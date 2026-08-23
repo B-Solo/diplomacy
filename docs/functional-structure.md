@@ -149,6 +149,7 @@ It supplies immutable `MapDefinition` values and map-configuration drafts withou
 The `MapLibrary` contract provides these capabilities:
 
 - List and load reusable maps.
+- Reopen a reusable map as an editable configuration draft without re-importing its SVG.
 - Import and sanitise a structured SVG into a configuration draft.
 - Classify SVG elements and generate initial topology and placement suggestions.
 - Validate edited topology, map metadata, powers, starts and presentation anchors.

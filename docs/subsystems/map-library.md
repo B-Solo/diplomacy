@@ -8,7 +8,7 @@ It owns map drafts and reusable-map files while active-game copies belong to the
 ## External API
 
 The subsystem provides `MapLibrary` from [Subsystem API Contracts](../api-contracts.md).
-Its callers can list and load maps, import SVG content, validate a draft and save a validated `MapDefinition`.
+Its callers can list and load maps, reopen a reusable map as an editable draft, import SVG content, validate a draft and save a validated `MapDefinition`.
 
 ## Implementation Notes
 
@@ -25,6 +25,7 @@ Issues use stable codes and point to the relevant map YAML field or source line.
 The same validation components check a game-specific starting year, season, units, supply-centre ownership and territory control while treating configured powers, colours, home supply centres and topology as immutable.
 
 Saving writes a complete reusable map folder atomically.
+Saving a reopened draft replaces the reusable map but cannot access or modify map snapshots owned by existing games.
 Default army and fleet assets are substituted when a draft omits either optional custom symbol.
 
 ## Modules

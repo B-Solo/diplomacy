@@ -1,0 +1,1397 @@
+# Reconstructed from vDiplomacy's Anarchy in the UK variant.
+# See SOURCE.md for provenance and the authoritative topology source.
+schema_version: 1
+map_id: england
+name: England
+rules_engine: standard
+assets:
+  map: map.svg
+  army: army.svg
+  fleet: fleet.svg
+start:
+  year: 2000
+  season: spring
+teams:
+  merseyside:
+    name: Merseyside
+    colour: '#a86f86'
+    home_supply_centres:
+      - merseyside
+      - cheshire
+      - anglesey
+      - isle-of-man
+    starting_supply_centres:
+      - merseyside
+      - cheshire
+      - anglesey
+      - isle-of-man
+    starting_territories:
+      - merseyside
+      - cheshire
+      - anglesey
+      - isle-of-man
+    initial_units:
+      - type: army
+        location: cheshire
+      - type: army
+        location: merseyside
+      - type: fleet
+        location: isle-of-man
+      - type: fleet
+        location: anglesey
+  up-north:
+    name: Up North
+    colour: '#426b87'
+    home_supply_centres:
+      - northumberland
+      - tyne-and-wear
+      - durham
+    starting_supply_centres:
+      - northumberland
+      - tyne-and-wear
+      - durham
+    starting_territories:
+      - northumberland
+      - tyne-and-wear
+      - durham
+    initial_units:
+      - type: army
+        location: northumberland
+      - type: fleet
+        location: tyne-and-wear
+      - type: army
+        location: durham
+  london:
+    name: London
+    colour: '#984843'
+    home_supply_centres:
+      - london
+      - kent
+      - surrey
+    starting_supply_centres:
+      - london
+      - kent
+      - surrey
+    starting_territories:
+      - london
+      - kent
+      - surrey
+    initial_units:
+      - type: army
+        location: london
+      - type: army
+        location: surrey
+      - type: fleet
+        location: kent
+  bristol:
+    name: Bristol
+    colour: '#a98538'
+    home_supply_centres:
+      - gloucestershire
+      - wiltshire
+      - avon
+    starting_supply_centres:
+      - gloucestershire
+      - wiltshire
+      - avon
+    starting_territories:
+      - gloucestershire
+      - wiltshire
+      - avon
+    initial_units:
+      - type: fleet
+        location: avon
+      - type: army
+        location: gloucestershire
+      - type: army
+        location: wiltshire
+  wales:
+    name: Wales
+    colour: '#50764c'
+    home_supply_centres:
+      - glamorgan
+      - dyfed
+      - pembrokeshire
+    starting_supply_centres:
+      - glamorgan
+      - dyfed
+      - pembrokeshire
+    starting_territories:
+      - glamorgan
+      - dyfed
+      - pembrokeshire
+    initial_units:
+      - type: army
+        location: dyfed
+      - type: army
+        location: pembrokeshire
+      - type: fleet
+        location: glamorgan
+  east-anglia:
+    name: East-Anglia
+    colour: '#715a86'
+    home_supply_centres:
+      - n-lincolnshire
+      - s-lincolnshire
+      - norfolk
+    starting_supply_centres:
+      - n-lincolnshire
+      - s-lincolnshire
+      - norfolk
+    starting_territories:
+      - n-lincolnshire
+      - s-lincolnshire
+      - norfolk
+    initial_units:
+      - type: army
+        location: n-lincolnshire
+      - type: army
+        location: s-lincolnshire
+      - type: fleet
+        location: norfolk
+territories:
+  north-atlantic:
+    name: North Atlantic
+    abbreviation: NAT
+    kind: sea
+    svg_element: territory-north-atlantic
+    supply_centre: false
+    anchors:
+      label:
+        - 110.0
+        - 145.0
+      fleet:
+        - 91.0
+        - 198.0
+    connection_overrides:
+      add:
+        - to: north-sea
+          units:
+            - fleet
+  niarbyl-bay:
+    name: Niarbyl Bay
+    abbreviation: NBY
+    kind: sea
+    svg_element: territory-niarbyl-bay
+    supply_centre: false
+    anchors:
+      label:
+        - 205.0
+        - 266.0
+      fleet:
+        - 220.0
+        - 226.0
+  douglas-bay:
+    name: Douglas Bay
+    abbreviation: DBY
+    kind: sea
+    svg_element: territory-douglas-bay
+    supply_centre: false
+    anchors:
+      label:
+        - 335.0
+        - 176.0
+      fleet:
+        - 349.0
+        - 230.0
+  irish-sea:
+    name: Irish Sea
+    abbreviation: IRS
+    kind: sea
+    svg_element: territory-irish-sea
+    supply_centre: false
+    anchors:
+      label:
+        - 45.0
+        - 470.0
+      fleet:
+        - 41.0
+        - 619.0
+  menai-straits:
+    name: Menai Straits
+    abbreviation: MEN
+    kind: sea
+    svg_element: territory-menai-straits
+    supply_centre: false
+    anchors:
+      label:
+        - 205.0
+        - 385.0
+      fleet:
+        - 214.0
+        - 353.0
+  mersey-estuary:
+    name: Mersey Estuary
+    abbreviation: MSE
+    kind: sea
+    svg_element: territory-mersey-estuary
+    supply_centre: false
+    anchors:
+      label:
+        - 380.0
+        - 325.0
+      fleet:
+        - 376.0
+        - 344.0
+  cardigan-bay:
+    name: Cardigan Bay
+    abbreviation: CDB
+    kind: sea
+    svg_element: territory-cardigan-bay
+    supply_centre: false
+    anchors:
+      label:
+        - 217.0
+        - 532.0
+      fleet:
+        - 178.0
+        - 561.0
+  n-bristol-channel:
+    name: N.Bristol Channel
+    abbreviation: NBC
+    kind: sea
+    svg_element: territory-n-bristol-channel
+    supply_centre: false
+    anchors:
+      label:
+        - 225.0
+        - 710.0
+      fleet:
+        - 267.0
+        - 688.0
+  s-bristol-channel:
+    name: S.Bristol Channel
+    abbreviation: SBC
+    kind: sea
+    svg_element: territory-s-bristol-channel
+    supply_centre: false
+    anchors:
+      label:
+        - 205.0
+        - 785.0
+      fleet:
+        - 192.0
+        - 819.0
+  avon-estuary:
+    name: Avon Estuary
+    abbreviation: AVE
+    kind: sea
+    svg_element: territory-avon-estuary
+    supply_centre: false
+    anchors:
+      label:
+        - 400.0
+        - 730.0
+      fleet:
+        - 430.0
+        - 711.0
+  english-channel:
+    name: English Channel
+    abbreviation: ENG
+    kind: sea
+    svg_element: territory-english-channel
+    supply_centre: false
+    anchors:
+      label:
+        - 380.0
+        - 995.0
+      fleet:
+        - 377.0
+        - 971.0
+  south-coast:
+    name: South Coast
+    abbreviation: SOC
+    kind: sea
+    svg_element: territory-south-coast
+    supply_centre: false
+    anchors:
+      label:
+        - 490.0
+        - 900.0
+      fleet:
+        - 564.0
+        - 891.0
+  straights-of-dover:
+    name: Straights of Dover
+    abbreviation: SOD
+    kind: sea
+    svg_element: territory-straights-of-dover
+    supply_centre: false
+    anchors:
+      label:
+        - 900.0
+        - 950.0
+      fleet:
+        - 925.0
+        - 922.0
+  dutch-crossing:
+    name: Dutch Crossing
+    abbreviation: DCR
+    kind: sea
+    svg_element: territory-dutch-crossing
+    supply_centre: false
+    anchors:
+      label:
+        - 980.0
+        - 675.0
+      fleet:
+        - 973.0
+        - 758.0
+  thames-estuary:
+    name: Thames Estuary
+    abbreviation: THE
+    kind: sea
+    svg_element: territory-thames-estuary
+    supply_centre: false
+    anchors:
+      label:
+        - 885.0
+        - 676.0
+      fleet:
+        - 927.0
+        - 619.0
+  humber-estuary:
+    name: Humber Estuary
+    abbreviation: HUE
+    kind: sea
+    svg_element: territory-humber-estuary
+    supply_centre: false
+    anchors:
+      label:
+        - 880.0
+        - 380.0
+      fleet:
+        - 919.0
+        - 422.0
+  north-sea:
+    name: North Sea
+    abbreviation: NTH
+    kind: sea
+    svg_element: territory-north-sea
+    supply_centre: false
+    anchors:
+      label:
+        - 940.0
+        - 145.0
+      fleet:
+        - 972.0
+        - 131.0
+  northeast-coast:
+    name: Northeast Coast
+    abbreviation: NEC
+    kind: sea
+    svg_element: territory-northeast-coast
+    supply_centre: false
+    anchors:
+      label:
+        - 775.0
+        - 165.0
+      fleet:
+        - 758.0
+        - 125.0
+  cumbria:
+    name: Cumbria
+    abbreviation: Cum
+    kind: land
+    svg_element: territory-cumbria
+    supply_centre: true
+    anchors:
+      label:
+        - 440.0
+        - 185.0
+      army:
+        - 445.0
+        - 187.0
+      fleet:
+        - 445.0
+        - 187.0
+      supply_centre:
+        - 445.0
+        - 155.0
+    connection_overrides:
+      remove:
+        - to: durham
+          units:
+            - fleet
+        - to: n-yorkshire
+          units:
+            - fleet
+        - to: northumberland
+          units:
+            - fleet
+  northumberland:
+    name: Northumberland
+    abbreviation: Nbl
+    kind: land
+    svg_element: territory-northumberland
+    supply_centre: true
+    anchors:
+      label:
+        - 525.0
+        - 120.0
+      army:
+        - 540.0
+        - 49.0
+      fleet:
+        - 540.0
+        - 49.0
+      supply_centre:
+        - 524.0
+        - 89.0
+  tyne-and-wear:
+    name: Tyne & Wear
+    abbreviation: Tyn
+    kind: land
+    svg_element: territory-tyne-and-wear
+    supply_centre: true
+    anchors:
+      label:
+        - 612.0
+        - 112.0
+      army:
+        - 587.0
+        - 117.0
+      fleet:
+        - 587.0
+        - 117.0
+      supply_centre:
+        - 578.0
+        - 105.0
+  durham:
+    name: Durham
+    abbreviation: Dur
+    kind: land
+    svg_element: territory-durham
+    supply_centre: true
+    anchors:
+      label:
+        - 568.0
+        - 157.0
+      army:
+        - 544.0
+        - 173.0
+      fleet:
+        - 544.0
+        - 173.0
+      supply_centre:
+        - 544.0
+        - 139.0
+    connection_overrides:
+      remove:
+        - to: n-yorkshire
+          units:
+            - fleet
+        - to: northumberland
+          units:
+            - fleet
+  cleveland:
+    name: Cleveland
+    abbreviation: Cle
+    kind: land
+    svg_element: territory-cleveland
+    supply_centre: true
+    anchors:
+      label:
+        - 650.0
+        - 185.0
+      army:
+        - 628.0
+        - 181.0
+      fleet:
+        - 628.0
+        - 181.0
+      supply_centre:
+        - 611.0
+        - 165.0
+  lancashire:
+    name: Lancashire
+    abbreviation: Lan
+    kind: land
+    svg_element: territory-lancashire
+    supply_centre: false
+    anchors:
+      label:
+        - 477.0
+        - 310.0
+      army:
+        - 473.0
+        - 289.0
+      fleet:
+        - 473.0
+        - 289.0
+    connection_overrides:
+      remove:
+        - to: n-yorkshire
+          units:
+            - fleet
+  n-yorkshire:
+    name: N.Yorkshire
+    abbreviation: Nyo
+    kind: land
+    svg_element: territory-n-yorkshire
+    supply_centre: false
+    anchors:
+      label:
+        - 600.0
+        - 245.0
+      army:
+        - 642.0
+        - 234.0
+      fleet:
+        - 642.0
+        - 234.0
+  merseyside:
+    name: Merseyside
+    abbreviation: Mer
+    kind: land
+    svg_element: territory-merseyside
+    supply_centre: true
+    anchors:
+      label:
+        - 431.0
+        - 335.0
+      army:
+        - 453.0
+        - 367.0
+      fleet:
+        - 453.0
+        - 367.0
+      supply_centre:
+        - 440.0
+        - 361.0
+  w-yorkshire:
+    name: W.Yorkshire
+    abbreviation: Wyo
+    kind: land
+    svg_element: territory-w-yorkshire
+    supply_centre: true
+    anchors:
+      label:
+        - 575.0
+        - 315.0
+      army:
+        - 568.0
+        - 308.0
+      supply_centre:
+        - 560.0
+        - 341.0
+  humberside:
+    name: Humberside
+    abbreviation: Hum
+    kind: land
+    svg_element: territory-humberside
+    supply_centre: true
+    anchors:
+      label:
+        - 682.0
+        - 287.0
+      army:
+        - 676.0
+        - 333.0
+      fleet:
+        - 676.0
+        - 333.0
+      supply_centre:
+        - 685.0
+        - 314.0
+  n-lincolnshire:
+    name: N.Lincolnshire
+    abbreviation: Nli
+    kind: land
+    svg_element: territory-n-lincolnshire
+    supply_centre: true
+    anchors:
+      label:
+        - 740.0
+        - 385.0
+      army:
+        - 755.0
+        - 400.0
+      fleet:
+        - 755.0
+        - 400.0
+      supply_centre:
+        - 709.0
+        - 371.0
+  derbyshire-and-nottinghamshire:
+    name: Derbyshire & Nottinghamshire
+    abbreviation: Dno
+    kind: land
+    svg_element: territory-derbyshire-and-nottinghamshire
+    supply_centre: false
+    anchors:
+      label:
+        - 620.0
+        - 430.0
+      army:
+        - 608.0
+        - 447.0
+  s-yorkshire:
+    name: S.Yorkshire
+    abbreviation: Syo
+    kind: land
+    svg_element: territory-s-yorkshire
+    supply_centre: false
+    anchors:
+      label:
+        - 613.0
+        - 365.0
+      army:
+        - 600.0
+        - 369.0
+  cheshire:
+    name: Cheshire
+    abbreviation: Che
+    kind: land
+    svg_element: territory-cheshire
+    supply_centre: true
+    anchors:
+      label:
+        - 510.0
+        - 420.0
+      army:
+        - 483.0
+        - 390.0
+      fleet:
+        - 483.0
+        - 390.0
+      supply_centre:
+        - 474.0
+        - 422.0
+  greater-manchester:
+    name: Greater Manchester
+    abbreviation: Gma
+    kind: land
+    svg_element: territory-greater-manchester
+    supply_centre: true
+    anchors:
+      label:
+        - 505.0
+        - 345.0
+      army:
+        - 513.0
+        - 370.0
+      supply_centre:
+        - 533.0
+        - 357.0
+  staffordshire:
+    name: Staffordshire
+    abbreviation: Sta
+    kind: land
+    svg_element: territory-staffordshire
+    supply_centre: false
+    anchors:
+      label:
+        - 530.0
+        - 475.0
+      army:
+        - 534.0
+        - 483.0
+  shropshire:
+    name: Shropshire
+    abbreviation: Shr
+    kind: land
+    svg_element: territory-shropshire
+    supply_centre: false
+    anchors:
+      label:
+        - 470.0
+        - 505.0
+      army:
+        - 466.0
+        - 490.0
+  s-lincolnshire:
+    name: S.Lincolnshire
+    abbreviation: Sli
+    kind: land
+    svg_element: territory-s-lincolnshire
+    supply_centre: true
+    anchors:
+      label:
+        - 690.0
+        - 420.0
+      army:
+        - 715.0
+        - 468.0
+      fleet:
+        - 715.0
+        - 468.0
+      supply_centre:
+        - 715.0
+        - 439.0
+  leicestershire:
+    name: Leicestershire
+    abbreviation: Lei
+    kind: land
+    svg_element: territory-leicestershire
+    supply_centre: true
+    anchors:
+      label:
+        - 620.0
+        - 510.0
+      army:
+        - 626.0
+        - 516.0
+      supply_centre:
+        - 656.0
+        - 479.0
+  w-midlands:
+    name: W.Midlands
+    abbreviation: Wmi
+    kind: land
+    svg_element: territory-w-midlands
+    supply_centre: true
+    anchors:
+      label:
+        - 535.0
+        - 535.0
+      army:
+        - 564.0
+        - 547.0
+      supply_centre:
+        - 552.0
+        - 520.0
+  warwickshire:
+    name: Warwickshire
+    abbreviation: War
+    kind: land
+    svg_element: territory-warwickshire
+    supply_centre: false
+    anchors:
+      label:
+        - 585.0
+        - 580.0
+      army:
+        - 609.0
+        - 548.0
+  hereford-and-worcester:
+    name: Hereford & Worcester
+    abbreviation: Hwo
+    kind: land
+    svg_element: territory-hereford-and-worcester
+    supply_centre: false
+    anchors:
+      label:
+        - 465.0
+        - 600.0
+      army:
+        - 464.0
+        - 609.0
+  gloucestershire:
+    name: Gloucestershire
+    abbreviation: Glo
+    kind: land
+    svg_element: territory-gloucestershire
+    supply_centre: true
+    anchors:
+      label:
+        - 495.0
+        - 650.0
+      army:
+        - 535.0
+        - 631.0
+      fleet:
+        - 535.0
+        - 631.0
+      supply_centre:
+        - 521.0
+        - 664.0
+  oxfordshire:
+    name: Oxfordshire
+    abbreviation: Oxf
+    kind: land
+    svg_element: territory-oxfordshire
+    supply_centre: false
+    anchors:
+      label:
+        - 610.0
+        - 665.0
+      army:
+        - 607.0
+        - 641.0
+  northants:
+    name: Northants.
+    abbreviation: Nha
+    kind: land
+    svg_element: territory-northants
+    supply_centre: true
+    anchors:
+      label:
+        - 645.0
+        - 545.0
+      army:
+        - 639.0
+        - 584.0
+      supply_centre:
+        - 659.0
+        - 568.0
+  cambs:
+    name: Cambs.
+    abbreviation: Cam
+    kind: land
+    svg_element: territory-cambs
+    supply_centre: false
+    anchors:
+      label:
+        - 745.0
+        - 550.0
+      army:
+        - 750.0
+        - 563.0
+  norfolk:
+    name: Norfolk
+    abbreviation: Nfk
+    kind: land
+    svg_element: territory-norfolk
+    supply_centre: true
+    anchors:
+      label:
+        - 825.0
+        - 470.0
+      army:
+        - 843.0
+        - 500.0
+      fleet:
+        - 843.0
+        - 500.0
+      supply_centre:
+        - 864.0
+        - 467.0
+  suffolk:
+    name: Suffolk
+    abbreviation: Sfk
+    kind: land
+    svg_element: territory-suffolk
+    supply_centre: false
+    anchors:
+      label:
+        - 840.0
+        - 560.0
+      army:
+        - 854.0
+        - 586.0
+      fleet:
+        - 854.0
+        - 586.0
+  essex:
+    name: Essex
+    abbreviation: Esx
+    kind: land
+    svg_element: territory-essex
+    supply_centre: false
+    anchors:
+      label:
+        - 805.0
+        - 628.0
+      army:
+        - 796.0
+        - 653.0
+      fleet:
+        - 796.0
+        - 653.0
+  hertfs:
+    name: Hertfs.
+    abbreviation: Htf
+    kind: land
+    svg_element: territory-hertfs
+    supply_centre: false
+    anchors:
+      label:
+        - 720.0
+        - 650.0
+      army:
+        - 737.0
+        - 628.0
+  beds:
+    name: Beds.
+    abbreviation: Bed
+    kind: land
+    svg_element: territory-beds
+    supply_centre: false
+    anchors:
+      label:
+        - 705.0
+        - 598.0
+      army:
+        - 695.0
+        - 618.0
+  bucks:
+    name: Bucks.
+    abbreviation: Buc
+    kind: land
+    svg_element: territory-bucks
+    supply_centre: false
+    anchors:
+      label:
+        - 675.0
+        - 645.0
+      army:
+        - 673.0
+        - 669.0
+  london:
+    name: London
+    abbreviation: Lon
+    kind: land
+    svg_element: territory-london
+    supply_centre: true
+    anchors:
+      label:
+        - 710.0
+        - 690.0
+      army:
+        - 739.0
+        - 707.0
+      supply_centre:
+        - 765.0
+        - 692.0
+  kent:
+    name: Kent
+    abbreviation: Ken
+    kind: land
+    svg_element: territory-kent
+    supply_centre: true
+    anchors:
+      label:
+        - 790.0
+        - 710.0
+      army:
+        - 834.0
+        - 750.0
+      fleet:
+        - 834.0
+        - 750.0
+      supply_centre:
+        - 818.0
+        - 728.0
+  e-sussex:
+    name: E.Sussex
+    abbreviation: Esu
+    kind: land
+    svg_element: territory-e-sussex
+    supply_centre: true
+    anchors:
+      label:
+        - 790.0
+        - 785.0
+      army:
+        - 773.0
+        - 776.0
+      fleet:
+        - 773.0
+        - 776.0
+      supply_centre:
+        - 775.0
+        - 804.0
+  surrey:
+    name: Surrey
+    abbreviation: Sur
+    kind: land
+    svg_element: territory-surrey
+    supply_centre: true
+    anchors:
+      label:
+        - 675.0
+        - 730.0
+      army:
+        - 690.0
+        - 751.0
+      supply_centre:
+        - 698.0
+        - 725.0
+  w-sussex:
+    name: W.Sussex
+    abbreviation: Wsu
+    kind: land
+    svg_element: territory-w-sussex
+    supply_centre: false
+    anchors:
+      label:
+        - 690.0
+        - 800.0
+      army:
+        - 702.0
+        - 777.0
+      fleet:
+        - 702.0
+        - 777.0
+  hampshire:
+    name: Hampshire
+    abbreviation: Ham
+    kind: land
+    svg_element: territory-hampshire
+    supply_centre: false
+    anchors:
+      label:
+        - 620.0
+        - 765.0
+      army:
+        - 618.0
+        - 785.0
+      fleet:
+        - 618.0
+        - 785.0
+    connection_overrides:
+      add:
+        - to: isle-of-wight
+          units:
+            - army
+            - fleet
+  berkshire:
+    name: Berkshire
+    abbreviation: Ber
+    kind: land
+    svg_element: territory-berkshire
+    supply_centre: false
+    anchors:
+      label:
+        - 620.0
+        - 710.0
+      army:
+        - 665.0
+        - 705.0
+  wiltshire:
+    name: Wiltshire
+    abbreviation: Wil
+    kind: land
+    svg_element: territory-wiltshire
+    supply_centre: true
+    anchors:
+      label:
+        - 540.0
+        - 700.0
+      army:
+        - 542.0
+        - 745.0
+      supply_centre:
+        - 541.0
+        - 721.0
+  dorset:
+    name: Dorset
+    abbreviation: Dor
+    kind: land
+    svg_element: territory-dorset
+    supply_centre: true
+    anchors:
+      label:
+        - 525.0
+        - 805.0
+      army:
+        - 524.0
+        - 830.0
+      fleet:
+        - 524.0
+        - 830.0
+      supply_centre:
+        - 500.0
+        - 824.0
+    connection_overrides:
+      remove:
+        - to: somerset
+          units:
+            - fleet
+  somerset:
+    name: Somerset
+    abbreviation: Som
+    kind: land
+    svg_element: territory-somerset
+    supply_centre: true
+    anchors:
+      label:
+        - 435.0
+        - 755.0
+      army:
+        - 461.0
+        - 769.0
+      fleet:
+        - 461.0
+        - 769.0
+      supply_centre:
+        - 410.0
+        - 780.0
+  avon:
+    name: Avon
+    abbreviation: Avo
+    kind: land
+    svg_element: territory-avon
+    supply_centre: true
+    anchors:
+      label:
+        - 455.0
+        - 730.0
+      army:
+        - 487.0
+        - 688.0
+      fleet:
+        - 487.0
+        - 688.0
+      supply_centre:
+        - 475.0
+        - 709.0
+  devon:
+    name: Devon
+    abbreviation: Dev
+    kind: land
+    svg_element: territory-devon
+    supply_centre: false
+    anchors:
+      label:
+        - 350.0
+        - 830.0
+      army:
+        - 365.0
+        - 814.0
+    split_coasts:
+      north:
+        fleet_anchor:
+          - 330.0
+          - 780.0
+        add_connections:
+          - s-bristol-channel
+          - avon-estuary
+          - cornwall
+      south:
+        fleet_anchor:
+          - 342.0
+          - 866.0
+        add_connections:
+          - south-coast
+          - dorset
+          - cornwall
+  cornwall:
+    name: Cornwall
+    abbreviation: Cor
+    kind: land
+    svg_element: territory-cornwall
+    supply_centre: true
+    anchors:
+      label:
+        - 265.0
+        - 855.0
+      army:
+        - 264.0
+        - 850.0
+      fleet:
+        - 264.0
+        - 850.0
+      supply_centre:
+        - 244.0
+        - 883.0
+  isle-of-wight:
+    name: Isle of Wight
+    abbreviation: Iow
+    kind: land
+    svg_element: territory-isle-of-wight
+    supply_centre: true
+    anchors:
+      label:
+        - 615.0
+        - 870.0
+      army:
+        - 615.0
+        - 834.0
+      fleet:
+        - 615.0
+        - 834.0
+      supply_centre:
+        - 615.0
+        - 846.0
+  gwent:
+    name: Gwent
+    abbreviation: Gwe
+    kind: land
+    svg_element: territory-gwent
+    supply_centre: false
+    anchors:
+      label:
+        - 435.0
+        - 660.0
+      army:
+        - 438.0
+        - 647.0
+      fleet:
+        - 438.0
+        - 647.0
+  glamorgan:
+    name: Glamorgan
+    abbreviation: Gla
+    kind: land
+    svg_element: territory-glamorgan
+    supply_centre: true
+    anchors:
+      label:
+        - 340.0
+        - 670.0
+      army:
+        - 394.0
+        - 693.0
+      fleet:
+        - 394.0
+        - 693.0
+      supply_centre:
+        - 368.0
+        - 684.0
+  s-powys:
+    name: S.Powys
+    abbreviation: Spo
+    kind: land
+    svg_element: territory-s-powys
+    supply_centre: true
+    anchors:
+      label:
+        - 370.0
+        - 590.0
+      army:
+        - 390.0
+        - 626.0
+      supply_centre:
+        - 390.0
+        - 609.0
+  dyfed:
+    name: Dyfed
+    abbreviation: Dyf
+    kind: land
+    svg_element: territory-dyfed
+    supply_centre: true
+    anchors:
+      label:
+        - 300.0
+        - 620.0
+      army:
+        - 337.0
+        - 608.0
+      supply_centre:
+        - 307.0
+        - 589.0
+    split_coasts:
+      north:
+        fleet_anchor:
+          - 325.0
+          - 565.0
+        add_connections:
+          - cardigan-bay
+          - pembrokeshire
+          - gwynedd
+      south:
+        fleet_anchor:
+          - 310.0
+          - 642.0
+        add_connections:
+          - n-bristol-channel
+          - pembrokeshire
+          - glamorgan
+  pembrokeshire:
+    name: Pembrokeshire
+    abbreviation: Pem
+    kind: land
+    svg_element: territory-pembrokeshire
+    supply_centre: true
+    anchors:
+      label:
+        - 270.0
+        - 630.0
+      army:
+        - 237.0
+        - 659.0
+      fleet:
+        - 237.0
+        - 659.0
+      supply_centre:
+        - 252.0
+        - 612.0
+  n-powys:
+    name: N.Powys
+    abbreviation: Npo
+    kind: land
+    svg_element: territory-n-powys
+    supply_centre: true
+    anchors:
+      label:
+        - 375.0
+        - 500.0
+      army:
+        - 385.0
+        - 539.0
+      supply_centre:
+        - 395.0
+        - 518.0
+  gwynedd:
+    name: Gwynedd
+    abbreviation: Gwy
+    kind: land
+    svg_element: territory-gwynedd
+    supply_centre: false
+    anchors:
+      label:
+        - 330.0
+        - 440.0
+      army:
+        - 349.0
+        - 470.0
+      fleet:
+        - 349.0
+        - 470.0
+    connection_overrides:
+      add:
+        - to: anglesey
+          units:
+            - army
+            - fleet
+  clwyd:
+    name: Clwyd
+    abbreviation: Clw
+    kind: land
+    svg_element: territory-clwyd
+    supply_centre: false
+    anchors:
+      label:
+        - 405.0
+        - 430.0
+      army:
+        - 408.0
+        - 440.0
+      fleet:
+        - 408.0
+        - 440.0
+  anglesey:
+    name: Anglesey
+    abbreviation: Ang
+    kind: land
+    svg_element: territory-anglesey
+    supply_centre: true
+    anchors:
+      label:
+        - 280.0
+        - 350.0
+      army:
+        - 300.0
+        - 393.0
+      fleet:
+        - 300.0
+        - 393.0
+      supply_centre:
+        - 292.0
+        - 377.0
+  isle-of-man:
+    name: Isle of Man
+    abbreviation: Iom
+    kind: land
+    svg_element: territory-isle-of-man
+    supply_centre: true
+    anchors:
+      label:
+        - 260.0
+        - 200.0
+      army:
+        - 282.0
+        - 235.0
+      fleet:
+        - 282.0
+        - 235.0
+      supply_centre:
+        - 291.0
+        - 215.0
+non_playable_elements:
+  impassable-scotland: impassable
+  connection-north-atlantic-north-sea: decoration
+  bridge-gwynedd-anglesey: decoration
+  bridge-hampshire-isle-of-wight: decoration

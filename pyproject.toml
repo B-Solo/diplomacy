@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "diplomacy-gamemaster"
+version = "0.1.0"
+description = "A local desktop application for running custom-map Diplomacy games"
+readme = "README.md"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+  "defusedxml>=0.7.1,<1",
+  "platformdirs>=4.3,<5",
+  "pydantic>=2.10,<3",
+  "PySide6>=6.8,<7",
+  "PyYAML>=6.0,<7",
+  "Shapely>=2.0,<3",
+  "svgelements>=1.9,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.14,<2",
+  "pytest>=8.3,<9",
+  "pytest-cov>=6,<7",
+  "pytest-qt>=4.4,<5",
+  "ruff>=0.9,<1",
+]
+
+[project.scripts]
+diplomacy-gamemaster = "diplomacy_app.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.mypy]
+python_version = "3.13"
+check_untyped_defs = true
+ignore_missing_imports = true
+disable_error_code = ["import-untyped"]
+packages = ["diplomacy_app"]

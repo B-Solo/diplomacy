@@ -1,0 +1,174 @@
+"""Interactive SVG map canvas with pointer-centred zooming and bounded panning."""
+
+from __future__ import annotations
+
+import math
+
+from PySide6.QtCore import QByteArray, QPointF, QRectF, Qt, Signal
+from PySide6.QtGui import QBrush, QColor, QPainter, QPen, QWheelEvent
+from PySide6.QtSvg import QSvgRenderer
+from PySide6.QtSvgWidgets import QGraphicsSvgItem
+from PySide6.QtWidgets import (
+    QGraphicsEllipseItem,
+    QGraphicsItemGroup,
+    QGraphicsScene,
+    QGraphicsView,
+)
+
+from diplomacy_app.domain.models import MapBounds, MapHotspot, MapScene, Point
+
+
+class MapCanvas(QGraphicsView):
+    zoom_changed = Signal(int)
+    outcome_hovered = Signal(str)
+
+    def __init__(self, parent=None) -> None:
+        super().__init__(parent)
+        self.setScene(QGraphicsScene(self))
+        self.setRenderHints(
+            QPainter.RenderHint.Antialiasing | QPainter.RenderHint.SmoothPixmapTransform
+        )
+        self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
+        self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
+        self.setResizeAnchor(QGraphicsView.ViewportAnchor.AnchorViewCenter)
+        self.setBackgroundBrush(QColor("#d7d1c2"))
+        self._item: QGraphicsSvgItem | None = None
+        self._scene_bounds = QRectF()
+        self._hotspots: tuple[MapHotspot, ...] = ()
+        self.setMouseTracking(True)
+
+    def set_svg(self, svg: bytes, bounds: MapBounds | None = None, fit: bool = False) -> None:
+        renderer = QSvgRenderer(QByteArray(svg), self)
+        if not renderer.isValid():
+            raise ValueError("Invalid SVG scene")
+        self.scene().clear()
+        item = QGraphicsSvgItem()
+        item.setSharedRenderer(renderer)
+        self.scene().addItem(item)
+        self._item = item
+        if bounds:
+            self._scene_bounds = QRectF(bounds.x, bounds.y, bounds.width, bounds.height)
+        else:
+            self._scene_bounds = renderer.viewBoxF()
+        self.scene().setSceneRect(self._scene_bounds)
+        if fit:
+            self.fit_map()
+
+    def set_scene(self, scene: MapScene, fit: bool = False) -> None:
+        self._hotspots = scene.hotspots
+        self.set_svg(scene.svg, scene.map_bounds, fit)
+        self._hotspots = scene.hotspots
+
+    def fit_map(self) -> None:
+        if not self._scene_bounds.isEmpty():
+            self.fitInView(self._scene_bounds, Qt.AspectRatioMode.KeepAspectRatio)
+            self._emit_zoom()
+
+    def set_standard_zoom(self) -> None:
+        self.resetTransform()
+        self._emit_zoom()
+
+    def zoom_by(self, factor: float) -> None:
+        current = self.transform().m11()
+        target = max(0.08, min(12.0, current * factor))
+        self.scale(target / current, target / current)
+        self._emit_zoom()
+
+    def wheelEvent(self, event: QWheelEvent) -> None:
+        self.zoom_by(1.2 if event.angleDelta().y() > 0 else 1 / 1.2)
+        event.accept()
+
+    def _emit_zoom(self) -> None:
+        self.zoom_changed.emit(round(self.transform().m11() * 100))
+
+    def visible_bounds(self) -> MapBounds:
+        rect = (
+            self.mapToScene(self.viewport().rect()).boundingRect().intersected(self._scene_bounds)
+        )
+        return MapBounds(rect.x(), rect.y(), rect.width(), rect.height())
+
+    def show_bounds(self, bounds: MapBounds) -> None:
+        rect = QRectF(bounds.x, bounds.y, bounds.width, bounds.height).intersected(
+            self._scene_bounds
+        )
+        if not rect.isEmpty():
+            self.fitInView(rect, Qt.AspectRatioMode.KeepAspectRatio)
+            self.centerOn(rect.center())
+            self._emit_zoom()
+
+    def mouseMoveEvent(self, event) -> None:
+        super().mouseMoveEvent(event)
+        point = self.mapToScene(event.position().toPoint())
+        message = ""
+        for hotspot in self._hotspots:
+            for start, end in zip(hotspot.path, hotspot.path[1:], strict=False):
+                dx, dy = end.x - start.x, end.y - start.y
+                length_squared = dx * dx + dy * dy
+                if not length_squared:
+                    continue
+                t = max(
+                    0.0,
+                    min(
+                        1.0,
+                        ((point.x() - start.x) * dx + (point.y() - start.y) * dy) / length_squared,
+                    ),
+                )
+                distance = math.hypot(
+                    point.x() - (start.x + t * dx), point.y() - (start.y + t * dy)
+                )
+                if distance <= hotspot.hit_width:
+                    message = ", ".join(hotspot.outcome_codes)
+                    break
+            if message:
+                break
+        self.outcome_hovered.emit(message)
+
+
+class AnchorItem(QGraphicsEllipseItem):
+    """Draggable anchor marker that commits only after a completed drag."""
+
+    def __init__(self, point: Point, colour: str, callback) -> None:
+        super().__init__(-6, -6, 12, 12)
+        self.setPos(QPointF(point.x, point.y))
+        self.setBrush(QBrush(QColor(colour)))
+        self.setPen(QPen(QColor("#fffdf7"), 2))
+        self.setFlag(QGraphicsEllipseItem.GraphicsItemFlag.ItemIsMovable)
+        self.setFlag(QGraphicsEllipseItem.GraphicsItemFlag.ItemIsSelectable)
+        self.setZValue(50)
+        self.callback = callback
+
+    def mouseReleaseEvent(self, event) -> None:
+        super().mouseReleaseEvent(event)
+        position = self.pos()
+        self.callback(Point(position.x(), position.y()))
+
+
+class UnitAnchorItem(QGraphicsItemGroup):
+    """Draggable unit-symbol preview centred on its presentation anchor."""
+
+    def __init__(self, point: Point, svg: bytes, colour: str, callback) -> None:
+        super().__init__()
+        self._renderer = QSvgRenderer(QByteArray(svg))
+        if not self._renderer.isValid():
+            raise ValueError("Invalid unit SVG")
+        symbol = QGraphicsSvgItem()
+        symbol.setSharedRenderer(self._renderer)
+        bounds = self._renderer.viewBoxF()
+        scale = min(32 / max(bounds.width(), 1), 22 / max(bounds.height(), 1))
+        symbol.setScale(scale)
+        symbol.setPos(-bounds.center().x() * scale, -bounds.center().y() * scale)
+        self.addToGroup(symbol)
+        marker = QGraphicsEllipseItem(-4, -4, 8, 8)
+        marker.setBrush(QBrush(Qt.BrushStyle.NoBrush))
+        marker.setPen(QPen(QColor(colour), 1.5))
+        self.addToGroup(marker)
+        self.setPos(QPointF(point.x, point.y))
+        self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)
+        self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsSelectable)
+        self.setZValue(50)
+        self.callback = callback
+
+    def mouseReleaseEvent(self, event) -> None:
+        super().mouseReleaseEvent(event)
+        position = self.pos()
+        self.callback(Point(position.x(), position.y()))

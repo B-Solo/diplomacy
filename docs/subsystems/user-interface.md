@@ -26,7 +26,7 @@ Clipboard integration accepts only `ImageArtifact` values returned through the c
 - `session_presenter` maps `SessionView` and typed failures onto widgets without adding domain decisions.
 - `map_workspace` displays `MapScene`, owns zoom and pan state, and converts the visible viewport into `RenderRequest` values.
 - `orders_workspace` owns one inline text editor per configured power, warning expansion, final toggles and the unfinalised-power filter.
-- `map_setup_workspace` edits the immutable `MapDraft`, displays its sanitised SVG and anchors, and submits draft snapshots for validation or saving.
+- `map_setup_workspace` opens imported or existing reusable-map drafts, displays their sanitised SVG, previews armies or fleets at every applicable anchor, independently drags label, army, fleet and supply-centre anchors, and submits immutable draft snapshots for validation or saving.
 - `background_tasks` executes blocking service calls and returns their completion to the GUI event thread.
 - `clipboard` transfers returned PNG artifacts through the operating-system clipboard API.
 

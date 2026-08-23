@@ -171,7 +171,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.7:** Map import associates existing SVG shapes and groups with map elements.
 - **GC.8:** Imported shapes are classified as playable land, playable sea, impassable region or decorative/background content.
 - **GC.9:** Only playable regions require a territory name, abbreviation, topology and placement anchors.
-- **GC.10:** The importer calculates initial label and unit anchors and provides a visual placement step in which they can be dragged.
+- **GC.10:** The importer calculates initial label, army, fleet and supply-centre anchors and provides a visual placement step in which each anchor can be dragged independently.
 - **GC.11:** Split coasts have separate fleet anchors.
 - **GC.12:** The importer generates likely adjacency from SVG geometry and assumes that every coastal province has one continuous coast.
 - **GC.13:** The generated ordinary topology is combined with explicit additions and removals, then materialised as the complete topology used for play.
@@ -180,6 +180,12 @@ Player communication occurs outside the application using map images copied by t
 - **GC.16:** The saved `map.yaml` remains directly editable outside the application.
 - **GC.17:** The importer collects powers, colours, home and starting supply-centre ownership, initial territory control, starting units, territory abbreviations and supply-centre locations.
 - **GC.18:** A map may provide one custom army SVG and one custom fleet SVG; the default symbols are used when either is absent.
+- **GC.19:** An existing reusable map can be reopened in the map-configuration editor without re-importing its SVG.
+- **GC.20:** Reopening a map provides the same visual placement step as initial import, including independent label, army, fleet, split-coast fleet and supply-centre anchors.
+- **GC.21:** Saving an edited reusable map changes the defaults used for games created afterwards and does not modify the private map snapshots of existing games.
+- **GC.22:** The visual placement step provides mutually exclusive `Armies` and `Fleets` preview buttons that display the selected unit symbol at every applicable anchor, independently of the configured starting units.
+- **GC.23:** The `Armies` preview displays an army in every playable land territory, while the `Fleets` preview displays a fleet in every playable sea, every ordinary coastal territory and at every named anchor of a split-coast territory.
+- **GC.24:** Placement previews do not change game state or the map's starting setup; dragging a preview unit changes only its corresponding presentation anchor.
 
 ## Limitations and Restrictions
 
@@ -252,11 +258,17 @@ New game
        -> Name territories and assign abbreviations and types
        -> Review inferred topology and edit only its exceptions as YAML
        -> Define supply centres, teams, colours and starting state
-       -> Position labels, units and split-coast fleet anchors
+       -> Position labels, army anchors, fleet anchors and supply-centre anchors
        -> Optionally provide army and fleet SVG symbols
        -> Save reusable map
   -> Confirm or adjust the game's starting setup
   -> Create game
+
+Manage configured maps
+  -> Open an existing reusable map
+  -> Edit configuration or visually reposition any presentation anchor
+     -> Preview armies at every army anchor or fleets at every fleet anchor
+  -> Validate and save the reusable map
 ```
 
 ## Design Considerations

@@ -1,0 +1,293 @@
+"""Authored map YAML parsing and effective-topology compilation."""
+
+from __future__ import annotations
+
+from collections.abc import Mapping
+from pathlib import Path
+from types import MappingProxyType
+from typing import Any
+
+import yaml
+
+from diplomacy_app.domain.errors import MapLibraryError
+from diplomacy_app.domain.models import (
+    Adjacency,
+    CoastId,
+    DislodgedUnit,
+    GameState,
+    Location,
+    MapAssets,
+    MapDefinition,
+    MapId,
+    MapPresentation,
+    PhaseId,
+    Point,
+    PowerDefinition,
+    PowerId,
+    Season,
+    StartingSetup,
+    TerritoryDefinition,
+    TerritoryId,
+    TerritoryKind,
+    UnitPosition,
+    UnitType,
+)
+from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
+from diplomacy_app.map_library.geometry import inferred_connections
+from diplomacy_app.map_library.svg_importer import sanitise_svg, territory_geometries
+
+
+def load_yaml(text: str) -> dict[str, Any]:
+    try:
+        value = yaml.safe_load(text)
+    except yaml.YAMLError as exc:
+        raise MapLibraryError(f"Invalid map YAML: {exc}") from exc
+    if not isinstance(value, dict):
+        raise MapLibraryError("Map YAML must contain an object at its root")
+    if value.get("schema_version") != 1:
+        raise MapLibraryError("Only map schema_version 1 is supported")
+    return value
+
+
+def _mapping(value: object, field: str) -> Mapping[str, Any]:
+    if not isinstance(value, dict):
+        raise MapLibraryError(f"{field} must be a mapping")
+    return value
+
+
+def _point(value: object, field: str) -> Point:
+    if not isinstance(value, list) or len(value) != 2:
+        raise MapLibraryError(f"{field} must contain [x, y]")
+    try:
+        return Point(float(value[0]), float(value[1]))
+    except (TypeError, ValueError) as exc:
+        raise MapLibraryError(f"{field} must contain numeric coordinates") from exc
+
+
+def _location(value: str, territories: Mapping[str, TerritoryDefinition]) -> Location:
+    base, separator, coast = value.partition("/")
+    if base not in territories:
+        raise MapLibraryError(f"Unknown territory location: {base}")
+    coast_id = CoastId(coast) if separator else None
+    if coast_id is not None and coast_id not in territories[base].split_coast_ids:
+        raise MapLibraryError(f"Unknown coast location: {value}")
+    return Location(TerritoryId(base), coast_id)
+
+
+def _parse_territories(raw: Mapping[str, Any]) -> tuple[TerritoryDefinition, ...]:
+    result: list[TerritoryDefinition] = []
+    for territory_id, untyped in raw.items():
+        item = _mapping(untyped, f"territories.{territory_id}")
+        split = _mapping(item.get("split_coasts", {}), f"territories.{territory_id}.split_coasts")
+        result.append(
+            TerritoryDefinition(
+                id=TerritoryId(territory_id),
+                name=str(item.get("name", territory_id)),
+                abbreviation=str(item.get("abbreviation", "")),
+                kind=TerritoryKind(str(item.get("kind", "land"))),
+                svg_element_id=str(item.get("svg_element", "")),
+                split_coast_ids=tuple(CoastId(value) for value in split),
+                is_supply_centre=bool(item.get("supply_centre", False)),
+            )
+        )
+    return tuple(result)
+
+
+def _parse_presentation(
+    raw: Mapping[str, Any], territories: tuple[TerritoryDefinition, ...]
+) -> MapPresentation:
+    label: dict[TerritoryId, Point] = {}
+    army: dict[TerritoryId, Point] = {}
+    fleet: dict[Location, Point] = {}
+    supply: dict[TerritoryId, Point] = {}
+    for territory in territories:
+        item = _mapping(raw[str(territory.id)], f"territories.{territory.id}")
+        anchors = _mapping(item.get("anchors", {}), f"territories.{territory.id}.anchors")
+        if "label" in anchors:
+            label[territory.id] = _point(anchors["label"], f"{territory.id}.anchors.label")
+        if "army" in anchors:
+            army[territory.id] = _point(anchors["army"], f"{territory.id}.anchors.army")
+        if "fleet" in anchors:
+            fleet[Location(territory.id)] = _point(
+                anchors["fleet"], f"{territory.id}.anchors.fleet"
+            )
+        if "supply_centre" in anchors:
+            supply[territory.id] = _point(
+                anchors["supply_centre"], f"{territory.id}.anchors.supply_centre"
+            )
+        split = _mapping(item.get("split_coasts", {}), f"territories.{territory.id}.split_coasts")
+        for coast_id, coast_value in split.items():
+            coast = _mapping(coast_value, f"territories.{territory.id}.split_coasts.{coast_id}")
+            if "fleet_anchor" in coast:
+                fleet[Location(territory.id, CoastId(coast_id))] = _point(
+                    coast["fleet_anchor"], f"{territory.id}.{coast_id}.fleet_anchor"
+                )
+    return MapPresentation(
+        MappingProxyType(label),
+        MappingProxyType(army),
+        MappingProxyType(fleet),
+        MappingProxyType(supply),
+    )
+
+
+def _effective_connections(
+    raw: Mapping[str, Any],
+    territories: tuple[TerritoryDefinition, ...],
+    svg: bytes,
+) -> frozenset[Adjacency]:
+    by_id = {str(item.id): item for item in territories}
+    geometry = territory_geometries(svg, (item.svg_element_id for item in territories))
+    inferred = {
+        pair: set(units) for pair, units in inferred_connections(territories, geometry).items()
+    }
+    for origin_id, untyped in raw.items():
+        item = _mapping(untyped, f"territories.{origin_id}")
+        overrides = _mapping(
+            item.get("connection_overrides", {}),
+            f"territories.{origin_id}.connection_overrides",
+        )
+        for operation in ("add", "remove"):
+            entries = overrides.get(operation, [])
+            if not isinstance(entries, list):
+                raise MapLibraryError(
+                    f"{origin_id}.connection_overrides.{operation} must be a list"
+                )
+            for entry_value in entries:
+                entry = _mapping(entry_value, f"{origin_id}.connection_overrides.{operation}")
+                destination = str(entry.get("to", ""))
+                if destination not in by_id:
+                    raise MapLibraryError(f"Unknown connection destination: {destination}")
+                pair = frozenset((TerritoryId(origin_id), TerritoryId(destination)))
+                units_value = entry.get("units", [])
+                if not isinstance(units_value, list):
+                    raise MapLibraryError(f"Connection units for {origin_id} must be a list")
+                units = {str(value) for value in units_value}
+                if operation == "add":
+                    inferred.setdefault(pair, set()).update(units)
+                else:
+                    inferred.setdefault(pair, set()).difference_update(units)
+
+    adjacencies: set[Adjacency] = set()
+    for pair, units in inferred.items():
+        if len(pair) != 2:
+            continue
+        left, right = sorted(pair)
+        for unit_name in units:
+            unit = UnitType(unit_name)
+            # Fleet inference is replaced by explicit named coast connections.
+            if unit is UnitType.FLEET and (
+                by_id[str(left)].split_coast_ids or by_id[str(right)].split_coast_ids
+            ):
+                continue
+            adjacencies.add(Adjacency(Location(left), Location(right), unit))
+            adjacencies.add(Adjacency(Location(right), Location(left), unit))
+
+    for origin_id, untyped in raw.items():
+        item = _mapping(untyped, f"territories.{origin_id}")
+        split = _mapping(item.get("split_coasts", {}), f"territories.{origin_id}.split_coasts")
+        for coast_id, coast_value in split.items():
+            coast = _mapping(coast_value, f"territories.{origin_id}.split_coasts.{coast_id}")
+            connections = coast.get("add_connections", [])
+            if not isinstance(connections, list):
+                raise MapLibraryError(f"{origin_id}.{coast_id}.add_connections must be a list")
+            coast_location = Location(TerritoryId(origin_id), CoastId(coast_id))
+            for destination_id in connections:
+                destination_location = Location(TerritoryId(str(destination_id)))
+                if str(destination_location.territory_id) not in by_id:
+                    raise MapLibraryError(f"Unknown split-coast destination: {destination_id}")
+                adjacencies.add(Adjacency(coast_location, destination_location, UnitType.FLEET))
+                adjacencies.add(Adjacency(destination_location, coast_location, UnitType.FLEET))
+    return frozenset(adjacencies)
+
+
+def _parse_powers_and_start(
+    document: Mapping[str, Any], territories: tuple[TerritoryDefinition, ...]
+) -> tuple[tuple[PowerDefinition, ...], StartingSetup]:
+    territory_by_id = {str(item.id): item for item in territories}
+    teams = _mapping(document.get("teams", {}), "teams")
+    powers: list[PowerDefinition] = []
+    units: list[UnitPosition] = []
+    dislodged: list[DislodgedUnit] = []
+    controllers: dict[TerritoryId, PowerId | None] = {item.id: None for item in territories}
+    owners: dict[TerritoryId, PowerId | None] = {
+        item.id: None for item in territories if item.is_supply_centre
+    }
+    for power_id, untyped in teams.items():
+        item = _mapping(untyped, f"teams.{power_id}")
+        power = PowerId(power_id)
+        home = frozenset(TerritoryId(str(value)) for value in item.get("home_supply_centres", []))
+        powers.append(
+            PowerDefinition(
+                power, str(item.get("name", power_id)), str(item.get("colour", "#777777")), home
+            )
+        )
+        for territory_id in item.get("starting_supply_centres", []):
+            owners[TerritoryId(str(territory_id))] = power
+        for territory_id in item.get("starting_territories", []):
+            controllers[TerritoryId(str(territory_id))] = power
+        for unit_value in item.get("initial_units", []):
+            unit = _mapping(unit_value, f"teams.{power_id}.initial_units")
+            location = _location(str(unit.get("location", "")), territory_by_id)
+            units.append(UnitPosition(power, UnitType(str(unit.get("type", ""))), location))
+        for unit_value in item.get("initial_dislodged_units", []):
+            unit = _mapping(unit_value, f"teams.{power_id}.initial_dislodged_units")
+            position = UnitPosition(
+                power,
+                UnitType(str(unit.get("type", ""))),
+                _location(str(unit.get("location", "")), territory_by_id),
+            )
+            options = tuple(
+                _location(str(value), territory_by_id) for value in unit.get("retreat_options", [])
+            )
+            dislodged.append(DislodgedUnit(position, options))
+    start = _mapping(document.get("start", {}), "start")
+    phase = PhaseId(int(start.get("year", 1901)), Season(str(start.get("season", "spring"))))
+    state = GameState(
+        tuple(units),
+        tuple(dislodged),
+        MappingProxyType(controllers),
+        MappingProxyType(owners),
+    )
+    return tuple(powers), StartingSetup(phase, state)
+
+
+def compile_map(
+    text: str,
+    svg: bytes,
+    army_svg: bytes | None = None,
+    fleet_svg: bytes | None = None,
+) -> MapDefinition:
+    """Compile authored map content into a validated application snapshot."""
+    document = load_yaml(text)
+    safe_svg = sanitise_svg(svg)
+    raw_territories = _mapping(document.get("territories", {}), "territories")
+    territories = _parse_territories(raw_territories)
+    powers, setup = _parse_powers_and_start(document, territories)
+    presentation = _parse_presentation(raw_territories, territories)
+    topology = _effective_connections(raw_territories, territories, safe_svg)
+    return MapDefinition(
+        id=MapId(str(document.get("map_id", ""))),
+        name=str(document.get("name", "")),
+        territories=territories,
+        adjacencies=topology,
+        powers=powers,
+        default_starting_setup=setup,
+        presentation=presentation,
+        assets=MapAssets(safe_svg, army_svg or DEFAULT_ARMY_SVG, fleet_svg or DEFAULT_FLEET_SVG),
+        rules_engine_id=str(document.get("rules_engine", "standard")),
+    )
+
+
+def load_map_folder(path: Path) -> MapDefinition:
+    text = (path / "map.yaml").read_text(encoding="utf-8")
+    document = load_yaml(text)
+    assets = _mapping(document.get("assets", {}), "assets")
+    map_path = path / str(assets.get("map", "map.svg"))
+    army_path = path / str(assets.get("army", "army.svg"))
+    fleet_path = path / str(assets.get("fleet", "fleet.svg"))
+    return compile_map(
+        text,
+        map_path.read_bytes(),
+        army_path.read_bytes() if army_path.exists() else None,
+        fleet_path.read_bytes() if fleet_path.exists() else None,
+    )

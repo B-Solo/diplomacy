@@ -595,6 +595,7 @@ class ApplicationService(Protocol):
 
     def list_maps(self) -> tuple[MapSummary, ...]: ...
     def begin_map_import(self, name: str, svg: bytes) -> MapDraft: ...
+    def load_map_draft(self, map_id: MapId) -> MapDraft: ...
     def validate_map_draft(self, draft: MapDraft) -> MapValidation: ...
     def save_map_draft(self, draft: MapDraft) -> MapDefinition: ...
 ```
@@ -602,6 +603,8 @@ class ApplicationService(Protocol):
 `SessionView` identifies the active game, selected phase, selected perspective and available navigation choices.
 `prepare_new_game` returns the reusable map's default setup for game-specific editing.
 `create_game` validates the supplied setup against the unchanged powers, colours, home supply centres and topology before creating files.
+`load_map_draft` opens an existing reusable map for configuration and visual anchor placement without re-importing its SVG.
+Saving that draft replaces only the reusable map; private map snapshots already stored in games remain unchanged.
 `ResolveResult` is either an `AdvancedPhase` or a `FinalisationRequired` value naming powers whose orders are still open.
 Calling `resolve_and_advance(allow_unfinalised=True)` authorises advancement after that warning.
 
