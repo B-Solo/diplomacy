@@ -277,14 +277,14 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert {label.attrib["font-size"] for label in node_layer.findall("{*}text")} == {"11"}
     assert {label.attrib["fill"] for label in node_layer.findall("{*}text")} == {"#111111"}
     assert all("stroke" not in label.attrib for label in node_layer.findall("{*}text"))
-    assert {label.text for label in topology_coast_labels.findall("{*}text")} >= {
+    assert {label.text for label in topology_coast_labels.findall("{*}g/{*}text")} >= {
         "North Coast",
         "South Coast",
     }
-    assert {label.attrib["font-size"] for label in topology_coast_labels.findall("{*}text")} == {
-        "9"
-    }
-    assert {label.attrib["fill"] for label in topology_coast_labels.findall("{*}text")} == {
+    assert {
+        label.attrib["font-size"] for label in topology_coast_labels.findall("{*}g/{*}text")
+    } == {"9"}
+    assert {label.attrib["fill"] for label in topology_coast_labels.findall("{*}g/{*}text")} == {
         definition.presentation.label_colour
     }
     assert {location for location in topology_nodes if location.startswith("devon")} == {
@@ -315,7 +315,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     multiline_label = TextAnchorItem(
         Point(0, 0), "Derbyshire & Nottinghamshire", "#111111", lambda _point: None
     )
-    assert multiline_label.glyph.toPlainText() == "Derbyshire &\nNottinghamshire"
+    assert multiline_label.rendered_text == "Derbyshire &\nNottinghamshire"
     land = next(item for item in definition.territories if item.kind.value == "land")
     sea = next(item for item in definition.territories if item.kind.value == "sea")
     land_node = topology_nodes[str(land.id)]
@@ -494,15 +494,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         if isinstance(item, TextAnchorItem)
         and item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
     ]
-    selectable_coast_labels = [item for item in selectable_labels if item.glyph.font().italic()]
-    selectable_territory_labels = [
-        item for item in selectable_labels if not item.glyph.font().italic()
-    ]
+    selectable_coast_labels = [item for item in selectable_labels if item.italic]
+    selectable_territory_labels = [item for item in selectable_labels if not item.italic]
     assert len(selectable_coast_labels) == len(wizard.draft.presentation.coast_label_anchors)
     assert len(selectable_territory_labels) == len(wizard.draft.presentation.label_anchors)
-    assert {
-        label.glyph.font().pixelSize() * label.scale() for label in selectable_coast_labels
-    } == {9.0}
+    assert {label.font_size for label in selectable_coast_labels} == {9.0}
     display_territory = wizard.draft.territories[0]
     canonical_name = display_territory.name
     wizard._select_territory_label(display_territory.id)
@@ -530,9 +526,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         item
         for item in wizard.anchor_canvas.scene().items()
         if isinstance(item, TextAnchorItem)
-        and item.glyph.toPlainText() == "First display line\nSecond display line"
+        and item.rendered_text == "First display line\nSecond display line"
     )
-    assert placement_label.glyph.toPlainText().splitlines() == [
+    assert placement_label.rendered_text.splitlines() == [
         "First display line",
         "Second display line",
     ]
@@ -569,16 +565,8 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     resized_labels = [
         item for item in wizard.anchor_canvas.scene().items() if isinstance(item, TextAnchorItem)
     ]
-    assert {
-        item.glyph.font().pixelSize() * item.scale()
-        for item in resized_labels
-        if not item.glyph.font().italic()
-    } == {12.5}
-    assert {
-        item.glyph.font().pixelSize() * item.scale()
-        for item in resized_labels
-        if item.glyph.font().italic()
-    } == {8.5}
+    assert {item.font_size for item in resized_labels if not item.italic} == {12.5}
+    assert {item.font_size for item in resized_labels if item.italic} == {8.5}
     wizard._set_map_colour("label_colour", "#201810")
     wizard._set_map_colour("inaccessible_region_colour", "#303030")
     wizard._set_map_colour("sea_colour", "#406080")

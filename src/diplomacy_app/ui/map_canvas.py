@@ -8,7 +8,6 @@ from PySide6.QtCore import QByteArray, QEvent, QPoint, QPointF, QRectF, Qt, Sign
 from PySide6.QtGui import (
     QBrush,
     QColor,
-    QFont,
     QInputDevice,
     QNativeGestureEvent,
     QPainter,
@@ -25,7 +24,6 @@ from PySide6.QtWidgets import (
     QGraphicsItemGroup,
     QGraphicsPolygonItem,
     QGraphicsScene,
-    QGraphicsTextItem,
     QGraphicsView,
     QHBoxLayout,
     QLineEdit,
@@ -35,7 +33,7 @@ from PySide6.QtWidgets import (
 
 from diplomacy_app.domain.models import MapBounds, MapHotspot, MapScene, Point
 from diplomacy_app.presentation import supply_centre_star_points
-from diplomacy_app.rendering.labels import label_lines
+from diplomacy_app.rendering.labels import isolated_label_svg, label_lines
 
 _SCROLLBAR_STYLE = """
 QScrollBar { background: transparent; border: 0; margin: 0; }
@@ -428,7 +426,7 @@ class SupplyCentreAnchorItem(QGraphicsItemGroup):
 
 
 class TextAnchorItem(QGraphicsItemGroup):
-    """Draggable rendered label."""
+    """Draggable instance of the canonical composed-map SVG label."""
 
     def __init__(
         self,
@@ -444,20 +442,27 @@ class TextAnchorItem(QGraphicsItemGroup):
         selection_callback=None,
     ) -> None:
         super().__init__()
-        glyph = QGraphicsTextItem()
-        font = QFont("Georgia")
-        font.setPixelSize(round(size * 2))
-        font.setBold(bold)
-        font.setItalic(italic)
-        glyph.setFont(font)
-        glyph.setDefaultTextColor(QColor(colour))
-        glyph.document().setDocumentMargin(0)
-        glyph.setPlainText("\n".join(label_lines(text)))
+        self.rendered_text = "\n".join(label_lines(text) if not italic else (text,))
+        self.font_size = size
+        self.italic = italic
+        self.svg = isolated_label_svg(
+            text,
+            colour,
+            size,
+            bold=bold,
+            italic=italic,
+            wrap=not italic,
+        )
+        self._renderer = QSvgRenderer(QByteArray(self.svg))
+        if not self._renderer.isValid():
+            raise ValueError("Invalid label SVG")
+        glyph = QGraphicsSvgItem()
+        glyph.setSharedRenderer(self._renderer)
+        glyph.setElementId("draggable-label")
+        bounds = self._renderer.boundsOnElement("draggable-label")
+        glyph.setPos(bounds.topLeft())
         self.glyph = glyph
-        bounds = glyph.boundingRect()
-        glyph.setPos(-bounds.center())
         self.addToGroup(glyph)
-        self.setScale(0.5)
         self.setPos(QPointF(point.x, point.y))
         self.setRotation(rotation)
         self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)

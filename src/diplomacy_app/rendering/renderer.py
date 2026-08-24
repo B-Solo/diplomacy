@@ -38,7 +38,7 @@ from diplomacy_app.presentation import (
     embedded_unit_svg,
     supply_centre_star_points,
 )
-from diplomacy_app.rendering.labels import LABEL_LINE_HEIGHT, label_lines
+from diplomacy_app.rendering.labels import add_label_element
 
 _SVG = "http://www.w3.org/2000/svg"
 ElementTree.register_namespace("", _SVG)
@@ -192,59 +192,35 @@ class MapRenderer:
             for territory in map_definition.territories:
                 item = projected[territory.id]
                 anchor = label_anchors[territory.id]
-                label_group = ElementTree.SubElement(
+                add_label_element(
                     labels,
-                    _tag("g"),
-                    {
-                        "class": "territory-label",
-                        "data-territory": str(territory.id),
-                    },
+                    element_id=f"territory-label-{territory.id}",
+                    text=item.label,
+                    anchor=anchor,
+                    size=map_definition.presentation.territory_label_font_size,
+                    colour=map_definition.presentation.label_colour,
+                    bold=True,
+                    css_class="territory-label",
+                    data={"data-territory": str(territory.id)},
                 )
-                lines = label_lines(item.label)
-                line_height = (
-                    map_definition.presentation.territory_label_font_size * LABEL_LINE_HEIGHT
-                )
-                for index, line in enumerate(lines):
-                    line_label = ElementTree.SubElement(
-                        label_group,
-                        _tag("text"),
-                        {
-                            "x": str(anchor.x),
-                            "y": f"{anchor.y + (index - (len(lines) - 1) / 2) * line_height:g}",
-                            "text-anchor": "middle",
-                            "dominant-baseline": "central",
-                            "font-family": "Georgia, serif",
-                            "font-size": f"{map_definition.presentation.territory_label_font_size:g}",
-                            "font-weight": "700",
-                            "fill": map_definition.presentation.label_colour,
-                            "data-line": str(index),
-                        },
-                    )
-                    line_label.text = line
                 for coast_id in territory.split_coast_ids:
                     location = Location(territory.id, coast_id)
                     coast_anchor = map_definition.presentation.coast_label_anchors[location]
                     rotation = map_definition.presentation.coast_label_rotations.get(location, 0)
-                    coast_label = ElementTree.SubElement(
+                    add_label_element(
                         coast_labels,
-                        _tag("text"),
-                        {
-                            "x": str(coast_anchor.x),
-                            "y": str(coast_anchor.y),
-                            "text-anchor": "middle",
-                            "dominant-baseline": "central",
-                            "font-family": "Georgia, serif",
-                            "font-size": f"{map_definition.presentation.coast_label_font_size:g}",
-                            "font-style": "italic",
-                            "font-weight": "700",
-                            "fill": map_definition.presentation.label_colour,
-                            "transform": (
-                                f"rotate({rotation:g} {coast_anchor.x:g} {coast_anchor.y:g})"
-                            ),
-                            "data-location": f"{territory.id}/{coast_id}",
-                        },
+                        element_id=f"coast-label-{territory.id}-{coast_id}",
+                        text=coast_label_text(coast_id),
+                        anchor=coast_anchor,
+                        size=map_definition.presentation.coast_label_font_size,
+                        colour=map_definition.presentation.label_colour,
+                        bold=True,
+                        italic=True,
+                        rotation=rotation,
+                        wrap=False,
+                        css_class="coast-label",
+                        data={"data-location": f"{territory.id}/{coast_id}"},
                     )
-                    coast_label.text = coast_label_text(coast_id)
                 if isinstance(item, VisibleTerritory) and territory.is_supply_centre:
                     point = map_definition.presentation.supply_centre_anchors[territory.id]
                     owner_colour = (

@@ -4,7 +4,9 @@ from dataclasses import replace
 from types import MappingProxyType
 from xml.etree import ElementTree
 
-from PySide6.QtGui import QImage
+from PySide6.QtCore import QRectF
+from PySide6.QtGui import QColor, QImage, QPainter
+from PySide6.QtWidgets import QGraphicsScene
 
 from diplomacy_app.domain.models import (
     DisplayMode,
@@ -27,6 +29,7 @@ from diplomacy_app.presentation import darken_colour
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rendering.labels import label_lines
 from diplomacy_app.rules_engine import StandardRulesEngine
+from diplomacy_app.ui.map_canvas import TextAnchorItem
 from diplomacy_app.visibility import VisibilityProjector
 
 
@@ -117,6 +120,49 @@ def test_exported_multiline_label_paints_two_distinct_lines(qapp, england):
         renderer.export(renderer.compose(minimal_map, projection, request), request).data
     )
     assert not image.isNull()
+
+    placement = QImage(200, 100, QImage.Format.Format_ARGB32)
+    placement.fill(QColor("white"))
+    placement_scene = QGraphicsScene()
+    placement_scene.setSceneRect(0, 0, 200, 100)
+    placement_scene.addItem(
+        TextAnchorItem(
+            Point(100, 50),
+            "FIRST LINE\nSECOND LINE",
+            "#000000",
+            lambda _point: None,
+            size=14,
+            bold=True,
+        )
+    )
+    painter = QPainter(placement)
+    placement_scene.render(
+        painter,
+        QRectF(0, 0, 200, 100),
+        QRectF(0, 0, 200, 100),
+    )
+    painter.end()
+
+    def dark_pixel_bounds(value: QImage) -> tuple[int, int, int, int]:
+        pixels = [
+            (x, y)
+            for y in range(value.height())
+            for x in range(value.width())
+            if max(
+                value.pixelColor(x, y).red(),
+                value.pixelColor(x, y).green(),
+                value.pixelColor(x, y).blue(),
+            )
+            < 100
+        ]
+        return (
+            min(x for x, _y in pixels),
+            min(y for _x, y in pixels),
+            max(x for x, _y in pixels),
+            max(y for _x, y in pixels),
+        )
+
+    assert dark_pixel_bounds(placement) == dark_pixel_bounds(image)
     dark_rows = [
         y
         for y in range(image.height())
@@ -193,10 +239,15 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
         "A deliberately long line",
         "Second line",
     )
-    coast_labels = root.findall(".//{*}g[@id='coast-labels']/{*}text")
+    coast_groups = root.findall(".//{*}g[@id='coast-labels']/{*}g")
+    coast_labels = [line for group in coast_groups if (line := group.find("{*}text")) is not None]
+    assert len(coast_labels) == len(coast_groups)
     assert {label.text for label in coast_labels} >= {"North Coast", "South Coast"}
     assert {label.attrib["font-size"] for label in coast_labels} == {"9"}
-    assert all("rotate(" in label.attrib["transform"] for label in coast_labels)
+    assert all(
+        "transform" not in group.attrib or "rotate(" in group.attrib["transform"]
+        for group in coast_groups
+    )
     assert all(label.attrib["fill"] == "#4c3b1e" for label in coast_labels)
     assert all("stroke" not in label.attrib for label in coast_labels)
     centre_stars = root.findall(".//{*}g[@id='supply-centres']/{*}polygon")
@@ -300,15 +351,15 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     assert all(line.attrib["fill"] == "#201810" for line in rendered_lines)
     assert {
         label.attrib["font-size"]
-        for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}text")
+        for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}g/{*}text")
     } == {"8.5"}
     assert {
         label.attrib["fill"]
-        for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}text")
+        for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}g/{*}text")
     } == {"#201810"}
     assert {
         label.attrib["font-weight"]
-        for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}text")
+        for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}g/{*}text")
     } == {"700"}
     inaccessible = next(
         node for node in display_root.iter() if node.attrib.get("id") == "impassable-scotland"
