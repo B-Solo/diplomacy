@@ -5,8 +5,13 @@ QWidget { font-family: "Segoe UI", sans-serif; font-size: 10pt; color: #292820; 
 QMainWindow { background: #e9e4d6; }
 QToolBar { background: #f6f1e3; border: 0; border-bottom: 1px solid #b7ae97; spacing: 7px; padding: 7px; }
 QPushButton, QToolButton, QComboBox, QSpinBox { background: #fffaf0; border: 1px solid #a89d83; border-radius: 4px; padding: 6px 10px; }
+QComboBox { color: #292820; }
 QComboBox::drop-down { border: 0; width: 24px; }
 QComboBox::down-arrow { width: 9px; height: 6px; }
+QComboBox QAbstractItemView { background: #fffaf0; color: #292820; border: 1px solid #a89d83; selection-background-color: #42584b; selection-color: #fffdf5; outline: 0; }
+QComboBox QAbstractItemView::item { background: #fffaf0; color: #292820; padding: 5px 8px; }
+QComboBox QAbstractItemView::item:hover { background: #f0e5ca; color: #292820; }
+QComboBox QAbstractItemView::item:selected { background: #42584b; color: #fffdf5; }
 QPushButton:hover, QToolButton:hover { background: #f0e5ca; border-color: #756a52; }
 QPushButton:pressed, QToolButton:pressed { background: #dfd1af; }
 QPushButton[primary="true"] { background: #42584b; color: #fffdf5; border-color: #2f4237; font-weight: 600; }

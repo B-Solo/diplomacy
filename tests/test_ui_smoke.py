@@ -10,10 +10,13 @@ from diplomacy_app.ui.application_window import ApplicationWindow
 from diplomacy_app.ui.map_canvas import TextAnchorItem, UnitAnchorItem
 from diplomacy_app.ui.map_manager_workspace import MapManagerWorkspace
 from diplomacy_app.ui.map_wizard import MapWizard
+from diplomacy_app.ui.style import STYLE
 from diplomacy_app.visibility import VisibilityProjector
 
 
 def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_root):
+    assert "QComboBox QAbstractItemView::item:selected" in STYLE
+    assert "selection-color: #fffdf5" in STYLE
     maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     service = ApplicationService(
         FileGameRepository(RecentGameStore(tmp_path / "app.json")),
