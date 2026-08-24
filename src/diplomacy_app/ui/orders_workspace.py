@@ -69,7 +69,7 @@ class PowerPanel(QFrame):
         canonical.setCursor(Qt.CursorShape.PointingHandCursor)
         canonical.setStyleSheet(
             "background: #fffdf7; color: #171714; text-align: left; "
-            "font-family: Consolas, monospace; padding: 8px; border: 0"
+            "font-family: monospace; padding: 8px; border: 0"
         )
         canonical.clicked.connect(lambda: self.stack.setCurrentIndex(1) if self.editable else None)
         self.stack.addWidget(canonical)

@@ -1,7 +1,9 @@
 """Warm, map-table-inspired application styling."""
 
+from PySide6.QtGui import QColor, QPalette
+
 STYLE = """
-QWidget { font-family: "Segoe UI", sans-serif; font-size: 10pt; color: #292820; }
+QWidget { font-size: 10pt; color: #292820; }
 QMainWindow { background: #e9e4d6; }
 QToolBar { background: #f6f1e3; color: #292820; border: 0; border-bottom: 1px solid #b7ae97; spacing: 4px; padding: 4px; }
 QPushButton, QToolButton, QComboBox, QSpinBox { background: #fffaf0; color: #292820; border: 1px solid #a89d83; border-radius: 3px; padding: 4px 7px; }
@@ -47,3 +49,44 @@ QLabel[muted="true"] { color: #6f6a5d; }
 QLabel[fog="true"] { background: #f1d7a9; color: #694817; border: 1px solid #b8873b; border-radius: 5px; padding: 3px 7px; font-weight: 700; }
 QToolTip { background: #fffaf0; color: #171714; border: 1px solid #756a52; padding: 3px; }
 """
+
+
+def light_palette() -> QPalette:
+    """Return a complete light palette that is independent of the desktop theme."""
+    palette = QPalette()
+    colours = {
+        QPalette.ColorRole.Window: "#e9e4d6",
+        QPalette.ColorRole.WindowText: "#292820",
+        QPalette.ColorRole.Base: "#fffdf7",
+        QPalette.ColorRole.AlternateBase: "#f4eedf",
+        QPalette.ColorRole.ToolTipBase: "#fffaf0",
+        QPalette.ColorRole.ToolTipText: "#171714",
+        QPalette.ColorRole.Text: "#171714",
+        QPalette.ColorRole.Button: "#fffaf0",
+        QPalette.ColorRole.ButtonText: "#292820",
+        QPalette.ColorRole.BrightText: "#fffdf5",
+        QPalette.ColorRole.Highlight: "#42584b",
+        QPalette.ColorRole.HighlightedText: "#fffdf5",
+        QPalette.ColorRole.Link: "#315b78",
+        QPalette.ColorRole.PlaceholderText: "#777165",
+    }
+    for group in (QPalette.ColorGroup.Active, QPalette.ColorGroup.Inactive):
+        for role, colour in colours.items():
+            palette.setColor(group, role, QColor(colour))
+    for role in (
+        QPalette.ColorRole.WindowText,
+        QPalette.ColorRole.Text,
+        QPalette.ColorRole.ButtonText,
+        QPalette.ColorRole.PlaceholderText,
+    ):
+        palette.setColor(QPalette.ColorGroup.Disabled, role, QColor("#777165"))
+    palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Window, QColor("#e9e4d6"))
+    palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Base, QColor("#eee9dd"))
+    palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Button, QColor("#ddd8cb"))
+    palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Highlight, QColor("#9da89f"))
+    palette.setColor(
+        QPalette.ColorGroup.Disabled,
+        QPalette.ColorRole.HighlightedText,
+        QColor("#fffdf5"),
+    )
+    return palette

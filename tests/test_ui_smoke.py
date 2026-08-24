@@ -42,12 +42,15 @@ from diplomacy_app.ui.application_window import ApplicationWindow, _quit_on_inte
 from diplomacy_app.ui.map_canvas import MapCanvas, TextAnchorItem, UnitAnchorItem
 from diplomacy_app.ui.map_manager_workspace import MapManagerWorkspace
 from diplomacy_app.ui.map_wizard import MapWizard
-from diplomacy_app.ui.style import STYLE
+from diplomacy_app.ui.style import STYLE, light_palette
 from diplomacy_app.visibility import VisibilityProjector
 
 
 def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_root):
-    QApplication.instance().setStyleSheet(STYLE)
+    app = QApplication.instance()
+    app.setStyle("Fusion")
+    app.setPalette(light_palette())
+    app.setStyleSheet(STYLE)
     assert "QComboBox QAbstractItemView::item:selected" in STYLE
     assert "selection-color: #fffdf5" in STYLE
     assert "QPushButton, QToolButton { padding: 5px 9px; }" in STYLE
@@ -56,6 +59,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert "QComboBox::down-arrow" in STYLE
     assert "border-top: 6px solid #39372f" in STYLE
     assert "QScrollBar::handle" in STYLE
+    assert "Segoe UI" not in STYLE
     maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     service = ApplicationService(
         FileGameRepository(RecentGameStore(tmp_path / "app.json")),
@@ -108,6 +112,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.resize(1400, 900)
     wizard.show()
     QApplication.processEvents()
+    for index in range(wizard.tabs.count()):
+        page = wizard.tabs.widget(index)
+        assert page.palette().color(QPalette.ColorRole.WindowText).name() == "#292820"
+    assert wizard.yaml_editor.palette().color(QPalette.ColorRole.Text).name() == "#171714"
+    assert wizard.setup_editor.palette().color(QPalette.ColorRole.Text).name() == "#171714"
     default_fit_canvas = MapCanvas()
     qtbot.addWidget(default_fit_canvas)
     default_fit_canvas.resize(320, 240)

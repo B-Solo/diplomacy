@@ -31,7 +31,7 @@ from diplomacy_app.ui.map_wizard import MapWizard
 from diplomacy_app.ui.map_workspace import MapWorkspace
 from diplomacy_app.ui.new_game_workspace import NewGameWorkspace
 from diplomacy_app.ui.orders_workspace import OrdersWorkspace
-from diplomacy_app.ui.style import STYLE
+from diplomacy_app.ui.style import STYLE, light_palette
 
 
 class ApplicationWindow(QMainWindow):
@@ -402,6 +402,8 @@ def run_application(arguments: list[str] | None = None) -> int:
     app = QApplication(arguments or sys.argv)
     app.setApplicationName("Diplomacy Gamemaster")
     app.setOrganizationName("DiplomacyGamemaster")
+    app.setStyle("Fusion")
+    app.setPalette(light_palette())
     app.setStyleSheet(STYLE)
     window = ApplicationWindow(build_application())
     window.showMaximized()

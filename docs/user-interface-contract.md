@@ -54,7 +54,7 @@ Player communication occurs outside the application using map images copied by t
 - **AN.9:** Game creation and reusable-map management replace the main workspace temporarily and return to the preceding application context when completed or cancelled.
 - **AN.10:** Application workflows, validation messages and confirmations remain inside the main window; operating-system file and folder choosers may use native windows.
 - **AN.11:** The current game's choices provide a placement-only editor for its private map snapshot.
-- **AN.12:** Interactive controls and their normal, selected, hovered and disabled states maintain explicit foreground/background contrast rather than relying on the desktop theme.
+- **AN.12:** All workspaces use an application-owned light palette and platform-available fonts; interactive controls and their normal, selected, hovered and disabled states maintain explicit foreground/background contrast rather than relying on the desktop theme.
 
 ### Season Navigation (SN)
 
@@ -202,6 +202,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.28:** The Unit symbols tab displays compact previews of the effective default or custom army and fleet symbols at approximately their real map scale before saving.
 - **GC.29:** Placement label mode independently selects no labels, full territory names or abbreviations; full names and abbreviations have separate draggable positions, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.
+- **GC.31:** Powers and setup, Unit symbols and normal game rendering use the effective symbols and visual anchors shown in Placement; their additional topology or game-state overlays do not substitute different presentation assets.
 
 ## Limitations and Restrictions
 
