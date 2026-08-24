@@ -5,7 +5,7 @@ from xml.etree import ElementTree
 import pytest
 from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtGui import QNativeGestureEvent, QPointingDevice, QWheelEvent
-from PySide6.QtWidgets import QGraphicsItem, QGraphicsView, QPushButton
+from PySide6.QtWidgets import QGraphicsItem, QGraphicsView, QLabel, QPushButton
 
 from diplomacy_app.application.service import ApplicationService
 from diplomacy_app.domain.models import Point
@@ -37,6 +37,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     qtbot.addWidget(window)
     window.set_session(service.start())
     assert window.stack.currentWidget() is window.welcome
+    assert not any(
+        "Open a self-contained game folder" in label.text()
+        for label in window.welcome.findChildren(QLabel)
+    )
     assert window.map_workspace.zoom_controls.parent() is window.map_workspace.canvas.viewport()
     assert window.map_workspace.zoom_controls.zoom_out.text() == "−"
     assert window.map_workspace.zoom_controls.zoom_in.text() == "+"
@@ -246,6 +250,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     manager = MapManagerWorkspace(service)
     qtbot.addWidget(manager)
     assert manager.map_selector.count() >= 1
+    assert not any(
+        "Import a structured SVG" in label.text() for label in manager.findChildren(QLabel)
+    )
 
     window._configure_maps()
     assert isinstance(window.stack.currentWidget(), MapManagerWorkspace)

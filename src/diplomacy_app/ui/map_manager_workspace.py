@@ -27,12 +27,6 @@ class MapManagerWorkspace(QWidget):
         title = QLabel("Configure reusable maps")
         title.setStyleSheet("font: 700 22pt Georgia, serif; color: #33483d")
         layout.addWidget(title)
-        note = QLabel(
-            "Import a structured SVG or reopen a configured map. Saving affects future games "
-            "only; existing games retain their private map snapshots."
-        )
-        note.setWordWrap(True)
-        layout.addWidget(note)
         row = QHBoxLayout()
         self.map_selector = QComboBox()
         row.addWidget(self.map_selector, 1)
