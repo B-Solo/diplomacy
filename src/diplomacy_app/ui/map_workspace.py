@@ -222,7 +222,12 @@ class MapWorkspace(QWidget):
             size = PixelSize(
                 max(1, self.canvas.viewport().width()), max(1, self.canvas.viewport().height())
             )
-        return RenderRequest(self.mode.currentData(), self.labels.currentData(), bounds, size)
+        return RenderRequest(
+            DisplayMode(self.mode.currentData()),
+            LabelMode(self.labels.currentData()),
+            bounds,
+            size,
+        )
 
     def refresh(self) -> None:
         if not self.session or not self.session.game:

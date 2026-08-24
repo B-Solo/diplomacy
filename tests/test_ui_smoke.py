@@ -25,7 +25,9 @@ from PySide6.QtWidgets import (
 
 from diplomacy_app.application.service import ApplicationService
 from diplomacy_app.domain.models import (
+    DisplayMode,
     GameLocation,
+    LabelMode,
     MapBounds,
     NewGameRequest,
     PixelSize,
@@ -39,7 +41,12 @@ from diplomacy_app.map_library import FileMapLibrary
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rules_engine import StandardRulesEngine
 from diplomacy_app.ui.application_window import ApplicationWindow, _quit_on_interrupt
-from diplomacy_app.ui.map_canvas import MapCanvas, TextAnchorItem, UnitAnchorItem
+from diplomacy_app.ui.map_canvas import (
+    MapCanvas,
+    SupplyCentreAnchorItem,
+    TextAnchorItem,
+    UnitAnchorItem,
+)
 from diplomacy_app.ui.map_manager_workspace import MapManagerWorkspace
 from diplomacy_app.ui.map_wizard import MapWizard
 from diplomacy_app.ui.style import STYLE, light_palette
@@ -100,6 +107,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         window.map_workspace.views.sizeAdjustPolicy()
         is QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
     )
+    window.map_workspace.mode.setCurrentIndex(1)
+    window.map_workspace.labels.setCurrentIndex(1)
+    render_request = window.map_workspace._request()
+    assert render_request.display_mode is DisplayMode.ORDERS
+    assert render_request.label_mode is LabelMode.ABBREVIATION
     window.show()
     QApplication.processEvents()
     control_palette = window.map_workspace.views.palette()
@@ -443,6 +455,14 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         for item in wizard.anchor_canvas.scene().items()
         if isinstance(item, TextAnchorItem)
     )
+    centre_items = [
+        item
+        for item in wizard.anchor_canvas.scene().items()
+        if isinstance(item, SupplyCentreAnchorItem)
+    ]
+    assert len(centre_items) == len(wizard.draft.presentation.supply_centre_anchors)
+    assert all(len(item.childItems()) == 1 for item in centre_items)
+    assert all(item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable for item in centre_items)
     selectable_labels = [
         item
         for item in wizard.anchor_canvas.scene().items()

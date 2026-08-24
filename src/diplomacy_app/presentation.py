@@ -2,11 +2,34 @@
 
 from __future__ import annotations
 
+import math
 from xml.etree import ElementTree
 
 from diplomacy_app.domain.models import CoastId, Point
 
 COAST_LABEL_FONT_SIZE = 9
+TERRITORY_LABEL_COLOUR = "#4c3b1e"
+COAST_LABEL_COLOUR = "#171714"
+SUPPLY_CENTRE_STAR_OUTER_RADIUS = 9.0
+SUPPLY_CENTRE_STAR_INNER_RADIUS = 3.5
+
+
+def supply_centre_star_points(centre: Point | None = None) -> tuple[Point, ...]:
+    """Return the shared sharp five-point supply-centre star geometry."""
+    centre = centre or Point(0, 0)
+    points = []
+    for index in range(10):
+        radius = (
+            SUPPLY_CENTRE_STAR_OUTER_RADIUS if index % 2 == 0 else SUPPLY_CENTRE_STAR_INNER_RADIUS
+        )
+        angle = -math.pi / 2 + index * math.pi / 5
+        points.append(
+            Point(
+                centre.x + radius * math.cos(angle),
+                centre.y + radius * math.sin(angle),
+            )
+        )
+    return tuple(points)
 
 
 def darken_colour(colour: str, factor: float) -> str:

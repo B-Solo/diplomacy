@@ -33,10 +33,13 @@ from diplomacy_app.domain.models import (
 )
 from diplomacy_app.map_library.svg_importer import view_box
 from diplomacy_app.presentation import (
+    COAST_LABEL_COLOUR,
     COAST_LABEL_FONT_SIZE,
+    TERRITORY_LABEL_COLOUR,
     coast_label_text,
     darken_colour,
     embedded_unit_svg,
+    supply_centre_star_points,
 )
 from diplomacy_app.rendering.labels import label_lines
 
@@ -115,10 +118,7 @@ class MapRenderer:
                         "font-family": "Georgia, serif",
                         "font-size": "11",
                         "font-weight": "700",
-                        "fill": "#252621",
-                        "paint-order": "stroke",
-                        "stroke": "#f5f0df",
-                        "stroke-width": "2",
+                        "fill": TERRITORY_LABEL_COLOUR,
                     },
                 )
                 lines = label_lines(item.label)
@@ -151,10 +151,7 @@ class MapRenderer:
                             "font-size": str(COAST_LABEL_FONT_SIZE),
                             "font-style": "italic",
                             "font-weight": "600",
-                            "fill": "#171714",
-                            "paint-order": "stroke",
-                            "stroke": "#f5f0df",
-                            "stroke-width": "1",
+                            "fill": COAST_LABEL_COLOUR,
                             "transform": (
                                 f"rotate({rotation:g} {coast_anchor.x:g} {coast_anchor.y:g})"
                             ),
@@ -165,25 +162,25 @@ class MapRenderer:
                 if isinstance(item, VisibleTerritory) and territory.is_supply_centre:
                     point = map_definition.presentation.supply_centre_anchors[territory.id]
                     owner_colour = (
-                        powers[item.supply_centre_owner].colour
+                        darken_colour(powers[item.supply_centre_owner].colour, 0.82)
                         if item.supply_centre_owner in powers
                         else "#eee6c8"
                     )
-                    star = ElementTree.SubElement(
+                    ElementTree.SubElement(
                         centres,
-                        _tag("text"),
+                        _tag("polygon"),
                         {
-                            "x": str(point.x),
-                            "y": str(point.y),
-                            "text-anchor": "middle",
-                            "dominant-baseline": "central",
-                            "font-size": "18",
+                            "points": " ".join(
+                                f"{star_point.x:g},{star_point.y:g}"
+                                for star_point in supply_centre_star_points(point)
+                            ),
                             "fill": owner_colour,
                             "stroke": "#3d3b33",
-                            "stroke-width": "1",
+                            "stroke-width": "1.25",
+                            "stroke-linejoin": "miter",
+                            "data-territory": str(territory.id),
                         },
                     )
-                    star.text = "★"
                 if isinstance(item, VisibleTerritory):
                     for unit, dislodged in ((item.unit, False), (item.dislodged_unit, True)):
                         if unit is None:

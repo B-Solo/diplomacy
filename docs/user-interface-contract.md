@@ -107,7 +107,7 @@ Player communication occurs outside the application using map images copied by t
 
 - **TR.1:** The current controller determines a playable land territory's colour; seas retain their neutral map treatment.
 - **TR.2:** Successful occupation changes territorial control, while an empty territory retains its controller.
-- **TR.3:** Supply-centre ownership is independent of current occupation and is represented by a star coloured for its owner.
+- **TR.3:** Supply-centre ownership is independent of current occupation and is represented by a sharp star filled with a slightly darker version of its owner's colour.
 - **TR.4:** Neutral supply centres use a neutral star.
 - **TR.5:** Each map provides one reusable army symbol and one reusable fleet symbol.
 - **TR.6:** All units of a type share the corresponding map symbol.

@@ -47,7 +47,9 @@ from diplomacy_app.domain.models import (
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import territory_geometries
 from diplomacy_app.presentation import (
+    COAST_LABEL_COLOUR,
     COAST_LABEL_FONT_SIZE,
+    TERRITORY_LABEL_COLOUR,
     coast_label_text,
     darken_colour,
     embedded_unit_svg,
@@ -55,6 +57,7 @@ from diplomacy_app.presentation import (
 from diplomacy_app.ui.map_canvas import (
     MapCanvas,
     MapZoomControls,
+    SupplyCentreAnchorItem,
     TextAnchorItem,
     UnitAnchorItem,
 )
@@ -853,7 +856,7 @@ class MapWizard(QWidget):
                 item = TextAnchorItem(
                     point,
                     text,
-                    "#4c3b1e",
+                    TERRITORY_LABEL_COLOUR,
                     lambda new_point, territory=territory, anchor_type=anchor_type: (
                         self._anchor_moved(
                             territory,
@@ -873,7 +876,7 @@ class MapWizard(QWidget):
                 item = TextAnchorItem(
                     point,
                     coast_label_text(location.coast_id),
-                    "#171714",
+                    COAST_LABEL_COLOUR,
                     lambda new_point, location=location: self._anchor_moved(
                         location.territory_id,
                         "coast_label",
@@ -894,17 +897,15 @@ class MapWizard(QWidget):
                 self.anchor_canvas.scene().addItem(item)
         if self.supply_preview.isChecked():
             for territory, point in presentation.supply_centre_anchors.items():
-                item = TextAnchorItem(
+                centre_item = SupplyCentreAnchorItem(
                     point,
-                    "★",
                     "#eee6c8",
                     lambda new_point, territory=territory: self._anchor_moved(
                         territory, "supply_centre", None, new_point
                     ),
-                    size=18,
                 )
-                item.setToolTip(f"{territories[territory].name}: supply centre")
-                self.anchor_canvas.scene().addItem(item)
+                centre_item.setToolTip(f"{territories[territory].name}: supply centre")
+                self.anchor_canvas.scene().addItem(centre_item)
         if self.armies_preview.isChecked():
             unit_entries: list[tuple[Any, str, str | None, Any]] = [
                 (territory, "army", None, point)

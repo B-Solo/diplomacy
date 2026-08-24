@@ -13,6 +13,7 @@ from PySide6.QtGui import (
     QNativeGestureEvent,
     QPainter,
     QPen,
+    QPolygonF,
     QWheelEvent,
 )
 from PySide6.QtSvg import QSvgRenderer
@@ -22,6 +23,7 @@ from PySide6.QtWidgets import (
     QGraphicsColorizeEffect,
     QGraphicsEllipseItem,
     QGraphicsItemGroup,
+    QGraphicsPolygonItem,
     QGraphicsScene,
     QGraphicsTextItem,
     QGraphicsView,
@@ -32,6 +34,7 @@ from PySide6.QtWidgets import (
 )
 
 from diplomacy_app.domain.models import MapBounds, MapHotspot, MapScene, Point
+from diplomacy_app.presentation import supply_centre_star_points
 from diplomacy_app.rendering.labels import label_lines
 
 _SCROLLBAR_STYLE = """
@@ -400,8 +403,32 @@ class UnitAnchorItem(QGraphicsItemGroup):
             self.callback(Point(position.x(), position.y()))
 
 
+class SupplyCentreAnchorItem(QGraphicsItemGroup):
+    """Draggable supply-centre preview using the rendered map's star geometry."""
+
+    def __init__(self, point: Point, colour: str, callback) -> None:
+        super().__init__()
+        polygon = QGraphicsPolygonItem(
+            QPolygonF([QPointF(item.x, item.y) for item in supply_centre_star_points()])
+        )
+        polygon.setBrush(QBrush(QColor(colour)))
+        pen = QPen(QColor("#3d3b33"), 1.25)
+        pen.setJoinStyle(Qt.PenJoinStyle.MiterJoin)
+        polygon.setPen(pen)
+        self.addToGroup(polygon)
+        self.setPos(QPointF(point.x, point.y))
+        self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)
+        self.setZValue(50)
+        self.callback = callback
+
+    def mouseReleaseEvent(self, event) -> None:
+        super().mouseReleaseEvent(event)
+        position = self.pos()
+        self.callback(Point(position.x(), position.y()))
+
+
 class TextAnchorItem(QGraphicsItemGroup):
-    """Draggable rendered label or supply-centre glyph."""
+    """Draggable rendered label."""
 
     def __init__(
         self,

@@ -21,6 +21,7 @@ from diplomacy_app.domain.models import (
     Revision,
     VisibilityPolicy,
 )
+from diplomacy_app.presentation import darken_colour
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rendering.labels import label_lines
 from diplomacy_app.rules_engine import StandardRulesEngine
@@ -102,12 +103,32 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
         "Derbyshire &",
         "Nottinghamshire",
     ]
+    assert derbyshire.attrib["fill"] == "#4c3b1e"
+    assert "stroke" not in derbyshire.attrib
     assert label_lines("Short Name") == ("Short Name",)
     assert label_lines("Manual\nBreak") == ("Manual", "Break")
     coast_labels = root.findall(".//{*}g[@id='coast-labels']/{*}text")
     assert {label.text for label in coast_labels} >= {"North Coast", "South Coast"}
     assert {label.attrib["font-size"] for label in coast_labels} == {"9"}
     assert all("rotate(" in label.attrib["transform"] for label in coast_labels)
+    assert all(label.attrib["fill"] == "#171714" for label in coast_labels)
+    assert all("stroke" not in label.attrib for label in coast_labels)
+    centre_stars = root.findall(".//{*}g[@id='supply-centres']/{*}polygon")
+    assert centre_stars
+    assert all(len(star.attrib["points"].split()) == 10 for star in centre_stars)
+    assert all(star.attrib["stroke-width"] == "1.25" for star in centre_stars)
+    assert all(star.attrib["stroke-linejoin"] == "miter" for star in centre_stars)
+    powers = {str(power.id): power for power in england.powers}
+    owners = {
+        str(territory_id): str(owner) if owner is not None else None
+        for territory_id, owner in phase.state.supply_centre_owners.items()
+    }
+    owned_star = next(
+        star for star in centre_stars if owners[star.attrib["data-territory"]] in powers
+    )
+    owner = owners[owned_star.attrib["data-territory"]]
+    assert owner is not None
+    assert owned_star.attrib["fill"] == darken_colour(powers[owner].colour, 0.82)
     asset_view_boxes = {
         ElementTree.fromstring(asset).attrib["viewBox"]
         for asset in (england.assets.army_svg, england.assets.fleet_svg)
