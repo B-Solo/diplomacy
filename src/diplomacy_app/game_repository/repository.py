@@ -368,6 +368,7 @@ class FileGameRepository:
         ):
             raise RepositoryError("Game map label sizes must be between 5 and 24")
         colours = (
+            presentation.label_colour,
             presentation.inaccessible_region_colour,
             presentation.sea_colour,
             presentation.unclaimed_region_colour,

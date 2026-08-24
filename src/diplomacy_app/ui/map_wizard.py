@@ -49,8 +49,6 @@ from diplomacy_app.domain.models import (
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import territory_geometries
 from diplomacy_app.presentation import (
-    COAST_LABEL_COLOUR,
-    TERRITORY_LABEL_COLOUR,
     coast_label_text,
     darken_colour,
     embedded_unit_svg,
@@ -328,6 +326,28 @@ class MapWizard(QWidget):
         self.setup_find = YamlFindBar(self.setup_editor, page)
         editor_layout.addWidget(self.setup_find)
         editor_layout.addWidget(self.setup_editor, 1)
+
+        self.map_colours_group = QGroupBox("Map colours")
+        colours_layout = QHBoxLayout(self.map_colours_group)
+        colours_layout.setContentsMargins(10, 8, 10, 8)
+        colours_layout.setSpacing(6)
+        self.label_colour_button = QPushButton()
+        self.inaccessible_colour_button = QPushButton()
+        self.sea_colour_button = QPushButton()
+        self.unclaimed_colour_button = QPushButton()
+        for field, button in (
+            ("label_colour", self.label_colour_button),
+            ("inaccessible_region_colour", self.inaccessible_colour_button),
+            ("sea_colour", self.sea_colour_button),
+            ("unclaimed_region_colour", self.unclaimed_colour_button),
+        ):
+            button.clicked.connect(
+                lambda _checked=False, field=field: self._choose_map_colour(field)
+            )
+            colours_layout.addWidget(button)
+        self._refresh_colour_buttons()
+        editor_layout.addWidget(self.map_colours_group)
+
         controls = QHBoxLayout()
         apply_setup = QPushButton("Regenerate map preview")
         apply_setup.clicked.connect(self._apply_setup_changes)
@@ -439,25 +459,6 @@ class MapWizard(QWidget):
             display_layout.addWidget(apply_display_name)
             self.display_name_group.setEnabled(False)
             editing_row.addWidget(self.display_name_group, 1)
-
-        self.map_colours_group = QGroupBox("Map colours")
-        colours_layout = QHBoxLayout(self.map_colours_group)
-        colours_layout.setContentsMargins(10, 8, 10, 8)
-        colours_layout.setSpacing(6)
-        self.inaccessible_colour_button = QPushButton()
-        self.sea_colour_button = QPushButton()
-        self.unclaimed_colour_button = QPushButton()
-        for field, button in (
-            ("inaccessible_region_colour", self.inaccessible_colour_button),
-            ("sea_colour", self.sea_colour_button),
-            ("unclaimed_region_colour", self.unclaimed_colour_button),
-        ):
-            button.clicked.connect(
-                lambda _checked=False, field=field: self._choose_map_colour(field)
-            )
-            colours_layout.addWidget(button)
-        self._refresh_colour_buttons()
-        editing_row.addWidget(self.map_colours_group)
 
         self.coast_label_group = QGroupBox("Selected coast label")
         coast_layout = QHBoxLayout(self.coast_label_group)
@@ -949,7 +950,7 @@ class MapWizard(QWidget):
                 item = TextAnchorItem(
                     point,
                     text,
-                    TERRITORY_LABEL_COLOUR,
+                    self.draft.presentation.label_colour,
                     lambda new_point, territory=territory, anchor_type=anchor_type: (
                         self._anchor_moved(
                             territory,
@@ -975,7 +976,7 @@ class MapWizard(QWidget):
                 item = TextAnchorItem(
                     point,
                     coast_label_text(location.coast_id),
-                    COAST_LABEL_COLOUR,
+                    self.draft.presentation.label_colour,
                     lambda new_point, location=location: self._anchor_moved(
                         location.territory_id,
                         "coast_label",
@@ -1063,6 +1064,7 @@ class MapWizard(QWidget):
     def _refresh_colour_buttons(self) -> None:
         presentation = self.draft.presentation
         for label, colour, button in (
+            ("Text", presentation.label_colour, self.label_colour_button),
             (
                 "Inaccessible",
                 presentation.inaccessible_region_colour,
@@ -1087,6 +1089,7 @@ class MapWizard(QWidget):
 
     def _set_map_colour(self, field: str, colour: str) -> None:
         values = {
+            "label_colour": self.draft.presentation.label_colour,
             "inaccessible_region_colour": self.draft.presentation.inaccessible_region_colour,
             "sea_colour": self.draft.presentation.sea_colour,
             "unclaimed_region_colour": self.draft.presentation.unclaimed_region_colour,
@@ -1098,6 +1101,7 @@ class MapWizard(QWidget):
         try:
             self.draft = self.service.update_map_colours(
                 self.draft,
+                values["label_colour"],
                 values["inaccessible_region_colour"],
                 values["sea_colour"],
                 values["unclaimed_region_colour"],
@@ -1105,6 +1109,7 @@ class MapWizard(QWidget):
             if not self.game_placement_only:
                 self.yaml_editor.setPlainText(self.draft.map_yaml)
             self._refresh_colour_buttons()
+            self._reload_setup_preview()
             self._reload_anchor_scene()
         except Exception as exc:
             self._show_error(f"Could not change map colour: {exc}")

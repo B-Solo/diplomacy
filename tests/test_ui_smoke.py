@@ -155,6 +155,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.placement_labels_group.title() == "Territory labels"
     assert wizard.label_sizes_group.title() == "Label sizes"
     assert wizard.map_colours_group.title() == "Map colours"
+    assert wizard.tabs.widget(2).isAncestorOf(wizard.map_colours_group)
     assert wizard.display_name_group.title() == "Selected territory display name"
     assert wizard.coast_label_group.title() == "Selected coast label"
     assert wizard.placement_labels.minimumWidth() == 150
@@ -518,9 +519,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert {
         item.glyph.font().pointSizeF() for item in resized_labels if item.glyph.font().italic()
     } == {8.5}
+    wizard._set_map_colour("label_colour", "#201810")
     wizard._set_map_colour("inaccessible_region_colour", "#303030")
     wizard._set_map_colour("sea_colour", "#406080")
     wizard._set_map_colour("unclaimed_region_colour", "#d8c8a8")
+    assert wizard.label_colour_button.text() == "Text #201810"
     assert wizard.inaccessible_colour_button.text() == "Inaccessible #303030"
     assert wizard.sea_colour_button.text() == "Sea #406080"
     assert wizard.unclaimed_colour_button.text() == "Unclaimed #D8C8A8"
@@ -540,7 +543,13 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         for node in base_preview.iter()
         if node.attrib.get("id") == land_territory.svg_element_id
     )
-    assert inaccessible_node.attrib["style"].endswith("fill:#303030")
+    assert inaccessible_node.attrib["style"].endswith("fill:url(#gamemaster-inaccessible-stripes)")
+    inaccessible_pattern = next(
+        node
+        for node in base_preview.iter()
+        if node.attrib.get("id") == "gamemaster-inaccessible-stripes"
+    )
+    assert inaccessible_pattern.find("{*}rect").attrib["fill"] == "#303030"
     assert sea_node.attrib["style"].endswith("fill:#406080")
     assert land_node.attrib["style"].endswith("fill:#d8c8a8")
     coast_location, coast_anchor = next(iter(wizard.draft.presentation.coast_label_anchors.items()))

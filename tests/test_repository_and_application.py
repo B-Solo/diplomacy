@@ -137,7 +137,7 @@ def test_current_game_map_placement_changes_only_private_presentation(tmp_path, 
     moved_abbreviation = Point(old_point.x - 6, old_point.y + 8)
     edited = service.update_map_anchor(edited, territory_id, "abbreviation", moved_abbreviation)
     edited = service.update_map_label_font_sizes(edited, 12.5, 8.5)
-    edited = service.update_map_colours(edited, "#303030", "#406080", "#d8c8a8")
+    edited = service.update_map_colours(edited, "#201810", "#303030", "#406080", "#d8c8a8")
     updated = service.save_game_map_placement(edited)
 
     reopened = repository(tmp_path).open(location)
@@ -149,6 +149,7 @@ def test_current_game_map_placement_changes_only_private_presentation(tmp_path, 
     assert reopened.map_definition.presentation.label_anchors[territory_id] == moved_point
     assert reopened.map_definition.presentation.territory_label_font_size == 12.5
     assert reopened.map_definition.presentation.coast_label_font_size == 8.5
+    assert reopened.map_definition.presentation.label_colour == "#201810"
     assert reopened.map_definition.presentation.inaccessible_region_colour == "#303030"
     assert reopened.map_definition.presentation.sea_colour == "#406080"
     assert reopened.map_definition.presentation.unclaimed_region_colour == "#d8c8a8"

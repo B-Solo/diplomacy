@@ -36,6 +36,7 @@ def test_england_compiles_complete_valid_topology(project_root, england):
     legacy_data["presentation"].pop("inaccessible_region_colour")
     legacy_data["presentation"].pop("sea_colour")
     legacy_data["presentation"].pop("unclaimed_region_colour")
+    legacy_data["presentation"].pop("label_colour", None)
     legacy_data.pop("inaccessible_svg_elements")
     for territory in legacy_data["territories"]:
         territory.pop("display_name")
@@ -47,6 +48,7 @@ def test_england_compiles_complete_valid_topology(project_root, england):
     assert restored.presentation.inaccessible_region_colour == "#777870"
     assert restored.presentation.sea_colour == "#9ebbd2"
     assert restored.presentation.unclaimed_region_colour == "#d0c9aa"
+    assert restored.presentation.label_colour == "#4c3b1e"
     assert all(item.display_name == item.name for item in restored.territories)
     assert all(
         type(edge)(edge.destination, edge.origin, edge.unit_type) in england.adjacencies

@@ -212,6 +212,7 @@ def authored_map_yaml(definition: MapDefinition) -> str:
         "presentation": {
             "territory_label_font_size": definition.presentation.territory_label_font_size,
             "coast_label_font_size": definition.presentation.coast_label_font_size,
+            "label_colour": definition.presentation.label_colour,
             "inaccessible_region_colour": definition.presentation.inaccessible_region_colour,
             "sea_colour": definition.presentation.sea_colour,
             "unclaimed_region_colour": definition.presentation.unclaimed_region_colour,

@@ -126,6 +126,7 @@ class MapPresentation:
     supply_centre_anchors: Mapping[TerritoryId, Point]
     territory_label_font_size: float
     coast_label_font_size: float
+    label_colour: str
     inaccessible_region_colour: str
     sea_colour: str
     unclaimed_region_colour: str
@@ -617,7 +618,7 @@ class ApplicationService(Protocol):
 `create_game` validates the supplied setup against the unchanged powers, colours, home supply centres and topology before creating files.
 `load_map_draft` opens an existing reusable map for configuration and visual anchor placement without re-importing its SVG.
 Saving that draft replaces only the reusable map; private map snapshots already stored in games remain unchanged.
-Current-game placement loads a restricted draft and persists only its presentation anchors, named-coast label rotations, shared label sizes and neutral map colours into that game's private snapshot.
+Current-game placement loads a restricted draft and persists only its presentation anchors, named-coast label rotations and shared label sizes into that game's private snapshot.
 `ResolveResult` is either an `AdvancedPhase` or a `FinalisationRequired` value naming powers whose orders are still open.
 Calling `resolve_and_advance(allow_unfinalised=True)` authorises advancement after that warning.
 

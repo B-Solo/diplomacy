@@ -78,7 +78,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
 - **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current` and `Copy map` actions.
-- **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors, named-coast label rotations, shared label sizes and neutral map colours; territory names, rules, topology, powers, setup and reusable-map defaults remain unchanged.
+- **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors, named-coast label rotations and shared label sizes; territory names, rules, topology, powers, setup, colours and reusable-map defaults remain unchanged.
 
 ### Saved Views and Image Copying (IC)
 
@@ -188,7 +188,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.14:** The Topology tab gives the graphical adjacency preview approximately three quarters of the initial split, includes readable territory and split-coast nodes, exposes local connection overrides alongside the complete effective topology and provides inline, wrapping text search through the platform-standard Find shortcut.
 - **GC.15:** The map-configuration editor supports split-coast connections, canals, off-map links, missed links and removal of incorrectly generated links through text.
 - **GC.16:** The saved `map.yaml` remains directly editable outside the application.
-- **GC.17:** A focused Powers and setup tab edits the starting phase, powers, colours, home and starting supply-centre ownership, initial territory control and starting units, provides the same inline YAML search and regenerates a map preview when applying those sections to the shared `map.yaml`.
+- **GC.17:** A focused Powers and setup tab edits the starting phase, powers, power and map colours, home and starting supply-centre ownership, initial territory control and starting units, provides the same inline YAML search and regenerates a map preview when applying those sections to the shared `map.yaml`.
 - **GC.18:** A map may provide one custom army SVG and one custom fleet SVG; the default symbols are used when either is absent.
 - **GC.19:** An existing reusable map can be reopened in the map-configuration editor without re-importing its SVG.
 - **GC.20:** Reopening a map provides the same visual Placement tab as initial import, including independent territory-label, named-coast-label, army, fleet, split-coast fleet and supply-centre anchors.
@@ -203,7 +203,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.29:** Placement label mode independently selects no labels, display names or abbreviations; display names and abbreviations have separate draggable positions, selected display names can be edited with Enter applying and Shift+Enter inserting explicit line breaks, territory and coast font sizes have separate map-wide half-point controls, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.
 - **GC.31:** Powers and setup, Unit symbols and normal game rendering use the effective symbols and visual anchors shown in Placement; their additional topology or game-state overlays do not substitute different presentation assets.
-- **GC.32:** Placement provides map-wide colour controls for inaccessible regions, seas and unclaimed land, and previews those colours immediately.
+- **GC.32:** Powers and setup provides map-wide controls for text, inaccessible-region, sea and unclaimed-land colours, previews those colours immediately, and renders inaccessible regions with stripes.
 
 ## Limitations and Restrictions
 

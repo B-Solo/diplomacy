@@ -41,6 +41,7 @@ from diplomacy_app.map_library.svg_importer import sanitise_svg, territory_geome
 from diplomacy_app.presentation import (
     DEFAULT_COAST_LABEL_FONT_SIZE,
     DEFAULT_INACCESSIBLE_REGION_COLOUR,
+    DEFAULT_LABEL_COLOUR,
     DEFAULT_SEA_COLOUR,
     DEFAULT_TERRITORY_LABEL_FONT_SIZE,
     DEFAULT_UNCLAIMED_REGION_COLOUR,
@@ -176,6 +177,7 @@ def _parse_presentation(
     ):
         raise MapLibraryError("Presentation font sizes must be between 5 and 24")
     colours = (
+        str(settings.get("label_colour", DEFAULT_LABEL_COLOUR)),
         str(settings.get("inaccessible_region_colour", DEFAULT_INACCESSIBLE_REGION_COLOUR)),
         str(settings.get("sea_colour", DEFAULT_SEA_COLOUR)),
         str(settings.get("unclaimed_region_colour", DEFAULT_UNCLAIMED_REGION_COLOUR)),

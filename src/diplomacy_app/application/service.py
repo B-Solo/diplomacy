@@ -315,10 +315,10 @@ class ApplicationService:
         return self.map_library.update_label_font_sizes(draft, territory_size, coast_size)
 
     def update_map_colours(
-        self, draft: MapDraft, inaccessible_colour, sea_colour, unclaimed_colour
+        self, draft: MapDraft, label_colour, inaccessible_colour, sea_colour, unclaimed_colour
     ) -> MapDraft:
         return self.map_library.update_map_colours(
-            draft, inaccessible_colour, sea_colour, unclaimed_colour
+            draft, label_colour, inaccessible_colour, sea_colour, unclaimed_colour
         )
 
     def save_map_draft(self, draft: MapDraft) -> MapDefinition:

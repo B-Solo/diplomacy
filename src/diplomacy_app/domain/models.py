@@ -121,6 +121,7 @@ class MapPresentation:
     supply_centre_anchors: Mapping[TerritoryId, Point]
     territory_label_font_size: float
     coast_label_font_size: float
+    label_colour: str
     inaccessible_region_colour: str
     sea_colour: str
     unclaimed_region_colour: str

@@ -33,8 +33,6 @@ from diplomacy_app.domain.models import (
 )
 from diplomacy_app.map_library.svg_importer import view_box
 from diplomacy_app.presentation import (
-    COAST_LABEL_COLOUR,
-    TERRITORY_LABEL_COLOUR,
     coast_label_text,
     darken_colour,
     embedded_unit_svg,
@@ -78,15 +76,50 @@ def _set_fill(node: ElementTree.Element, colour: str) -> None:
         target.set("style", ";".join(declarations))
 
 
+def _add_inaccessible_pattern(root: ElementTree.Element, colour: str) -> str:
+    pattern_id = "gamemaster-inaccessible-stripes"
+    definitions = ElementTree.SubElement(root, _tag("defs"))
+    pattern = ElementTree.SubElement(
+        definitions,
+        _tag("pattern"),
+        {
+            "id": pattern_id,
+            "width": "12",
+            "height": "12",
+            "patternUnits": "userSpaceOnUse",
+            "patternTransform": "rotate(45)",
+        },
+    )
+    ElementTree.SubElement(
+        pattern,
+        _tag("rect"),
+        {"width": "12", "height": "12", "fill": colour},
+    )
+    ElementTree.SubElement(
+        pattern,
+        _tag("rect"),
+        {
+            "width": "4",
+            "height": "12",
+            "fill": "#fffdf7",
+            "fill-opacity": "0.24",
+        },
+    )
+    return pattern_id
+
+
 class MapRenderer:
     def base_map_svg(self, map_definition: MapDefinition) -> bytes:
         """Apply map-wide neutral presentation colours without game-state overlays."""
         root = ElementTree.fromstring(map_definition.assets.map_svg)
+        inaccessible_pattern = _add_inaccessible_pattern(
+            root, map_definition.presentation.inaccessible_region_colour
+        )
         by_svg_id = {node.attrib["id"]: node for node in root.iter() if "id" in node.attrib}
         for element_id in map_definition.inaccessible_svg_element_ids:
             node = by_svg_id.get(element_id)
             if node is not None:
-                _set_fill(node, map_definition.presentation.inaccessible_region_colour)
+                _set_fill(node, f"url(#{inaccessible_pattern})")
         for territory in map_definition.territories:
             node = by_svg_id.get(territory.svg_element_id)
             if node is None:
@@ -151,7 +184,7 @@ class MapRenderer:
                         "font-family": "Georgia, serif",
                         "font-size": f"{map_definition.presentation.territory_label_font_size:g}",
                         "font-weight": "700",
-                        "fill": TERRITORY_LABEL_COLOUR,
+                        "fill": map_definition.presentation.label_colour,
                     },
                 )
                 lines = label_lines(item.label)
@@ -184,7 +217,7 @@ class MapRenderer:
                             "font-size": f"{map_definition.presentation.coast_label_font_size:g}",
                             "font-style": "italic",
                             "font-weight": "600",
-                            "fill": COAST_LABEL_COLOUR,
+                            "fill": map_definition.presentation.label_colour,
                             "transform": (
                                 f"rotate({rotation:g} {coast_anchor.x:g} {coast_anchor.y:g})"
                             ),

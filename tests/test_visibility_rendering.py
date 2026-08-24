@@ -115,7 +115,7 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     assert {label.text for label in coast_labels} >= {"North Coast", "South Coast"}
     assert {label.attrib["font-size"] for label in coast_labels} == {"9"}
     assert all("rotate(" in label.attrib["transform"] for label in coast_labels)
-    assert all(label.attrib["fill"] == "#171714" for label in coast_labels)
+    assert all(label.attrib["fill"] == "#4c3b1e" for label in coast_labels)
     assert all("stroke" not in label.attrib for label in coast_labels)
     centre_stars = root.findall(".//{*}g[@id='supply-centres']/{*}polygon")
     assert centre_stars
@@ -193,6 +193,7 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
             england.presentation,
             territory_label_font_size=12.5,
             coast_label_font_size=8.5,
+            label_colour="#201810",
             inaccessible_region_colour="#303030",
             sea_colour="#406080",
             unclaimed_region_colour="#d8c8a8",
@@ -222,10 +223,15 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
         "Chosen second line",
     ]
     assert displayed.attrib["font-size"] == "12.5"
+    assert displayed.attrib["fill"] == "#201810"
     assert {
         label.attrib["font-size"]
         for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}text")
     } == {"8.5"}
+    assert {
+        label.attrib["fill"]
+        for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}text")
+    } == {"#201810"}
     inaccessible = next(
         node for node in display_root.iter() if node.attrib.get("id") == "impassable-scotland"
     )
@@ -241,6 +247,6 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     unclaimed_node = next(
         node for node in display_root.iter() if node.attrib.get("id") == unclaimed.svg_element_id
     )
-    assert inaccessible.attrib["style"].endswith("fill:#303030")
+    assert inaccessible.attrib["style"].endswith("fill:url(#gamemaster-inaccessible-stripes)")
     assert sea_node.attrib["style"].endswith("fill:#406080")
     assert unclaimed_node.attrib["style"].endswith("fill:#d8c8a8")

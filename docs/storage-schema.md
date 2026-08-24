@@ -100,6 +100,7 @@ assets:
 presentation:
   territory_label_font_size: 11.0
   coast_label_font_size: 9.0
+  label_colour: "#4c3b1e"
   inaccessible_region_colour: "#777870"
   sea_colour: "#9ebbd2"
   unclaimed_region_colour: "#d0c9aa"
