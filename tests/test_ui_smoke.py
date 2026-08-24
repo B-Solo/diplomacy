@@ -40,6 +40,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert "QComboBox QAbstractItemView::item:selected" in STYLE
     assert "selection-color: #fffdf5" in STYLE
     assert "QPushButton, QToolButton { padding: 5px 9px; }" in STYLE
+    assert "background: #fffdf7; color: #171714" in STYLE
     maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     service = ApplicationService(
         FileGameRepository(RecentGameStore(tmp_path / "app.json")),
