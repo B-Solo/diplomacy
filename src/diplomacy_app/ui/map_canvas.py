@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import math
 
-from PySide6.QtCore import QByteArray, QPointF, QRectF, Qt, Signal
-from PySide6.QtGui import QBrush, QColor, QFont, QPainter, QPen, QWheelEvent
+from PySide6.QtCore import QByteArray, QPoint, QPointF, QRectF, Qt, Signal
+from PySide6.QtGui import QBrush, QColor, QFont, QInputDevice, QPainter, QPen, QWheelEvent
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtSvgWidgets import QGraphicsSvgItem
 from PySide6.QtWidgets import (
@@ -86,8 +86,27 @@ class MapCanvas(QGraphicsView):
         self._emit_zoom()
 
     def wheelEvent(self, event: QWheelEvent) -> None:
-        self.zoom_by(1.2 if event.angleDelta().y() > 0 else 1 / 1.2)
+        device = event.device()
+        touchpad = device is not None and device.type() is QInputDevice.DeviceType.TouchPad
+        pixel_delta = event.pixelDelta()
+        if touchpad or not pixel_delta.isNull():
+            angle_delta = event.angleDelta()
+            delta = (
+                pixel_delta
+                if not pixel_delta.isNull()
+                else QPoint(round(angle_delta.x() / 8), round(angle_delta.y() / 8))
+            )
+            self.pan_by(delta)
+        elif event.angleDelta().y():
+            self.zoom_by(1.2 if event.angleDelta().y() > 0 else 1 / 1.2)
         event.accept()
+
+    def pan_by(self, delta: QPoint) -> None:
+        """Pan by a trackpad-style pixel delta without changing zoom."""
+        horizontal = self.horizontalScrollBar()
+        vertical = self.verticalScrollBar()
+        horizontal.setValue(horizontal.value() - delta.x())
+        vertical.setValue(vertical.value() - delta.y())
 
     def _emit_zoom(self) -> None:
         self.zoom_changed.emit(round(self.transform().m11() * 100))

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from PySide6.QtCore import QPoint, QPointF, Qt
+from PySide6.QtGui import QWheelEvent
+
 from diplomacy_app.application.service import ApplicationService
 from diplomacy_app.game_repository import FileGameRepository
 from diplomacy_app.game_repository.recent_games import RecentGameStore
@@ -42,6 +45,34 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     zoomed_in = wizard.anchor_canvas.transform().m11()
     wizard.placement_zoom.zoom_out.click()
     assert wizard.anchor_canvas.transform().m11() < zoomed_in
+    wizard.anchor_canvas.set_standard_zoom()
+    before_scale = wizard.anchor_canvas.transform().m11()
+    before_scroll = wizard.anchor_canvas.verticalScrollBar().value()
+    trackpad_scroll = QWheelEvent(
+        QPointF(50, 50),
+        QPointF(50, 50),
+        QPoint(0, -40),
+        QPoint(0, -120),
+        Qt.MouseButton.NoButton,
+        Qt.KeyboardModifier.NoModifier,
+        Qt.ScrollPhase.ScrollUpdate,
+        False,
+    )
+    wizard.anchor_canvas.wheelEvent(trackpad_scroll)
+    assert wizard.anchor_canvas.transform().m11() == before_scale
+    assert wizard.anchor_canvas.verticalScrollBar().value() > before_scroll
+    mouse_wheel = QWheelEvent(
+        QPointF(50, 50),
+        QPointF(50, 50),
+        QPoint(),
+        QPoint(0, 120),
+        Qt.MouseButton.NoButton,
+        Qt.KeyboardModifier.NoModifier,
+        Qt.ScrollPhase.NoScrollPhase,
+        False,
+    )
+    wizard.anchor_canvas.wheelEvent(mouse_wheel)
+    assert wizard.anchor_canvas.transform().m11() > before_scale
     for controls in (
         wizard.regions_zoom,
         wizard.topology_zoom,
