@@ -96,7 +96,7 @@ class VisibilityProjector:
         territories: list[ProjectedTerritory] = []
         for definition in map_definition.territories:
             label = (
-                definition.name
+                definition.display_name
                 if request.label_mode is LabelMode.FULL_NAME
                 else definition.abbreviation
             )

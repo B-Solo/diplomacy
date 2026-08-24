@@ -15,6 +15,7 @@ from PySide6.QtGui import QColor, QKeySequence, QShortcut, QTextCursor, QTextDoc
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
+    QDoubleSpinBox,
     QFileDialog,
     QGroupBox,
     QHBoxLayout,
@@ -48,7 +49,6 @@ from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_S
 from diplomacy_app.map_library.svg_importer import territory_geometries
 from diplomacy_app.presentation import (
     COAST_LABEL_COLOUR,
-    COAST_LABEL_FONT_SIZE,
     TERRITORY_LABEL_COLOUR,
     coast_label_text,
     darken_colour,
@@ -163,6 +163,7 @@ class MapWizard(QWidget):
         self._topology_node_territories: dict[str, str] = {}
         self._topology_names: dict[str, str] = {}
         self._topology_hovered_territory: str | None = None
+        self._selected_territory_label = None
         self._selected_coast_label: Location | None = None
         self._coast_label_items: dict[Location, TextAnchorItem] = {}
         layout = QVBoxLayout(self)
@@ -229,7 +230,7 @@ class MapWizard(QWidget):
         self.regions_zoom = MapZoomControls(self.preview)
         map_layout.addWidget(self.hovered_territory)
         self.roles = QTableWidget(0, 3)
-        self.roles.setHorizontalHeaderLabels(["Territory", "SVG element", "Role"])
+        self.roles.setHorizontalHeaderLabels(["Canonical territory", "SVG element", "Role"])
         self.roles.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         self.roles.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
         self.roles.horizontalHeader().setSectionResizeMode(
@@ -368,12 +369,57 @@ class MapWizard(QWidget):
         self.placement_labels = QComboBox()
         self.placement_labels.setMinimumWidth(150)
         self.placement_labels.addItem("None", None)
-        self.placement_labels.addItem("Full names", "full")
+        self.placement_labels.addItem("Display names", "full")
         self.placement_labels.addItem("Abbreviations", "abbreviation")
         self.placement_labels.setCurrentIndex(1)
         self.placement_labels.currentIndexChanged.connect(self._reload_anchor_scene)
         labels_layout.addWidget(self.placement_labels)
         preview_row.addWidget(self.placement_labels_group)
+
+        self.label_sizes_group = QGroupBox("Label sizes")
+        sizes_layout = QHBoxLayout(self.label_sizes_group)
+        sizes_layout.setContentsMargins(10, 8, 10, 8)
+        sizes_layout.setSpacing(6)
+        sizes_layout.addWidget(QLabel("Territory"))
+        self.territory_font_size = QDoubleSpinBox()
+        self.territory_font_size.setRange(5, 24)
+        self.territory_font_size.setDecimals(1)
+        self.territory_font_size.setSingleStep(0.5)
+        self.territory_font_size.setSuffix(" pt")
+        self.territory_font_size.setValue(self.draft.presentation.territory_label_font_size)
+        sizes_layout.addWidget(self.territory_font_size)
+        sizes_layout.addWidget(QLabel("Coasts"))
+        self.coast_font_size = QDoubleSpinBox()
+        self.coast_font_size.setRange(5, 24)
+        self.coast_font_size.setDecimals(1)
+        self.coast_font_size.setSingleStep(0.5)
+        self.coast_font_size.setSuffix(" pt")
+        self.coast_font_size.setValue(self.draft.presentation.coast_label_font_size)
+        sizes_layout.addWidget(self.coast_font_size)
+        self.territory_font_size.valueChanged.connect(self._label_font_sizes_changed)
+        self.coast_font_size.valueChanged.connect(self._label_font_sizes_changed)
+        preview_row.addWidget(self.label_sizes_group)
+        preview_row.addStretch()
+        layout.addLayout(preview_row)
+
+        editing_row = QHBoxLayout()
+        editing_row.setSpacing(10)
+
+        if not self.game_placement_only:
+            self.display_name_group = QGroupBox("Selected territory display name")
+            display_layout = QHBoxLayout(self.display_name_group)
+            display_layout.setContentsMargins(10, 8, 10, 8)
+            display_layout.setSpacing(6)
+            self.display_name_editor = QPlainTextEdit()
+            self.display_name_editor.setPlaceholderText("Select a full-name label on the map")
+            self.display_name_editor.setFixedHeight(48)
+            self.display_name_editor.setMinimumWidth(190)
+            display_layout.addWidget(self.display_name_editor)
+            apply_display_name = QPushButton("Apply")
+            apply_display_name.clicked.connect(self._apply_display_name)
+            display_layout.addWidget(apply_display_name)
+            self.display_name_group.setEnabled(False)
+            editing_row.addWidget(self.display_name_group, 1)
 
         self.coast_label_group = QGroupBox("Selected coast label")
         coast_layout = QHBoxLayout(self.coast_label_group)
@@ -388,11 +434,11 @@ class MapWizard(QWidget):
         self.coast_rotation.setEnabled(False)
         self.coast_rotation.valueChanged.connect(self._coast_rotation_changed)
         coast_layout.addWidget(self.coast_rotation)
-        preview_row.addWidget(self.coast_label_group)
-        preview_row.addStretch()
-        layout.addLayout(preview_row)
+        editing_row.addWidget(self.coast_label_group)
+        editing_row.addStretch()
+        layout.addLayout(editing_row)
         self.anchor_canvas = MapCanvas()
-        self.anchor_canvas.scene_pressed.connect(self._clear_coast_label_selection)
+        self.anchor_canvas.scene_pressed.connect(self._clear_label_selection)
         layout.addWidget(self.anchor_canvas, 1)
         self.placement_zoom = MapZoomControls(self.anchor_canvas)
         self.tabs.addTab(page, "Placement")
@@ -774,7 +820,7 @@ class MapWizard(QWidget):
                     "text-anchor": "middle",
                     "dominant-baseline": "central",
                     "font-family": "Georgia, serif",
-                    "font-size": str(COAST_LABEL_FONT_SIZE),
+                    "font-size": f"{definition.presentation.coast_label_font_size:g}",
                     "font-style": "italic",
                     "font-weight": "600",
                     "fill": "#111111",
@@ -843,6 +889,15 @@ class MapWizard(QWidget):
         presentation = self.draft.presentation
         territories = {territory.id: territory for territory in self.draft.territories}
         label_mode = self.placement_labels.currentData()
+        if not self.game_placement_only:
+            if label_mode != "full":
+                self._selected_territory_label = None
+                self.display_name_editor.clear()
+                self.display_name_group.setEnabled(False)
+            elif self._selected_territory_label is not None:
+                selected = territories[self._selected_territory_label]
+                self.display_name_editor.setPlainText(selected.display_name)
+                self.display_name_group.setEnabled(True)
         if label_mode:
             anchor_type = "label" if label_mode == "full" else "abbreviation"
             anchors = (
@@ -852,7 +907,7 @@ class MapWizard(QWidget):
             )
             for territory, point in anchors.items():
                 definition = territories[territory]
-                text = definition.name if label_mode == "full" else definition.abbreviation
+                text = definition.display_name if label_mode == "full" else definition.abbreviation
                 item = TextAnchorItem(
                     point,
                     text,
@@ -865,7 +920,13 @@ class MapWizard(QWidget):
                             new_point,
                         )
                     ),
+                    size=presentation.territory_label_font_size,
                     bold=True,
+                    selection_callback=(
+                        (lambda territory=territory: self._select_territory_label(territory))
+                        if label_mode == "full" and not self.game_placement_only
+                        else None
+                    ),
                 )
                 item.setToolTip(f"{definition.name}: {label_mode} label")
                 self.anchor_canvas.scene().addItem(item)
@@ -883,7 +944,7 @@ class MapWizard(QWidget):
                         str(location.coast_id),
                         new_point,
                     ),
-                    size=COAST_LABEL_FONT_SIZE,
+                    size=presentation.coast_label_font_size,
                     bold=True,
                     italic=True,
                     rotation=presentation.coast_label_rotations.get(location, 0),
@@ -947,6 +1008,41 @@ class MapWizard(QWidget):
         del checked
         self._reload_anchor_scene()
 
+    def _label_font_sizes_changed(self, value: float) -> None:
+        del value
+        try:
+            self.draft = self.service.update_map_label_font_sizes(
+                self.draft,
+                self.territory_font_size.value(),
+                self.coast_font_size.value(),
+            )
+            if not self.game_placement_only:
+                self.yaml_editor.setPlainText(self.draft.map_yaml)
+            self._reload_anchor_scene()
+        except Exception as exc:
+            self._show_error(f"Could not change label sizes: {exc}")
+
+    def _select_territory_label(self, territory_id) -> None:
+        if self.game_placement_only:
+            return
+        territory = next(item for item in self.draft.territories if item.id == territory_id)
+        self._selected_territory_label = territory_id
+        self.display_name_editor.setPlainText(territory.display_name)
+        self.display_name_group.setEnabled(True)
+
+    def _apply_display_name(self) -> None:
+        territory_id = self._selected_territory_label
+        if territory_id is None or self.game_placement_only:
+            return
+        try:
+            self.draft = self.service.update_map_territory_display_name(
+                self.draft, territory_id, self.display_name_editor.toPlainText()
+            )
+            self.yaml_editor.setPlainText(self.draft.map_yaml)
+            self._reload_anchor_scene()
+        except Exception as exc:
+            self._show_error(f"Could not change display name: {exc}")
+
     def _select_coast_label(self, location: Location) -> None:
         self._selected_coast_label = location
         self.coast_rotation.blockSignals(True)
@@ -956,9 +1052,13 @@ class MapWizard(QWidget):
         self.coast_rotation.blockSignals(False)
         self.coast_rotation.setEnabled(True)
 
-    def _clear_coast_label_selection(self) -> None:
+    def _clear_label_selection(self) -> None:
         self._selected_coast_label = None
         self.coast_rotation.setEnabled(False)
+        self._selected_territory_label = None
+        if not self.game_placement_only:
+            self.display_name_editor.clear()
+            self.display_name_group.setEnabled(False)
 
     def _coast_rotation_changed(self, rotation: int) -> None:
         location = self._selected_coast_label

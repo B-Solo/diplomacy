@@ -7,7 +7,8 @@ from xml.etree import ElementTree
 
 from diplomacy_app.domain.models import CoastId, Point
 
-COAST_LABEL_FONT_SIZE = 9
+DEFAULT_TERRITORY_LABEL_FONT_SIZE = 11.0
+DEFAULT_COAST_LABEL_FONT_SIZE = 9.0
 TERRITORY_LABEL_COLOUR = "#4c3b1e"
 COAST_LABEL_COLOUR = "#171714"
 SUPPLY_CENTRE_STAR_OUTER_RADIUS = 9.0

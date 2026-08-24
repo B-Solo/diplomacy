@@ -34,7 +34,6 @@ from diplomacy_app.domain.models import (
 from diplomacy_app.map_library.svg_importer import view_box
 from diplomacy_app.presentation import (
     COAST_LABEL_COLOUR,
-    COAST_LABEL_FONT_SIZE,
     TERRITORY_LABEL_COLOUR,
     coast_label_text,
     darken_colour,
@@ -116,7 +115,7 @@ class MapRenderer:
                         "text-anchor": "middle",
                         "dominant-baseline": "central",
                         "font-family": "Georgia, serif",
-                        "font-size": "11",
+                        "font-size": f"{map_definition.presentation.territory_label_font_size:g}",
                         "font-weight": "700",
                         "fill": TERRITORY_LABEL_COLOUR,
                     },
@@ -148,7 +147,7 @@ class MapRenderer:
                             "text-anchor": "middle",
                             "dominant-baseline": "central",
                             "font-family": "Georgia, serif",
-                            "font-size": str(COAST_LABEL_FONT_SIZE),
+                            "font-size": f"{map_definition.presentation.coast_label_font_size:g}",
                             "font-style": "italic",
                             "font-weight": "600",
                             "fill": COAST_LABEL_COLOUR,

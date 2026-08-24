@@ -170,6 +170,7 @@ def authored_map_yaml(definition: MapDefinition) -> str:
             anchors["supply_centre"] = [point.x, point.y]
         item: dict[str, Any] = {
             "name": territory.name,
+            "display_name": territory.display_name,
             "abbreviation": territory.abbreviation,
             "kind": territory.kind.value,
             "svg_element": territory.svg_element_id,
@@ -208,6 +209,10 @@ def authored_map_yaml(definition: MapDefinition) -> str:
         "name": definition.name,
         "rules_engine": definition.rules_engine_id,
         "assets": {"map": "map.svg", "army": "army.svg", "fleet": "fleet.svg"},
+        "presentation": {
+            "territory_label_font_size": definition.presentation.territory_label_font_size,
+            "coast_label_font_size": definition.presentation.coast_label_font_size,
+        },
         "start": {
             "year": definition.default_starting_setup.phase_id.year,
             "season": definition.default_starting_setup.phase_id.season.value,

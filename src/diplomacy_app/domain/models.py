@@ -80,6 +80,7 @@ class Location:
 class TerritoryDefinition:
     id: TerritoryId
     name: str
+    display_name: str
     abbreviation: str
     kind: TerritoryKind
     svg_element_id: str
@@ -118,6 +119,8 @@ class MapPresentation:
     coast_label_anchors: Mapping[Location, Point]
     coast_label_rotations: Mapping[Location, float]
     supply_centre_anchors: Mapping[TerritoryId, Point]
+    territory_label_font_size: float
+    coast_label_font_size: float
 
 
 @dataclass(frozen=True, slots=True, order=True)

@@ -51,7 +51,7 @@ The application renders the map from the selected game state.
 The gamemaster can select an area of the map to enlarge and copy the resulting image to the clipboard.
 The gamemaster can overlay orders diagrammatically, including arrows for movements, convoys and supports, and move backwards and forwards through the recorded game history.
 
-A separate order-entry view accepts plain-text orders using either territory abbreviations or full names.
+A separate order-entry view accepts plain-text orders using either territory abbreviations or canonical names.
 The application retains the submitted text, performs initial validation and records a canonical interpretation for use by the rest of the application.
 
 The existing `diplomacy` Python package is expected to provide the rules and adjudication behavior.

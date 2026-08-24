@@ -437,7 +437,7 @@ class TextAnchorItem(QGraphicsItemGroup):
         colour: str,
         callback,
         *,
-        size: int = 11,
+        size: float = 11,
         bold: bool = False,
         italic: bool = False,
         rotation: float = 0,
@@ -445,7 +445,8 @@ class TextAnchorItem(QGraphicsItemGroup):
     ) -> None:
         super().__init__()
         glyph = QGraphicsTextItem()
-        font = QFont("Georgia", size)
+        font = QFont("Georgia")
+        font.setPointSizeF(size)
         font.setBold(bold)
         font.setItalic(italic)
         glyph.setFont(font)

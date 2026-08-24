@@ -75,10 +75,10 @@ Player communication occurs outside the application using map images copied by t
 - **MW.6:** Entering a whole percentage from `8%` to `1200%` applies that exact zoom level; `Fit` returns to the full-map view.
 - **MW.7:** Pan is clamped to the map bounds.
 - **MW.8:** The map display switches between `Position` and `Orders`.
-- **MW.9:** Territory labels switch between full names and three-letter codes, never displaying both modes together; long full names use centred multiple lines broken at spaces or ampersands.
+- **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
 - **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current` and `Copy map` actions.
-- **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors and named-coast label rotations; territory names, rules, topology, powers, setup and reusable-map defaults remain unchanged.
+- **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors, named-coast label rotations and shared label sizes; territory names, rules, topology, powers, setup and reusable-map defaults remain unchanged.
 
 ### Saved Views and Image Copying (IC)
 
@@ -180,7 +180,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.6:** Map import accepts a prepared structured SVG in which every relevant territory shape or group has a unique identifier.
 - **GC.7:** Map import associates existing SVG shapes and groups with map elements.
 - **GC.8:** Imported shapes are classified as playable land, playable sea, impassable region or decorative/background content.
-- **GC.9:** Only playable regions require a territory name, abbreviation, topology and placement anchors.
+- **GC.9:** Only playable regions require a canonical territory name, optional multiline display name, abbreviation, topology and placement anchors.
 - **GC.10:** The importer calculates initial label, army, fleet and supply-centre anchors and provides a visual Placement tab in which each anchor can be dragged independently.
 - **GC.11:** Split coasts have separate fleet anchors and visible named-coast labels with independently configurable anchors and rotations.
 - **GC.12:** The importer generates likely adjacency from SVG geometry and assumes that every coastal province has one continuous coast.
@@ -196,11 +196,11 @@ Player communication occurs outside the application using map images copied by t
 - **GC.22:** The visual Placement tab provides independent `Armies`, `Fleets`, `Supply centres`, territory-label and named-coast-label controls that display each selected layer at every applicable anchor, independently of the configured starting state; selecting a coast label exposes its rotation control.
 - **GC.23:** The `Armies` preview displays an army in every playable land territory, while the `Fleets` preview displays a fleet in every playable sea, every ordinary coastal territory and at every named anchor of a split-coast territory.
 - **GC.24:** Placement previews do not change game state or the map's starting setup; dragging a preview unit changes only its corresponding presentation anchor.
-- **GC.25:** Hovering any classified shape in the SVG regions tab identifies and selects its row; hovering or selecting a row highlights the corresponding shape on the map, and editing a playable territory name updates the map draft.
+- **GC.25:** Hovering any classified shape in the SVG regions tab identifies and selects its row; hovering or selecting a row highlights the corresponding shape on the map, and editing a playable territory's canonical name updates the map draft.
 - **GC.26:** The topology preview draws a colour-coded adjacency graph over a faded map, using an army node and separate fleet nodes for each named coast of a split-coast territory; its key distinguishes army-only, fleet-only and shared connections, arrowheads identify asymmetric connections, and hovering a node navigates to and highlights that territory's editable YAML block.
 - **GC.27:** The map editor uses independently accessible, non-sequential tabs with minimal page margins and a persistent `Save configured map` action, overlays compact `−`, current-percentage, `+` and `Fit` controls on every visual tab, and supports mouse-wheel and trackpad-pinch zoom plus trackpad scrolling consistently with the main map.
 - **GC.28:** The Unit symbols tab displays compact previews of the effective default or custom army and fleet symbols at approximately their real map scale before saving.
-- **GC.29:** Placement label mode independently selects no labels, full territory names or abbreviations; full names and abbreviations have separate draggable positions, and all placement layers can be hidden to inspect overlap combinations.
+- **GC.29:** Placement label mode independently selects no labels, display names or abbreviations; display names and abbreviations have separate draggable positions, selected display names can be edited with explicit line breaks, territory and coast font sizes have separate map-wide half-point controls, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.
 - **GC.31:** Powers and setup, Unit symbols and normal game rendering use the effective symbols and visual anchors shown in Placement; their additional topology or game-state overlays do not substitute different presentation assets.
 

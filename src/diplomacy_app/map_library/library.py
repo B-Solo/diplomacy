@@ -42,6 +42,10 @@ from diplomacy_app.map_library.svg_importer import (
     shape_ids,
     territory_geometries,
 )
+from diplomacy_app.presentation import (
+    DEFAULT_COAST_LABEL_FONT_SIZE,
+    DEFAULT_TERRITORY_LABEL_FONT_SIZE,
+)
 from diplomacy_app.storage.serialization import map_definition_data
 
 _SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
@@ -186,6 +190,10 @@ class FileMapLibrary:
             "name": name,
             "rules_engine": "standard",
             "assets": {"map": "map.svg"},
+            "presentation": {
+                "territory_label_font_size": DEFAULT_TERRITORY_LABEL_FONT_SIZE,
+                "coast_label_font_size": DEFAULT_COAST_LABEL_FONT_SIZE,
+            },
             "start": {"year": 1901, "season": "spring"},
             "teams": {},
             "territories": territories,
@@ -214,6 +222,8 @@ class FileMapLibrary:
                 MappingProxyType({}),
                 MappingProxyType({}),
                 MappingProxyType({}),
+                DEFAULT_TERRITORY_LABEL_FONT_SIZE,
+                DEFAULT_COAST_LABEL_FONT_SIZE,
             ),
             None,
             None,
@@ -252,6 +262,20 @@ class FileMapLibrary:
                     str(territory.id),
                 )
             seen_ids.add(territory.id)
+            if not territory.name.strip():
+                error(
+                    "territory.missing_name",
+                    "Canonical territory name is required",
+                    "name",
+                    str(territory.id),
+                )
+            if not territory.display_name.strip():
+                error(
+                    "territory.missing_display_name",
+                    "Territory display name is required",
+                    "display_name",
+                    str(territory.id),
+                )
             abbreviation = territory.abbreviation.casefold()
             if not _ABBREVIATION.fullmatch(territory.abbreviation):
                 error(
@@ -451,6 +475,35 @@ class FileMapLibrary:
         if not cleaned:
             raise MapLibraryError("Territory name cannot be empty")
         item["name"] = cleaned
+        text = yaml.safe_dump(document, sort_keys=False, allow_unicode=True)
+        return self.refresh_draft(replace(draft, map_yaml=text))
+
+    def update_territory_display_name(
+        self, draft: MapDraft, territory_id: TerritoryId, display_name: str
+    ) -> MapDraft:
+        document = load_yaml(draft.map_yaml)
+        territories = document.get("territories", {})
+        item = territories.get(str(territory_id))
+        if not isinstance(item, dict):
+            raise MapLibraryError(f"Unknown territory: {territory_id}")
+        cleaned = display_name.strip()
+        if not cleaned:
+            raise MapLibraryError("Territory display name cannot be empty")
+        item["display_name"] = cleaned
+        text = yaml.safe_dump(document, sort_keys=False, allow_unicode=True)
+        return self.refresh_draft(replace(draft, map_yaml=text))
+
+    def update_label_font_sizes(
+        self, draft: MapDraft, territory_size: float, coast_size: float
+    ) -> MapDraft:
+        if not 5 <= territory_size <= 24 or not 5 <= coast_size <= 24:
+            raise MapLibraryError("Label font sizes must be between 5 and 24")
+        document = load_yaml(draft.map_yaml)
+        presentation = document.setdefault("presentation", {})
+        if not isinstance(presentation, dict):
+            raise MapLibraryError("presentation must be a mapping")
+        presentation["territory_label_font_size"] = round(territory_size, 1)
+        presentation["coast_label_font_size"] = round(coast_size, 1)
         text = yaml.safe_dump(document, sort_keys=False, allow_unicode=True)
         return self.refresh_draft(replace(draft, map_yaml=text))
 

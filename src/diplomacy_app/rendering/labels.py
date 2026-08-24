@@ -8,6 +8,8 @@ import textwrap
 
 def label_lines(text: str, width: int = 16) -> tuple[str, ...]:
     """Wrap a label at words and ampersands while preserving explicit line breaks."""
+    if "\n" in text or "\r" in text:
+        return tuple(line.strip() for line in text.splitlines())
     lines: list[str] = []
     for paragraph in text.splitlines() or [""]:
         normalised = re.sub(r"\s*&\s*", " & ", paragraph).strip()

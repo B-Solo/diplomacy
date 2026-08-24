@@ -97,6 +97,10 @@ assets:
   army: army.svg
   fleet: fleet.svg
 
+presentation:
+  territory_label_font_size: 11.0
+  coast_label_font_size: 9.0
+
 start:
   year: 1901
   season: spring
@@ -115,6 +119,7 @@ teams:
 territories:
   london:
     name: London
+    display_name: London
     abbreviation: Lon
     kind: land
     svg_element: territory-london
@@ -157,6 +162,9 @@ territories:
 
   example-split-coast:
     name: Example Split Coast
+    display_name: |-
+      Example Split
+      Coast
     abbreviation: Esc
     kind: land
     svg_element: territory-example-split-coast
@@ -181,7 +189,7 @@ non_playable_elements:
   map-decoration: decoration
 ```
 
-Territory and team identifiers are lowercase stable slugs and do not change when a display name changes.
+Territory and team identifiers are lowercase stable slugs. A territory's canonical `name` is used by players and order entry, while its optional `display_name` controls map text and may contain explicit line breaks; omitting it displays the canonical name.
 Abbreviations contain exactly three ASCII letters and are unique without regard to case.
 Land abbreviations use initial-capital display form, and sea abbreviations use uppercase display form.
 If `anchors.abbreviation` is omitted, it initially uses `anchors.label`; moving either label in Placement then stores its position independently.
@@ -190,6 +198,7 @@ Every playable territory references exactly one SVG element and owns its label, 
 Coordinates use source-SVG view-box coordinates.
 Every territory has a label anchor, every land territory has an army anchor, every coastal location and sea has a fleet anchor, and every supply centre has a supply-centre anchor.
 Every named split coast has its own visible label anchor and rotation.
+Territory labels and named-coast labels each use one map-wide font size.
 
 The importer derives ordinary bidirectional movement from SVG geometry, territory types and the default single-coast assumption.
 Ordinary movement has no YAML entry.

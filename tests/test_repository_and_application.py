@@ -136,6 +136,7 @@ def test_current_game_map_placement_changes_only_private_presentation(tmp_path, 
     edited = service.update_map_anchor(draft, territory_id, "label", moved_point)
     moved_abbreviation = Point(old_point.x - 6, old_point.y + 8)
     edited = service.update_map_anchor(edited, territory_id, "abbreviation", moved_abbreviation)
+    edited = service.update_map_label_font_sizes(edited, 12.5, 8.5)
     updated = service.save_game_map_placement(edited)
 
     reopened = repository(tmp_path).open(location)
@@ -145,6 +146,8 @@ def test_current_game_map_placement_changes_only_private_presentation(tmp_path, 
         == moved_abbreviation
     )
     assert reopened.map_definition.presentation.label_anchors[territory_id] == moved_point
+    assert reopened.map_definition.presentation.territory_label_font_size == 12.5
+    assert reopened.map_definition.presentation.coast_label_font_size == 8.5
     assert (
         reopened.map_definition.presentation.abbreviation_anchors[territory_id]
         == moved_abbreviation
@@ -157,3 +160,4 @@ def test_current_game_map_placement_changes_only_private_presentation(tmp_path, 
     assert reopened.phases == updated.game.phases
     assert maps.load(configured.id).presentation.label_anchors[territory_id] == old_point
     assert maps.load(configured.id).presentation.abbreviation_anchors[territory_id] == old_point
+    assert maps.load(configured.id).presentation.territory_label_font_size != 12.5

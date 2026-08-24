@@ -354,9 +354,19 @@ class FileGameRepository:
         values = (
             *(coordinate for point in points for coordinate in (point.x, point.y)),
             *presentation.coast_label_rotations.values(),
+            presentation.territory_label_font_size,
+            presentation.coast_label_font_size,
         )
         if not all(math.isfinite(value) for value in values):
-            raise RepositoryError("Game map placement coordinates must be finite")
+            raise RepositoryError("Game map placement values must be finite")
+        if not all(
+            5 <= size <= 24
+            for size in (
+                presentation.territory_label_font_size,
+                presentation.coast_label_font_size,
+            )
+        ):
+            raise RepositoryError("Game map label sizes must be between 5 and 24")
         updated = replace(game.map_definition, presentation=presentation)
         commit_files(
             root,

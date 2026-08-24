@@ -107,6 +107,10 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     assert "stroke" not in derbyshire.attrib
     assert label_lines("Short Name") == ("Short Name",)
     assert label_lines("Manual\nBreak") == ("Manual", "Break")
+    assert label_lines("A deliberately long line\nSecond line") == (
+        "A deliberately long line",
+        "Second line",
+    )
     coast_labels = root.findall(".//{*}g[@id='coast-labels']/{*}text")
     assert {label.text for label in coast_labels} >= {"North Coast", "South Coast"}
     assert {label.attrib["font-size"] for label in coast_labels} == {"9"}
@@ -178,3 +182,44 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     )
     assert rendered_abbreviation.attrib["x"] == str(abbreviation_anchor.x)
     assert rendered_abbreviation.attrib["y"] == str(abbreviation_anchor.y)
+
+    display_territory = replace(territory, display_name="Chosen first line\nChosen second line")
+    display_map = replace(
+        england,
+        territories=tuple(
+            display_territory if item.id == territory.id else item for item in england.territories
+        ),
+        presentation=replace(
+            england.presentation,
+            territory_label_font_size=12.5,
+            coast_label_font_size=8.5,
+        ),
+    )
+    display_projection = VisibilityProjector().project(
+        display_map,
+        phase,
+        engine.effective_orders(display_map, phase),
+        VisibilityPolicy(False, 1),
+        ProjectionRequest(
+            Perspective(PerspectiveKind.GAMEMASTER),
+            LabelMode.FULL_NAME,
+            True,
+            False,
+        ),
+    )
+    display_scene = renderer.compose(display_map, display_projection, request)
+    display_root = ElementTree.fromstring(display_scene.svg)
+    displayed = next(
+        label
+        for label in display_root.findall(".//{*}g[@id='territory-labels']/{*}text")
+        if "".join(label.itertext()) == "Chosen first lineChosen second line"
+    )
+    assert [line.text for line in displayed.findall("{*}tspan")] == [
+        "Chosen first line",
+        "Chosen second line",
+    ]
+    assert displayed.attrib["font-size"] == "12.5"
+    assert {
+        label.attrib["font-size"]
+        for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}text")
+    } == {"8.5"}

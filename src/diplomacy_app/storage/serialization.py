@@ -46,7 +46,11 @@ from diplomacy_app.domain.models import (
     UnitType,
     WaiveOrder,
 )
-from diplomacy_app.presentation import default_coast_label_anchor
+from diplomacy_app.presentation import (
+    DEFAULT_COAST_LABEL_FONT_SIZE,
+    DEFAULT_TERRITORY_LABEL_FONT_SIZE,
+    default_coast_label_anchor,
+)
 
 
 def location_data(value: Location) -> dict[str, str | None]:
@@ -344,6 +348,7 @@ def map_definition_data(value: MapDefinition) -> dict[str, Any]:
             {
                 "id": item.id,
                 "name": item.name,
+                "display_name": item.display_name,
                 "abbreviation": item.abbreviation,
                 "kind": item.kind.value,
                 "svg_element": item.svg_element_id,
@@ -382,6 +387,8 @@ def map_definition_data(value: MapDefinition) -> dict[str, Any]:
             value.default_starting_setup.state, value.default_starting_setup.phase_id
         ),
         "presentation": {
+            "territory_label_font_size": value.presentation.territory_label_font_size,
+            "coast_label_font_size": value.presentation.coast_label_font_size,
             "labels": {
                 str(key): [point.x, point.y]
                 for key, point in value.presentation.label_anchors.items()
@@ -458,6 +465,7 @@ def map_definition_from_data(value: Any, assets: MapAssets) -> MapDefinition:
             TerritoryDefinition(
                 TerritoryId(str(item["id"])),
                 str(item["name"]),
+                str(item.get("display_name", item["name"])),
                 str(item["abbreviation"]),
                 TerritoryKind(str(item["kind"])),
                 str(item["svg_element"]),
@@ -502,6 +510,8 @@ def map_definition_from_data(value: Any, assets: MapAssets) -> MapDefinition:
                     for key, item in presentation.get("supply_centres", {}).items()
                 }
             ),
+            float(presentation.get("territory_label_font_size", DEFAULT_TERRITORY_LABEL_FONT_SIZE)),
+            float(presentation.get("coast_label_font_size", DEFAULT_COAST_LABEL_FONT_SIZE)),
         ),
         assets,
         str(value.get("rules_engine", "standard")),

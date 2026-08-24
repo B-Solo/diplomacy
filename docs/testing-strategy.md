@@ -11,7 +11,7 @@ Tests follow the application-owned contracts so third-party libraries and the de
 
 Each subsystem has fast tests against its public protocol using immutable contract values and in-memory or temporary-directory collaborators.
 These tests cover successful operations, structured user-input issues, typed operational failures and revision conflicts.
-Order tests cover every phase, full names and abbreviations, canonicalisation, malformed lines, duplicate unit orders, omitted orders and engine validation attribution.
+Order tests cover every phase, canonical names and abbreviations, canonicalisation, malformed lines, duplicate unit orders, omitted orders and engine validation attribution.
 Visibility tests assert complete returned values rather than selected fields so restricted information cannot leak through newly added fields.
 
 ### Adapter Conformance Tests

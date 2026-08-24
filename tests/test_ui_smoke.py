@@ -152,8 +152,12 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.tabs.widget(3).layout().contentsMargins().left() == 2
     assert wizard.placement_layers_group.title() == "Preview layers"
     assert wizard.placement_labels_group.title() == "Territory labels"
+    assert wizard.label_sizes_group.title() == "Label sizes"
+    assert wizard.display_name_group.title() == "Selected territory display name"
     assert wizard.coast_label_group.title() == "Selected coast label"
     assert wizard.placement_labels.minimumWidth() == 150
+    assert wizard.territory_font_size.singleStep() == 0.5
+    assert wizard.coast_font_size.singleStep() == 0.5
     assert wizard.coast_rotation.minimumWidth() == 90
     assert wizard.yaml_editor.textCursor().selectedText() == "territories:"
     assert wizard.yaml_find.find_shortcut.key() in QKeySequence.keyBindings(
@@ -469,8 +473,42 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         if isinstance(item, TextAnchorItem)
         and item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
     ]
-    assert len(selectable_labels) == len(wizard.draft.presentation.coast_label_anchors)
-    assert {label.glyph.font().pointSize() for label in selectable_labels} == {9}
+    selectable_coast_labels = [item for item in selectable_labels if item.glyph.font().italic()]
+    selectable_territory_labels = [
+        item for item in selectable_labels if not item.glyph.font().italic()
+    ]
+    assert len(selectable_coast_labels) == len(wizard.draft.presentation.coast_label_anchors)
+    assert len(selectable_territory_labels) == len(wizard.draft.presentation.label_anchors)
+    assert {label.glyph.font().pointSizeF() for label in selectable_coast_labels} == {9.0}
+    display_territory = wizard.draft.territories[0]
+    canonical_name = display_territory.name
+    wizard._select_territory_label(display_territory.id)
+    wizard.display_name_editor.setPlainText("First display line\nSecond display line")
+    wizard._apply_display_name()
+    updated_territory = next(
+        item for item in wizard.draft.territories if item.id == display_territory.id
+    )
+    assert updated_territory.name == canonical_name
+    assert updated_territory.display_name == "First display line\nSecond display line"
+    assert (
+        yaml.safe_load(wizard.draft.map_yaml)["territories"][str(display_territory.id)][
+            "display_name"
+        ]
+        == "First display line\nSecond display line"
+    )
+    wizard.territory_font_size.setValue(12.5)
+    wizard.coast_font_size.setValue(8.5)
+    assert wizard.draft.presentation.territory_label_font_size == 12.5
+    assert wizard.draft.presentation.coast_label_font_size == 8.5
+    resized_labels = [
+        item for item in wizard.anchor_canvas.scene().items() if isinstance(item, TextAnchorItem)
+    ]
+    assert {
+        item.glyph.font().pointSizeF() for item in resized_labels if not item.glyph.font().italic()
+    } == {12.5}
+    assert {
+        item.glyph.font().pointSizeF() for item in resized_labels if item.glyph.font().italic()
+    } == {8.5}
     coast_location, coast_anchor = next(iter(wizard.draft.presentation.coast_label_anchors.items()))
     moved_coast_anchor = Point(coast_anchor.x + 2, coast_anchor.y + 3)
     wizard._anchor_moved(
@@ -558,6 +596,8 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         maps.load(saved[0].id).presentation.abbreviation_anchors[anchor_id]
         == moved_abbreviation_anchor
     )
+    assert maps.load(saved[0].id).presentation.territory_label_font_size == 12.5
+    assert maps.load(saved[0].id).presentation.coast_label_font_size == 8.5
     reopened_maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     assert (
         next(
@@ -566,6 +606,14 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
             if territory.id == renamed_territory.id
         )
         == "Persisted place name"
+    )
+    assert (
+        next(
+            territory.display_name
+            for territory in reopened_maps.load_draft(saved[0].id).territories
+            if territory.id == renamed_territory.id
+        )
+        == "First display line\nSecond display line"
     )
 
     manager = MapManagerWorkspace(service)

@@ -268,7 +268,7 @@ class ApplicationService:
             tuple(
                 VisibleTerritory(
                     territory.id,
-                    territory.name,
+                    territory.display_name,
                     state.territory_controllers.get(territory.id),
                     state.supply_centre_owners.get(territory.id),
                     units.get(territory.id),
@@ -302,6 +302,14 @@ class ApplicationService:
 
     def update_map_territory_name(self, draft: MapDraft, territory_id, name) -> MapDraft:
         return self.map_library.update_territory_name(draft, territory_id, name)
+
+    def update_map_territory_display_name(
+        self, draft: MapDraft, territory_id, display_name
+    ) -> MapDraft:
+        return self.map_library.update_territory_display_name(draft, territory_id, display_name)
+
+    def update_map_label_font_sizes(self, draft: MapDraft, territory_size, coast_size) -> MapDraft:
+        return self.map_library.update_label_font_sizes(draft, territory_size, coast_size)
 
     def save_map_draft(self, draft: MapDraft) -> MapDefinition:
         return self.map_library.save(draft)

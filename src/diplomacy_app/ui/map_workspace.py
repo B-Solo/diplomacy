@@ -65,7 +65,7 @@ class MapWorkspace(QWidget):
         self.mode.currentIndexChanged.connect(self.schedule_refresh)
         controls.addWidget(self.mode)
         self.labels = QComboBox()
-        self.labels.addItem("Territory names", LabelMode.FULL_NAME)
+        self.labels.addItem("Display names", LabelMode.FULL_NAME)
         self.labels.addItem("Three-letter codes", LabelMode.ABBREVIATION)
         self.labels.currentIndexChanged.connect(self.schedule_refresh)
         controls.addWidget(self.labels)

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from collections.abc import Mapping
 from pathlib import Path
 from types import MappingProxyType
@@ -35,7 +36,11 @@ from diplomacy_app.domain.models import (
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.geometry import inferred_connections
 from diplomacy_app.map_library.svg_importer import sanitise_svg, territory_geometries
-from diplomacy_app.presentation import default_coast_label_anchor
+from diplomacy_app.presentation import (
+    DEFAULT_COAST_LABEL_FONT_SIZE,
+    DEFAULT_TERRITORY_LABEL_FONT_SIZE,
+    default_coast_label_anchor,
+)
 
 
 def load_yaml(text: str) -> dict[str, Any]:
@@ -84,6 +89,7 @@ def _parse_territories(raw: Mapping[str, Any]) -> tuple[TerritoryDefinition, ...
             TerritoryDefinition(
                 id=TerritoryId(territory_id),
                 name=str(item.get("name", territory_id)),
+                display_name=str(item.get("display_name", item.get("name", territory_id))),
                 abbreviation=str(item.get("abbreviation", "")),
                 kind=TerritoryKind(str(item.get("kind", "land"))),
                 svg_element_id=str(item.get("svg_element", "")),
@@ -95,7 +101,9 @@ def _parse_territories(raw: Mapping[str, Any]) -> tuple[TerritoryDefinition, ...
 
 
 def _parse_presentation(
-    raw: Mapping[str, Any], territories: tuple[TerritoryDefinition, ...]
+    raw: Mapping[str, Any],
+    territories: tuple[TerritoryDefinition, ...],
+    settings: Mapping[str, Any],
 ) -> MapPresentation:
     label: dict[TerritoryId, Point] = {}
     abbreviation: dict[TerritoryId, Point] = {}
@@ -147,6 +155,19 @@ def _parse_presentation(
                     raise MapLibraryError(
                         f"{territory.id}.{coast_id}.label_rotation must be numeric"
                     ) from exc
+    try:
+        territory_font_size = float(
+            settings.get("territory_label_font_size", DEFAULT_TERRITORY_LABEL_FONT_SIZE)
+        )
+        coast_font_size = float(
+            settings.get("coast_label_font_size", DEFAULT_COAST_LABEL_FONT_SIZE)
+        )
+    except (TypeError, ValueError) as exc:
+        raise MapLibraryError("Presentation font sizes must be numeric") from exc
+    if not all(
+        math.isfinite(size) and 5 <= size <= 24 for size in (territory_font_size, coast_font_size)
+    ):
+        raise MapLibraryError("Presentation font sizes must be between 5 and 24")
     return MapPresentation(
         MappingProxyType(label),
         MappingProxyType(abbreviation),
@@ -155,6 +176,8 @@ def _parse_presentation(
         MappingProxyType(coast_labels),
         MappingProxyType(coast_rotations),
         MappingProxyType(supply),
+        territory_font_size,
+        coast_font_size,
     )
 
 
@@ -291,7 +314,8 @@ def compile_map(
     raw_territories = _mapping(document.get("territories", {}), "territories")
     territories = _parse_territories(raw_territories)
     powers, setup = _parse_powers_and_start(document, territories)
-    presentation = _parse_presentation(raw_territories, territories)
+    presentation_settings = _mapping(document.get("presentation", {}), "presentation")
+    presentation = _parse_presentation(raw_territories, territories, presentation_settings)
     topology = _effective_connections(raw_territories, territories, safe_svg)
     return MapDefinition(
         id=MapId(str(document.get("map_id", ""))),
