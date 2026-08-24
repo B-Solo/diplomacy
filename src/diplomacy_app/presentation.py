@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from xml.etree import ElementTree
+
 from diplomacy_app.domain.models import CoastId, Point
 
 
@@ -19,3 +21,11 @@ def default_coast_label_anchor(coast_id: CoastId, fleet_anchor: Point) -> Point:
     if horizontal == 0 and vertical == 0:
         vertical = -18
     return Point(fleet_anchor.x + horizontal, fleet_anchor.y + vertical)
+
+
+def embedded_unit_svg(asset: bytes, colour: str) -> bytes:
+    """Normalise unit artwork for consistent view-box sizing when embedded in a map."""
+    root = ElementTree.fromstring(asset.replace(b"currentColor", colour.encode()))
+    root.attrib.pop("width", None)
+    root.attrib.pop("height", None)
+    return ElementTree.tostring(root, encoding="utf-8")

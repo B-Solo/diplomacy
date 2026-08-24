@@ -46,7 +46,7 @@ from diplomacy_app.domain.models import (
 )
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import territory_geometries
-from diplomacy_app.presentation import coast_label_text
+from diplomacy_app.presentation import coast_label_text, embedded_unit_svg
 from diplomacy_app.ui.map_canvas import (
     MapCanvas,
     MapZoomControls,
@@ -1038,7 +1038,7 @@ class MapWizard(QWidget):
 
     @staticmethod
     def _asset_preview_svg(asset: bytes) -> bytes:
-        encoded = base64.b64encode(asset.replace(b"currentColor", b"#344d40")).decode()
+        encoded = base64.b64encode(embedded_unit_svg(asset, "#344d40")).decode()
         return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220">
           <path d="M35 38 Q110 15 180 34 T285 48 L272 190 Q170 208 48 182 Z"
                 fill="#d0c9aa" stroke="#665f4f" stroke-width="2"/>

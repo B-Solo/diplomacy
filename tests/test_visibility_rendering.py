@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 from types import MappingProxyType
 from xml.etree import ElementTree
 
@@ -104,3 +105,15 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     coast_labels = root.findall(".//{*}g[@id='coast-labels']/{*}text")
     assert {label.text for label in coast_labels} >= {"North Coast", "South Coast"}
     assert all("rotate(" in label.attrib["transform"] for label in coast_labels)
+    asset_view_boxes = {
+        ElementTree.fromstring(asset).attrib["viewBox"]
+        for asset in (england.assets.army_svg, england.assets.fleet_svg)
+    }
+    unit_images = root.findall(".//{*}g[@id='units']/{*}image")
+    assert unit_images
+    for image in unit_images:
+        embedded = ElementTree.fromstring(base64.b64decode(image.attrib["href"].partition(",")[2]))
+        assert embedded.attrib["viewBox"] in asset_view_boxes
+        assert "width" not in embedded.attrib
+        assert "height" not in embedded.attrib
+        assert image.attrib["preserveAspectRatio"] == "xMidYMid meet"

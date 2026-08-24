@@ -31,7 +31,7 @@ from diplomacy_app.domain.models import (
     WaiveOrder,
 )
 from diplomacy_app.map_library.svg_importer import view_box
-from diplomacy_app.presentation import coast_label_text
+from diplomacy_app.presentation import coast_label_text, embedded_unit_svg
 from diplomacy_app.rendering.labels import label_lines
 
 _SVG = "http://www.w3.org/2000/svg"
@@ -61,8 +61,8 @@ def _anchor(map_definition: MapDefinition, unit: UnitRef) -> Point:
 
 
 def _image_href(svg: bytes, colour: str) -> str:
-    tinted = svg.replace(b"currentColor", colour.encode())
-    return "data:image/svg+xml;base64," + base64.b64encode(tinted).decode()
+    normalised = embedded_unit_svg(svg, colour)
+    return "data:image/svg+xml;base64," + base64.b64encode(normalised).decode()
 
 
 class MapRenderer:
@@ -204,6 +204,7 @@ class MapRenderer:
                                 "y": str(point.y - 11 + offset),
                                 "width": "32",
                                 "height": "22",
+                                "preserveAspectRatio": "xMidYMid meet",
                                 "href": _image_href(asset, colour),
                             },
                         )
