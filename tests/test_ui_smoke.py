@@ -50,8 +50,37 @@ from diplomacy_app.ui.map_canvas import (
 )
 from diplomacy_app.ui.map_manager_workspace import MapManagerWorkspace
 from diplomacy_app.ui.map_wizard import MapWizard
+from diplomacy_app.ui.new_game_workspace import NewGameWorkspace
 from diplomacy_app.ui.style import STYLE, light_palette
 from diplomacy_app.visibility import VisibilityProjector
+
+
+def test_new_game_uses_a_named_folder_below_the_selected_location(qtbot, tmp_path, project_root):
+    games_location = tmp_path / "games"
+    games_location.mkdir()
+    maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
+    service = ApplicationService(
+        FileGameRepository(RecentGameStore(tmp_path / "app.json")),
+        maps,
+        StandardRulesEngine(),
+        VisibilityProjector(),
+        MapRenderer(),
+    )
+    workspace = NewGameWorkspace(service)
+    qtbot.addWidget(workspace)
+
+    workspace.name.setText("Friday Night Game")
+    workspace.folder.setText(str(games_location))
+
+    expected = games_location / "friday-night-game"
+    assert workspace.destination.text() == str(expected)
+
+    workspace._create()
+
+    assert workspace.created_session is not None
+    assert workspace.created_session.game.game_id == "friday-night-game"
+    assert workspace.created_session.game.location.path == expected
+    assert expected.is_dir()
 
 
 def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_root):

@@ -36,6 +36,8 @@ class GameLocation:
     path: Path
 ```
 
+For game creation, `GameLocation` identifies the final self-contained game folder. The user interface derives it from the selected parent location and game name.
+
 ### Operations
 
 Contracts are synchronous Python protocols.

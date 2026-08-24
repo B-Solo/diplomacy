@@ -39,6 +39,7 @@ from diplomacy_app.domain.models import (
     UnitPosition,
     UnitType,
     VisibilityPolicy,
+    game_folder_name,
 )
 
 
@@ -176,16 +177,24 @@ class NewGameWorkspace(QWidget):
         form.addRow("Configured map", map_row)
         self.name = QLineEdit()
         self.name.setPlaceholderText("Friday night game")
+        self.name.textChanged.connect(self._update_destination)
         form.addRow("Game name", self.name)
         folder_row = QWidget()
         folder_layout = QHBoxLayout(folder_row)
         folder_layout.setContentsMargins(0, 0, 0, 0)
         self.folder = QLineEdit()
+        self.folder.setPlaceholderText("Folder containing your games")
+        self.folder.textChanged.connect(self._update_destination)
         choose = QPushButton("Choose…")
         choose.clicked.connect(self._choose_folder)
         folder_layout.addWidget(self.folder, 1)
         folder_layout.addWidget(choose)
-        form.addRow("Game folder", folder_row)
+        form.addRow("Games location", folder_row)
+        self.destination = QLabel()
+        self.destination.setObjectName("gameDestination")
+        self.destination.setProperty("muted", True)
+        self.destination.setWordWrap(True)
+        form.addRow("Game will be created at", self.destination)
         self.fog = QCheckBox("Enable Fog of War")
         form.addRow("Visibility", self.fog)
         self.fog_depth = QSpinBox()
@@ -235,9 +244,18 @@ class NewGameWorkspace(QWidget):
             self._show_error(f"Could not load map: {exc}")
 
     def _choose_folder(self) -> None:
-        folder = QFileDialog.getExistingDirectory(self, "Choose an empty game folder")
+        folder = QFileDialog.getExistingDirectory(self, "Choose where to create the game")
         if folder:
             self.folder.setText(folder)
+
+    def _update_destination(self) -> None:
+        name = self.name.text().strip()
+        parent = self.folder.text().strip()
+        if not name or not parent:
+            self.destination.clear()
+            return
+        destination = Path(parent).expanduser().resolve() / game_folder_name(name)
+        self.destination.setText(str(destination))
 
     def _import_map(self) -> None:
         filename, _ = QFileDialog.getOpenFileName(
@@ -266,13 +284,15 @@ class NewGameWorkspace(QWidget):
 
     def _create(self) -> None:
         try:
-            if not self.name.text().strip():
+            name = self.name.text().strip()
+            if not name:
                 raise ValueError("Enter a game name")
             if not self.folder.text().strip():
-                raise ValueError("Choose the self-contained game folder")
+                raise ValueError("Choose where to create the game")
+            parent = Path(self.folder.text()).expanduser().resolve()
             request = NewGameRequest(
-                self.name.text().strip(),
-                GameLocation(Path(self.folder.text()).expanduser().resolve()),
+                name,
+                GameLocation(parent / game_folder_name(name)),
                 self.map_selector.currentData(),
                 parse_setup(self.setup_editor.toPlainText()),
                 GameSettings(

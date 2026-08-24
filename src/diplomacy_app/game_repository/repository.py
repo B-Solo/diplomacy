@@ -32,6 +32,7 @@ from diplomacy_app.domain.models import (
     SavedViewId,
     Season,
     SvgElementRole,
+    game_folder_name,
 )
 from diplomacy_app.game_repository.game_codec import (
     authored_map_yaml,
@@ -236,8 +237,7 @@ class FileGameRepository:
             raise RepositoryError(f"Game folder is not empty: {target}")
         parent = target.parent
         parent.mkdir(parents=True, exist_ok=True)
-        game_slug = re.sub(r"[^a-z0-9]+", "-", request.name.casefold()).strip("-") or "game"
-        game_id = GameId(game_slug)
+        game_id = GameId(game_folder_name(request.name))
         private_map = replace(request.map_definition, default_starting_setup=request.starting_setup)
         stage = Path(tempfile.mkdtemp(prefix=f".{target.name}-", dir=parent))
         try:

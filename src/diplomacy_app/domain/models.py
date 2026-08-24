@@ -6,6 +6,7 @@ rules-engine objects. They are the executable form of ``docs/api-contracts.md``.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import StrEnum
@@ -18,6 +19,11 @@ PowerId = NewType("PowerId", str)
 TerritoryId = NewType("TerritoryId", str)
 CoastId = NewType("CoastId", str)
 SavedViewId = NewType("SavedViewId", str)
+
+
+def game_folder_name(name: str) -> str:
+    """Return the stable filesystem and identifier slug for a game name."""
+    return re.sub(r"[^a-z0-9]+", "-", name.casefold()).strip("-") or "game"
 
 
 class TerritoryKind(StrEnum):

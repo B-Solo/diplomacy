@@ -56,6 +56,7 @@ Player communication occurs outside the application using map images copied by t
 - **AN.11:** The current game's choices provide a placement-only editor for its private map snapshot.
 - **AN.12:** All workspaces use an application-owned light palette and platform-available fonts; interactive controls and their normal, selected, hovered and disabled states maintain explicit foreground/background contrast rather than relying on the desktop theme.
 - **AN.13:** Recent games can be permanently deleted from the game choices after an in-window confirmation identifies the game folder and warns that deletion cannot be undone; deleting the current game returns to the no-game state.
+- **AN.14:** Game creation asks for a parent location, previews the destination and creates a safe top-level folder derived from the game name beneath that location.
 
 ### Season Navigation (SN)
 
