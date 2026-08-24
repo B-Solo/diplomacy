@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import base64
+import math
+import re
 from dataclasses import replace
 from pathlib import Path
 from typing import Any
@@ -10,6 +12,7 @@ from xml.etree import ElementTree
 
 import yaml
 from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QColor, QTextCursor, QTextFormat
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -23,6 +26,7 @@ from PySide6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QTabWidget,
+    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -31,6 +35,7 @@ from shapely.geometry import Point as GeometryPoint
 from diplomacy_app.domain.models import (
     Location,
     MapDraft,
+    Point,
     SvgElementRole,
     TerritoryKind,
     UnitType,
@@ -56,6 +61,9 @@ class MapWizard(QWidget):
         self.saved_definition = None
         self._element_geometries = territory_geometries(draft.svg, draft.element_roles)
         self._row_by_element: dict[str, int] = {}
+        self._topology_nodes: dict[str, Point] = {}
+        self._topology_names: dict[str, str] = {}
+        self._topology_hovered_territory: str | None = None
         layout = QVBoxLayout(self)
         self.tabs = QTabWidget()
         layout.addWidget(self.tabs, 1)
@@ -132,6 +140,7 @@ class MapWizard(QWidget):
         self.yaml_editor = QPlainTextEdit()
         self.yaml_editor.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         self.topology_canvas = MapCanvas()
+        self.topology_canvas.scene_hovered.connect(self._topology_hovered)
         topology_side = QWidget()
         topology_layout = QVBoxLayout(topology_side)
         topology_layout.setContentsMargins(0, 0, 0, 0)
@@ -408,6 +417,13 @@ class MapWizard(QWidget):
                 )
                 anchor_type = "fleet"
             nodes[str(territory.id)] = (point, anchor_type)
+        self._topology_nodes = {
+            territory_id: point for territory_id, (point, _anchor_type) in nodes.items()
+        }
+        self._topology_names = {
+            str(territory.id): territory.name for territory in definition.territories
+        }
+        self._topology_hovered_territory = None
 
         edge_layer = ElementTree.SubElement(root, tag("g"), {"id": "topology-edges"})
         pairs = sorted({tuple(sorted(pair)) for pair in directions})
@@ -485,6 +501,55 @@ class MapWizard(QWidget):
             )
             label.text = territory.abbreviation
         return ElementTree.tostring(root, encoding="utf-8", xml_declaration=True)
+
+    def _topology_hovered(self, x: float, y: float) -> None:
+        if not self._topology_nodes:
+            return
+        territory_id, point = min(
+            self._topology_nodes.items(),
+            key=lambda item: math.hypot(item[1].x - x, item[1].y - y),
+        )
+        scale = max(abs(self.topology_canvas.transform().m11()), 0.01)
+        if math.hypot(point.x - x, point.y - y) > 16 / scale:
+            self.topology_canvas.setToolTip("")
+            self._topology_hovered_territory = None
+            return
+        if territory_id == self._topology_hovered_territory:
+            return
+        if self._highlight_yaml_territory(territory_id):
+            self._topology_hovered_territory = territory_id
+            name = self._topology_names.get(territory_id, territory_id)
+            self.topology_canvas.setToolTip(
+                f"{name}: edit this highlighted YAML block, including split_coasts."
+            )
+
+    def _highlight_yaml_territory(self, territory_id: str) -> bool:
+        text = self.yaml_editor.toPlainText()
+        start = re.search(rf"(?m)^  {re.escape(territory_id)}:\s*$", text)
+        if start is None:
+            return False
+        next_section = re.search(
+            r"(?m)^(?:  [^\s][^:\n]*|[^\s#][^:\n]*):\s*$",
+            text[start.end() :],
+        )
+        end = start.end() + next_section.start() if next_section is not None else len(text)
+
+        highlight_cursor = QTextCursor(self.yaml_editor.document())
+        highlight_cursor.setPosition(start.start())
+        highlight_cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
+        selection = QTextEdit.ExtraSelection()
+        selection.cursor = highlight_cursor  # type: ignore[attr-defined]
+        selection.format.setBackground(QColor("#f2d98d"))  # type: ignore[attr-defined]
+        selection.format.setProperty(  # type: ignore[attr-defined]
+            QTextFormat.Property.FullWidthSelection, True
+        )
+        self.yaml_editor.setExtraSelections([selection])
+
+        navigation_cursor = QTextCursor(self.yaml_editor.document())
+        navigation_cursor.setPosition(start.start() + 2)
+        self.yaml_editor.setTextCursor(navigation_cursor)
+        self.yaml_editor.centerCursor()
+        return True
 
     def _reload_anchor_scene(self) -> None:
         self.anchor_canvas.set_svg(self.draft.svg, fit=True)

@@ -128,6 +128,14 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert {label.attrib["font-size"] for label in node_layer.findall("{*}text")} == {"11"}
     assert {label.attrib["fill"] for label in node_layer.findall("{*}text")} == {"#111111"}
     assert all("stroke" not in label.attrib for label in node_layer.findall("{*}text"))
+    devon = next(item for item in definition.territories if str(item.id) == "devon")
+    devon_point = definition.presentation.army_anchors[devon.id]
+    wizard._topology_hovered(devon_point.x, devon_point.y)
+    topology_yaml_highlights = wizard.yaml_editor.extraSelections()
+    assert len(topology_yaml_highlights) == 1
+    assert "split_coasts:" in topology_yaml_highlights[0].cursor.selectedText()
+    assert wizard.yaml_editor.textCursor().block().text().strip() == "devon:"
+    assert "Devon" in wizard.topology_canvas.toolTip()
     assert wizard.army_asset_preview.size().width() == 340
     assert wizard.army_asset_preview.size().height() == 240
     assert wizard.army_asset_preview.transform().m11() < 1.2
