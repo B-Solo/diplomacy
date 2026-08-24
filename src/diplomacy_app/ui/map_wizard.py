@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import base64
 import math
 import re
 from dataclasses import replace
@@ -47,7 +46,12 @@ from diplomacy_app.domain.models import (
 )
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import territory_geometries
-from diplomacy_app.presentation import COAST_LABEL_FONT_SIZE, coast_label_text, embedded_unit_svg
+from diplomacy_app.presentation import (
+    COAST_LABEL_FONT_SIZE,
+    coast_label_text,
+    darken_colour,
+    embedded_unit_svg,
+)
 from diplomacy_app.ui.map_canvas import (
     MapCanvas,
     MapZoomControls,
@@ -982,7 +986,31 @@ class MapWizard(QWidget):
 
     def _reload_setup_preview(self) -> bool:
         try:
-            self.setup_canvas.set_scene(self.service.preview_map_setup(self.draft), fit=True)
+            scene = self.service.preview_map_setup(self.draft)
+            root = ElementTree.fromstring(scene.svg)
+            units_layer = root.find(".//{*}g[@id='units']")
+            if units_layer is not None:
+                units_layer.clear()
+            self.setup_canvas.set_scene(
+                replace(scene, svg=ElementTree.tostring(root, encoding="utf-8")), fit=True
+            )
+            definition = self.service.preview_map_definition(self.draft)
+            powers = {power.id: power for power in definition.powers}
+            for unit in definition.default_starting_setup.state.units:
+                if unit.unit_type is UnitType.ARMY:
+                    point = definition.presentation.army_anchors[unit.location.territory_id]
+                    asset = definition.assets.army_svg
+                else:
+                    point = definition.presentation.fleet_anchors.get(unit.location)
+                    if point is None:
+                        point = definition.presentation.fleet_anchors[
+                            Location(unit.location.territory_id)
+                        ]
+                    asset = definition.assets.fleet_svg
+                colour = darken_colour(powers[unit.power_id].colour, 0.82)
+                self.setup_canvas.scene().addItem(
+                    UnitAnchorItem(point, embedded_unit_svg(asset, colour), movable=False)
+                )
             return True
         except Exception as exc:
             self.setup_validation_label.setText(f"Could not render setup: {exc}")
@@ -1052,18 +1080,23 @@ class MapWizard(QWidget):
         self.fleet_preview_label.setText(
             "Fleet — custom symbol" if self.draft.fleet_svg else "Fleet — supplied default"
         )
-        self.army_asset_preview.set_svg(self._asset_preview_svg(army), fit=True)
-        self.fleet_asset_preview.set_svg(self._asset_preview_svg(fleet), fit=True)
+        self._set_asset_preview(self.army_asset_preview, army)
+        self._set_asset_preview(self.fleet_asset_preview, fleet)
 
     @staticmethod
-    def _asset_preview_svg(asset: bytes) -> bytes:
-        encoded = base64.b64encode(embedded_unit_svg(asset, "#344d40")).decode()
-        return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220">
+    def _set_asset_preview(canvas: MapCanvas, asset: bytes) -> None:
+        background = b"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220">
           <path d="M35 38 Q110 15 180 34 T285 48 L272 190 Q170 208 48 182 Z"
                 fill="#d0c9aa" stroke="#665f4f" stroke-width="2"/>
-          <image x="144" y="99" width="32" height="22"
-                 href="data:image/svg+xml;base64,{encoded}"/>
-        </svg>""".encode()
+        </svg>"""
+        canvas.set_svg(background, fit=True)
+        canvas.scene().addItem(
+            UnitAnchorItem(
+                Point(160, 110),
+                embedded_unit_svg(asset, "#344d40"),
+                movable=False,
+            )
+        )
 
     def _tab_changed(self, index: int) -> None:
         if (

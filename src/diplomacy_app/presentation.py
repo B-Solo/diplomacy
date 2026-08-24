@@ -9,6 +9,17 @@ from diplomacy_app.domain.models import CoastId, Point
 COAST_LABEL_FONT_SIZE = 9
 
 
+def darken_colour(colour: str, factor: float) -> str:
+    """Darken a six-digit SVG colour while preserving unsupported colour formats."""
+    value = colour.lstrip("#")
+    if len(value) != 6:
+        return colour
+    channels = [
+        max(0, min(255, round(int(value[index : index + 2], 16) * factor))) for index in (0, 2, 4)
+    ]
+    return "#" + "".join(f"{channel:02x}" for channel in channels)
+
+
 def coast_label_text(coast_id: CoastId) -> str:
     """Return a readable label for a stable coast identifier."""
     name = str(coast_id).replace("-", " ").replace("_", " ").title()

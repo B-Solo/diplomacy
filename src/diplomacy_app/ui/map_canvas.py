@@ -353,9 +353,9 @@ class AnchorItem(QGraphicsEllipseItem):
 
 
 class UnitAnchorItem(QGraphicsItemGroup):
-    """Draggable unit-symbol preview centred on its presentation anchor."""
+    """Unit-symbol preview centred on its presentation anchor."""
 
-    def __init__(self, point: Point, svg: bytes, callback) -> None:
+    def __init__(self, point: Point, svg: bytes, callback=None, *, movable: bool = True) -> None:
         super().__init__()
         self._renderer = QSvgRenderer(QByteArray(svg))
         if not self._renderer.isValid():
@@ -368,14 +368,15 @@ class UnitAnchorItem(QGraphicsItemGroup):
         symbol.setPos(-bounds.center().x() * scale, -bounds.center().y() * scale)
         self.addToGroup(symbol)
         self.setPos(QPointF(point.x, point.y))
-        self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)
+        self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable, movable)
         self.setZValue(50)
         self.callback = callback
 
     def mouseReleaseEvent(self, event) -> None:
         super().mouseReleaseEvent(event)
         position = self.pos()
-        self.callback(Point(position.x(), position.y()))
+        if self.callback is not None:
+            self.callback(Point(position.x(), position.y()))
 
 
 class TextAnchorItem(QGraphicsItemGroup):

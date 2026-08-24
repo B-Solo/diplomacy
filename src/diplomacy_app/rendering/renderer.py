@@ -31,7 +31,12 @@ from diplomacy_app.domain.models import (
     WaiveOrder,
 )
 from diplomacy_app.map_library.svg_importer import view_box
-from diplomacy_app.presentation import COAST_LABEL_FONT_SIZE, coast_label_text, embedded_unit_svg
+from diplomacy_app.presentation import (
+    COAST_LABEL_FONT_SIZE,
+    coast_label_text,
+    darken_colour,
+    embedded_unit_svg,
+)
 from diplomacy_app.rendering.labels import label_lines
 
 _SVG = "http://www.w3.org/2000/svg"
@@ -40,16 +45,6 @@ ElementTree.register_namespace("", _SVG)
 
 def _tag(name: str) -> str:
     return f"{{{_SVG}}}{name}"
-
-
-def _darken(colour: str, factor: float) -> str:
-    value = colour.lstrip("#")
-    if len(value) != 6:
-        return colour
-    channels = [
-        max(0, min(255, round(int(value[index : index + 2], 16) * factor))) for index in (0, 2, 4)
-    ]
-    return "#" + "".join(f"{channel:02x}" for channel in channels)
 
 
 def _anchor(map_definition: MapDefinition, unit: UnitRef) -> Point:
@@ -190,7 +185,7 @@ class MapRenderer:
                         unit_ref = UnitRef(unit.power_id, unit.unit_type, unit.location)
                         point = _anchor(map_definition, unit_ref)
                         offset = 9 if dislodged and item.unit else 0
-                        colour = _darken(powers[unit.power_id].colour, 0.82)
+                        colour = darken_colour(powers[unit.power_id].colour, 0.82)
                         asset = (
                             map_definition.assets.army_svg
                             if unit.unit_type is UnitType.ARMY

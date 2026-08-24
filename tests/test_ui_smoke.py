@@ -220,6 +220,18 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.army_asset_preview.size().height() == 240
     assert wizard.army_asset_preview.transform().m11() < 1.2
     assert wizard.fleet_asset_preview.transform().m11() < 1.2
+    for canvas in (wizard.army_asset_preview, wizard.fleet_asset_preview):
+        symbol_items = [item for item in canvas.scene().items() if isinstance(item, UnitAnchorItem)]
+        assert len(symbol_items) == 1
+        assert not symbol_items[0].flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable
+    setup_symbol_items = [
+        item for item in wizard.setup_canvas.scene().items() if isinstance(item, UnitAnchorItem)
+    ]
+    assert len(setup_symbol_items) == len(definition.default_starting_setup.state.units)
+    assert all(
+        not item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable
+        for item in setup_symbol_items
+    )
     multiline_label = TextAnchorItem(
         Point(0, 0), "Derbyshire & Nottinghamshire", "#111111", lambda _point: None
     )
