@@ -162,6 +162,7 @@ territories:
     svg_element: territory-example-split-coast
     anchors:
       label: [600.0, 140.0]
+      abbreviation: [608.0, 136.0]
       army: [600.0, 150.0]
     split_coasts:
       north:
@@ -183,6 +184,7 @@ non_playable_elements:
 Territory and team identifiers are lowercase stable slugs and do not change when a display name changes.
 Abbreviations contain exactly three ASCII letters and are unique without regard to case.
 Land abbreviations use initial-capital display form, and sea abbreviations use uppercase display form.
+If `anchors.abbreviation` is omitted, it initially uses `anchors.label`; moving either label in Placement then stores its position independently.
 
 Every playable territory references exactly one SVG element and owns its label, unit and optional supply-centre anchors.
 Coordinates use source-SVG view-box coordinates.

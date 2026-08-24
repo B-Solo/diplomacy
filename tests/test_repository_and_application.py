@@ -134,14 +134,26 @@ def test_current_game_map_placement_changes_only_private_presentation(tmp_path, 
     territory_id, old_point = next(iter(draft.presentation.label_anchors.items()))
     moved_point = Point(old_point.x + 11, old_point.y - 4)
     edited = service.update_map_anchor(draft, territory_id, "label", moved_point)
+    moved_abbreviation = Point(old_point.x - 6, old_point.y + 8)
+    edited = service.update_map_anchor(edited, territory_id, "abbreviation", moved_abbreviation)
     updated = service.save_game_map_placement(edited)
 
     reopened = repository(tmp_path).open(location)
     assert updated.game.map_definition.presentation.label_anchors[territory_id] == moved_point
+    assert (
+        updated.game.map_definition.presentation.abbreviation_anchors[territory_id]
+        == moved_abbreviation
+    )
     assert reopened.map_definition.presentation.label_anchors[territory_id] == moved_point
+    assert (
+        reopened.map_definition.presentation.abbreviation_anchors[territory_id]
+        == moved_abbreviation
+    )
+    assert reopened.map_definition.presentation.label_anchors[territory_id] != moved_abbreviation
     assert reopened.map_definition.territories == original.territories
     assert reopened.map_definition.adjacencies == original.adjacencies
     assert reopened.map_definition.powers == original.powers
     assert reopened.map_definition.default_starting_setup == original.default_starting_setup
     assert reopened.phases == updated.game.phases
     assert maps.load(configured.id).presentation.label_anchors[territory_id] == old_point
+    assert maps.load(configured.id).presentation.abbreviation_anchors[territory_id] == old_point

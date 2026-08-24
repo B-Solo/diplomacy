@@ -198,7 +198,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.26:** The topology preview draws a colour-coded adjacency graph over a faded map, using an army node and separate fleet nodes for each named coast of a split-coast territory; its key distinguishes army-only, fleet-only and shared connections, arrowheads identify asymmetric connections, and hovering a node navigates to and highlights that territory's editable YAML block.
 - **GC.27:** The map editor uses independently accessible, non-sequential tabs with minimal page margins and a persistent `Save configured map` action, overlays compact `−`, current-percentage, `+` and `Fit` controls on every visual tab, and supports mouse-wheel and trackpad-pinch zoom plus trackpad scrolling consistently with the main map.
 - **GC.28:** The Unit symbols tab displays compact previews of the effective default or custom army and fleet symbols at approximately their real map scale before saving.
-- **GC.29:** Placement label mode independently selects no labels, full territory names or abbreviations, and all placement layers can be hidden to inspect overlap combinations.
+- **GC.29:** Placement label mode independently selects no labels, full territory names or abbreviations; full names and abbreviations have separate draggable positions, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.
 
 ## Limitations and Restrictions

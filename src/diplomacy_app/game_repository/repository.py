@@ -332,6 +332,7 @@ class FileGameRepository:
         current = game.map_definition.presentation
         fields = (
             "label_anchors",
+            "abbreviation_anchors",
             "army_anchors",
             "fleet_anchors",
             "coast_label_anchors",
@@ -344,6 +345,7 @@ class FileGameRepository:
             raise RepositoryError("Game map placement cannot add or remove visual anchors")
         points = (
             *presentation.label_anchors.values(),
+            *presentation.abbreviation_anchors.values(),
             *presentation.army_anchors.values(),
             *presentation.fleet_anchors.values(),
             *presentation.coast_label_anchors.values(),

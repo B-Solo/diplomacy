@@ -16,6 +16,7 @@ def test_england_compiles_complete_valid_topology(project_root, england):
     )
     draft = library.load_draft(MapId("england"))
     assert library.validate(draft).is_valid
+    assert england.presentation.abbreviation_anchors == england.presentation.label_anchors
     assert len(england.territories) == 74
     assert sum(item.is_supply_centre for item in england.territories) == 34
     assert len(england.powers) == 6
@@ -25,8 +26,10 @@ def test_england_compiles_complete_valid_topology(project_root, england):
     assert england.presentation.coast_label_rotations[devon_north] == 0
     legacy_data = map_definition_data(england)
     legacy_data["presentation"].pop("coast_labels")
+    legacy_data["presentation"].pop("abbreviations")
     restored = map_definition_from_data(legacy_data, england.assets)
     assert devon_north in restored.presentation.coast_label_anchors
+    assert restored.presentation.abbreviation_anchors == restored.presentation.label_anchors
     assert all(
         type(edge)(edge.destination, edge.origin, edge.unit_type) in england.adjacencies
         for edge in england.adjacencies

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+from dataclasses import replace
 from types import MappingProxyType
 from xml.etree import ElementTree
 
@@ -14,6 +15,7 @@ from diplomacy_app.domain.models import (
     PerspectiveKind,
     PhaseSnapshot,
     PixelSize,
+    Point,
     ProjectionRequest,
     RenderRequest,
     Revision,
@@ -118,3 +120,40 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
         assert "width" not in embedded.attrib
         assert "height" not in embedded.attrib
         assert image.attrib["preserveAspectRatio"] == "xMidYMid meet"
+
+    territory = england.territories[0]
+    abbreviation_anchor = Point(17, 29)
+    abbreviation_anchors = dict(england.presentation.abbreviation_anchors)
+    abbreviation_anchors[territory.id] = abbreviation_anchor
+    abbreviation_map = replace(
+        england,
+        presentation=replace(
+            england.presentation,
+            abbreviation_anchors=MappingProxyType(abbreviation_anchors),
+        ),
+    )
+    abbreviation_projection = VisibilityProjector().project(
+        abbreviation_map,
+        phase,
+        engine.effective_orders(abbreviation_map, phase),
+        VisibilityPolicy(False, 1),
+        ProjectionRequest(
+            Perspective(PerspectiveKind.GAMEMASTER),
+            LabelMode.ABBREVIATION,
+            True,
+            False,
+        ),
+    )
+    abbreviation_scene = renderer.compose(
+        abbreviation_map,
+        abbreviation_projection,
+        replace(request, label_mode=LabelMode.ABBREVIATION),
+    )
+    abbreviation_root = ElementTree.fromstring(abbreviation_scene.svg)
+    rendered_abbreviation = next(
+        label
+        for label in abbreviation_root.findall(".//{*}g[@id='territory-labels']/{*}text")
+        if "".join(label.itertext()) == territory.abbreviation
+    )
+    assert rendered_abbreviation.attrib["x"] == str(abbreviation_anchor.x)
+    assert rendered_abbreviation.attrib["y"] == str(abbreviation_anchor.y)

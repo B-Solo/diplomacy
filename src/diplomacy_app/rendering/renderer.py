@@ -13,6 +13,7 @@ from diplomacy_app.domain.models import (
     DisbandOrder,
     HiddenTerritory,
     HoldOrder,
+    LabelMode,
     Location,
     MapBounds,
     MapDefinition,
@@ -73,6 +74,11 @@ class MapRenderer:
             by_svg_id = {node.attrib["id"]: node for node in root.iter() if "id" in node.attrib}
             definitions = {item.id: item for item in map_definition.territories}
             powers = {item.id: item for item in map_definition.powers}
+            label_anchors = (
+                map_definition.presentation.abbreviation_anchors
+                if request.label_mode is LabelMode.ABBREVIATION
+                else map_definition.presentation.label_anchors
+            )
             projected = {item.territory_id: item for item in projected_state.territories}
             for territory_id, item in projected.items():
                 node = by_svg_id.get(definitions[territory_id].svg_element_id)
@@ -97,7 +103,7 @@ class MapRenderer:
             orders_layer = ElementTree.SubElement(generated, _tag("g"), {"id": "orders"})
             for territory in map_definition.territories:
                 item = projected[territory.id]
-                anchor = map_definition.presentation.label_anchors[territory.id]
+                anchor = label_anchors[territory.id]
                 label = ElementTree.SubElement(
                     labels,
                     _tag("text"),
@@ -232,7 +238,7 @@ class MapRenderer:
                     else:
                         end = map_definition.presentation.fleet_anchors.get(
                             order.destination,
-                            map_definition.presentation.label_anchors[destination_definition.id],
+                            label_anchors[destination_definition.id],
                         )
                     move_paths[(order.unit.location, order.destination)] = (start, end)
                     ElementTree.SubElement(
@@ -349,7 +355,7 @@ class MapRenderer:
                     mark.text = "+" if isinstance(order, BuildOrder) else "−"
                 elif isinstance(order, RetreatOrder):
                     start = _anchor(map_definition, order.unit)
-                    end = map_definition.presentation.label_anchors[order.destination.territory_id]
+                    end = label_anchors[order.destination.territory_id]
                     ElementTree.SubElement(
                         orders_layer,
                         _tag("line"),

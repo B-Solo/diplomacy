@@ -148,6 +148,9 @@ def authored_map_yaml(definition: MapDefinition) -> str:
         if territory.id in definition.presentation.label_anchors:
             point = definition.presentation.label_anchors[territory.id]
             anchors["label"] = [point.x, point.y]
+        if territory.id in definition.presentation.abbreviation_anchors:
+            point = definition.presentation.abbreviation_anchors[territory.id]
+            anchors["abbreviation"] = [point.x, point.y]
         if territory.id in definition.presentation.army_anchors:
             point = definition.presentation.army_anchors[territory.id]
             anchors["army"] = [point.x, point.y]

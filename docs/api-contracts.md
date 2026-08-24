@@ -117,6 +117,7 @@ class MapAssets:
 @dataclass(frozen=True, slots=True)
 class MapPresentation:
     label_anchors: Mapping[TerritoryId, Point]
+    abbreviation_anchors: Mapping[TerritoryId, Point]
     army_anchors: Mapping[TerritoryId, Point]
     fleet_anchors: Mapping[Location, Point]
     coast_label_anchors: Mapping[Location, Point]

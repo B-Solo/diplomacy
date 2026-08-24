@@ -208,6 +208,7 @@ class FileMapLibrary:
             definition.default_starting_setup,
             MapPresentation(
                 MappingProxyType(label),
+                MappingProxyType(label),
                 MappingProxyType(army),
                 MappingProxyType(fleet),
                 MappingProxyType({}),
@@ -279,6 +280,13 @@ class FileMapLibrary:
                     "territory.missing_label_anchor",
                     "Label anchor is required",
                     "anchors.label",
+                    str(territory.id),
+                )
+            if territory.id not in definition.presentation.abbreviation_anchors:
+                error(
+                    "territory.missing_abbreviation_anchor",
+                    "Territory abbreviation anchor is required",
+                    "anchors.abbreviation",
                     str(territory.id),
                 )
             if (

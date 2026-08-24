@@ -386,6 +386,10 @@ def map_definition_data(value: MapDefinition) -> dict[str, Any]:
                 str(key): [point.x, point.y]
                 for key, point in value.presentation.label_anchors.items()
             },
+            "abbreviations": {
+                str(key): [point.x, point.y]
+                for key, point in value.presentation.abbreviation_anchors.items()
+            },
             "armies": {
                 str(key): [point.x, point.y]
                 for key, point in value.presentation.army_anchors.items()
@@ -419,6 +423,15 @@ def map_definition_from_data(value: Any, assets: MapAssets) -> MapDefinition:
     def point(item: Any) -> Point:
         return Point(float(item[0]), float(item[1]))
 
+    label_anchors = {
+        TerritoryId(str(key)): point(item) for key, item in presentation.get("labels", {}).items()
+    }
+    abbreviation_anchors = {
+        TerritoryId(str(key)): point(item)
+        for key, item in presentation.get("abbreviations", {}).items()
+    }
+    if not abbreviation_anchors:
+        abbreviation_anchors = dict(label_anchors)
     fleet_anchors = {
         location_from_data(item["location"]): point(item["point"])
         for item in presentation.get("fleets", [])
@@ -472,12 +485,8 @@ def map_definition_from_data(value: Any, assets: MapAssets) -> MapDefinition:
         ),
         StartingSetup(phase, state),
         MapPresentation(
-            MappingProxyType(
-                {
-                    TerritoryId(str(key)): point(item)
-                    for key, item in presentation.get("labels", {}).items()
-                }
-            ),
+            MappingProxyType(label_anchors),
+            MappingProxyType(abbreviation_anchors),
             MappingProxyType(
                 {
                     TerritoryId(str(key)): point(item)

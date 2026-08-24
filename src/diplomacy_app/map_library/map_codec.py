@@ -98,6 +98,7 @@ def _parse_presentation(
     raw: Mapping[str, Any], territories: tuple[TerritoryDefinition, ...]
 ) -> MapPresentation:
     label: dict[TerritoryId, Point] = {}
+    abbreviation: dict[TerritoryId, Point] = {}
     army: dict[TerritoryId, Point] = {}
     fleet: dict[Location, Point] = {}
     coast_labels: dict[Location, Point] = {}
@@ -108,6 +109,14 @@ def _parse_presentation(
         anchors = _mapping(item.get("anchors", {}), f"territories.{territory.id}.anchors")
         if "label" in anchors:
             label[territory.id] = _point(anchors["label"], f"{territory.id}.anchors.label")
+            abbreviation[territory.id] = (
+                _point(
+                    anchors["abbreviation"],
+                    f"{territory.id}.anchors.abbreviation",
+                )
+                if "abbreviation" in anchors
+                else label[territory.id]
+            )
         if "army" in anchors:
             army[territory.id] = _point(anchors["army"], f"{territory.id}.anchors.army")
         if "fleet" in anchors:
@@ -140,6 +149,7 @@ def _parse_presentation(
                     ) from exc
     return MapPresentation(
         MappingProxyType(label),
+        MappingProxyType(abbreviation),
         MappingProxyType(army),
         MappingProxyType(fleet),
         MappingProxyType(coast_labels),

@@ -839,19 +839,30 @@ class MapWizard(QWidget):
         territories = {territory.id: territory for territory in self.draft.territories}
         label_mode = self.placement_labels.currentData()
         if label_mode:
-            for territory, point in presentation.label_anchors.items():
+            anchor_type = "label" if label_mode == "full" else "abbreviation"
+            anchors = (
+                presentation.label_anchors
+                if label_mode == "full"
+                else presentation.abbreviation_anchors
+            )
+            for territory, point in anchors.items():
                 definition = territories[territory]
                 text = definition.name if label_mode == "full" else definition.abbreviation
                 item = TextAnchorItem(
                     point,
                     text,
                     "#4c3b1e",
-                    lambda new_point, territory=territory: self._anchor_moved(
-                        territory, "label", None, new_point
+                    lambda new_point, territory=territory, anchor_type=anchor_type: (
+                        self._anchor_moved(
+                            territory,
+                            anchor_type,
+                            None,
+                            new_point,
+                        )
                     ),
                     bold=True,
                 )
-                item.setToolTip(f"{definition.name}: label")
+                item.setToolTip(f"{definition.name}: {label_mode} label")
                 self.anchor_canvas.scene().addItem(item)
         if self.coast_labels_preview.isChecked():
             for location, point in presentation.coast_label_anchors.items():

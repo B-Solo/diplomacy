@@ -464,6 +464,18 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     moved_anchor = Point(anchor_point.x + 1, anchor_point.y + 1)
     wizard._anchor_moved(anchor_id, "label", None, moved_anchor)
     assert wizard.draft.presentation.label_anchors[anchor_id] == moved_anchor
+    original_abbreviation_anchor = wizard.draft.presentation.abbreviation_anchors[anchor_id]
+    moved_abbreviation_anchor = Point(anchor_point.x - 2, anchor_point.y + 3)
+    wizard.placement_labels.setCurrentIndex(2)
+    wizard._anchor_moved(
+        anchor_id,
+        "abbreviation",
+        None,
+        moved_abbreviation_anchor,
+    )
+    assert wizard.draft.presentation.abbreviation_anchors[anchor_id] == moved_abbreviation_anchor
+    assert wizard.draft.presentation.label_anchors[anchor_id] == moved_anchor
+    assert original_abbreviation_anchor != moved_abbreviation_anchor
     renamed_territory = wizard.draft.territories[0]
     renamed_row = wizard._row_by_element[renamed_territory.svg_element_id]
     wizard.roles.item(renamed_row, 0).setText("Persisted place name")
@@ -481,6 +493,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.save_button.click()
     assert saved and saved[0].id == wizard.draft.map_id
     assert maps.load(saved[0].id).presentation.label_anchors[anchor_id] == moved_anchor
+    assert (
+        maps.load(saved[0].id).presentation.abbreviation_anchors[anchor_id]
+        == moved_abbreviation_anchor
+    )
     reopened_maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     assert (
         next(
