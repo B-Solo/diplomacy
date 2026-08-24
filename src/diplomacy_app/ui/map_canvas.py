@@ -5,7 +5,16 @@ from __future__ import annotations
 import math
 
 from PySide6.QtCore import QByteArray, QPoint, QPointF, QRectF, Qt, Signal
-from PySide6.QtGui import QBrush, QColor, QFont, QInputDevice, QPainter, QPen, QWheelEvent
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QFont,
+    QInputDevice,
+    QNativeGestureEvent,
+    QPainter,
+    QPen,
+    QWheelEvent,
+)
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtSvgWidgets import QGraphicsSvgItem
 from PySide6.QtWidgets import (
@@ -79,11 +88,30 @@ class MapCanvas(QGraphicsView):
         self.resetTransform()
         self._emit_zoom()
 
-    def zoom_by(self, factor: float) -> None:
+    def zoom_by(self, factor: float, position: QPointF | None = None) -> None:
         current = self.transform().m11()
         target = max(0.08, min(12.0, current * factor))
+        if position is not None:
+            scene_position = self.mapToScene(position.toPoint())
+            anchor = self.transformationAnchor()
+            self.setTransformationAnchor(QGraphicsView.ViewportAnchor.NoAnchor)
         self.scale(target / current, target / current)
+        if position is not None:
+            moved_position = self.mapToScene(position.toPoint())
+            offset = moved_position - scene_position
+            self.translate(offset.x(), offset.y())
+            self.setTransformationAnchor(anchor)
         self._emit_zoom()
+
+    def viewportEvent(self, event) -> bool:
+        if (
+            isinstance(event, QNativeGestureEvent)
+            and event.gestureType() is Qt.NativeGestureType.ZoomNativeGesture
+        ):
+            self.zoom_by(math.exp(event.value()), event.position())
+            event.accept()
+            return True
+        return super().viewportEvent(event)
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         device = event.device()
@@ -225,7 +253,7 @@ class AnchorItem(QGraphicsEllipseItem):
 class UnitAnchorItem(QGraphicsItemGroup):
     """Draggable unit-symbol preview centred on its presentation anchor."""
 
-    def __init__(self, point: Point, svg: bytes, colour: str, callback) -> None:
+    def __init__(self, point: Point, svg: bytes, callback) -> None:
         super().__init__()
         self._renderer = QSvgRenderer(QByteArray(svg))
         if not self._renderer.isValid():
@@ -237,10 +265,6 @@ class UnitAnchorItem(QGraphicsItemGroup):
         symbol.setScale(scale)
         symbol.setPos(-bounds.center().x() * scale, -bounds.center().y() * scale)
         self.addToGroup(symbol)
-        marker = QGraphicsEllipseItem(-4, -4, 8, 8)
-        marker.setBrush(QBrush(Qt.BrushStyle.NoBrush))
-        marker.setPen(QPen(QColor(colour), 1.5))
-        self.addToGroup(marker)
         self.setPos(QPointF(point.x, point.y))
         self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)
         self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsSelectable)
@@ -275,10 +299,6 @@ class TextAnchorItem(QGraphicsItemGroup):
         bounds = glyph.boundingRect()
         glyph.setPos(-bounds.center())
         self.addToGroup(glyph)
-        marker = QGraphicsEllipseItem(-3, -3, 6, 6)
-        marker.setBrush(QBrush(Qt.BrushStyle.NoBrush))
-        marker.setPen(QPen(QColor(colour), 1))
-        self.addToGroup(marker)
         self.setPos(QPointF(point.x, point.y))
         self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)
         self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsSelectable)

@@ -569,7 +569,6 @@ class MapWizard(QWidget):
             unit_item = UnitAnchorItem(
                 point,
                 tinted_asset,
-                colour,
                 lambda new_point, territory=territory, anchor=anchor, coast=coast: (
                     self._anchor_moved(territory, anchor, coast, new_point)
                 ),

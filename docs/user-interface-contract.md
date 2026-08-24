@@ -63,7 +63,7 @@ Player communication occurs outside the application using map images copied by t
 
 - **MW.1:** The map occupies the available workspace while preserving the SVG view box and aspect ratio.
 - **MW.2:** Opening a map fits the entire map into the workspace without stretching it.
-- **MW.3:** The gamemaster zooms with a mouse wheel or visible controls, pans by dragging, and pans vertically or horizontally with two-finger trackpad scrolling.
+- **MW.3:** The gamemaster zooms with a mouse wheel, a trackpad pinch or visible controls, pans by dragging, and pans vertically or horizontally with two-finger trackpad scrolling.
 - **MW.4:** Mouse-wheel zoom is centred on the pointer.
 - **MW.5:** Wheel and button zoom use the same discrete levels, and the current percentage is visible.
 - **MW.6:** Activating the percentage control returns to the standard `100%` level; `Fit` returns to the full-map view.
@@ -190,7 +190,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.24:** Placement previews do not change game state or the map's starting setup; dragging a preview unit changes only its corresponding presentation anchor.
 - **GC.25:** Hovering any classified shape in the classification step identifies and selects its row; hovering or selecting a row highlights the corresponding shape on the map.
 - **GC.26:** The topology preview draws a colour-coded adjacency graph over a faded map, using army anchors as land and coastal nodes and fleet anchors as sea nodes; its key distinguishes army-only, fleet-only and shared connections, and arrowheads identify asymmetric connections.
-- **GC.27:** The map editor uses the full main-window workspace, provides visible zoom-in, zoom-out, current-percentage and fit controls on every visual step, supports mouse-wheel zoom and trackpad scrolling consistently with the main map, and uses `Next` until the final step exposes `Save configured map`.
+- **GC.27:** The map editor uses the full main-window workspace, provides visible zoom-in, zoom-out, current-percentage and fit controls on every visual step, supports mouse-wheel and trackpad-pinch zoom plus trackpad scrolling consistently with the main map, and uses `Next` until the final step exposes `Save configured map`.
 - **GC.28:** The unit-symbol step displays the effective default or custom army and fleet symbols at useful map scale before saving.
 - **GC.29:** Placement label mode independently selects no labels, full territory names or abbreviations, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.

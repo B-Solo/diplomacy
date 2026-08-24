@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from xml.etree import ElementTree
 
+import pytest
 from PySide6.QtCore import QPoint, QPointF, Qt
-from PySide6.QtGui import QWheelEvent
+from PySide6.QtGui import QNativeGestureEvent, QPointingDevice, QWheelEvent
 
 from diplomacy_app.application.service import ApplicationService
 from diplomacy_app.game_repository import FileGameRepository
@@ -118,6 +119,26 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     )
     wizard.anchor_canvas.wheelEvent(mouse_wheel)
     assert wizard.anchor_canvas.transform().m11() > before_scale
+    pinch_position = QPointF(50, 50)
+    pinch_scene_position = wizard.anchor_canvas.mapToScene(pinch_position.toPoint())
+    pointing_device = QPointingDevice.primaryPointingDevice()
+    pinch = QNativeGestureEvent(
+        Qt.NativeGestureType.ZoomNativeGesture,
+        pointing_device,
+        2,
+        pinch_position,
+        pinch_position,
+        pinch_position,
+        0.15,
+        QPointF(),
+        1,
+    )
+    before_pinch_scale = wizard.anchor_canvas.transform().m11()
+    assert wizard.anchor_canvas.viewportEvent(pinch)
+    assert wizard.anchor_canvas.transform().m11() > before_pinch_scale
+    moved_scene_position = wizard.anchor_canvas.mapToScene(pinch_position.toPoint())
+    assert moved_scene_position.x() == pytest.approx(pinch_scene_position.x())
+    assert moved_scene_position.y() == pytest.approx(pinch_scene_position.y())
     for controls in (
         wizard.regions_zoom,
         wizard.topology_zoom,
@@ -127,10 +148,17 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     ):
         assert not controls.zoom_in.isHidden()
         assert not controls.zoom_out.isHidden()
-    army_count = len(
-        [item for item in wizard.anchor_canvas.scene().items() if isinstance(item, UnitAnchorItem)]
-    )
+    army_items = [
+        item for item in wizard.anchor_canvas.scene().items() if isinstance(item, UnitAnchorItem)
+    ]
+    army_count = len(army_items)
     assert army_count == len(wizard.draft.presentation.army_anchors)
+    assert all(len(item.childItems()) == 1 for item in army_items)
+    assert all(
+        len(item.childItems()) == 1
+        for item in wizard.anchor_canvas.scene().items()
+        if isinstance(item, TextAnchorItem)
+    )
     wizard.fleets_preview.click()
     assert wizard.fleets_preview.isChecked()
     assert wizard.armies_preview.isChecked()
