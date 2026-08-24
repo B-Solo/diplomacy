@@ -3,6 +3,7 @@ from __future__ import annotations
 from xml.etree import ElementTree
 
 import pytest
+import yaml
 from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtGui import (
     QInputDevice,
@@ -11,7 +12,7 @@ from PySide6.QtGui import (
     QPointingDevice,
     QWheelEvent,
 )
-from PySide6.QtWidgets import QGraphicsItem, QGraphicsView, QLabel, QPushButton
+from PySide6.QtWidgets import QApplication, QGraphicsItem, QGraphicsView, QLabel, QPushButton
 
 from diplomacy_app.application.service import ApplicationService
 from diplomacy_app.domain.models import Point
@@ -57,6 +58,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
 
     wizard = MapWizard(service, service.load_map_draft(maps.list()[0].map_id))
     qtbot.addWidget(wizard)
+    wizard.resize(1400, 900)
+    wizard.show()
+    QApplication.processEvents()
     default_fit_canvas = MapCanvas()
     qtbot.addWidget(default_fit_canvas)
     default_fit_canvas.resize(320, 240)
@@ -67,14 +71,16 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         is QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate
     )
     assert wizard.roles.rowCount() >= 74
-    assert wizard.tabs.count() == 4
+    assert wizard.tabs.count() == 5
     assert tuple(wizard.tabs.tabText(index) for index in range(wizard.tabs.count())) == (
         "SVG regions",
         "Topology",
+        "Powers and setup",
         "Placement",
         "Unit symbols",
     )
     assert wizard.validation_label.text().startswith("Valid:")
+    assert wizard.yaml_editor.textCursor().selectedText() == "territories:"
     assert wizard.save_button.text() == "Save configured map"
     for index in range(wizard.tabs.count()):
         wizard.tabs.setCurrentIndex(index)
@@ -85,6 +91,14 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.tabs.setCurrentIndex(2)
     assert "# Retained when changing tabs" in wizard.draft.map_yaml
     assert not wizard.yaml_editor.document().isModified()
+    setup = yaml.safe_load(wizard.setup_editor.toPlainText())
+    power_id = next(iter(setup["teams"]))
+    setup["teams"][power_id]["colour"] = "#123456"
+    wizard.setup_editor.setPlainText(yaml.safe_dump(setup, sort_keys=False))
+    wizard.setup_editor.document().setModified(True)
+    wizard.tabs.setCurrentIndex(3)
+    assert yaml.safe_load(wizard.draft.map_yaml)["teams"][power_id]["colour"] == "#123456"
+    assert wizard.setup_validation_label.text() == "Applied to map YAML"
     assert not any(
         button.text() == "Reload anchors from YAML" for button in wizard.findChildren(QPushButton)
     )
@@ -101,8 +115,21 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         if group.attrib.get("id") == "topology-map-underlay"
     )
     graph_edges = [line for line in topology.findall(".//{*}line") if "data-kind" in line.attrib]
+    node_layer = next(
+        group for group in topology.findall(".//{*}g") if group.attrib.get("id") == "topology-nodes"
+    )
     assert underlay.attrib["opacity"] == "0.34"
     assert graph_edges
+    wizard.tabs.setCurrentIndex(1)
+    QApplication.processEvents()
+    yaml_width, map_width = wizard.topology_splitter.sizes()
+    assert map_width > yaml_width
+    wizard.tabs.setCurrentIndex(3)
+    assert {label.attrib["font-size"] for label in node_layer.findall("{*}text")} == {"11"}
+    assert wizard.army_asset_preview.size().width() == 340
+    assert wizard.army_asset_preview.size().height() == 240
+    assert wizard.army_asset_preview.transform().m11() < 1.2
+    assert wizard.fleet_asset_preview.transform().m11() < 1.2
     land = next(item for item in definition.territories if item.kind.value == "land")
     sea = next(item for item in definition.territories if item.kind.value == "sea")
     land_node = topology_nodes[str(land.id)]
@@ -140,7 +167,6 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.anchor_canvas.set_standard_zoom()
     before_scale = wizard.anchor_canvas.transform().m11()
     before_scroll = wizard.anchor_canvas.verticalScrollBar().value()
-    controls_position = wizard.placement_zoom.pos()
     touchpad = QPointingDevice(
         "Test trackpad",
         10_001,
@@ -165,7 +191,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.anchor_canvas.wheelEvent(trackpad_scroll)
     assert wizard.anchor_canvas.transform().m11() == before_scale
     assert wizard.anchor_canvas.verticalScrollBar().value() > before_scroll
-    assert wizard.placement_zoom.pos() == controls_position
+    assert wizard.placement_zoom.y() == 8
+    assert (
+        wizard.placement_zoom.x()
+        == wizard.anchor_canvas.viewport().width() - wizard.placement_zoom.width() - 8
+    )
     mouse = QPointingDevice(
         "Test mouse",
         10_002,
@@ -191,7 +221,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     )
     wizard.anchor_canvas.wheelEvent(mouse_wheel)
     assert wizard.anchor_canvas.transform().m11() > before_scale
-    pinch_position = QPointF(50, 50)
+    pinch_position = QPointF(
+        wizard.anchor_canvas.viewport().width() / 2,
+        wizard.anchor_canvas.viewport().height() / 2,
+    )
     pinch_scene_position = wizard.anchor_canvas.mapToScene(pinch_position.toPoint())
     pointing_device = QPointingDevice.primaryPointingDevice()
     pinch = QNativeGestureEvent(
@@ -283,7 +316,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.draft.presentation.label_anchors[anchor_id] == moved_anchor
     saved = []
     wizard.saved.connect(saved.append)
-    wizard.tabs.setCurrentIndex(2)
+    wizard.tabs.setCurrentIndex(3)
     wizard.save_button.click()
     assert saved and saved[0].id == wizard.draft.map_id
     assert maps.load(saved[0].id).presentation.label_anchors[anchor_id] == moved_anchor

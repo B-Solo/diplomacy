@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree
 
+import yaml
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -60,6 +61,7 @@ class MapWizard(QWidget):
         layout.addWidget(self.tabs, 1)
         self._build_classification_tab()
         self._build_yaml_tab()
+        self._build_setup_tab()
         self._build_anchor_tab()
         self._build_assets_tab()
         self.message = QLabel()
@@ -81,6 +83,7 @@ class MapWizard(QWidget):
         self._reload_anchor_scene()
         self.tabs.currentChanged.connect(self._tab_changed)
         self._validate()
+        self._focus_topology_section()
 
     def _build_classification_tab(self) -> None:
         page = QWidget()
@@ -136,7 +139,10 @@ class MapWizard(QWidget):
         self.topology_zoom = MapZoomControls(self.topology_canvas)
         splitter.addWidget(self.yaml_editor)
         splitter.addWidget(topology_side)
-        splitter.setSizes([650, 430])
+        splitter.setStretchFactor(0, 2)
+        splitter.setStretchFactor(1, 3)
+        splitter.setSizes([440, 720])
+        self.topology_splitter = splitter
         layout.addWidget(splitter, 1)
         controls = QHBoxLayout()
         validate = QPushButton("Validate and compile")
@@ -147,6 +153,22 @@ class MapWizard(QWidget):
         controls.addWidget(self.validation_label, 1)
         layout.addLayout(controls)
         self.tabs.addTab(page, "Topology")
+
+    def _build_setup_tab(self) -> None:
+        page = QWidget()
+        layout = QVBoxLayout(page)
+        self.setup_editor = QPlainTextEdit()
+        self.setup_editor.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
+        layout.addWidget(self.setup_editor, 1)
+        controls = QHBoxLayout()
+        apply_setup = QPushButton("Apply to map YAML")
+        apply_setup.clicked.connect(self._apply_setup_changes)
+        controls.addWidget(apply_setup)
+        self.setup_validation_label = QLabel()
+        self.setup_validation_label.setWordWrap(True)
+        controls.addWidget(self.setup_validation_label, 1)
+        layout.addLayout(controls)
+        self.tabs.addTab(page, "Powers and setup")
 
     def _build_anchor_tab(self) -> None:
         page = QWidget()
@@ -183,29 +205,32 @@ class MapWizard(QWidget):
         page = QWidget()
         layout = QVBoxLayout(page)
         previews = QHBoxLayout()
+        previews.addStretch()
         army_column = QVBoxLayout()
         self.army_preview_label = QLabel()
         army_column.addWidget(self.army_preview_label)
         self.army_asset_preview = MapCanvas()
+        self.army_asset_preview.setFixedSize(340, 240)
         army_column.addWidget(self.army_asset_preview)
         self.army_asset_zoom = MapZoomControls(self.army_asset_preview)
+        army = QPushButton("Choose army SVG…")
+        army.clicked.connect(lambda: self._choose_asset("army"))
+        army_column.addWidget(army)
         fleet_column = QVBoxLayout()
         self.fleet_preview_label = QLabel()
         fleet_column.addWidget(self.fleet_preview_label)
         self.fleet_asset_preview = MapCanvas()
+        self.fleet_asset_preview.setFixedSize(340, 240)
         fleet_column.addWidget(self.fleet_asset_preview)
         self.fleet_asset_zoom = MapZoomControls(self.fleet_asset_preview)
-        previews.addLayout(army_column)
-        previews.addLayout(fleet_column)
-        layout.addLayout(previews, 1)
-        army = QPushButton("Choose army SVG…")
         fleet = QPushButton("Choose fleet SVG…")
-        army.clicked.connect(lambda: self._choose_asset("army"))
         fleet.clicked.connect(lambda: self._choose_asset("fleet"))
-        layout.addWidget(army)
-        layout.addWidget(fleet)
-        self.asset_status = QLabel()
-        layout.addWidget(self.asset_status)
+        fleet_column.addWidget(fleet)
+        previews.addLayout(army_column)
+        previews.addSpacing(24)
+        previews.addLayout(fleet_column)
+        previews.addStretch()
+        layout.addLayout(previews)
         layout.addStretch()
         self.tabs.addTab(page, "Unit symbols")
         self._update_asset_status()
@@ -319,6 +344,8 @@ class MapWizard(QWidget):
             )
             self.validation_label.setStyleSheet("color: #2f6843")
             self.yaml_editor.document().setModified(False)
+            if not self.setup_editor.document().isModified():
+                self._load_setup_editor()
             return True
         except Exception as exc:
             self.validation_label.setText(str(exc))
@@ -450,8 +477,8 @@ class MapWizard(QWidget):
                 tag("text"),
                 {
                     "x": str(point.x + 6),
-                    "y": str(point.y - 5),
-                    "font-size": "8",
+                    "y": str(point.y - 6),
+                    "font-size": "11",
                     "font-weight": "700",
                     "fill": "#1b1f1d",
                     "stroke": "#fffdf5",
@@ -543,6 +570,54 @@ class MapWizard(QWidget):
         except Exception as exc:
             self._show_error(f"Could not move anchor: {exc}")
 
+    def _load_setup_editor(self) -> None:
+        document = yaml.safe_load(self.draft.map_yaml)
+        if not isinstance(document, dict):
+            return
+        setup = {
+            "start": document.get("start", {}),
+            "teams": document.get("teams", {}),
+        }
+        self.setup_editor.setPlainText(yaml.safe_dump(setup, sort_keys=False, allow_unicode=True))
+        self.setup_editor.document().setModified(False)
+
+    def _focus_topology_section(self) -> None:
+        cursor = self.yaml_editor.document().find("territories:")
+        if not cursor.isNull():
+            self.yaml_editor.setTextCursor(cursor)
+            self.yaml_editor.ensureCursorVisible()
+
+    def _apply_setup_changes(self) -> bool:
+        try:
+            setup = yaml.safe_load(self.setup_editor.toPlainText())
+            if not isinstance(setup, dict):
+                raise ValueError("Setup YAML must contain a mapping")
+            unexpected = set(setup) - {"start", "teams"}
+            if unexpected:
+                raise ValueError("Powers and setup accepts only 'start' and 'teams' sections")
+            if not isinstance(setup.get("start"), dict) or not isinstance(setup.get("teams"), dict):
+                raise ValueError("Both 'start' and 'teams' must be mappings")
+            document = yaml.safe_load(self.yaml_editor.toPlainText())
+            if not isinstance(document, dict):
+                raise ValueError("Map YAML must contain a mapping")
+            document["start"] = setup["start"]
+            document["teams"] = setup["teams"]
+            text = yaml.safe_dump(document, sort_keys=False, allow_unicode=True)
+            self.yaml_editor.setPlainText(text)
+            self.draft = replace(self.draft, map_yaml=text)
+            self.setup_editor.document().setModified(False)
+            if not self._validate():
+                self.setup_validation_label.setText("Map validation failed")
+                self.setup_validation_label.setStyleSheet("color: #8a302b")
+                return False
+            self.setup_validation_label.setText("Applied to map YAML")
+            self.setup_validation_label.setStyleSheet("color: #2f6843")
+            return True
+        except Exception as exc:
+            self.setup_validation_label.setText(str(exc))
+            self.setup_validation_label.setStyleSheet("color: #8a302b")
+            return False
+
     def _choose_asset(self, kind: str) -> None:
         filename, _ = QFileDialog.getOpenFileName(
             self, f"Choose {kind} SVG", "", "SVG files (*.svg)"
@@ -559,10 +634,6 @@ class MapWizard(QWidget):
         self._reload_anchor_scene()
 
     def _update_asset_status(self) -> None:
-        self.asset_status.setText(
-            f"Army: {'custom' if self.draft.army_svg else 'default'}    "
-            f"Fleet: {'custom' if self.draft.fleet_svg else 'default'}"
-        )
         army = self.draft.army_svg or DEFAULT_ARMY_SVG
         fleet = self.draft.fleet_svg or DEFAULT_FLEET_SVG
         self.army_preview_label.setText(
@@ -577,20 +648,31 @@ class MapWizard(QWidget):
     @staticmethod
     def _asset_preview_svg(asset: bytes) -> bytes:
         encoded = base64.b64encode(asset.replace(b"currentColor", b"#344d40")).decode()
-        return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 140">
-          <path d="M15 18 Q70 2 125 18 T205 25 L198 122 Q120 138 22 118 Z"
+        return f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220">
+          <path d="M35 38 Q110 15 180 34 T285 48 L272 190 Q170 208 48 182 Z"
                 fill="#d0c9aa" stroke="#665f4f" stroke-width="2"/>
-          <image x="94" y="59" width="32" height="22"
+          <image x="144" y="99" width="32" height="22"
                  href="data:image/svg+xml;base64,{encoded}"/>
         </svg>""".encode()
 
     def _tab_changed(self, index: int) -> None:
+        if (
+            index != 2
+            and self.setup_editor.document().isModified()
+            and not self._apply_setup_changes()
+        ):
+            self.tabs.blockSignals(True)
+            self.tabs.setCurrentIndex(2)
+            self.tabs.blockSignals(False)
+            return
         if index == 1:
             self._validate()
         elif self.yaml_editor.document().isModified():
-            if self._validate() and index == 2:
+            if self._validate() and index == 3:
                 self._reload_anchor_scene()
         elif index == 2:
+            self._load_setup_editor()
+        elif index == 3:
             self._reload_anchor_scene()
 
     def _show_error(self, text: str) -> None:
@@ -599,6 +681,9 @@ class MapWizard(QWidget):
         self.message.setVisible(True)
 
     def _save(self) -> None:
+        if self.setup_editor.document().isModified() and not self._apply_setup_changes():
+            self.tabs.setCurrentIndex(2)
+            return
         if not self._validate():
             self.tabs.setCurrentIndex(1)
             return

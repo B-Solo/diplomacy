@@ -53,6 +53,7 @@ class MapCanvas(QGraphicsView):
         self._highlight: QGraphicsSvgItem | None = None
         self._scene_bounds = QRectF()
         self._hotspots: tuple[MapHotspot, ...] = ()
+        self._fit_active = False
         self.setMouseTracking(True)
 
     def set_svg(self, svg: bytes, bounds: MapBounds | None = None, fit: bool = True) -> None:
@@ -81,14 +82,17 @@ class MapCanvas(QGraphicsView):
 
     def fit_map(self) -> None:
         if not self._scene_bounds.isEmpty():
+            self._fit_active = True
             self.fitInView(self._scene_bounds, Qt.AspectRatioMode.KeepAspectRatio)
             self._emit_zoom()
 
     def set_standard_zoom(self) -> None:
+        self._fit_active = False
         self.resetTransform()
         self._emit_zoom()
 
     def zoom_by(self, factor: float, position: QPointF | None = None) -> None:
+        self._fit_active = False
         current = self.transform().m11()
         target = max(0.08, min(12.0, current * factor))
         if position is not None:
@@ -156,9 +160,15 @@ class MapCanvas(QGraphicsView):
             self._scene_bounds
         )
         if not rect.isEmpty():
+            self._fit_active = False
             self.fitInView(rect, Qt.AspectRatioMode.KeepAspectRatio)
             self.centerOn(rect.center())
             self._emit_zoom()
+
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        if self._fit_active:
+            self.fit_map()
 
     def mouseMoveEvent(self, event) -> None:
         super().mouseMoveEvent(event)
@@ -248,6 +258,8 @@ class MapZoomControls(QWidget):
         self.fit.clicked.connect(canvas.fit_map)
         layout.addWidget(self.fit)
         canvas.zoom_changed.connect(lambda value: self.percentage.setText(f"{value}%"))
+        canvas.horizontalScrollBar().valueChanged.connect(lambda _value: self._position_overlay())
+        canvas.verticalScrollBar().valueChanged.connect(lambda _value: self._position_overlay())
         canvas.viewport().installEventFilter(self)
         self.adjustSize()
         self._position_overlay()

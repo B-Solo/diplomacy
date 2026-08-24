@@ -181,10 +181,10 @@ Player communication occurs outside the application using map images copied by t
 - **GC.11:** Split coasts have separate fleet anchors.
 - **GC.12:** The importer generates likely adjacency from SVG geometry and assumes that every coastal province has one continuous coast.
 - **GC.13:** The generated ordinary topology is combined with explicit additions and removals, then materialised as the complete topology used for play.
-- **GC.14:** The map editor exposes the configured `map.yaml`, including its local connection overrides, alongside an initially validated graphical preview of the complete effective topology.
+- **GC.14:** The Topology tab gives the graphical adjacency preview more space than the configured `map.yaml`, includes readable territory labels and exposes local connection overrides alongside the complete effective topology.
 - **GC.15:** The map-configuration editor supports split-coast connections, canals, off-map links, missed links and removal of incorrectly generated links through text.
 - **GC.16:** The saved `map.yaml` remains directly editable outside the application.
-- **GC.17:** The importer collects powers, colours, home and starting supply-centre ownership, initial territory control, starting units, territory abbreviations and supply-centre locations.
+- **GC.17:** A focused Powers and setup tab edits the starting phase, powers, colours, home and starting supply-centre ownership, initial territory control and starting units, and applies those sections to the shared `map.yaml`.
 - **GC.18:** A map may provide one custom army SVG and one custom fleet SVG; the default symbols are used when either is absent.
 - **GC.19:** An existing reusable map can be reopened in the map-configuration editor without re-importing its SVG.
 - **GC.20:** Reopening a map provides the same visual Placement tab as initial import, including independent label, army, fleet, split-coast fleet and supply-centre anchors.
@@ -195,7 +195,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.25:** Hovering any classified shape in the SVG regions tab identifies and selects its row; hovering or selecting a row highlights the corresponding shape on the map.
 - **GC.26:** The topology preview draws a colour-coded adjacency graph over a faded map, using army anchors as land and coastal nodes and fleet anchors as sea nodes; its key distinguishes army-only, fleet-only and shared connections, and arrowheads identify asymmetric connections.
 - **GC.27:** The map editor uses independently accessible, non-sequential tabs with a persistent `Save configured map` action, overlays compact `−`, current-percentage, `+` and `Fit` controls on every visual tab, and supports mouse-wheel and trackpad-pinch zoom plus trackpad scrolling consistently with the main map.
-- **GC.28:** The Unit symbols tab displays the effective default or custom army and fleet symbols at useful map scale before saving.
+- **GC.28:** The Unit symbols tab displays compact previews of the effective default or custom army and fleet symbols at approximately their real map scale before saving.
 - **GC.29:** Placement label mode independently selects no labels, full territory names or abbreviations, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.
 
@@ -266,8 +266,9 @@ The plain-text field is not visible until that text is selected.
 New game
   -> Choose configured map
      or Import SVG and create map
-       -> Open independent SVG regions, Topology, Placement and Unit symbols tabs
-          -> Classify shapes and edit territory, topology and starting configuration as YAML
+       -> Open independent SVG regions, Topology, Powers and setup, Placement and Unit symbols tabs
+          -> Classify shapes and edit territory and topology configuration as YAML
+          -> Configure powers, colours and the reusable starting setup in a focused panel
           -> Position labels, army anchors, fleet anchors and supply-centre anchors
           -> Optionally provide army and fleet SVG symbols
        -> Validate and save the reusable map from any tab
@@ -279,6 +280,7 @@ Manage configured maps
   -> Open only the independent tabs needed for this edit
      -> Inspect or reclassify linked territory shapes
      -> Edit YAML and review the effective topology graphically
+     -> Edit powers, colours and reusable starting defaults
      -> Combine and reposition label, army, fleet and supply-centre placement layers
      -> Preview or replace the effective unit symbols
   -> Validate and save the reusable map from the current tab
