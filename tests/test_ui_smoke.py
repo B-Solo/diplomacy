@@ -541,10 +541,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     composed_preview = ElementTree.fromstring(wizard._preview_svg_without())
     composed_label = next(
         label
-        for label in composed_preview.findall(".//{*}g[@id='territory-labels']/{*}text")
-        if "".join(label.itertext()) == "First display lineSecond display line"
+        for label in composed_preview.findall(".//{*}g[@id='territory-labels']/{*}g")
+        if "".join(line.text or "" for line in label.findall("{*}text"))
+        == "First display lineSecond display line"
     )
-    composed_lines = composed_label.findall("{*}tspan")
+    composed_lines = composed_label.findall("{*}text")
     assert [line.text for line in composed_lines] == [
         "First display line",
         "Second display line",
@@ -555,8 +556,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         wizard._topology_svg(service.preview_map_definition(wizard.draft))
     )
     assert any(
-        "".join(label.itertext()) == "First display lineSecond display line"
-        for label in topology_preview.findall(".//{*}g[@id='territory-labels']/{*}text")
+        "".join(line.text or "" for line in label.findall("{*}text"))
+        == "First display lineSecond display line"
+        for label in topology_preview.findall(".//{*}g[@id='territory-labels']/{*}g")
     )
     assert wizard._reload_setup_preview()
     assert wizard.setup_canvas._renderer.elementExists("territory-labels")

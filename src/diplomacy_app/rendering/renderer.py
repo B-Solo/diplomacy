@@ -192,37 +192,35 @@ class MapRenderer:
             for territory in map_definition.territories:
                 item = projected[territory.id]
                 anchor = label_anchors[territory.id]
-                label = ElementTree.SubElement(
+                label_group = ElementTree.SubElement(
                     labels,
-                    _tag("text"),
+                    _tag("g"),
                     {
-                        "x": str(anchor.x),
-                        "y": str(anchor.y),
-                        "text-anchor": "middle",
-                        "dominant-baseline": "central",
-                        "font-family": "Georgia, serif",
-                        "font-size": f"{map_definition.presentation.territory_label_font_size:g}",
-                        "font-weight": "700",
-                        "fill": map_definition.presentation.label_colour,
+                        "class": "territory-label",
+                        "data-territory": str(territory.id),
                     },
                 )
                 lines = label_lines(item.label)
-                if len(lines) == 1:
-                    label.text = lines[0]
-                else:
-                    line_height = (
-                        map_definition.presentation.territory_label_font_size * LABEL_LINE_HEIGHT
+                line_height = (
+                    map_definition.presentation.territory_label_font_size * LABEL_LINE_HEIGHT
+                )
+                for index, line in enumerate(lines):
+                    line_label = ElementTree.SubElement(
+                        label_group,
+                        _tag("text"),
+                        {
+                            "x": str(anchor.x),
+                            "y": f"{anchor.y + (index - (len(lines) - 1) / 2) * line_height:g}",
+                            "text-anchor": "middle",
+                            "dominant-baseline": "central",
+                            "font-family": "Georgia, serif",
+                            "font-size": f"{map_definition.presentation.territory_label_font_size:g}",
+                            "font-weight": "700",
+                            "fill": map_definition.presentation.label_colour,
+                            "data-line": str(index),
+                        },
                     )
-                    for index, line in enumerate(lines):
-                        tspan = ElementTree.SubElement(
-                            label,
-                            _tag("tspan"),
-                            {
-                                "x": str(anchor.x),
-                                "y": f"{anchor.y + (index - (len(lines) - 1) / 2) * line_height:g}",
-                            },
-                        )
-                        tspan.text = line
+                    line_label.text = line
                 for coast_id in territory.split_coast_ids:
                     location = Location(territory.id, coast_id)
                     coast_anchor = map_definition.presentation.coast_label_anchors[location]

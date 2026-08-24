@@ -4,6 +4,8 @@ from dataclasses import replace
 from types import MappingProxyType
 from xml.etree import ElementTree
 
+from PySide6.QtGui import QImage
+
 from diplomacy_app.domain.models import (
     DisplayMode,
     GameId,
@@ -15,6 +17,7 @@ from diplomacy_app.domain.models import (
     PhaseSnapshot,
     PixelSize,
     Point,
+    ProjectedMapState,
     ProjectionRequest,
     RenderRequest,
     Revision,
@@ -65,6 +68,76 @@ def test_power_projection_has_discriminated_hidden_values(england):
     )
 
 
+def test_exported_multiline_label_paints_two_distinct_lines(qapp, england):
+    territory = england.territories[0]
+    outside = Point(-1000, -1000)
+    label_anchors = {item.id: outside for item in england.territories}
+    label_anchors[territory.id] = Point(100, 50)
+    presentation = replace(
+        england.presentation,
+        label_anchors=MappingProxyType(label_anchors),
+        coast_label_anchors=MappingProxyType(
+            {location: outside for location in england.presentation.coast_label_anchors}
+        ),
+        territory_label_font_size=14,
+        label_colour="#000000",
+    )
+    minimal_map = replace(
+        england,
+        presentation=presentation,
+        assets=replace(
+            england.assets,
+            map_svg=(
+                b'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100">'
+                b'<rect width="200" height="100" fill="#ffffff"/></svg>'
+            ),
+        ),
+    )
+    projection = ProjectedMapState(
+        england.default_starting_setup.phase_id,
+        Perspective(PerspectiveKind.GAMEMASTER),
+        tuple(
+            HiddenTerritory(
+                item.id,
+                "FIRST LINE\nSECOND LINE" if item.id == territory.id else "",
+            )
+            for item in england.territories
+        ),
+        (),
+        (),
+    )
+    request = RenderRequest(
+        DisplayMode.POSITION,
+        LabelMode.FULL_NAME,
+        MapBounds(0, 0, 200, 100),
+        PixelSize(200, 100),
+    )
+    renderer = MapRenderer()
+    image = QImage.fromData(
+        renderer.export(renderer.compose(minimal_map, projection, request), request).data
+    )
+    assert not image.isNull()
+    dark_rows = [
+        y
+        for y in range(image.height())
+        if any(
+            max(
+                image.pixelColor(x, y).red(),
+                image.pixelColor(x, y).green(),
+                image.pixelColor(x, y).blue(),
+            )
+            < 100
+            for x in range(image.width())
+        )
+    ]
+    row_groups: list[list[int]] = []
+    for row in dark_rows:
+        if not row_groups or row > row_groups[-1][-1] + 1:
+            row_groups.append([])
+        row_groups[-1].append(row)
+    assert len(row_groups) == 2
+
+
 def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     phase = phase_for(england)
     engine = StandardRulesEngine()
@@ -104,15 +177,16 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     assert all(symbol.findall(".//{*}path") for symbol in unit_symbols)
     derbyshire = next(
         label
-        for label in root.findall(".//{*}g[@id='territory-labels']/{*}text")
-        if "".join(label.itertext()) == "Derbyshire &Nottinghamshire"
+        for label in root.findall(".//{*}g[@id='territory-labels']/{*}g")
+        if "".join(line.text or "" for line in label.findall("{*}text"))
+        == "Derbyshire &Nottinghamshire"
     )
-    assert [line.text for line in derbyshire.findall("{*}tspan")] == [
+    assert [line.text for line in derbyshire.findall("{*}text")] == [
         "Derbyshire &",
         "Nottinghamshire",
     ]
-    assert derbyshire.attrib["fill"] == "#4c3b1e"
-    assert "stroke" not in derbyshire.attrib
+    assert {line.attrib["fill"] for line in derbyshire.findall("{*}text")} == {"#4c3b1e"}
+    assert all("stroke" not in line.attrib for line in derbyshire.findall("{*}text"))
     assert label_lines("Short Name") == ("Short Name",)
     assert label_lines("Manual\nBreak") == ("Manual", "Break")
     assert label_lines("A deliberately long line\nSecond line") == (
@@ -172,11 +246,13 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     abbreviation_root = ElementTree.fromstring(abbreviation_scene.svg)
     rendered_abbreviation = next(
         label
-        for label in abbreviation_root.findall(".//{*}g[@id='territory-labels']/{*}text")
-        if "".join(label.itertext()) == territory.abbreviation
+        for label in abbreviation_root.findall(".//{*}g[@id='territory-labels']/{*}g")
+        if "".join(line.text or "" for line in label.findall("{*}text")) == territory.abbreviation
     )
-    assert rendered_abbreviation.attrib["x"] == str(abbreviation_anchor.x)
-    assert rendered_abbreviation.attrib["y"] == str(abbreviation_anchor.y)
+    abbreviation_line = rendered_abbreviation.find("{*}text")
+    assert abbreviation_line is not None
+    assert abbreviation_line.attrib["x"] == str(abbreviation_anchor.x)
+    assert abbreviation_line.attrib["y"] == str(abbreviation_anchor.y)
 
     display_territory = replace(territory, display_name="Chosen first line\nChosen second line")
     display_map = replace(
@@ -210,18 +286,18 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     display_root = ElementTree.fromstring(display_scene.svg)
     displayed = next(
         label
-        for label in display_root.findall(".//{*}g[@id='territory-labels']/{*}text")
-        if "".join(label.itertext()) == "Chosen first lineChosen second line"
+        for label in display_root.findall(".//{*}g[@id='territory-labels']/{*}g")
+        if "".join(line.text or "" for line in label.findall("{*}text"))
+        == "Chosen first lineChosen second line"
     )
-    assert [line.text for line in displayed.findall("{*}tspan")] == [
+    rendered_lines = displayed.findall("{*}text")
+    assert [line.text for line in rendered_lines] == [
         "Chosen first line",
         "Chosen second line",
     ]
-    rendered_lines = displayed.findall("{*}tspan")
     assert len({line.attrib["y"] for line in rendered_lines}) == 2
-    assert all("dy" not in line.attrib for line in rendered_lines)
-    assert displayed.attrib["font-size"] == "12.5"
-    assert displayed.attrib["fill"] == "#201810"
+    assert all(line.attrib["font-size"] == "12.5" for line in rendered_lines)
+    assert all(line.attrib["fill"] == "#201810" for line in rendered_lines)
     assert {
         label.attrib["font-size"]
         for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}text")
