@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import re
 from collections.abc import Mapping
 from pathlib import Path
 from types import MappingProxyType
@@ -27,6 +28,7 @@ from diplomacy_app.domain.models import (
     PowerId,
     Season,
     StartingSetup,
+    SvgElementRole,
     TerritoryDefinition,
     TerritoryId,
     TerritoryKind,
@@ -38,9 +40,14 @@ from diplomacy_app.map_library.geometry import inferred_connections
 from diplomacy_app.map_library.svg_importer import sanitise_svg, territory_geometries
 from diplomacy_app.presentation import (
     DEFAULT_COAST_LABEL_FONT_SIZE,
+    DEFAULT_INACCESSIBLE_REGION_COLOUR,
+    DEFAULT_SEA_COLOUR,
     DEFAULT_TERRITORY_LABEL_FONT_SIZE,
+    DEFAULT_UNCLAIMED_REGION_COLOUR,
     default_coast_label_anchor,
 )
+
+_COLOUR = re.compile(r"^#[0-9a-fA-F]{6}$")
 
 
 def load_yaml(text: str) -> dict[str, Any]:
@@ -168,6 +175,13 @@ def _parse_presentation(
         math.isfinite(size) and 5 <= size <= 24 for size in (territory_font_size, coast_font_size)
     ):
         raise MapLibraryError("Presentation font sizes must be between 5 and 24")
+    colours = (
+        str(settings.get("inaccessible_region_colour", DEFAULT_INACCESSIBLE_REGION_COLOUR)),
+        str(settings.get("sea_colour", DEFAULT_SEA_COLOUR)),
+        str(settings.get("unclaimed_region_colour", DEFAULT_UNCLAIMED_REGION_COLOUR)),
+    )
+    if not all(_COLOUR.fullmatch(colour) for colour in colours):
+        raise MapLibraryError("Presentation colours must use #RRGGBB notation")
     return MapPresentation(
         MappingProxyType(label),
         MappingProxyType(abbreviation),
@@ -178,6 +192,7 @@ def _parse_presentation(
         MappingProxyType(supply),
         territory_font_size,
         coast_font_size,
+        *colours,
     )
 
 
@@ -316,6 +331,12 @@ def compile_map(
     powers, setup = _parse_powers_and_start(document, territories)
     presentation_settings = _mapping(document.get("presentation", {}), "presentation")
     presentation = _parse_presentation(raw_territories, territories, presentation_settings)
+    non_playable = _mapping(document.get("non_playable_elements", {}), "non_playable_elements")
+    inaccessible_ids = frozenset(
+        str(element_id)
+        for element_id, role in non_playable.items()
+        if str(role) == SvgElementRole.IMPASSABLE.value
+    )
     topology = _effective_connections(raw_territories, territories, safe_svg)
     return MapDefinition(
         id=MapId(str(document.get("map_id", ""))),
@@ -325,6 +346,7 @@ def compile_map(
         powers=powers,
         default_starting_setup=setup,
         presentation=presentation,
+        inaccessible_svg_element_ids=inaccessible_ids,
         assets=MapAssets(safe_svg, army_svg or DEFAULT_ARMY_SVG, fleet_svg or DEFAULT_FLEET_SVG),
         rules_engine_id=str(document.get("rules_engine", "standard")),
     )

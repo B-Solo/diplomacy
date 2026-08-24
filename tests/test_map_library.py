@@ -22,14 +22,21 @@ def test_england_compiles_complete_valid_topology(project_root, england):
     assert sum(item.is_supply_centre for item in england.territories) == 34
     assert len(england.powers) == 6
     assert len(england.adjacencies) == 480
+    assert "impassable-scotland" in england.inaccessible_svg_element_ids
     devon_north = Location(TerritoryId("devon"), CoastId("north"))
     assert devon_north in england.presentation.coast_label_anchors
     assert england.presentation.coast_label_rotations[devon_north] == 0
     legacy_data = map_definition_data(england)
+    round_tripped = map_definition_from_data(legacy_data, england.assets)
+    assert round_tripped.inaccessible_svg_element_ids == england.inaccessible_svg_element_ids
     legacy_data["presentation"].pop("coast_labels")
     legacy_data["presentation"].pop("abbreviations")
     legacy_data["presentation"].pop("territory_label_font_size")
     legacy_data["presentation"].pop("coast_label_font_size")
+    legacy_data["presentation"].pop("inaccessible_region_colour")
+    legacy_data["presentation"].pop("sea_colour")
+    legacy_data["presentation"].pop("unclaimed_region_colour")
+    legacy_data.pop("inaccessible_svg_elements")
     for territory in legacy_data["territories"]:
         territory.pop("display_name")
     restored = map_definition_from_data(legacy_data, england.assets)
@@ -37,6 +44,9 @@ def test_england_compiles_complete_valid_topology(project_root, england):
     assert restored.presentation.abbreviation_anchors == restored.presentation.label_anchors
     assert restored.presentation.territory_label_font_size == 11
     assert restored.presentation.coast_label_font_size == 9
+    assert restored.presentation.inaccessible_region_colour == "#777870"
+    assert restored.presentation.sea_colour == "#9ebbd2"
+    assert restored.presentation.unclaimed_region_colour == "#d0c9aa"
     assert all(item.display_name == item.name for item in restored.territories)
     assert all(
         type(edge)(edge.destination, edge.origin, edge.unit_type) in england.adjacencies

@@ -257,6 +257,9 @@ class ApplicationService:
     def preview_map_definition(self, draft: MapDraft) -> MapDefinition:
         return self.map_library.preview_definition(draft)
 
+    def preview_map_base(self, draft: MapDraft) -> bytes:
+        return self.renderer.base_map_svg(self.map_library.preview_definition(draft))
+
     def preview_map_setup(self, draft: MapDraft) -> MapScene:
         definition = self.map_library.preview_definition(draft)
         state = definition.default_starting_setup.state
@@ -310,6 +313,13 @@ class ApplicationService:
 
     def update_map_label_font_sizes(self, draft: MapDraft, territory_size, coast_size) -> MapDraft:
         return self.map_library.update_label_font_sizes(draft, territory_size, coast_size)
+
+    def update_map_colours(
+        self, draft: MapDraft, inaccessible_colour, sea_colour, unclaimed_colour
+    ) -> MapDraft:
+        return self.map_library.update_map_colours(
+            draft, inaccessible_colour, sea_colour, unclaimed_colour
+        )
 
     def save_map_draft(self, draft: MapDraft) -> MapDefinition:
         return self.map_library.save(draft)

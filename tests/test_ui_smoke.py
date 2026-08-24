@@ -153,6 +153,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.placement_layers_group.title() == "Preview layers"
     assert wizard.placement_labels_group.title() == "Territory labels"
     assert wizard.label_sizes_group.title() == "Label sizes"
+    assert wizard.map_colours_group.title() == "Map colours"
     assert wizard.display_name_group.title() == "Selected territory display name"
     assert wizard.coast_label_group.title() == "Selected coast label"
     assert wizard.placement_labels.minimumWidth() == 150
@@ -509,6 +510,31 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert {
         item.glyph.font().pointSizeF() for item in resized_labels if item.glyph.font().italic()
     } == {8.5}
+    wizard._set_map_colour("inaccessible_region_colour", "#303030")
+    wizard._set_map_colour("sea_colour", "#406080")
+    wizard._set_map_colour("unclaimed_region_colour", "#d8c8a8")
+    assert wizard.inaccessible_colour_button.text() == "Inaccessible #303030"
+    assert wizard.sea_colour_button.text() == "Sea #406080"
+    assert wizard.unclaimed_colour_button.text() == "Unclaimed #D8C8A8"
+    base_preview = ElementTree.fromstring(service.preview_map_base(wizard.draft))
+    inaccessible_node = next(
+        node for node in base_preview.iter() if node.attrib.get("id") == "impassable-scotland"
+    )
+    sea_territory = next(item for item in wizard.draft.territories if item.kind.value == "sea")
+    sea_node = next(
+        node
+        for node in base_preview.iter()
+        if node.attrib.get("id") == sea_territory.svg_element_id
+    )
+    land_territory = next(item for item in wizard.draft.territories if item.kind.value == "land")
+    land_node = next(
+        node
+        for node in base_preview.iter()
+        if node.attrib.get("id") == land_territory.svg_element_id
+    )
+    assert inaccessible_node.attrib["style"].endswith("fill:#303030")
+    assert sea_node.attrib["style"].endswith("fill:#406080")
+    assert land_node.attrib["style"].endswith("fill:#d8c8a8")
     coast_location, coast_anchor = next(iter(wizard.draft.presentation.coast_label_anchors.items()))
     moved_coast_anchor = Point(coast_anchor.x + 2, coast_anchor.y + 3)
     wizard._anchor_moved(
@@ -598,6 +624,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     )
     assert maps.load(saved[0].id).presentation.territory_label_font_size == 12.5
     assert maps.load(saved[0].id).presentation.coast_label_font_size == 8.5
+    assert maps.load(saved[0].id).presentation.inaccessible_region_colour == "#303030"
+    assert maps.load(saved[0].id).presentation.sea_colour == "#406080"
+    assert maps.load(saved[0].id).presentation.unclaimed_region_colour == "#d8c8a8"
     reopened_maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     assert (
         next(

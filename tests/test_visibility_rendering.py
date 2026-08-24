@@ -193,6 +193,9 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
             england.presentation,
             territory_label_font_size=12.5,
             coast_label_font_size=8.5,
+            inaccessible_region_colour="#303030",
+            sea_colour="#406080",
+            unclaimed_region_colour="#d8c8a8",
         ),
     )
     display_projection = VisibilityProjector().project(
@@ -223,3 +226,21 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
         label.attrib["font-size"]
         for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}text")
     } == {"8.5"}
+    inaccessible = next(
+        node for node in display_root.iter() if node.attrib.get("id") == "impassable-scotland"
+    )
+    sea = next(item for item in display_map.territories if item.kind.value == "sea")
+    sea_node = next(
+        node for node in display_root.iter() if node.attrib.get("id") == sea.svg_element_id
+    )
+    unclaimed = next(
+        item
+        for item in display_map.territories
+        if item.kind.value == "land" and phase.state.territory_controllers.get(item.id) is None
+    )
+    unclaimed_node = next(
+        node for node in display_root.iter() if node.attrib.get("id") == unclaimed.svg_element_id
+    )
+    assert inaccessible.attrib["style"].endswith("fill:#303030")
+    assert sea_node.attrib["style"].endswith("fill:#406080")
+    assert unclaimed_node.attrib["style"].endswith("fill:#d8c8a8")

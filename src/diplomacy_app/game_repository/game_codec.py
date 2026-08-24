@@ -212,6 +212,9 @@ def authored_map_yaml(definition: MapDefinition) -> str:
         "presentation": {
             "territory_label_font_size": definition.presentation.territory_label_font_size,
             "coast_label_font_size": definition.presentation.coast_label_font_size,
+            "inaccessible_region_colour": definition.presentation.inaccessible_region_colour,
+            "sea_colour": definition.presentation.sea_colour,
+            "unclaimed_region_colour": definition.presentation.unclaimed_region_colour,
         },
         "start": {
             "year": definition.default_starting_setup.phase_id.year,
@@ -219,5 +222,9 @@ def authored_map_yaml(definition: MapDefinition) -> str:
         },
         "teams": teams,
         "territories": territories,
+        "non_playable_elements": {
+            element_id: "impassable"
+            for element_id in sorted(definition.inaccessible_svg_element_ids)
+        },
     }
     return yaml.safe_dump(value, sort_keys=False, allow_unicode=True)

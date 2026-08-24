@@ -44,7 +44,10 @@ from diplomacy_app.map_library.svg_importer import (
 )
 from diplomacy_app.presentation import (
     DEFAULT_COAST_LABEL_FONT_SIZE,
+    DEFAULT_INACCESSIBLE_REGION_COLOUR,
+    DEFAULT_SEA_COLOUR,
     DEFAULT_TERRITORY_LABEL_FONT_SIZE,
+    DEFAULT_UNCLAIMED_REGION_COLOUR,
 )
 from diplomacy_app.storage.serialization import map_definition_data
 
@@ -193,6 +196,9 @@ class FileMapLibrary:
             "presentation": {
                 "territory_label_font_size": DEFAULT_TERRITORY_LABEL_FONT_SIZE,
                 "coast_label_font_size": DEFAULT_COAST_LABEL_FONT_SIZE,
+                "inaccessible_region_colour": DEFAULT_INACCESSIBLE_REGION_COLOUR,
+                "sea_colour": DEFAULT_SEA_COLOUR,
+                "unclaimed_region_colour": DEFAULT_UNCLAIMED_REGION_COLOUR,
             },
             "start": {"year": 1901, "season": "spring"},
             "teams": {},
@@ -224,6 +230,9 @@ class FileMapLibrary:
                 MappingProxyType({}),
                 DEFAULT_TERRITORY_LABEL_FONT_SIZE,
                 DEFAULT_COAST_LABEL_FONT_SIZE,
+                DEFAULT_INACCESSIBLE_REGION_COLOUR,
+                DEFAULT_SEA_COLOUR,
+                DEFAULT_UNCLAIMED_REGION_COLOUR,
             ),
             None,
             None,
@@ -504,6 +513,26 @@ class FileMapLibrary:
             raise MapLibraryError("presentation must be a mapping")
         presentation["territory_label_font_size"] = round(territory_size, 1)
         presentation["coast_label_font_size"] = round(coast_size, 1)
+        text = yaml.safe_dump(document, sort_keys=False, allow_unicode=True)
+        return self.refresh_draft(replace(draft, map_yaml=text))
+
+    def update_map_colours(
+        self,
+        draft: MapDraft,
+        inaccessible_colour: str,
+        sea_colour: str,
+        unclaimed_colour: str,
+    ) -> MapDraft:
+        colours = (inaccessible_colour, sea_colour, unclaimed_colour)
+        if not all(re.fullmatch(r"#[0-9a-fA-F]{6}", colour) for colour in colours):
+            raise MapLibraryError("Map colours must use #RRGGBB notation")
+        document = load_yaml(draft.map_yaml)
+        presentation = document.setdefault("presentation", {})
+        if not isinstance(presentation, dict):
+            raise MapLibraryError("presentation must be a mapping")
+        presentation["inaccessible_region_colour"] = inaccessible_colour.lower()
+        presentation["sea_colour"] = sea_colour.lower()
+        presentation["unclaimed_region_colour"] = unclaimed_colour.lower()
         text = yaml.safe_dump(document, sort_keys=False, allow_unicode=True)
         return self.refresh_draft(replace(draft, map_yaml=text))
 

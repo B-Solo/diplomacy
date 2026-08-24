@@ -48,7 +48,10 @@ from diplomacy_app.domain.models import (
 )
 from diplomacy_app.presentation import (
     DEFAULT_COAST_LABEL_FONT_SIZE,
+    DEFAULT_INACCESSIBLE_REGION_COLOUR,
+    DEFAULT_SEA_COLOUR,
     DEFAULT_TERRITORY_LABEL_FONT_SIZE,
+    DEFAULT_UNCLAIMED_REGION_COLOUR,
     default_coast_label_anchor,
 )
 
@@ -344,6 +347,7 @@ def map_definition_data(value: MapDefinition) -> dict[str, Any]:
         "map_id": value.id,
         "name": value.name,
         "rules_engine": value.rules_engine_id,
+        "inaccessible_svg_elements": sorted(value.inaccessible_svg_element_ids),
         "territories": [
             {
                 "id": item.id,
@@ -389,6 +393,9 @@ def map_definition_data(value: MapDefinition) -> dict[str, Any]:
         "presentation": {
             "territory_label_font_size": value.presentation.territory_label_font_size,
             "coast_label_font_size": value.presentation.coast_label_font_size,
+            "inaccessible_region_colour": value.presentation.inaccessible_region_colour,
+            "sea_colour": value.presentation.sea_colour,
+            "unclaimed_region_colour": value.presentation.unclaimed_region_colour,
             "labels": {
                 str(key): [point.x, point.y]
                 for key, point in value.presentation.label_anchors.items()
@@ -512,7 +519,11 @@ def map_definition_from_data(value: Any, assets: MapAssets) -> MapDefinition:
             ),
             float(presentation.get("territory_label_font_size", DEFAULT_TERRITORY_LABEL_FONT_SIZE)),
             float(presentation.get("coast_label_font_size", DEFAULT_COAST_LABEL_FONT_SIZE)),
+            str(presentation.get("inaccessible_region_colour", DEFAULT_INACCESSIBLE_REGION_COLOUR)),
+            str(presentation.get("sea_colour", DEFAULT_SEA_COLOUR)),
+            str(presentation.get("unclaimed_region_colour", DEFAULT_UNCLAIMED_REGION_COLOUR)),
         ),
+        frozenset(str(item) for item in value.get("inaccessible_svg_elements", [])),
         assets,
         str(value.get("rules_engine", "standard")),
     )

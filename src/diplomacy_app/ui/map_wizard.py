@@ -14,6 +14,7 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QColor, QKeySequence, QShortcut, QTextCursor, QTextDocument, QTextFormat
 from PySide6.QtWidgets import (
     QCheckBox,
+    QColorDialog,
     QComboBox,
     QDoubleSpinBox,
     QFileDialog,
@@ -420,6 +421,25 @@ class MapWizard(QWidget):
             display_layout.addWidget(apply_display_name)
             self.display_name_group.setEnabled(False)
             editing_row.addWidget(self.display_name_group, 1)
+
+        self.map_colours_group = QGroupBox("Map colours")
+        colours_layout = QHBoxLayout(self.map_colours_group)
+        colours_layout.setContentsMargins(10, 8, 10, 8)
+        colours_layout.setSpacing(6)
+        self.inaccessible_colour_button = QPushButton()
+        self.sea_colour_button = QPushButton()
+        self.unclaimed_colour_button = QPushButton()
+        for field, button in (
+            ("inaccessible_region_colour", self.inaccessible_colour_button),
+            ("sea_colour", self.sea_colour_button),
+            ("unclaimed_region_colour", self.unclaimed_colour_button),
+        ):
+            button.clicked.connect(
+                lambda _checked=False, field=field: self._choose_map_colour(field)
+            )
+            colours_layout.addWidget(button)
+        self._refresh_colour_buttons()
+        editing_row.addWidget(self.map_colours_group)
 
         self.coast_label_group = QGroupBox("Selected coast label")
         coast_layout = QHBoxLayout(self.coast_label_group)
@@ -882,7 +902,7 @@ class MapWizard(QWidget):
         return True
 
     def _reload_anchor_scene(self) -> None:
-        self.anchor_canvas.set_svg(self.draft.svg, fit=True)
+        self.anchor_canvas.set_svg(self.service.preview_map_base(self.draft), fit=True)
         self._selected_coast_label = None
         self._coast_label_items.clear()
         self.coast_rotation.setEnabled(False)
@@ -1021,6 +1041,55 @@ class MapWizard(QWidget):
             self._reload_anchor_scene()
         except Exception as exc:
             self._show_error(f"Could not change label sizes: {exc}")
+
+    def _refresh_colour_buttons(self) -> None:
+        presentation = self.draft.presentation
+        for label, colour, button in (
+            (
+                "Inaccessible",
+                presentation.inaccessible_region_colour,
+                self.inaccessible_colour_button,
+            ),
+            ("Sea", presentation.sea_colour, self.sea_colour_button),
+            ("Unclaimed", presentation.unclaimed_region_colour, self.unclaimed_colour_button),
+        ):
+            foreground = "#171714" if QColor(colour).lightness() >= 145 else "#fffdf7"
+            button.setText(f"{label} {colour.upper()}")
+            button.setStyleSheet(
+                f"QPushButton {{ background: {colour}; color: {foreground}; "
+                "border: 1px solid #625d50; }"
+            )
+
+    def _choose_map_colour(self, field: str) -> None:
+        current = getattr(self.draft.presentation, field)
+        label = field.removesuffix("_colour").replace("_", " ").title()
+        selected = QColorDialog.getColor(QColor(current), self, f"Choose {label}")
+        if selected.isValid():
+            self._set_map_colour(field, selected.name())
+
+    def _set_map_colour(self, field: str, colour: str) -> None:
+        values = {
+            "inaccessible_region_colour": self.draft.presentation.inaccessible_region_colour,
+            "sea_colour": self.draft.presentation.sea_colour,
+            "unclaimed_region_colour": self.draft.presentation.unclaimed_region_colour,
+        }
+        if field not in values:
+            self._show_error(f"Unknown map colour: {field}")
+            return
+        values[field] = colour
+        try:
+            self.draft = self.service.update_map_colours(
+                self.draft,
+                values["inaccessible_region_colour"],
+                values["sea_colour"],
+                values["unclaimed_region_colour"],
+            )
+            if not self.game_placement_only:
+                self.yaml_editor.setPlainText(self.draft.map_yaml)
+            self._refresh_colour_buttons()
+            self._reload_anchor_scene()
+        except Exception as exc:
+            self._show_error(f"Could not change map colour: {exc}")
 
     def _select_territory_label(self, territory_id) -> None:
         if self.game_placement_only:

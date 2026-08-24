@@ -78,7 +78,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
 - **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current` and `Copy map` actions.
-- **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors, named-coast label rotations and shared label sizes; territory names, rules, topology, powers, setup and reusable-map defaults remain unchanged.
+- **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors, named-coast label rotations, shared label sizes and neutral map colours; territory names, rules, topology, powers, setup and reusable-map defaults remain unchanged.
 
 ### Saved Views and Image Copying (IC)
 
@@ -105,7 +105,7 @@ Player communication occurs outside the application using map images copied by t
 
 ### Territory, Unit and Supply-Centre Rendering (TR)
 
-- **TR.1:** The current controller determines a playable land territory's colour; seas retain their neutral map treatment.
+- **TR.1:** The current controller determines a playable land territory's colour; each map configures its sea, unclaimed-land and inaccessible-region colours.
 - **TR.2:** Successful occupation changes territorial control, while an empty territory retains its controller.
 - **TR.3:** Supply-centre ownership is independent of current occupation and is represented by a sharp star filled with a slightly darker version of its owner's colour.
 - **TR.4:** Neutral supply centres use a neutral star.
@@ -203,6 +203,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.29:** Placement label mode independently selects no labels, display names or abbreviations; display names and abbreviations have separate draggable positions, selected display names can be edited with explicit line breaks, territory and coast font sizes have separate map-wide half-point controls, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.
 - **GC.31:** Powers and setup, Unit symbols and normal game rendering use the effective symbols and visual anchors shown in Placement; their additional topology or game-state overlays do not substitute different presentation assets.
+- **GC.32:** Placement provides map-wide colour controls for inaccessible regions, seas and unclaimed land, and previews those colours immediately.
 
 ## Limitations and Restrictions
 

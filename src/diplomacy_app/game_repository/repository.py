@@ -367,6 +367,13 @@ class FileGameRepository:
             )
         ):
             raise RepositoryError("Game map label sizes must be between 5 and 24")
+        colours = (
+            presentation.inaccessible_region_colour,
+            presentation.sea_colour,
+            presentation.unclaimed_region_colour,
+        )
+        if not all(re.fullmatch(r"#[0-9a-fA-F]{6}", colour) for colour in colours):
+            raise RepositoryError("Game map colours must use #RRGGBB notation")
         updated = replace(game.map_definition, presentation=presentation)
         commit_files(
             root,

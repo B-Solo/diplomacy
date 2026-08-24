@@ -63,7 +63,42 @@ def _image_href(svg: bytes, colour: str) -> str:
     return "data:image/svg+xml;base64," + base64.b64encode(normalised).decode()
 
 
+def _set_fill(node: ElementTree.Element, colour: str) -> None:
+    geometry_tags = {"path", "rect", "circle", "ellipse", "polygon", "polyline"}
+    targets = [node, *(child for child in node.iter() if child is not node)]
+    for target in targets:
+        if target is not node and target.tag.rsplit("}", 1)[-1] not in geometry_tags:
+            continue
+        declarations = [
+            declaration.strip()
+            for declaration in target.attrib.get("style", "").split(";")
+            if declaration.strip() and declaration.partition(":")[0].strip().casefold() != "fill"
+        ]
+        declarations.append(f"fill:{colour}")
+        target.set("style", ";".join(declarations))
+
+
 class MapRenderer:
+    def base_map_svg(self, map_definition: MapDefinition) -> bytes:
+        """Apply map-wide neutral presentation colours without game-state overlays."""
+        root = ElementTree.fromstring(map_definition.assets.map_svg)
+        by_svg_id = {node.attrib["id"]: node for node in root.iter() if "id" in node.attrib}
+        for element_id in map_definition.inaccessible_svg_element_ids:
+            node = by_svg_id.get(element_id)
+            if node is not None:
+                _set_fill(node, map_definition.presentation.inaccessible_region_colour)
+        for territory in map_definition.territories:
+            node = by_svg_id.get(territory.svg_element_id)
+            if node is None:
+                continue
+            colour = (
+                map_definition.presentation.sea_colour
+                if territory.kind is TerritoryKind.SEA
+                else map_definition.presentation.unclaimed_region_colour
+            )
+            _set_fill(node, colour)
+        return ElementTree.tostring(root, encoding="utf-8", xml_declaration=True)
+
     def compose(
         self,
         map_definition: MapDefinition,
@@ -71,7 +106,7 @@ class MapRenderer:
         request: RenderRequest,
     ) -> MapScene:
         try:
-            root = ElementTree.fromstring(map_definition.assets.map_svg)
+            root = ElementTree.fromstring(self.base_map_svg(map_definition))
             bounds = MapBounds(*view_box(map_definition.assets.map_svg))
             by_svg_id = {node.attrib["id"]: node for node in root.iter() if "id" in node.attrib}
             definitions = {item.id: item for item in map_definition.territories}
@@ -89,13 +124,12 @@ class MapRenderer:
                 if isinstance(item, HiddenTerritory):
                     fill = "#8d8b85"
                 elif definitions[territory_id].kind is TerritoryKind.SEA:
-                    fill = "#9ebbd2"
+                    fill = map_definition.presentation.sea_colour
                 elif item.controller and item.controller in powers:
                     fill = powers[item.controller].colour
                 else:
-                    fill = "#d0c9aa"
-                previous = node.attrib.get("style", "").strip().rstrip(";")
-                node.set("style", (f"{previous};" if previous else "") + f"fill:{fill}")
+                    fill = map_definition.presentation.unclaimed_region_colour
+                _set_fill(node, fill)
 
             generated = ElementTree.SubElement(root, _tag("g"), {"id": "gamemaster-layers"})
             labels = ElementTree.SubElement(generated, _tag("g"), {"id": "territory-labels"})

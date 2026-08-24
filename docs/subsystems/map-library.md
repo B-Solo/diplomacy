@@ -20,7 +20,7 @@ Geometry infers army movement across a shared land border and fleet movement acr
 Declaring `split_coasts` suppresses ordinary inferred fleet connections for that province, after which its local additions assign neighbouring fleet locations to named coasts explicitly.
 The saved effective topology is materialised as JSON so later geometry-library changes cannot alter an existing configured map implicitly.
 
-Validation covers identifier uniqueness, canonical and display names, abbreviation uniqueness, topology symmetry, unit-specific reachability, power starts, supply centres, label sizes, anchor coverage and SVG references.
+Validation covers identifier uniqueness, canonical and display names, abbreviation uniqueness, topology symmetry, unit-specific reachability, power starts, supply centres, label sizes, presentation colours, anchor coverage and SVG references.
 Issues use stable codes and point to the relevant map YAML field or source line.
 The same validation components check a game-specific starting year, season, units, supply-centre ownership and territory control while treating configured powers, colours, home supply centres and topology as immutable.
 

@@ -100,6 +100,9 @@ assets:
 presentation:
   territory_label_font_size: 11.0
   coast_label_font_size: 9.0
+  inaccessible_region_colour: "#777870"
+  sea_colour: "#9ebbd2"
+  unclaimed_region_colour: "#d0c9aa"
 
 start:
   year: 1901
@@ -199,6 +202,7 @@ Coordinates use source-SVG view-box coordinates.
 Every territory has a label anchor, every land territory has an army anchor, every coastal location and sea has a fleet anchor, and every supply centre has a supply-centre anchor.
 Every named split coast has its own visible label anchor and rotation.
 Territory labels and named-coast labels each use one map-wide font size.
+Inaccessible regions, seas and unclaimed land each use one map-wide presentation colour.
 
 The importer derives ordinary bidirectional movement from SVG geometry, territory types and the default single-coast assumption.
 Ordinary movement has no YAML entry.
