@@ -65,7 +65,7 @@ Player communication occurs outside the application using map images copied by t
 
 ### Map Workspace (MW)
 
-- **MW.1:** The map occupies the available workspace while preserving the SVG view box and aspect ratio.
+- **MW.1:** The map occupies the available workspace while preserving the SVG view box and aspect ratio; surrounding chrome uses compact controls, minimal margins and overlays instead of persistent map-reducing status rows.
 - **MW.2:** Loading a map fits the entire map into the workspace without stretching it; later state refreshes preserve the user's viewport.
 - **MW.3:** The gamemaster zooms with a mouse wheel, a trackpad pinch or visible controls, pans by dragging, and pans vertically or horizontally with two-finger trackpad scrolling.
 - **MW.4:** Mouse-wheel zoom is centred on the pointer.
@@ -181,7 +181,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.11:** Split coasts have separate fleet anchors and visible named-coast labels with independently configurable anchors and rotations.
 - **GC.12:** The importer generates likely adjacency from SVG geometry and assumes that every coastal province has one continuous coast.
 - **GC.13:** The generated ordinary topology is combined with explicit additions and removals, then materialised as the complete topology used for play.
-- **GC.14:** The Topology tab gives the graphical adjacency preview more space than the configured `map.yaml`, includes readable territory labels, exposes local connection overrides alongside the complete effective topology and provides inline, wrapping text search through the platform-standard Find shortcut.
+- **GC.14:** The Topology tab gives the graphical adjacency preview approximately three quarters of the initial split, includes readable territory labels, exposes local connection overrides alongside the complete effective topology and provides inline, wrapping text search through the platform-standard Find shortcut.
 - **GC.15:** The map-configuration editor supports split-coast connections, canals, off-map links, missed links and removal of incorrectly generated links through text.
 - **GC.16:** The saved `map.yaml` remains directly editable outside the application.
 - **GC.17:** A focused Powers and setup tab edits the starting phase, powers, colours, home and starting supply-centre ownership, initial territory control and starting units, provides the same inline YAML search and applies those sections to the shared `map.yaml`.
@@ -194,7 +194,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.24:** Placement previews do not change game state or the map's starting setup; dragging a preview unit changes only its corresponding presentation anchor.
 - **GC.25:** Hovering any classified shape in the SVG regions tab identifies and selects its row; hovering or selecting a row highlights the corresponding shape on the map.
 - **GC.26:** The topology preview draws a colour-coded adjacency graph over a faded map, using army anchors as land and coastal nodes and fleet anchors as sea nodes; its key distinguishes army-only, fleet-only and shared connections, arrowheads identify asymmetric connections, and hovering a node navigates to and highlights that territory's editable YAML block.
-- **GC.27:** The map editor uses independently accessible, non-sequential tabs with a persistent `Save configured map` action, overlays compact `−`, current-percentage, `+` and `Fit` controls on every visual tab, and supports mouse-wheel and trackpad-pinch zoom plus trackpad scrolling consistently with the main map.
+- **GC.27:** The map editor uses independently accessible, non-sequential tabs with minimal page margins and a persistent `Save configured map` action, overlays compact `−`, current-percentage, `+` and `Fit` controls on every visual tab, and supports mouse-wheel and trackpad-pinch zoom plus trackpad scrolling consistently with the main map.
 - **GC.28:** The Unit symbols tab displays compact previews of the effective default or custom army and fleet symbols at approximately their real map scale before saving.
 - **GC.29:** Placement label mode independently selects no labels, full territory names or abbreviations, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.

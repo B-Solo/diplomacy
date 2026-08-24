@@ -68,15 +68,20 @@ class ApplicationWindow(QMainWindow):
         layout.addWidget(self.stack, 1)
         layout.addWidget(self._season_bar())
         self.setCentralWidget(root)
-        self.statusBar().showMessage("Ready")
+        self.statusBar().setSizeGripEnabled(False)
+        self.statusBar().messageChanged.connect(
+            lambda message: self.statusBar().setVisible(bool(message))
+        )
+        self.statusBar().hide()
 
     def _header(self) -> QWidget:
         frame = QFrame()
         frame.setStyleSheet("QFrame { background: #33483d; color: #fffaf0; border: 0; }")
         layout = QHBoxLayout(frame)
-        layout.setContentsMargins(18, 8, 12, 8)
+        layout.setContentsMargins(8, 3, 6, 3)
+        layout.setSpacing(5)
         brand = QLabel("⚜  Diplomacy")
-        brand.setStyleSheet("font: 700 17pt Georgia, serif; color: #f7edcf")
+        brand.setStyleSheet("font: 700 14pt Georgia, serif; color: #f7edcf")
         layout.addWidget(brand)
         self.game_button = QPushButton("No game open")
         self.game_button.setStyleSheet(
@@ -125,6 +130,8 @@ class ApplicationWindow(QMainWindow):
         bar = QFrame()
         bar.setStyleSheet("QFrame { background: #f6f1e3; border-top: 1px solid #b7ae97; }")
         layout = QHBoxLayout(bar)
+        layout.setContentsMargins(4, 2, 4, 2)
+        layout.setSpacing(4)
         self.previous = QPushButton("←")
         self.next = QPushButton("→")
         self.phase_selector = QComboBox()

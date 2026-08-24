@@ -148,6 +148,9 @@ class MapWizard(QWidget):
         self._selected_coast_label: Location | None = None
         self._coast_label_items: dict[Location, TextAnchorItem] = {}
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(4, 3, 4, 3)
+        layout.setSpacing(3)
+        self.outer_layout = layout
         self.tabs = QTabWidget()
         layout.addWidget(self.tabs, 1)
         self._build_classification_tab()
@@ -160,6 +163,7 @@ class MapWizard(QWidget):
         self.message.setVisible(False)
         layout.addWidget(self.message)
         buttons = QHBoxLayout()
+        buttons.setSpacing(4)
         cancel = QPushButton("Cancel")
         cancel.clicked.connect(self.cancelled)
         buttons.addWidget(cancel)
@@ -179,6 +183,8 @@ class MapWizard(QWidget):
     def _build_classification_tab(self) -> None:
         page = QWidget()
         layout = QHBoxLayout(page)
+        layout.setContentsMargins(2, 2, 2, 2)
+        layout.setSpacing(2)
         self.preview = MapCanvas()
         self.preview.set_svg(self.draft.svg, fit=True)
         self.hovered_territory = QLabel("Hover over a territory or row to identify it.")
@@ -203,15 +209,18 @@ class MapWizard(QWidget):
         )
         self.preview.scene_hovered.connect(self._map_hovered)
         splitter = QSplitter()
+        splitter.setHandleWidth(2)
         splitter.addWidget(map_side)
         splitter.addWidget(self.roles)
-        splitter.setSizes([720, 330])
+        splitter.setSizes([820, 280])
         layout.addWidget(splitter)
         self.tabs.addTab(page, "SVG regions")
 
     def _build_yaml_tab(self) -> None:
         page = QWidget()
         layout = QVBoxLayout(page)
+        layout.setContentsMargins(2, 2, 2, 2)
+        layout.setSpacing(3)
         legend = QLabel(
             '<span style="color:#f4511e; font-weight:700">━━ Army</span>&nbsp;&nbsp; '
             '<span style="color:#00b8d4; font-weight:700">━━ Fleet</span>&nbsp;&nbsp; '
@@ -220,6 +229,7 @@ class MapWizard(QWidget):
         )
         layout.addWidget(legend)
         splitter = QSplitter(Qt.Orientation.Horizontal)
+        splitter.setHandleWidth(2)
         self.yaml_editor = QPlainTextEdit()
         self.yaml_editor.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         yaml_side = QWidget()
@@ -237,9 +247,9 @@ class MapWizard(QWidget):
         self.topology_zoom = MapZoomControls(self.topology_canvas)
         splitter.addWidget(yaml_side)
         splitter.addWidget(topology_side)
-        splitter.setStretchFactor(0, 2)
+        splitter.setStretchFactor(0, 1)
         splitter.setStretchFactor(1, 3)
-        splitter.setSizes([440, 720])
+        splitter.setSizes([300, 860])
         self.topology_splitter = splitter
         layout.addWidget(splitter, 1)
         controls = QHBoxLayout()
@@ -255,6 +265,8 @@ class MapWizard(QWidget):
     def _build_setup_tab(self) -> None:
         page = QWidget()
         layout = QVBoxLayout(page)
+        layout.setContentsMargins(4, 3, 4, 3)
+        layout.setSpacing(3)
         self.setup_editor = QPlainTextEdit()
         self.setup_editor.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         self.setup_find = YamlFindBar(self.setup_editor, page)
@@ -273,6 +285,8 @@ class MapWizard(QWidget):
     def _build_anchor_tab(self) -> None:
         page = QWidget()
         layout = QVBoxLayout(page)
+        layout.setContentsMargins(2, 2, 2, 2)
+        layout.setSpacing(3)
         preview_row = QHBoxLayout()
         preview_row.addWidget(QLabel("Show"))
         self.armies_preview = QCheckBox("Armies")
@@ -317,6 +331,8 @@ class MapWizard(QWidget):
     def _build_assets_tab(self) -> None:
         page = QWidget()
         layout = QVBoxLayout(page)
+        layout.setContentsMargins(4, 3, 4, 3)
+        layout.setSpacing(3)
         previews = QHBoxLayout()
         previews.addStretch()
         army_column = QVBoxLayout()
@@ -340,7 +356,7 @@ class MapWizard(QWidget):
         fleet.clicked.connect(lambda: self._choose_asset("fleet"))
         fleet_column.addWidget(fleet)
         previews.addLayout(army_column)
-        previews.addSpacing(24)
+        previews.addSpacing(12)
         previews.addLayout(fleet_column)
         previews.addStretch()
         layout.addLayout(previews)

@@ -12,7 +12,14 @@ from PySide6.QtGui import (
     QPointingDevice,
     QWheelEvent,
 )
-from PySide6.QtWidgets import QApplication, QGraphicsItem, QGraphicsView, QLabel, QPushButton
+from PySide6.QtWidgets import (
+    QApplication,
+    QFrame,
+    QGraphicsItem,
+    QGraphicsView,
+    QLabel,
+    QPushButton,
+)
 
 from diplomacy_app.application.service import ApplicationService
 from diplomacy_app.domain.models import Point
@@ -55,6 +62,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert window.map_workspace.zoom_controls.parent() is window.map_workspace.canvas
     assert window.map_workspace.zoom_controls.zoom_out.text() == "−"
     assert window.map_workspace.zoom_controls.zoom_in.text() == "+"
+    assert window.map_workspace.outer_layout.contentsMargins().left() == 4
+    assert window.map_workspace.fog_badge.parent() is window.map_workspace.canvas
+    assert window.map_workspace.outcomes.parent() is window.map_workspace.canvas
+    assert window.map_workspace.canvas.frameShape() is QFrame.Shape.NoFrame
+    assert window.statusBar().isHidden()
 
     wizard = MapWizard(service, service.load_map_draft(maps.list()[0].map_id))
     qtbot.addWidget(wizard)
@@ -80,6 +92,8 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         "Unit symbols",
     )
     assert wizard.validation_label.text().startswith("Valid:")
+    assert wizard.outer_layout.contentsMargins().left() == 4
+    assert wizard.tabs.widget(3).layout().contentsMargins().left() == 2
     assert wizard.yaml_editor.textCursor().selectedText() == "territories:"
     assert wizard.yaml_find.find_shortcut.key() in QKeySequence.keyBindings(
         QKeySequence.StandardKey.Find
@@ -142,7 +156,8 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.tabs.setCurrentIndex(1)
     QApplication.processEvents()
     yaml_width, map_width = wizard.topology_splitter.sizes()
-    assert map_width > yaml_width
+    assert map_width >= yaml_width * 2
+    assert wizard.topology_splitter.handleWidth() == 2
     wizard.tabs.setCurrentIndex(3)
     assert {label.attrib["font-size"] for label in node_layer.findall("{*}text")} == {"11"}
     assert {label.attrib["fill"] for label in node_layer.findall("{*}text")} == {"#111111"}

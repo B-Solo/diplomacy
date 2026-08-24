@@ -18,6 +18,7 @@ from PySide6.QtGui import (
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtSvgWidgets import QGraphicsSvgItem
 from PySide6.QtWidgets import (
+    QFrame,
     QGraphicsColorizeEffect,
     QGraphicsEllipseItem,
     QGraphicsItemGroup,
@@ -49,6 +50,7 @@ class MapCanvas(QGraphicsView):
     zoom_changed = Signal(int)
     outcome_hovered = Signal(str)
     scene_hovered = Signal(float, float)
+    resized = Signal()
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -60,6 +62,7 @@ class MapCanvas(QGraphicsView):
         self.setViewportUpdateMode(QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate)
         self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
         self.setResizeAnchor(QGraphicsView.ViewportAnchor.AnchorViewCenter)
+        self.setFrameShape(QFrame.Shape.NoFrame)
         self.setBackgroundBrush(QColor("#d7d1c2"))
         self.horizontalScrollBar().setStyleSheet(_SCROLLBAR_STYLE)
         self.verticalScrollBar().setStyleSheet(_SCROLLBAR_STYLE)
@@ -188,6 +191,7 @@ class MapCanvas(QGraphicsView):
         super().resizeEvent(event)
         if self._fit_active:
             self.fit_map()
+        self.resized.emit()
 
     def mouseMoveEvent(self, event) -> None:
         super().mouseMoveEvent(event)
@@ -250,29 +254,29 @@ class MapZoomControls(QWidget):
             "#mapZoomControls { background: rgba(255, 250, 240, 220); "
             "border: 1px solid #8f846d; border-radius: 5px; } "
             "#mapZoomControls QPushButton, #mapZoomControls QLineEdit { "
-            "min-width: 0; padding: 3px 6px; "
+            "min-width: 0; padding: 2px 4px; "
             "border-radius: 3px; }"
         )
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(3, 3, 3, 3)
+        layout.setContentsMargins(2, 2, 2, 2)
         layout.setSpacing(2)
         self.zoom_out = QPushButton("−")
         self.zoom_out.setAccessibleName("Zoom out")
         self.zoom_out.setToolTip("Zoom out one level")
-        self.zoom_out.setFixedWidth(28)
+        self.zoom_out.setFixedWidth(24)
         self.zoom_out.clicked.connect(lambda: canvas.zoom_by(1 / 1.2))
         layout.addWidget(self.zoom_out)
         self.percentage = ZoomPercentageEdit(f"{round(canvas.transform().m11() * 100)}%")
         self.percentage.setAccessibleName("Zoom percentage")
         self.percentage.setToolTip("Enter a zoom percentage from 8% to 1200%")
         self.percentage.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.percentage.setFixedWidth(54)
+        self.percentage.setFixedWidth(50)
         self.percentage.editingFinished.connect(self._apply_percentage)
         layout.addWidget(self.percentage)
         self.zoom_in = QPushButton("+")
         self.zoom_in.setAccessibleName("Zoom in")
         self.zoom_in.setToolTip("Zoom in one level")
-        self.zoom_in.setFixedWidth(28)
+        self.zoom_in.setFixedWidth(24)
         self.zoom_in.clicked.connect(lambda: canvas.zoom_by(1.2))
         layout.addWidget(self.zoom_in)
         self.fit = QPushButton("Fit")

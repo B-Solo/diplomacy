@@ -46,7 +46,11 @@ class MapWorkspace(QWidget):
         self._first_scene = True
         self._loaded_game_location = None
         outer = QVBoxLayout(self)
+        outer.setContentsMargins(4, 3, 4, 3)
+        outer.setSpacing(3)
+        self.outer_layout = outer
         controls = QHBoxLayout()
+        controls.setSpacing(4)
         self.perspective_label = QLabel("Viewing as")
         self.perspective = QComboBox()
         self.perspective.currentIndexChanged.connect(self._perspective_changed)
@@ -90,25 +94,41 @@ class MapWorkspace(QWidget):
         self.copy_button = copy
         controls.addWidget(copy)
         outer.addLayout(controls)
+        self.canvas = MapCanvas()
+        outer.addWidget(self.canvas, 1)
         self.fog_badge = QLabel()
+        self.fog_badge.setParent(self.canvas)
         self.fog_badge.setProperty("fog", True)
         self.fog_badge.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.fog_badge.setVisible(False)
-        outer.addWidget(self.fog_badge)
-        self.canvas = MapCanvas()
-        outer.addWidget(self.canvas, 1)
         self.zoom_controls = MapZoomControls(self.canvas)
         self.zoom = self.zoom_controls.percentage
-        footer = QHBoxLayout()
-        self.outcomes = QLabel()
-        self.outcomes.setProperty("muted", True)
-        footer.addWidget(self.outcomes)
-        outer.addLayout(footer)
-        self.canvas.outcome_hovered.connect(self.outcomes.setText)
+        self.outcomes = QLabel(self.canvas)
+        self.outcomes.setStyleSheet(
+            "background: rgba(255, 250, 240, 220); border-radius: 3px; padding: 2px 5px"
+        )
+        self.outcomes.setVisible(False)
+        self.canvas.outcome_hovered.connect(self._outcome_hovered)
+        self.canvas.resized.connect(self._position_overlays)
         self.refresh_timer = QTimer(self)
         self.refresh_timer.setSingleShot(True)
         self.refresh_timer.setInterval(60)
         self.refresh_timer.timeout.connect(self.refresh)
+
+    def _outcome_hovered(self, text: str) -> None:
+        self.outcomes.setText(text)
+        self.outcomes.setVisible(bool(text))
+        self._position_overlays()
+
+    def _position_overlays(self) -> None:
+        if self.fog_badge.isVisible():
+            self.fog_badge.adjustSize()
+            self.fog_badge.move(8, 8)
+            self.fog_badge.raise_()
+        if self.outcomes.isVisible():
+            self.outcomes.adjustSize()
+            self.outcomes.move(8, max(8, self.canvas.height() - self.outcomes.height() - 8))
+            self.outcomes.raise_()
 
     def set_session(self, session) -> None:
         self.session = session
@@ -151,10 +171,11 @@ class MapWorkspace(QWidget):
         if power:
             self.fog_badge.setText(f"Fog of War preview — {power.name}")
             self.copy_button.setText(f"Copy {power.name} view")
-            self.canvas.setStyleSheet(f"border: 4px solid {power.colour}")
+            self.canvas.setStyleSheet(f"border: 2px solid {power.colour}")
         else:
             self.copy_button.setText("Copy map")
             self.canvas.setStyleSheet("")
+        self._position_overlays()
 
     def _perspective_changed(self) -> None:
         perspective = self.perspective.currentData()
