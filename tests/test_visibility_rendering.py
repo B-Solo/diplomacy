@@ -217,6 +217,9 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
         "Chosen first line",
         "Chosen second line",
     ]
+    rendered_lines = displayed.findall("{*}tspan")
+    assert len({line.attrib["y"] for line in rendered_lines}) == 2
+    assert all("dy" not in line.attrib for line in rendered_lines)
     assert displayed.attrib["font-size"] == "12.5"
     assert displayed.attrib["fill"] == "#201810"
     assert {
@@ -227,6 +230,10 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
         label.attrib["fill"]
         for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}text")
     } == {"#201810"}
+    assert {
+        label.attrib["font-weight"]
+        for label in display_root.findall(".//{*}g[@id='coast-labels']/{*}text")
+    } == {"700"}
     inaccessible = next(
         node for node in display_root.iter() if node.attrib.get("id") == "impassable-scotland"
     )

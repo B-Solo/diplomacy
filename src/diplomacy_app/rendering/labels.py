@@ -5,6 +5,8 @@ from __future__ import annotations
 import re
 import textwrap
 
+LABEL_LINE_HEIGHT = 1.1
+
 
 def label_lines(text: str, width: int = 16) -> tuple[str, ...]:
     """Wrap a label at words and ampersands while preserving explicit line breaks."""

@@ -17,6 +17,7 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
+    QFileDialog,
     QFrame,
     QGraphicsItem,
     QGraphicsView,
@@ -525,6 +526,40 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         ]
         == "First display line\nSecond display line"
     )
+    placement_label = next(
+        item
+        for item in wizard.anchor_canvas.scene().items()
+        if isinstance(item, TextAnchorItem)
+        and item.glyph.toPlainText() == "First display line\nSecond display line"
+    )
+    assert placement_label.glyph.toPlainText().splitlines() == [
+        "First display line",
+        "Second display line",
+    ]
+    wizard._reload_classification_preview()
+    assert wizard.preview._renderer.elementExists("territory-labels")
+    composed_preview = ElementTree.fromstring(wizard._preview_svg_without())
+    composed_label = next(
+        label
+        for label in composed_preview.findall(".//{*}g[@id='territory-labels']/{*}text")
+        if "".join(label.itertext()) == "First display lineSecond display line"
+    )
+    composed_lines = composed_label.findall("{*}tspan")
+    assert [line.text for line in composed_lines] == [
+        "First display line",
+        "Second display line",
+    ]
+    assert len({line.attrib["y"] for line in composed_lines}) == 2
+    assert all("dy" not in line.attrib for line in composed_lines)
+    topology_preview = ElementTree.fromstring(
+        wizard._topology_svg(service.preview_map_definition(wizard.draft))
+    )
+    assert any(
+        "".join(label.itertext()) == "First display lineSecond display line"
+        for label in topology_preview.findall(".//{*}g[@id='territory-labels']/{*}text")
+    )
+    assert wizard._reload_setup_preview()
+    assert wizard.setup_canvas._renderer.elementExists("territory-labels")
     wizard.territory_font_size.setValue(12.5)
     wizard.coast_font_size.setValue(8.5)
     assert wizard.draft.presentation.territory_label_font_size == 12.5
@@ -724,7 +759,7 @@ def test_terminal_interrupt_requests_normal_application_quit():
     assert app.quit_requested
 
 
-def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root):
+def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root, monkeypatch):
     maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     service = ApplicationService(
         FileGameRepository(RecentGameStore(tmp_path / "app.json")),
@@ -786,6 +821,15 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root)
     assert not copy_errors
     assert not QApplication.clipboard().image().isNull()
     assert window.map_workspace.copy_button.text() == "Copied"
+    saved_image = tmp_path / "saved-map.png"
+    monkeypatch.setattr(
+        QFileDialog,
+        "getSaveFileName",
+        lambda *_args, **_kwargs: (str(saved_image), "PNG images (*.png)"),
+    )
+    window.map_workspace._save_image()
+    assert saved_image.read_bytes().startswith(b"\x89PNG")
+    assert window.map_workspace.save_image_button.text() == "Saved"
 
     window.game_map_placement_button.click()
     editor = window.stack.currentWidget()

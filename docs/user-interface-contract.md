@@ -79,7 +79,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.8:** The map display switches between `Position` and `Orders`.
 - **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
-- **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current` and `Copy map` actions.
+- **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current`, `Copy map` and `Save image` actions.
 - **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors, named-coast label rotations and shared label sizes; territory names, rules, topology, powers, setup, colours and reusable-map defaults remain unchanged.
 
 ### Saved Views and Image Copying (IC)
@@ -93,6 +93,7 @@ Player communication occurs outside the application using map images copied by t
 - **IC.7:** The copied image excludes application controls, badges, outlines and any workspace beyond the SVG map bounds.
 - **IC.8:** When a saved or current view reaches a map edge, the copied image aligns exactly with that edge rather than including padding outside it.
 - **IC.9:** After recalling `Full map` or a named saved view, any subsequent pan or zoom changes the view selector to `Custom view`; programmatic rendering and window resizing do not clear the selection.
+- **IC.10:** `Save image` writes the same bounded PNG that `Copy map` places on the clipboard, using a native file chooser.
 
 ### Fog of War (FW)
 
@@ -237,7 +238,7 @@ The header and season bar remain stable while the central toolbar and workspace 
 ```text
 ┌─────────────────────────────────────────────────────────────────────┐
 │ Viewing as [Gamemaster ▾]  Position | Orders  Labels [Names ▾]      │
-│                       View [Full map ▾] [Save current] [Copy map]    │
+│          View [Full map ▾] [Save current] [Copy map] [Save image]   │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │                            map canvas                         [− +]  │

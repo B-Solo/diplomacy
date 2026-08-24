@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import uuid
+from pathlib import Path
 from typing import Any
 
 from PySide6.QtCore import Qt, QTimer, Signal
@@ -11,6 +12,7 @@ from PySide6.QtGui import QImage
 from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
+    QFileDialog,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -21,6 +23,7 @@ from PySide6.QtWidgets import (
 
 from diplomacy_app.domain.models import (
     DisplayMode,
+    ImageArtifact,
     LabelMode,
     MapBounds,
     Perspective,
@@ -29,6 +32,7 @@ from diplomacy_app.domain.models import (
     RenderRequest,
     SavedView,
     SavedViewId,
+    game_folder_name,
 )
 from diplomacy_app.ui.map_canvas import MapCanvas, MapZoomControls
 
@@ -102,6 +106,9 @@ class MapWorkspace(QWidget):
         copy.clicked.connect(self._copy)
         self.copy_button = copy
         controls.addWidget(copy)
+        self.save_image_button = QPushButton("Save image…")
+        self.save_image_button.clicked.connect(self._save_image)
+        controls.addWidget(self.save_image_button)
         outer.addLayout(controls)
         self.canvas = MapCanvas()
         outer.addWidget(self.canvas, 1)
@@ -314,16 +321,19 @@ class MapWorkspace(QWidget):
         except Exception as exc:
             self.message.emit(f"Could not save view: {exc}")
 
+    def _export_current_view(self) -> ImageArtifact:
+        selected = self.views.currentData()
+        bounds = self.canvas.visible_bounds()
+        size = PixelSize(
+            max(1, self.canvas.viewport().width()), max(1, self.canvas.viewport().height())
+        )
+        if isinstance(selected, SavedView):
+            bounds, size = selected.bounds, selected.output_size
+        return self.service.export_map(self._request(bounds, size))
+
     def _copy(self) -> None:
         try:
-            selected = self.views.currentData()
-            bounds = self.canvas.visible_bounds()
-            size = PixelSize(
-                max(1, self.canvas.viewport().width()), max(1, self.canvas.viewport().height())
-            )
-            if isinstance(selected, SavedView):
-                bounds, size = selected.bounds, selected.output_size
-            artifact = self.service.export_map(self._request(bounds, size))
+            artifact = self._export_current_view()
             image = QImage.fromData(artifact.data)
             if image.isNull():
                 raise ValueError("Exported image could not be loaded")
@@ -332,3 +342,26 @@ class MapWorkspace(QWidget):
             QTimer.singleShot(1300, self._update_fog)
         except Exception as exc:
             self.message.emit(f"Could not copy map: {exc}")
+
+    def _save_image(self) -> None:
+        game_name = self.session.game.name if self.session and self.session.game else "map"
+        phase = self.session.phase.phase_id.label if self.session and self.session.phase else ""
+        suggested = game_folder_name(f"{game_name} {phase}") + ".png"
+        filename, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save map image",
+            suggested,
+            "PNG images (*.png)",
+        )
+        if not filename:
+            return
+        path = Path(filename)
+        if path.suffix.casefold() != ".png":
+            path = path.with_suffix(".png")
+        try:
+            artifact = self._export_current_view()
+            path.write_bytes(artifact.data)
+            self.save_image_button.setText("Saved")
+            QTimer.singleShot(1300, lambda: self.save_image_button.setText("Save image…"))
+        except Exception as exc:
+            self.message.emit(f"Could not save map image: {exc}")

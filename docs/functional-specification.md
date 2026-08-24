@@ -48,7 +48,7 @@ The gamemaster owns a self-contained game folder containing a structured SVG map
 The folder contains every game state and its associated orders, allowing a game to be moved, reopened, reviewed and continued without additional application-owned data.
 
 The application renders the map from the selected game state.
-The gamemaster can select an area of the map to enlarge and copy the resulting image to the clipboard.
+The gamemaster can select an area of the map to enlarge and copy the resulting image to the clipboard or save it as a PNG file.
 The gamemaster can overlay orders diagrammatically, including arrows for movements, convoys and supports, and move backwards and forwards through the recorded game history.
 
 A separate order-entry view accepts plain-text orders using either territory abbreviations or canonical names.

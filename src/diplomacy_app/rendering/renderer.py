@@ -38,7 +38,7 @@ from diplomacy_app.presentation import (
     embedded_unit_svg,
     supply_centre_star_points,
 )
-from diplomacy_app.rendering.labels import label_lines
+from diplomacy_app.rendering.labels import LABEL_LINE_HEIGHT, label_lines
 
 _SVG = "http://www.w3.org/2000/svg"
 ElementTree.register_namespace("", _SVG)
@@ -210,13 +210,16 @@ class MapRenderer:
                 if len(lines) == 1:
                     label.text = lines[0]
                 else:
+                    line_height = (
+                        map_definition.presentation.territory_label_font_size * LABEL_LINE_HEIGHT
+                    )
                     for index, line in enumerate(lines):
                         tspan = ElementTree.SubElement(
                             label,
                             _tag("tspan"),
                             {
                                 "x": str(anchor.x),
-                                "dy": f"{-0.55 * (len(lines) - 1):g}em" if index == 0 else "1.1em",
+                                "y": f"{anchor.y + (index - (len(lines) - 1) / 2) * line_height:g}",
                             },
                         )
                         tspan.text = line
@@ -235,7 +238,7 @@ class MapRenderer:
                             "font-family": "Georgia, serif",
                             "font-size": f"{map_definition.presentation.coast_label_font_size:g}",
                             "font-style": "italic",
-                            "font-weight": "600",
+                            "font-weight": "700",
                             "fill": map_definition.presentation.label_colour,
                             "transform": (
                                 f"rotate({rotation:g} {coast_anchor.x:g} {coast_anchor.y:g})"

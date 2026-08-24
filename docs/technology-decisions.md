@@ -32,7 +32,7 @@ The compiled `_engine.map` file is derived from `_compiled-map.json` after succe
 
 The application uses PySide6 with Qt Widgets.
 Qt Widgets suits the form-heavy gamemaster workflow, while `QGraphicsView` supplies mature zooming, panning and coordinate transforms for maps of different sizes.
-`QThreadPool` runs blocking coordinator calls outside the event thread, and `QClipboard` provides native image clipboard integration.
+`QThreadPool` runs blocking coordinator calls outside the event thread, while `QClipboard` and the native file chooser provide image output integration.
 
 The same Qt SVG implementation displays and exports composed scenes.
 `QSvgRenderer` renders a `MapScene` into a `QGraphicsView` for interaction and into a bounded `QImage` through `QPainter` for PNG export.

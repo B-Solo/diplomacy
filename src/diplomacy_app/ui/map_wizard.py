@@ -38,13 +38,13 @@ from shapely.geometry import Point as GeometryPoint
 from diplomacy_app.domain.models import (
     CoastId,
     Location,
+    MapDefinition,
     MapDraft,
     Point,
     SvgElementRole,
     TerritoryKind,
     UnitType,
 )
-from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import territory_geometries
 from diplomacy_app.presentation import (
     coast_label_text,
@@ -619,9 +619,9 @@ class MapWizard(QWidget):
 
     def _reload_classification_preview(self) -> None:
         try:
-            self.preview.set_svg(self._preview_svg_without(), fit=True)
-        except Exception:
-            self.preview.set_svg(self.draft.svg, fit=True)
+            self.preview.set_scene(self.service.preview_map_setup(self.draft), fit=True)
+        except Exception as exc:
+            self._show_error(f"Could not render SVG regions preview: {exc}")
 
     def _validate(self) -> bool:
         self._commit_editor()
@@ -874,6 +874,7 @@ class MapWizard(QWidget):
         return True
 
     def _reload_anchor_scene(self) -> None:
+        map_definition = self.service.preview_map_definition(self.draft)
         self.anchor_canvas.set_svg(
             self._preview_svg_without(
                 "territory-labels",
@@ -887,8 +888,8 @@ class MapWizard(QWidget):
         self._selected_coast_label = None
         self._coast_label_items.clear()
         self.coast_rotation.setEnabled(False)
-        presentation = self.draft.presentation
-        territories = {territory.id: territory for territory in self.draft.territories}
+        presentation = map_definition.presentation
+        territories = {territory.id: territory for territory in map_definition.territories}
         label_mode = self.placement_labels.currentData()
         if not self.game_placement_only:
             if label_mode != "full":
@@ -912,7 +913,7 @@ class MapWizard(QWidget):
                 item = TextAnchorItem(
                     point,
                     text,
-                    self.draft.presentation.label_colour,
+                    presentation.label_colour,
                     lambda new_point, territory=territory, anchor_type=anchor_type: (
                         self._anchor_moved(
                             territory,
@@ -938,7 +939,7 @@ class MapWizard(QWidget):
                 item = TextAnchorItem(
                     point,
                     coast_label_text(location.coast_id),
-                    self.draft.presentation.label_colour,
+                    presentation.label_colour,
                     lambda new_point, location=location: self._anchor_moved(
                         location.territory_id,
                         "coast_label",
@@ -958,8 +959,8 @@ class MapWizard(QWidget):
                 self._coast_label_items[location] = item
                 self.anchor_canvas.scene().addItem(item)
         if self.supply_preview.isChecked():
-            powers = {power.id: power for power in self.draft.powers}
-            owners = self.draft.default_starting_setup.state.supply_centre_owners
+            powers = {power.id: power for power in map_definition.powers}
+            owners = map_definition.default_starting_setup.state.supply_centre_owners
             for territory, point in presentation.supply_centre_anchors.items():
                 owner = owners.get(territory)
                 colour = (
@@ -983,9 +984,10 @@ class MapWizard(QWidget):
             ]
             self._add_unit_previews(
                 unit_entries,
-                DEFAULT_ARMY_SVG,
+                map_definition.assets.army_svg,
                 UnitType.ARMY,
                 "#3f7b53",
+                map_definition,
             )
         if self.fleets_preview.isChecked():
             unit_entries = [
@@ -997,15 +999,20 @@ class MapWizard(QWidget):
                 )
                 for location, point in presentation.fleet_anchors.items()
             ]
-            asset = DEFAULT_FLEET_SVG
+            asset = map_definition.assets.fleet_svg
             colour = "#356f95"
-            self._add_unit_previews(unit_entries, asset, UnitType.FLEET, colour)
+            self._add_unit_previews(unit_entries, asset, UnitType.FLEET, colour, map_definition)
 
     def _add_unit_previews(
-        self, unit_entries, asset: bytes, unit_type: UnitType, fallback_colour: str
+        self,
+        unit_entries,
+        asset: bytes,
+        unit_type: UnitType,
+        fallback_colour: str,
+        definition: MapDefinition,
     ) -> None:
-        state = self.draft.default_starting_setup.state
-        powers = {power.id: power for power in self.draft.powers}
+        state = definition.default_starting_setup.state
+        powers = {power.id: power for power in definition.powers}
         starting_units = {(unit.unit_type, unit.location): unit.power_id for unit in state.units}
         for territory, anchor, coast, point in unit_entries:
             location = Location(territory, CoastId(coast) if coast is not None else None)
