@@ -143,6 +143,20 @@ class YamlFindBar(QWidget):
         )
 
 
+class DisplayNameEdit(QPlainTextEdit):
+    """Multiline display-name editor whose unmodified Enter key applies."""
+
+    apply_requested = Signal()
+
+    def keyPressEvent(self, event: Any) -> None:
+        if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter) and not (
+            event.modifiers() & Qt.KeyboardModifier.ShiftModifier
+        ):
+            self.apply_requested.emit()
+            return
+        super().keyPressEvent(event)
+
+
 class MapWizard(QWidget):
     cancelled = Signal()
     saved = Signal(object)
@@ -411,10 +425,14 @@ class MapWizard(QWidget):
             display_layout = QHBoxLayout(self.display_name_group)
             display_layout.setContentsMargins(10, 8, 10, 8)
             display_layout.setSpacing(6)
-            self.display_name_editor = QPlainTextEdit()
-            self.display_name_editor.setPlaceholderText("Select a full-name label on the map")
+            self.display_name_editor = DisplayNameEdit()
+            self.display_name_editor.setPlaceholderText("Select a display-name label on the map")
+            self.display_name_editor.setToolTip(
+                "Press Enter to apply; press Shift+Enter to insert a line break."
+            )
             self.display_name_editor.setFixedHeight(48)
             self.display_name_editor.setMinimumWidth(190)
+            self.display_name_editor.apply_requested.connect(self._apply_display_name)
             display_layout.addWidget(self.display_name_editor)
             apply_display_name = QPushButton("Apply")
             apply_display_name.clicked.connect(self._apply_display_name)

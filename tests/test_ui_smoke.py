@@ -11,6 +11,7 @@ from PySide6.QtGui import (
     QNativeGestureEvent,
     QPalette,
     QPointingDevice,
+    QTextCursor,
     QWheelEvent,
 )
 from PySide6.QtWidgets import (
@@ -484,8 +485,15 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     display_territory = wizard.draft.territories[0]
     canonical_name = display_territory.name
     wizard._select_territory_label(display_territory.id)
-    wizard.display_name_editor.setPlainText("First display line\nSecond display line")
-    wizard._apply_display_name()
+    wizard.display_name_editor.setPlainText("First display line")
+    wizard.display_name_editor.moveCursor(QTextCursor.MoveOperation.End)
+    qtbot.keyClick(
+        wizard.display_name_editor,
+        Qt.Key.Key_Return,
+        Qt.KeyboardModifier.ShiftModifier,
+    )
+    qtbot.keyClicks(wizard.display_name_editor, "Second display line")
+    qtbot.keyClick(wizard.display_name_editor, Qt.Key.Key_Return)
     updated_territory = next(
         item for item in wizard.draft.territories if item.id == display_territory.id
     )
