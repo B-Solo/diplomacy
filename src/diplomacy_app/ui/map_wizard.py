@@ -12,7 +12,7 @@ from xml.etree import ElementTree
 
 import yaml
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QColor, QTextCursor, QTextFormat
+from PySide6.QtGui import QColor, QKeySequence, QShortcut, QTextCursor, QTextDocument, QTextFormat
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QHeaderView,
     QLabel,
+    QLineEdit,
     QPlainTextEdit,
     QPushButton,
     QSplitter,
@@ -27,6 +28,7 @@ from PySide6.QtWidgets import (
     QTableWidgetItem,
     QTabWidget,
     QTextEdit,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
@@ -48,6 +50,83 @@ from diplomacy_app.ui.map_canvas import (
     TextAnchorItem,
     UnitAnchorItem,
 )
+
+
+class YamlFindBar(QWidget):
+    """Inline, wrapping search controls for a YAML text editor."""
+
+    def __init__(self, editor: QPlainTextEdit, shortcut_parent: QWidget) -> None:
+        super().__init__()
+        self.editor = editor
+        self._origin = 0
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 4)
+        layout.setSpacing(4)
+        self.query = QLineEdit()
+        self.query.setPlaceholderText("Find in YAML")
+        self.query.setClearButtonEnabled(True)
+        layout.addWidget(self.query, 1)
+        previous = QToolButton()
+        previous.setText("↑")
+        previous.setToolTip("Previous match (Shift+Enter)")
+        previous.clicked.connect(lambda: self.find_match(backward=True))
+        layout.addWidget(previous)
+        following = QToolButton()
+        following.setText("↓")
+        following.setToolTip("Next match (Enter)")
+        following.clicked.connect(self.find_match)
+        layout.addWidget(following)
+        close = QToolButton()
+        close.setText("×")
+        close.setToolTip("Close find (Escape)")
+        close.clicked.connect(self.close_find)
+        layout.addWidget(close)
+
+        self.find_shortcut = QShortcut(QKeySequence(QKeySequence.StandardKey.Find), shortcut_parent)
+        self.find_shortcut.setContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
+        self.find_shortcut.activated.connect(self.show_find)
+        self.previous_shortcut = QShortcut(QKeySequence("Shift+Return"), self.query)
+        self.previous_shortcut.activated.connect(lambda: self.find_match(backward=True))
+        self.escape_shortcut = QShortcut(QKeySequence(Qt.Key.Key_Escape), self)
+        self.escape_shortcut.setContext(Qt.ShortcutContext.WidgetWithChildrenShortcut)
+        self.escape_shortcut.activated.connect(self.close_find)
+        self.query.returnPressed.connect(self.find_match)
+        self.query.textChanged.connect(lambda _text: self.find_match(from_origin=True))
+        self.hide()
+
+    def show_find(self) -> None:
+        cursor = self.editor.textCursor()
+        selected = cursor.selectedText()
+        self._origin = cursor.selectionStart()
+        if selected and "\u2029" not in selected:
+            self.query.setText(selected)
+        self.show()
+        self.query.setFocus()
+        self.query.selectAll()
+
+    def close_find(self) -> None:
+        self.hide()
+        self.editor.setFocus()
+
+    def find_match(self, backward: bool = False, from_origin: bool = False) -> None:
+        query = self.query.text()
+        if not query:
+            self.query.setStyleSheet("")
+            return
+        if from_origin:
+            cursor = QTextCursor(self.editor.document())
+            cursor.setPosition(self._origin)
+            self.editor.setTextCursor(cursor)
+        flag = QTextDocument.FindFlag.FindBackward if backward else QTextDocument.FindFlag(0)
+        found = self.editor.find(query, flag)
+        if not found:
+            cursor = QTextCursor(self.editor.document())
+            cursor.movePosition(
+                QTextCursor.MoveOperation.End if backward else QTextCursor.MoveOperation.Start
+            )
+            self.editor.setTextCursor(cursor)
+            found = self.editor.find(query, flag)
+        self.query.setStyleSheet("" if found else "QLineEdit { background: #f4d8d3; }")
 
 
 class MapWizard(QWidget):
@@ -139,6 +218,12 @@ class MapWizard(QWidget):
         splitter = QSplitter(Qt.Orientation.Horizontal)
         self.yaml_editor = QPlainTextEdit()
         self.yaml_editor.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
+        yaml_side = QWidget()
+        yaml_layout = QVBoxLayout(yaml_side)
+        yaml_layout.setContentsMargins(0, 0, 0, 0)
+        self.yaml_find = YamlFindBar(self.yaml_editor, page)
+        yaml_layout.addWidget(self.yaml_find)
+        yaml_layout.addWidget(self.yaml_editor, 1)
         self.topology_canvas = MapCanvas()
         self.topology_canvas.scene_hovered.connect(self._topology_hovered)
         topology_side = QWidget()
@@ -146,7 +231,7 @@ class MapWizard(QWidget):
         topology_layout.setContentsMargins(0, 0, 0, 0)
         topology_layout.addWidget(self.topology_canvas, 1)
         self.topology_zoom = MapZoomControls(self.topology_canvas)
-        splitter.addWidget(self.yaml_editor)
+        splitter.addWidget(yaml_side)
         splitter.addWidget(topology_side)
         splitter.setStretchFactor(0, 2)
         splitter.setStretchFactor(1, 3)
@@ -168,6 +253,8 @@ class MapWizard(QWidget):
         layout = QVBoxLayout(page)
         self.setup_editor = QPlainTextEdit()
         self.setup_editor.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
+        self.setup_find = YamlFindBar(self.setup_editor, page)
+        layout.addWidget(self.setup_find)
         layout.addWidget(self.setup_editor, 1)
         controls = QHBoxLayout()
         apply_setup = QPushButton("Apply to map YAML")

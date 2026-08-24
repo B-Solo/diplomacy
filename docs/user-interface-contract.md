@@ -181,10 +181,10 @@ Player communication occurs outside the application using map images copied by t
 - **GC.11:** Split coasts have separate fleet anchors.
 - **GC.12:** The importer generates likely adjacency from SVG geometry and assumes that every coastal province has one continuous coast.
 - **GC.13:** The generated ordinary topology is combined with explicit additions and removals, then materialised as the complete topology used for play.
-- **GC.14:** The Topology tab gives the graphical adjacency preview more space than the configured `map.yaml`, includes readable territory labels and exposes local connection overrides alongside the complete effective topology.
+- **GC.14:** The Topology tab gives the graphical adjacency preview more space than the configured `map.yaml`, includes readable territory labels, exposes local connection overrides alongside the complete effective topology and provides inline, wrapping text search through the platform-standard Find shortcut.
 - **GC.15:** The map-configuration editor supports split-coast connections, canals, off-map links, missed links and removal of incorrectly generated links through text.
 - **GC.16:** The saved `map.yaml` remains directly editable outside the application.
-- **GC.17:** A focused Powers and setup tab edits the starting phase, powers, colours, home and starting supply-centre ownership, initial territory control and starting units, and applies those sections to the shared `map.yaml`.
+- **GC.17:** A focused Powers and setup tab edits the starting phase, powers, colours, home and starting supply-centre ownership, initial territory control and starting units, provides the same inline YAML search and applies those sections to the shared `map.yaml`.
 - **GC.18:** A map may provide one custom army SVG and one custom fleet SVG; the default symbols are used when either is absent.
 - **GC.19:** An existing reusable map can be reopened in the map-configuration editor without re-importing its SVG.
 - **GC.20:** Reopening a map provides the same visual Placement tab as initial import, including independent label, army, fleet, split-coast fleet and supply-centre anchors.

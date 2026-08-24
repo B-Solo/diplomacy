@@ -81,6 +81,20 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     )
     assert wizard.validation_label.text().startswith("Valid:")
     assert wizard.yaml_editor.textCursor().selectedText() == "territories:"
+    assert wizard.yaml_find.find_shortcut.key() in QKeySequence.keyBindings(
+        QKeySequence.StandardKey.Find
+    )
+    wizard.tabs.setCurrentIndex(1)
+    wizard.yaml_find.show_find()
+    wizard.yaml_find.query.setText("split_coasts:")
+    assert wizard.yaml_editor.textCursor().selectedText() == "split_coasts:"
+    wizard.yaml_find.close_find()
+    assert wizard.yaml_find.isHidden()
+    wizard.tabs.setCurrentIndex(2)
+    wizard.setup_find.show_find()
+    wizard.setup_find.query.setText("teams:")
+    assert wizard.setup_editor.textCursor().selectedText() == "teams:"
+    wizard.setup_find.close_find()
     assert wizard.save_button.text() == "Save configured map"
     for index in range(wizard.tabs.count()):
         wizard.tabs.setCurrentIndex(index)
