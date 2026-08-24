@@ -52,7 +52,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         "Open a self-contained game folder" in label.text()
         for label in window.welcome.findChildren(QLabel)
     )
-    assert window.map_workspace.zoom_controls.parent() is window.map_workspace.canvas.viewport()
+    assert window.map_workspace.zoom_controls.parent() is window.map_workspace.canvas
     assert window.map_workspace.zoom_controls.zoom_out.text() == "−"
     assert window.map_workspace.zoom_controls.zoom_in.text() == "+"
 
@@ -158,9 +158,20 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
             )
         ].y
     )
+    wizard.anchor_canvas.fit_map()
+    QApplication.processEvents()
+    assert not wizard.anchor_canvas.horizontalScrollBar().isVisible()
+    assert not wizard.anchor_canvas.verticalScrollBar().isVisible()
+    fitted_control_position = wizard.placement_zoom.pos()
     initial_zoom = wizard.anchor_canvas.transform().m11()
     wizard.placement_zoom.zoom_in.click()
+    QApplication.processEvents()
     assert wizard.anchor_canvas.transform().m11() > initial_zoom
+    assert (
+        wizard.anchor_canvas.horizontalScrollBar().isVisible()
+        or wizard.anchor_canvas.verticalScrollBar().isVisible()
+    )
+    assert wizard.placement_zoom.pos() == fitted_control_position
     zoomed_in = wizard.anchor_canvas.transform().m11()
     wizard.placement_zoom.zoom_out.click()
     assert wizard.anchor_canvas.transform().m11() < zoomed_in
@@ -194,8 +205,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.placement_zoom.y() == 8
     assert (
         wizard.placement_zoom.x()
-        == wizard.anchor_canvas.viewport().width() - wizard.placement_zoom.width() - 8
+        == wizard.anchor_canvas.width() - wizard.placement_zoom.width() - 12
     )
+    anchored_position = wizard.placement_zoom.pos()
     mouse = QPointingDevice(
         "Test mouse",
         10_002,
@@ -221,6 +233,8 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     )
     wizard.anchor_canvas.wheelEvent(mouse_wheel)
     assert wizard.anchor_canvas.transform().m11() > before_scale
+    assert wizard.placement_zoom.pos() == anchored_position
+    assert wizard.anchor_canvas.verticalScrollBar().width() <= 8
     pinch_position = QPointF(
         wizard.anchor_canvas.viewport().width() / 2,
         wizard.anchor_canvas.viewport().height() / 2,
@@ -253,7 +267,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     ):
         assert not controls.zoom_in.isHidden()
         assert not controls.zoom_out.isHidden()
-        assert controls.parent() is controls.canvas.viewport()
+        assert controls.parent() is controls.canvas
         assert controls.zoom_out.text() == "−"
         assert controls.zoom_in.text() == "+"
         assert controls.percentage.text() == f"{round(controls.canvas.transform().m11() * 100)}%"

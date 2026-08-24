@@ -31,6 +31,17 @@ from PySide6.QtWidgets import (
 
 from diplomacy_app.domain.models import MapBounds, MapHotspot, MapScene, Point
 
+_SCROLLBAR_STYLE = """
+QScrollBar { background: transparent; border: 0; margin: 0; }
+QScrollBar:vertical { width: 8px; }
+QScrollBar:horizontal { height: 8px; }
+QScrollBar::handle { background: rgba(92, 88, 78, 145); border-radius: 4px; }
+QScrollBar::handle:vertical { min-height: 32px; }
+QScrollBar::handle:horizontal { min-width: 32px; }
+QScrollBar::add-line, QScrollBar::sub-line { width: 0; height: 0; }
+QScrollBar::add-page, QScrollBar::sub-page { background: transparent; }
+"""
+
 
 class MapCanvas(QGraphicsView):
     zoom_changed = Signal(int)
@@ -48,6 +59,8 @@ class MapCanvas(QGraphicsView):
         self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
         self.setResizeAnchor(QGraphicsView.ViewportAnchor.AnchorViewCenter)
         self.setBackgroundBrush(QColor("#d7d1c2"))
+        self.horizontalScrollBar().setStyleSheet(_SCROLLBAR_STYLE)
+        self.verticalScrollBar().setStyleSheet(_SCROLLBAR_STYLE)
         self._item: QGraphicsSvgItem | None = None
         self._renderer: QSvgRenderer | None = None
         self._highlight: QGraphicsSvgItem | None = None
@@ -223,7 +236,7 @@ class MapZoomControls(QWidget):
     """Compact controls overlaid in the top-right corner of a map canvas."""
 
     def __init__(self, canvas: MapCanvas) -> None:
-        super().__init__(canvas.viewport())
+        super().__init__(canvas)
         self.canvas = canvas
         self.setObjectName("mapZoomControls")
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
@@ -257,26 +270,27 @@ class MapZoomControls(QWidget):
         self.fit.setToolTip("Fit the complete map in this pane")
         self.fit.clicked.connect(canvas.fit_map)
         layout.addWidget(self.fit)
-        canvas.zoom_changed.connect(lambda value: self.percentage.setText(f"{value}%"))
-        canvas.horizontalScrollBar().valueChanged.connect(lambda _value: self._position_overlay())
-        canvas.verticalScrollBar().valueChanged.connect(lambda _value: self._position_overlay())
-        canvas.viewport().installEventFilter(self)
+        canvas.zoom_changed.connect(self._zoom_changed)
+        canvas.installEventFilter(self)
         self.adjustSize()
         self._position_overlay()
         self.show()
 
     def eventFilter(self, watched, event) -> bool:
-        if watched is self.canvas.viewport() and event.type() in {
+        if watched is self.canvas and event.type() in {
             QEvent.Type.Resize,
             QEvent.Type.Show,
         }:
             self._position_overlay()
         return super().eventFilter(watched, event)
 
+    def _zoom_changed(self, value: int) -> None:
+        self.percentage.setText(f"{value}%")
+        self._position_overlay()
+
     def _position_overlay(self) -> None:
         self.adjustSize()
-        viewport = self.canvas.viewport()
-        self.move(max(8, viewport.width() - self.width() - 8), 8)
+        self.move(max(8, self.canvas.width() - self.width() - 12), 8)
         self.raise_()
 
 
