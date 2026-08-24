@@ -69,6 +69,12 @@ class MapWorkspace(QWidget):
         controls.addStretch()
         controls.addWidget(QLabel("View"))
         self.views = QComboBox()
+        self.views.setObjectName("savedViewSelector")
+        self.views.setMinimumWidth(240)
+        self.views.setMinimumContentsLength(26)
+        self.views.setSizeAdjustPolicy(
+            QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+        )
         self.views.currentIndexChanged.connect(self._view_changed)
         controls.addWidget(self.views)
         save = QPushButton("Save current")
@@ -105,7 +111,8 @@ class MapWorkspace(QWidget):
         self.zoom = self.zoom_controls.percentage
         self.outcomes = QLabel(self.canvas)
         self.outcomes.setStyleSheet(
-            "background: rgba(255, 250, 240, 220); border-radius: 3px; padding: 2px 5px"
+            "background: rgba(255, 250, 240, 220); color: #292820; "
+            "border-radius: 3px; padding: 2px 5px"
         )
         self.outcomes.setVisible(False)
         self.canvas.outcome_hovered.connect(self._outcome_hovered)
@@ -152,8 +159,14 @@ class MapWorkspace(QWidget):
         self.views.blockSignals(True)
         self.views.clear()
         self.views.addItem("Full map", None)
+        self.views.setItemData(0, "Full map", Qt.ItemDataRole.ToolTipRole)
         for view in session.game.saved_views:
             self.views.addItem(view.name, view)
+            self.views.setItemData(
+                self.views.count() - 1,
+                view.name,
+                Qt.ItemDataRole.ToolTipRole,
+            )
         self.views.blockSignals(False)
         self._update_fog()
         self.schedule_refresh()
@@ -253,6 +266,11 @@ class MapWorkspace(QWidget):
         try:
             self.service.save_view(view)
             self.views.addItem(view.name, view)
+            self.views.setItemData(
+                self.views.count() - 1,
+                view.name,
+                Qt.ItemDataRole.ToolTipRole,
+            )
             self.views.setCurrentIndex(self.views.count() - 1)
             self._end_save_view()
         except Exception as exc:

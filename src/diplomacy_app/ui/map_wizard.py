@@ -134,7 +134,9 @@ class YamlFindBar(QWidget):
             )
             self.editor.setTextCursor(cursor)
             found = self.editor.find(query, flag)
-        self.query.setStyleSheet("" if found else "QLineEdit { background: #f4d8d3; }")
+        self.query.setStyleSheet(
+            "" if found else "QLineEdit { background: #f4d8d3; color: #551f1a; }"
+        )
 
 
 class MapWizard(QWidget):

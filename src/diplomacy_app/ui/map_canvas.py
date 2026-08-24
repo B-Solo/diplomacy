@@ -258,8 +258,9 @@ class MapZoomControls(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
         self.setStyleSheet(
             "#mapZoomControls { background: rgba(255, 250, 240, 220); "
-            "border: 1px solid #8f846d; border-radius: 5px; } "
+            "color: #292820; border: 1px solid #8f846d; border-radius: 5px; } "
             "#mapZoomControls QPushButton, #mapZoomControls QLineEdit { "
+            "background: #fffaf0; color: #292820; border: 1px solid #a89d83; "
             "min-width: 0; padding: 3px 5px; "
             "border-radius: 3px; }"
         )

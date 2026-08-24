@@ -150,7 +150,9 @@ class ApplicationWindow(QMainWindow):
 
     def _season_bar(self) -> QWidget:
         bar = QFrame()
-        bar.setStyleSheet("QFrame { background: #f6f1e3; border-top: 1px solid #b7ae97; }")
+        bar.setStyleSheet(
+            "QFrame { background: #f6f1e3; color: #292820; border-top: 1px solid #b7ae97; }"
+        )
         layout = QHBoxLayout(bar)
         layout.setContentsMargins(4, 2, 4, 2)
         layout.setSpacing(4)

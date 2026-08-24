@@ -54,6 +54,7 @@ Player communication occurs outside the application using map images copied by t
 - **AN.9:** Game creation and reusable-map management replace the main workspace temporarily and return to the preceding application context when completed or cancelled.
 - **AN.10:** Application workflows, validation messages and confirmations remain inside the main window; operating-system file and folder choosers may use native windows.
 - **AN.11:** The current game's choices provide a placement-only editor for its private map snapshot.
+- **AN.12:** Interactive controls and their normal, selected, hovered and disabled states maintain explicit foreground/background contrast rather than relying on the desktop theme.
 
 ### Season Navigation (SN)
 
@@ -76,7 +77,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.8:** The map display switches between `Position` and `Orders`.
 - **MW.9:** Territory labels switch between full names and three-letter codes, never displaying both modes together; long full names use centred multiple lines broken at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
-- **MW.11:** The Map toolbar contains a compact named-view selector, `Save current` and `Copy map` actions.
+- **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current` and `Copy map` actions.
 - **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors and named-coast label rotations; territory names, rules, topology, powers, setup and reusable-map defaults remain unchanged.
 
 ### Saved Views and Image Copying (IC)

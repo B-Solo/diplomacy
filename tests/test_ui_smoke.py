@@ -9,11 +9,13 @@ from PySide6.QtGui import (
     QInputDevice,
     QKeySequence,
     QNativeGestureEvent,
+    QPalette,
     QPointingDevice,
     QWheelEvent,
 )
 from PySide6.QtWidgets import (
     QApplication,
+    QComboBox,
     QFrame,
     QGraphicsItem,
     QGraphicsView,
@@ -37,11 +39,15 @@ from diplomacy_app.visibility import VisibilityProjector
 
 
 def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_root):
+    QApplication.instance().setStyleSheet(STYLE)
     assert "QComboBox QAbstractItemView::item:selected" in STYLE
     assert "selection-color: #fffdf5" in STYLE
     assert "QPushButton, QToolButton { padding: 5px 9px; }" in STYLE
     assert "background: #fffdf7; color: #171714" in STYLE
     assert "QPlainTextEdit#setupEditor" in STYLE
+    assert "QComboBox::down-arrow" in STYLE
+    assert "border-top: 6px solid #39372f" in STYLE
+    assert "QScrollBar::handle" in STYLE
     maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     service = ApplicationService(
         FileGameRepository(RecentGameStore(tmp_path / "app.json")),
@@ -76,6 +82,17 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert window.map_workspace.fog_badge.parent() is window.map_workspace.canvas
     assert window.map_workspace.outcomes.parent() is window.map_workspace.canvas
     assert window.map_workspace.canvas.frameShape() is QFrame.Shape.NoFrame
+    assert window.map_workspace.views.minimumWidth() == 240
+    assert window.map_workspace.views.minimumContentsLength() == 26
+    assert (
+        window.map_workspace.views.sizeAdjustPolicy()
+        is QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+    )
+    window.show()
+    QApplication.processEvents()
+    control_palette = window.map_workspace.views.palette()
+    assert control_palette.color(QPalette.ColorRole.Button).name() == "#fffaf0"
+    assert control_palette.color(QPalette.ColorRole.ButtonText).name() == "#292820"
     assert window.statusBar().isHidden()
 
     wizard = MapWizard(service, service.load_map_draft(maps.list()[0].map_id))

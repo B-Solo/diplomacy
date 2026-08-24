@@ -32,7 +32,8 @@ class PowerPanel(QFrame):
         self.editable = editable and requirement.requires_submission
         self.setFrameShape(QFrame.Shape.StyledPanel)
         self.setStyleSheet(
-            f"QFrame {{ border-top: 4px solid {power.colour}; background: #fbf7eb; border-radius: 6px; }}"
+            f"QFrame {{ border-top: 4px solid {power.colour}; background: #fbf7eb; "
+            "color: #292820; border-radius: 6px; }"
         )
         layout = QVBoxLayout(self)
         header = QHBoxLayout()
@@ -67,7 +68,8 @@ class PowerPanel(QFrame):
         canonical.setFlat(True)
         canonical.setCursor(Qt.CursorShape.PointingHandCursor)
         canonical.setStyleSheet(
-            "text-align: left; font-family: Consolas, monospace; padding: 8px; border: 0"
+            "background: #fffdf7; color: #171714; text-align: left; "
+            "font-family: Consolas, monospace; padding: 8px; border: 0"
         )
         canonical.clicked.connect(lambda: self.stack.setCurrentIndex(1) if self.editable else None)
         self.stack.addWidget(canonical)
@@ -164,7 +166,7 @@ class OrdersWorkspace(QWidget):
         outer.addLayout(controls)
         self.confirmation = QFrame()
         self.confirmation.setStyleSheet(
-            "background: #f6dfc0; border: 1px solid #c99b63; border-radius: 4px"
+            "background: #f6dfc0; color: #713d22; border: 1px solid #c99b63; border-radius: 4px"
         )
         confirmation_layout = QHBoxLayout(self.confirmation)
         self.confirmation_text = QLabel()
