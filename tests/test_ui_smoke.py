@@ -154,6 +154,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.army_asset_preview.size().height() == 240
     assert wizard.army_asset_preview.transform().m11() < 1.2
     assert wizard.fleet_asset_preview.transform().m11() < 1.2
+    multiline_label = TextAnchorItem(
+        Point(0, 0), "Derbyshire & Nottinghamshire", "#111111", lambda _point: None
+    )
+    assert multiline_label.glyph.toPlainText() == "Derbyshire &\nNottinghamshire"
     land = next(item for item in definition.territories if item.kind.value == "land")
     sea = next(item for item in definition.territories if item.kind.value == "sea")
     land_node = topology_nodes[str(land.id)]

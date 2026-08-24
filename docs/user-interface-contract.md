@@ -73,7 +73,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.6:** Activating the percentage control returns to the standard `100%` level; `Fit` returns to the full-map view.
 - **MW.7:** Pan is clamped to the map bounds.
 - **MW.8:** The map display switches between `Position` and `Orders`.
-- **MW.9:** Territory labels switch between full names and three-letter codes, never displaying both modes together.
+- **MW.9:** Territory labels switch between full names and three-letter codes, never displaying both modes together; long full names use centred multiple lines broken at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
 - **MW.11:** The Map toolbar contains a compact named-view selector, `Save current` and `Copy map` actions.
 

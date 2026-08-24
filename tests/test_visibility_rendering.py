@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from types import MappingProxyType
+from xml.etree import ElementTree
 
 from diplomacy_app.domain.models import (
     DisplayMode,
@@ -18,6 +19,7 @@ from diplomacy_app.domain.models import (
     VisibilityPolicy,
 )
 from diplomacy_app.rendering import MapRenderer
+from diplomacy_app.rendering.labels import label_lines
 from diplomacy_app.rules_engine import StandardRulesEngine
 from diplomacy_app.visibility import VisibilityProjector
 
@@ -86,3 +88,16 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     assert artifact.media_type == "image/png"
     assert artifact.data.startswith(b"\x89PNG")
     assert artifact.size == PixelSize(640, 480)
+
+    root = ElementTree.fromstring(scene.svg)
+    derbyshire = next(
+        label
+        for label in root.findall(".//{*}g[@id='territory-labels']/{*}text")
+        if "".join(label.itertext()) == "Derbyshire &Nottinghamshire"
+    )
+    assert [line.text for line in derbyshire.findall("{*}tspan")] == [
+        "Derbyshire &",
+        "Nottinghamshire",
+    ]
+    assert label_lines("Short Name") == ("Short Name",)
+    assert label_lines("Manual\nBreak") == ("Manual", "Break")

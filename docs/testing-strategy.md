@@ -29,7 +29,7 @@ Single-file writes are tested for revision conflicts and preservation of the pre
 
 ### Rendering Tests
 
-Renderer tests first inspect the composed SVG structure for deterministic layers, clipped bounds and absence of forbidden hidden-state data.
+Renderer tests first inspect the composed SVG structure for deterministic layers, centred multiline territory labels, clipped bounds and absence of forbidden hidden-state data.
 A small set of representative scenes is rasterised as golden PNGs for full-map, cropped, Fog of War, split-coast, convoy, invalid-order, retreat and adjustment cases.
 Golden comparisons use a small pixel tolerance for platform rasterisation differences and always assert exact output dimensions and opaque bounds separately.
 

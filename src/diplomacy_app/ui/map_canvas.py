@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (
     QGraphicsEllipseItem,
     QGraphicsItemGroup,
     QGraphicsScene,
-    QGraphicsSimpleTextItem,
+    QGraphicsTextItem,
     QGraphicsView,
     QHBoxLayout,
     QPushButton,
@@ -30,6 +30,7 @@ from PySide6.QtWidgets import (
 )
 
 from diplomacy_app.domain.models import MapBounds, MapHotspot, MapScene, Point
+from diplomacy_app.rendering.labels import label_lines
 
 _SCROLLBAR_STYLE = """
 QScrollBar { background: transparent; border: 0; margin: 0; }
@@ -352,11 +353,14 @@ class TextAnchorItem(QGraphicsItemGroup):
         bold: bool = False,
     ) -> None:
         super().__init__()
-        glyph = QGraphicsSimpleTextItem(text)
+        glyph = QGraphicsTextItem()
         font = QFont("Georgia", size)
         font.setBold(bold)
         glyph.setFont(font)
-        glyph.setBrush(QBrush(QColor(colour)))
+        glyph.setDefaultTextColor(QColor(colour))
+        glyph.document().setDocumentMargin(0)
+        glyph.setPlainText("\n".join(label_lines(text)))
+        self.glyph = glyph
         bounds = glyph.boundingRect()
         glyph.setPos(-bounds.center())
         self.addToGroup(glyph)

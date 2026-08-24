@@ -31,6 +31,7 @@ from diplomacy_app.domain.models import (
     WaiveOrder,
 )
 from diplomacy_app.map_library.svg_importer import view_box
+from diplomacy_app.rendering.labels import label_lines
 
 _SVG = "http://www.w3.org/2000/svg"
 ElementTree.register_namespace("", _SVG)
@@ -117,7 +118,20 @@ class MapRenderer:
                         "stroke-width": "2",
                     },
                 )
-                label.text = item.label
+                lines = label_lines(item.label)
+                if len(lines) == 1:
+                    label.text = lines[0]
+                else:
+                    for index, line in enumerate(lines):
+                        tspan = ElementTree.SubElement(
+                            label,
+                            _tag("tspan"),
+                            {
+                                "x": str(anchor.x),
+                                "dy": f"{-0.55 * (len(lines) - 1):g}em" if index == 0 else "1.1em",
+                            },
+                        )
+                        tspan.text = line
                 if isinstance(item, VisibleTerritory) and territory.is_supply_centre:
                     point = map_definition.presentation.supply_centre_anchors[territory.id]
                     owner_colour = (
