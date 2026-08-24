@@ -55,7 +55,7 @@ class MapCanvas(QGraphicsView):
         self._hotspots: tuple[MapHotspot, ...] = ()
         self.setMouseTracking(True)
 
-    def set_svg(self, svg: bytes, bounds: MapBounds | None = None, fit: bool = False) -> None:
+    def set_svg(self, svg: bytes, bounds: MapBounds | None = None, fit: bool = True) -> None:
         renderer = QSvgRenderer(QByteArray(svg), self)
         if not renderer.isValid():
             raise ValueError("Invalid SVG scene")
@@ -74,7 +74,7 @@ class MapCanvas(QGraphicsView):
         if fit:
             self.fit_map()
 
-    def set_scene(self, scene: MapScene, fit: bool = False) -> None:
+    def set_scene(self, scene: MapScene, fit: bool = True) -> None:
         self._hotspots = scene.hotspots
         self.set_svg(scene.svg, scene.map_bounds, fit)
         self._hotspots = scene.hotspots

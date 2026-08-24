@@ -16,6 +16,8 @@ The UI renders returned snapshots rather than maintaining a second editable doma
 Blocking import, adjudication and rasterisation calls run outside the GUI event thread, with completion marshalled back to that thread.
 The UI disables duplicate mutation actions while a call is active and presents typed application failures without interpreting dependency exceptions.
 Application workflows are pages in the main-window stack, with inline status and confirmation regions; only native filesystem selection leaves the window.
+The entry point opens the main window maximised, converts terminal interrupts into normal Qt shutdown requests and restores the process signal handler after the event loop exits.
+The main window binds Qt's platform-standard Close shortcut so macOS supplies `Cmd+W` and other platforms use their native equivalent.
 
 `MapScene` is displayed as sanitised SVG with active content disabled.
 The map workspace performs hover hit-testing only against the projected hotspots returned with that scene.
@@ -26,7 +28,7 @@ The shared map canvas overlays compact zoom controls without reserving layout sp
 
 - `application_window` creates the main window, binds global actions and swaps startup, game, new-game, map-manager and map-setup workspaces.
 - `session_presenter` maps `SessionView` and typed failures onto widgets without adding domain decisions.
-- `map_workspace` displays `MapScene`, owns zoom and pan state, and converts the visible viewport into `RenderRequest` values.
+- `map_workspace` displays `MapScene`, fits a newly loaded game's map, preserves zoom and pan during later state refreshes, and converts the visible viewport into `RenderRequest` values.
 - `orders_workspace` owns one inline text editor per configured power, warning expansion, final toggles and the unfinalised-power filter.
 - `new_game_workspace` edits game metadata and game-specific starting state inside the main-window stack.
 - `map_manager_workspace` selects reusable maps and starts existing-map or imported-SVG configuration.

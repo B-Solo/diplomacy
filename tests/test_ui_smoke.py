@@ -4,7 +4,13 @@ from xml.etree import ElementTree
 
 import pytest
 from PySide6.QtCore import QPoint, QPointF, Qt
-from PySide6.QtGui import QInputDevice, QNativeGestureEvent, QPointingDevice, QWheelEvent
+from PySide6.QtGui import (
+    QInputDevice,
+    QKeySequence,
+    QNativeGestureEvent,
+    QPointingDevice,
+    QWheelEvent,
+)
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsView, QLabel, QPushButton
 
 from diplomacy_app.application.service import ApplicationService
@@ -14,8 +20,8 @@ from diplomacy_app.game_repository.recent_games import RecentGameStore
 from diplomacy_app.map_library import FileMapLibrary
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rules_engine import StandardRulesEngine
-from diplomacy_app.ui.application_window import ApplicationWindow
-from diplomacy_app.ui.map_canvas import TextAnchorItem, UnitAnchorItem
+from diplomacy_app.ui.application_window import ApplicationWindow, _quit_on_interrupt
+from diplomacy_app.ui.map_canvas import MapCanvas, TextAnchorItem, UnitAnchorItem
 from diplomacy_app.ui.map_manager_workspace import MapManagerWorkspace
 from diplomacy_app.ui.map_wizard import MapWizard
 from diplomacy_app.ui.style import STYLE
@@ -35,6 +41,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     )
     window = ApplicationWindow(service)
     qtbot.addWidget(window)
+    assert window.windowState() & Qt.WindowState.WindowMaximized
+    assert set(window.close_window_action.shortcuts()) == set(
+        QKeySequence.keyBindings(QKeySequence.StandardKey.Close)
+    )
     window.set_session(service.start())
     assert window.stack.currentWidget() is window.welcome
     assert not any(
@@ -47,6 +57,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
 
     wizard = MapWizard(service, service.load_map_draft(maps.list()[0].map_id))
     qtbot.addWidget(wizard)
+    default_fit_canvas = MapCanvas()
+    qtbot.addWidget(default_fit_canvas)
+    default_fit_canvas.resize(320, 240)
+    default_fit_canvas.set_svg(wizard.draft.svg)
+    assert default_fit_canvas.transform().m11() < 1
     assert (
         wizard.anchor_canvas.viewportUpdateMode()
         is QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate
@@ -125,6 +140,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.anchor_canvas.set_standard_zoom()
     before_scale = wizard.anchor_canvas.transform().m11()
     before_scroll = wizard.anchor_canvas.verticalScrollBar().value()
+    controls_position = wizard.placement_zoom.pos()
     touchpad = QPointingDevice(
         "Test trackpad",
         10_001,
@@ -149,6 +165,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.anchor_canvas.wheelEvent(trackpad_scroll)
     assert wizard.anchor_canvas.transform().m11() == before_scale
     assert wizard.anchor_canvas.verticalScrollBar().value() > before_scroll
+    assert wizard.placement_zoom.pos() == controls_position
     mouse = QPointingDevice(
         "Test mouse",
         10_002,
@@ -288,3 +305,19 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert not embedded_wizard.isWindow()
     embedded_wizard.cancelled.emit()
     assert window.stack.currentWidget() is manager_page
+    window.show()
+    assert window.isMaximized()
+    window.close_window_action.trigger()
+    assert not window.isVisible()
+
+
+def test_terminal_interrupt_requests_normal_application_quit():
+    class ApplicationProbe:
+        quit_requested = False
+
+        def quit(self):
+            self.quit_requested = True
+
+    app = ApplicationProbe()
+    _quit_on_interrupt(app, 2, None)
+    assert app.quit_requested

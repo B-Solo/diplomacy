@@ -44,6 +44,7 @@ class MapWorkspace(QWidget):
         self.session: Any = None
         self.scene = None
         self._first_scene = True
+        self._loaded_game_location = None
         outer = QVBoxLayout(self)
         controls = QHBoxLayout()
         self.perspective_label = QLabel("Viewing as")
@@ -113,6 +114,10 @@ class MapWorkspace(QWidget):
         self.session = session
         if not session.game:
             return
+        if session.game.location != self._loaded_game_location:
+            self._loaded_game_location = session.game.location
+            self.scene = None
+            self._first_scene = True
         fog = session.game.settings.visibility_policy.enabled
         self.perspective_label.setVisible(fog)
         self.perspective.setVisible(fog)

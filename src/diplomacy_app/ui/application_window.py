@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import signal
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import Qt, QThreadPool
+from PySide6.QtCore import Qt, QThreadPool, QTimer
+from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
@@ -41,6 +43,11 @@ class ApplicationWindow(QMainWindow):
         self.setWindowTitle("Diplomacy Gamemaster")
         self.resize(1280, 840)
         self.setMinimumSize(860, 620)
+        self.setWindowState(self.windowState() | Qt.WindowState.WindowMaximized)
+        self.close_window_action = QAction("Close window", self)
+        self.close_window_action.setShortcuts(QKeySequence.StandardKey.Close)
+        self.close_window_action.triggered.connect(self.close)
+        self.addAction(self.close_window_action)
         root = QWidget()
         layout = QVBoxLayout(root)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -338,12 +345,29 @@ class ApplicationWindow(QMainWindow):
         self.statusBar().showMessage(text, 8000)
 
 
+def _quit_on_interrupt(app, _signum: int, _frame) -> None:
+    app.quit()
+
+
 def run_application(arguments: list[str] | None = None) -> int:
     app = QApplication(arguments or sys.argv)
     app.setApplicationName("Diplomacy Gamemaster")
     app.setOrganizationName("DiplomacyGamemaster")
     app.setStyleSheet(STYLE)
     window = ApplicationWindow(build_application())
-    window.show()
+    window.showMaximized()
     window.start()
-    return app.exec()
+    previous_interrupt_handler = signal.getsignal(signal.SIGINT)
+    signal.signal(
+        signal.SIGINT,
+        lambda signum, frame: _quit_on_interrupt(app, signum, frame),
+    )
+    interrupt_timer = QTimer(app)
+    interrupt_timer.setInterval(100)
+    interrupt_timer.timeout.connect(lambda: None)
+    interrupt_timer.start()
+    try:
+        return app.exec()
+    finally:
+        interrupt_timer.stop()
+        signal.signal(signal.SIGINT, previous_interrupt_handler)

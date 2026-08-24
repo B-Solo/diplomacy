@@ -47,6 +47,9 @@ Player communication occurs outside the application using map images copied by t
 - **AN.2:** If the last-used game is unavailable, or no game has been opened before, the application shows recent games together with `Open game folder` and `New game` actions.
 - **AN.3:** The in-game header identifies the open game and provides a compact way to open, create or switch games.
 - **AN.4:** The two primary workspaces are `Map` and `Orders`.
+- **AN.5:** The application opens maximised to the usable desktop area rather than in borderless full-screen mode.
+- **AN.6:** The platform-standard close-window shortcut closes the application, including `Cmd+W` on macOS.
+- **AN.7:** When launched from a terminal, `Ctrl+C` requests a normal application shutdown without a traceback.
 - **AN.5:** Game, season and perspective context persists when switching between the primary workspaces.
 - **AN.6:** Game creation and reusable-map management replace the main workspace temporarily and return to the preceding application context when completed or cancelled.
 - **AN.7:** Application workflows, validation messages and confirmations remain inside the main window; operating-system file and folder choosers may use native windows.
@@ -63,7 +66,7 @@ Player communication occurs outside the application using map images copied by t
 ### Map Workspace (MW)
 
 - **MW.1:** The map occupies the available workspace while preserving the SVG view box and aspect ratio.
-- **MW.2:** Opening a map fits the entire map into the workspace without stretching it.
+- **MW.2:** Loading a map fits the entire map into the workspace without stretching it; later state refreshes preserve the user's viewport.
 - **MW.3:** The gamemaster zooms with a mouse wheel, a trackpad pinch or visible controls, pans by dragging, and pans vertically or horizontally with two-finger trackpad scrolling.
 - **MW.4:** Mouse-wheel zoom is centred on the pointer.
 - **MW.5:** Compact `−`, current-percentage, `+` and `Fit` controls overlay the map; wheel and button zoom use the same discrete levels.
