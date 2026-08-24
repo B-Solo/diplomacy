@@ -46,7 +46,7 @@ Player communication occurs outside the application using map images copied by t
 - **AN.1:** On launch, the application opens the last-used game and selects its latest season.
 - **AN.2:** If the last-used game is unavailable, or no game has been opened before, the application shows recent games together with `Open game folder` and `New game` actions.
 - **AN.3:** The in-game header identifies the open game and provides a compact way to open, create or switch games.
-- **AN.4:** The two primary workspaces are `Map` and `Orders`.
+- **AN.4:** The header always shows both `Map` and `Orders` workspace choices in a prominent high-contrast switch whose active workspace is unmistakable.
 - **AN.5:** The application opens maximised to the usable desktop area rather than in borderless full-screen mode.
 - **AN.6:** The platform-standard close-window shortcut closes the application, including `Cmd+W` on macOS.
 - **AN.7:** When launched from a terminal, `Ctrl+C` requests a normal application shutdown without a traceback.

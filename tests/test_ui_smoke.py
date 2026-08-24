@@ -56,6 +56,13 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert set(window.close_window_action.shortcuts()) == set(
         QKeySequence.keyBindings(QKeySequence.StandardKey.Close)
     )
+    assert window.tabs.objectName() == "primaryWorkspaceTabs"
+    assert tuple(window.tabs.tabText(index) for index in range(window.tabs.count())) == (
+        "Map",
+        "Orders",
+    )
+    assert "tab:selected" in window.tabs.styleSheet()
+    assert "background: #fffaf0; color: #20352b" in window.tabs.styleSheet()
     window.set_session(service.start())
     assert window.stack.currentWidget() is window.welcome
     assert not any(
@@ -564,6 +571,12 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root)
     qtbot.addWidget(window)
     window.set_session(session, open_map=True)
     assert not window.game_map_placement_button.isHidden()
+    assert window.tabs.currentIndex() == 0
+    assert window.stack.currentWidget() is window.map_workspace
+    window.tabs.setCurrentIndex(1)
+    assert window.stack.currentWidget() is window.orders_workspace
+    window.tabs.setCurrentIndex(0)
+    assert window.stack.currentWidget() is window.map_workspace
 
     window.game_map_placement_button.click()
     editor = window.stack.currentWidget()

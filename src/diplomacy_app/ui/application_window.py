@@ -90,7 +90,25 @@ class ApplicationWindow(QMainWindow):
         self.game_button.clicked.connect(self._show_game_choices)
         layout.addWidget(self.game_button)
         layout.addStretch()
+        workspace_label = QLabel("Workspace")
+        workspace_label.setStyleSheet(
+            "color: #cbd7cf; font-size: 8pt; font-weight: 700; text-transform: uppercase"
+        )
+        layout.addWidget(workspace_label)
         self.tabs = QTabBar()
+        self.tabs.setObjectName("primaryWorkspaceTabs")
+        self.tabs.setAccessibleName("Primary workspace")
+        self.tabs.setDrawBase(False)
+        self.tabs.setStyleSheet(
+            "QTabBar#primaryWorkspaceTabs::tab {"
+            " background: #263a31; color: #fffaf0; border: 1px solid #829487;"
+            " border-radius: 4px; min-width: 82px; padding: 7px 14px;"
+            " font-size: 10pt; font-weight: 700; margin-left: 3px; }"
+            "QTabBar#primaryWorkspaceTabs::tab:hover:!selected {"
+            " background: #50675a; border-color: #b6c3ba; }"
+            "QTabBar#primaryWorkspaceTabs::tab:selected {"
+            " background: #fffaf0; color: #20352b; border-color: #fffaf0; }"
+        )
         self.tabs.addTab("Map")
         self.tabs.addTab("Orders")
         self.tabs.currentChanged.connect(self._tab_changed)
