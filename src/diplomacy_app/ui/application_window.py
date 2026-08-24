@@ -39,6 +39,7 @@ class ApplicationWindow(QMainWindow):
         super().__init__()
         self.service = service
         self.session = None
+        self._pending_game_deletion: tuple[GameLocation, str] | None = None
         self.thread_pool = QThreadPool.globalInstance()
         self.setWindowTitle("Diplomacy Gamemaster")
         self.resize(1280, 840)
@@ -144,6 +145,25 @@ class ApplicationWindow(QMainWindow):
         self.return_button.clicked.connect(self._return_to_context)
         self.return_button.setVisible(False)
         layout.addWidget(self.return_button)
+
+        self.delete_confirmation = QFrame()
+        self.delete_confirmation.setStyleSheet(
+            "QFrame { background: #f3ddd8; border: 1px solid #b66a61; border-radius: 4px; }"
+        )
+        confirmation_layout = QHBoxLayout(self.delete_confirmation)
+        self.delete_confirmation_text = QLabel()
+        self.delete_confirmation_text.setWordWrap(True)
+        confirmation_layout.addWidget(self.delete_confirmation_text, 1)
+        cancel_delete = QPushButton("Cancel")
+        cancel_delete.clicked.connect(self._cancel_game_deletion)
+        confirmation_layout.addWidget(cancel_delete)
+        self.confirm_delete_game = QPushButton("Delete game permanently")
+        self.confirm_delete_game.setProperty("danger", True)
+        self.confirm_delete_game.clicked.connect(self._confirm_game_deletion)
+        confirmation_layout.addWidget(self.confirm_delete_game)
+        self.delete_confirmation.setVisible(False)
+        layout.addWidget(self.delete_confirmation)
+
         self.recent_layout = QVBoxLayout()
         layout.addLayout(self.recent_layout)
         return page
@@ -223,11 +243,50 @@ class ApplicationWindow(QMainWindow):
             heading.setStyleSheet("font-weight: 700; margin-top: 18px")
             self.recent_layout.addWidget(heading)
         for recent in session.recent_games[:6]:
-            button = QPushButton(f"{recent.name}  —  {recent.current_phase.label}")
-            button.clicked.connect(
+            row = QWidget()
+            row_layout = QHBoxLayout(row)
+            row_layout.setContentsMargins(0, 0, 0, 0)
+            row_layout.setSpacing(5)
+            open_recent = QPushButton(f"{recent.name}  —  {recent.current_phase.label}")
+            open_recent.clicked.connect(
                 lambda _checked=False, location=recent.location: self._open_location(location)
             )
-            self.recent_layout.addWidget(button)
+            row_layout.addWidget(open_recent, 1)
+            delete_recent = QPushButton("Delete…")
+            delete_recent.setProperty("danger", True)
+            delete_recent.clicked.connect(
+                lambda _checked=False, location=recent.location, name=recent.name: (
+                    self._request_game_deletion(location, name)
+                )
+            )
+            row_layout.addWidget(delete_recent)
+            self.recent_layout.addWidget(row)
+
+    def _request_game_deletion(self, location: GameLocation, name: str) -> None:
+        self._pending_game_deletion = (location, name)
+        self.delete_confirmation_text.setText(
+            f'Delete "{name}" permanently? This removes the complete game folder at '
+            f"{location.path} and cannot be undone."
+        )
+        self.delete_confirmation.setVisible(True)
+
+    def _cancel_game_deletion(self) -> None:
+        self._pending_game_deletion = None
+        self.delete_confirmation.setVisible(False)
+
+    def _confirm_game_deletion(self) -> None:
+        if self._pending_game_deletion is None:
+            return
+        location, name = self._pending_game_deletion
+        try:
+            session = self.service.delete_game(location)
+        except Exception as exc:
+            self._show_error(f"Could not delete game: {exc}")
+            return
+        self._cancel_game_deletion()
+        self.set_session(session)
+        self._show_game_choices()
+        self.statusBar().showMessage(f"Deleted game {name}", 3000)
 
     def _tab_changed(self, index: int) -> None:
         if not self.session or not self.session.game:

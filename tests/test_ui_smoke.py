@@ -790,3 +790,22 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root)
     assert (
         window.session.game.map_definition.presentation.label_anchors[territory_id] == moved_point
     )
+
+    window._show_game_choices()
+    assert window.stack.currentWidget() is window.welcome
+    delete_buttons = [
+        button for button in window.welcome.findChildren(QPushButton) if button.text() == "Delete…"
+    ]
+    assert len(delete_buttons) == 1
+    delete_buttons[0].click()
+    assert not window.delete_confirmation.isHidden()
+    assert "Placement UI game" in window.delete_confirmation_text.text()
+    assert str(session.game.location.path) in window.delete_confirmation_text.text()
+    window._cancel_game_deletion()
+    assert window.delete_confirmation.isHidden()
+    assert session.game.location.path.exists()
+    window._request_game_deletion(session.game.location, session.game.name)
+    window.confirm_delete_game.click()
+    assert not session.game.location.path.exists()
+    assert window.session.game is None
+    assert window.stack.currentWidget() is window.welcome

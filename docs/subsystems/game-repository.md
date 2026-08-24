@@ -8,7 +8,7 @@ It also maintains the small application-owned record of recent and last-opened g
 ## External API
 
 The subsystem provides `GameRepository` from [Subsystem API Contracts](../api-contracts.md).
-Its callers can discover, open and create games; load phases; save submissions, views and private-map presentation; change finalisation; and commit adjudication proposals.
+Its callers can discover, open, create and delete games; load phases; save submissions, views and private-map presentation; change finalisation; and commit adjudication proposals.
 
 ## Implementation Notes
 
@@ -16,6 +16,7 @@ Stored data is parsed into application contract values at the repository boundar
 Unknown or malformed data produces `InvalidStoredData` with file and logical-location context.
 Retreat-phase codecs preserve dislodged units and their legal destinations independently of active occupying units.
 Game creation copies the configured map, materialises the validated game-specific setup into that private copy and writes its first phase state before exposing the game folder as complete.
+Game deletion validates the complete target as a game immediately before removing its folder and application-owned recent-game references.
 
 Every write is staged beside its destination, flushed and then installed using recoverable renames.
 Multi-file adjudication and private-map presentation changes use the redo manifest and recovery marker defined in [Storage Schema](../storage-schema.md), so reopening a game completes an interrupted commit deterministically.

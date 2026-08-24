@@ -57,3 +57,19 @@ class RecentGameStore:
                 "recent_games": [str(path) for path in recent],
             },
         )
+
+    def forget(self, location: GameLocation) -> None:
+        value = self._read()
+        recent = [item.path for item in self.locations() if item.path != location.path]
+        last_opened = value.get("last_opened")
+        if last_opened and Path(str(last_opened)).resolve() == location.path:
+            last_opened = str(recent[0]) if recent else None
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        atomic_json(
+            self.path,
+            {
+                "schema_version": 1,
+                "last_opened": last_opened,
+                "recent_games": [str(path) for path in recent],
+            },
+        )

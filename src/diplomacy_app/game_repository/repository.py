@@ -141,6 +141,27 @@ class FileGameRepository:
     def open(self, location: GameLocation) -> GameSnapshot:
         return self._read_game(location, record=True)
 
+    def delete(self, location: GameLocation) -> None:
+        root = location.path.resolve()
+        if root.parent == root or location.path.is_symlink():
+            raise RepositoryError(f"Refusing to delete unsafe game folder: {root}")
+        resolved_location = GameLocation(root)
+        game = self._read_game(resolved_location, record=False)
+        required = (root / "game.yaml", root / "views.json", root / "map")
+        if not all(path.exists() for path in required):
+            raise RepositoryError(f"Game folder is incomplete and was not deleted: {root}")
+        try:
+            shutil.rmtree(root)
+        except OSError as exc:
+            raise RepositoryError(f"Could not delete game: {exc}") from exc
+        self._locations.pop(game.game_id, None)
+        try:
+            self._recent.forget(resolved_location)
+        except OSError as exc:
+            raise RepositoryError(
+                f"Deleted game folder but could not update recent games: {exc}"
+            ) from exc
+
     def _root_for(self, game_id: GameId) -> Path:
         location = self._locations.get(game_id)
         if location is None:

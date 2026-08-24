@@ -92,6 +92,17 @@ class ApplicationService:
         self._game, self._phase, self._perspective = game, phase, GAMEMASTER
         return self._session()
 
+    def delete_game(self, location: GameLocation) -> SessionView:
+        deleting_current = (
+            self._game is not None and self._game.location.path.resolve() == location.path.resolve()
+        )
+        self.repository.delete(location)
+        if deleting_current:
+            self._game = None
+            self._phase = None
+            self._perspective = GAMEMASTER
+        return self._session()
+
     def _require_game(self) -> tuple[GameSnapshot, PhaseSnapshot]:
         if self._game is None or self._phase is None:
             raise RepositoryError("Open or create a game first")

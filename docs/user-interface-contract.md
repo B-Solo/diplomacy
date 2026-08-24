@@ -55,6 +55,7 @@ Player communication occurs outside the application using map images copied by t
 - **AN.10:** Application workflows, validation messages and confirmations remain inside the main window; operating-system file and folder choosers may use native windows.
 - **AN.11:** The current game's choices provide a placement-only editor for its private map snapshot.
 - **AN.12:** All workspaces use an application-owned light palette and platform-available fonts; interactive controls and their normal, selected, hovered and disabled states maintain explicit foreground/background contrast rather than relying on the desktop theme.
+- **AN.13:** Recent games can be permanently deleted from the game choices after an in-window confirmation identifies the game folder and warns that deletion cannot be undone; deleting the current game returns to the no-game state.
 
 ### Season Navigation (SN)
 

@@ -81,6 +81,50 @@ def test_coordinator_complete_default_order_workflow(tmp_path, project_root):
     assert service.start().game.name == "Coordinator game"
 
 
+def test_coordinator_deletes_recent_and_current_games(tmp_path, project_root):
+    maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
+    repo = repository(tmp_path)
+    service = ApplicationService(
+        repo,
+        maps,
+        StandardRulesEngine(),
+        VisibilityProjector(),
+        MapRenderer(),
+    )
+    configured = maps.load(maps.list()[0].map_id)
+    first_location = GameLocation((tmp_path / "first-game").resolve())
+    second_location = GameLocation((tmp_path / "second-game").resolve())
+    service.create_game(
+        NewGameRequest(
+            "First game",
+            first_location,
+            configured.id,
+            configured.default_starting_setup,
+        )
+    )
+    current = service.create_game(
+        NewGameRequest(
+            "Second game",
+            second_location,
+            configured.id,
+            configured.default_starting_setup,
+        )
+    )
+
+    after_first = service.delete_game(first_location)
+    assert after_first.game == current.game
+    assert not first_location.path.exists()
+    assert [item.location for item in after_first.recent_games] == [second_location]
+    assert repo.last_opened() == second_location
+
+    after_current = service.delete_game(second_location)
+    assert after_current.game is None
+    assert after_current.phase is None
+    assert after_current.recent_games == ()
+    assert repo.last_opened() is None
+    assert not second_location.path.exists()
+
+
 def test_reusable_map_edit_does_not_change_existing_game_snapshot(tmp_path, project_root):
     maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
     configured = maps.load(maps.list()[0].map_id)
