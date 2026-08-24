@@ -30,7 +30,7 @@ The shared map canvas distinguishes pixel-based or touchpad wheel events from mo
 - `orders_workspace` owns one inline text editor per configured power, warning expansion, final toggles and the unfinalised-power filter.
 - `new_game_workspace` edits game metadata and game-specific starting state inside the main-window stack.
 - `map_manager_workspace` selects reusable maps and starts existing-map or imported-SVG configuration.
-- `map_wizard` links territory rows with SVG hover highlights, displays effective topology overlays, combines independently selectable placement layers, previews effective unit assets, drags every anchor and submits immutable draft snapshots for validation or saving.
+- `map_wizard` links classified rows with SVG hover highlights, displays the effective topology as an army/fleet-anchor adjacency graph over a faded map, combines independently selectable placement layers, previews effective unit assets, drags every anchor and submits immutable draft snapshots for validation or saving.
 - `background_tasks` executes blocking service calls and returns their completion to the GUI event thread.
 - `clipboard` transfers returned PNG artifacts through the operating-system clipboard API.
 

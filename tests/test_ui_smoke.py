@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from xml.etree import ElementTree
+
 from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtGui import QWheelEvent
 
@@ -39,6 +41,49 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.tabs.count() == 4
     assert wizard.validation_label.text().startswith("Valid:")
     assert wizard.next_button.text() == "Next"
+    definition = service.preview_map_definition(wizard.draft)
+    topology = ElementTree.fromstring(wizard._topology_svg(definition))
+    topology_nodes = {
+        node.attrib["data-territory"]: node
+        for node in topology.findall(".//{*}circle")
+        if "data-territory" in node.attrib
+    }
+    underlay = next(
+        group
+        for group in topology.findall(".//{*}g")
+        if group.attrib.get("id") == "topology-map-underlay"
+    )
+    graph_edges = [line for line in topology.findall(".//{*}line") if "data-kind" in line.attrib]
+    assert underlay.attrib["opacity"] == "0.34"
+    assert graph_edges
+    land = next(item for item in definition.territories if item.kind.value == "land")
+    sea = next(item for item in definition.territories if item.kind.value == "sea")
+    land_node = topology_nodes[str(land.id)]
+    sea_node = topology_nodes[str(sea.id)]
+    assert land_node.attrib["data-anchor-type"] == "army"
+    assert float(land_node.attrib["cx"]) == definition.presentation.army_anchors[land.id].x
+    assert float(land_node.attrib["cy"]) == definition.presentation.army_anchors[land.id].y
+    assert sea_node.attrib["data-anchor-type"] == "fleet"
+    assert (
+        float(sea_node.attrib["cx"])
+        == definition.presentation.fleet_anchors[
+            next(
+                location
+                for location in definition.presentation.fleet_anchors
+                if location.territory_id == sea.id
+            )
+        ].x
+    )
+    assert (
+        float(sea_node.attrib["cy"])
+        == definition.presentation.fleet_anchors[
+            next(
+                location
+                for location in definition.presentation.fleet_anchors
+                if location.territory_id == sea.id
+            )
+        ].y
+    )
     initial_zoom = wizard.anchor_canvas.transform().m11()
     wizard.placement_zoom.zoom_in.click()
     assert wizard.anchor_canvas.transform().m11() > initial_zoom

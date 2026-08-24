@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import base64
-import math
 from dataclasses import replace
 from pathlib import Path
 from typing import Any
@@ -27,9 +26,14 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 from shapely.geometry import Point as GeometryPoint
-from shapely.ops import nearest_points
 
-from diplomacy_app.domain.models import MapDraft, SvgElementRole, UnitType
+from diplomacy_app.domain.models import (
+    Location,
+    MapDraft,
+    SvgElementRole,
+    TerritoryKind,
+    UnitType,
+)
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import territory_geometries
 from diplomacy_app.ui.map_canvas import (
@@ -128,17 +132,16 @@ class MapWizard(QWidget):
         page = QWidget()
         layout = QVBoxLayout(page)
         note = QLabel(
-            "Edit the durable map.yaml on the left. The validated topology on the right uses "
-            "green for army, blue for fleet and purple for shared connections; arrowheads mark "
-            "one-way links."
+            "Edit the durable map.yaml on the left. The validated adjacency graph on the right "
+            "uses army anchors for land/coastal nodes and fleet anchors for sea nodes."
         )
         note.setWordWrap(True)
         layout.addWidget(note)
         legend = QLabel(
-            '<span style="color:#36734b; font-weight:700">━━ Army</span>&nbsp;&nbsp; '
-            '<span style="color:#286b99; font-weight:700">━━ Fleet</span>&nbsp;&nbsp; '
-            '<span style="color:#76509a; font-weight:700">━━ Both</span>&nbsp;&nbsp; '
-            "→ one-way &nbsp;&nbsp; - - exceptional/off-map"
+            '<span style="color:#f4511e; font-weight:700">━━ Army</span>&nbsp;&nbsp; '
+            '<span style="color:#00b8d4; font-weight:700">━━ Fleet</span>&nbsp;&nbsp; '
+            '<span style="color:#d500f9; font-weight:700">━━ Both</span>&nbsp;&nbsp; '
+            "→ one-way &nbsp;&nbsp; ○ node"
         )
         layout.addWidget(legend)
         splitter = QSplitter(Qt.Orientation.Horizontal)
@@ -369,8 +372,16 @@ class MapWizard(QWidget):
         def tag(name: str) -> str:
             return f"{{{namespace}}}{name}"
 
+        original_children = list(root)
+        underlay = ElementTree.Element(tag("g"), {"id": "topology-map-underlay", "opacity": "0.34"})
+        for child in original_children:
+            if child.tag.rsplit("}", 1)[-1] not in {"defs", "style", "title", "desc"}:
+                root.remove(child)
+                underlay.append(child)
+        root.append(underlay)
+
         defs = ElementTree.SubElement(root, tag("defs"))
-        colours = {"army": "#36734b", "fleet": "#286b99", "both": "#76509a"}
+        colours = {"army": "#f4511e", "fleet": "#00b8d4", "both": "#d500f9"}
         for name, colour in colours.items():
             marker = ElementTree.SubElement(
                 defs,
@@ -380,8 +391,8 @@ class MapWizard(QWidget):
                     "viewBox": "0 0 10 10",
                     "refX": "8",
                     "refY": "5",
-                    "markerWidth": "5",
-                    "markerHeight": "5",
+                    "markerWidth": "6",
+                    "markerHeight": "6",
                     "orient": "auto-start-reverse",
                 },
             )
@@ -397,11 +408,21 @@ class MapWizard(QWidget):
             if origin != destination:
                 directions.setdefault((origin, destination), set()).add(edge.unit_type)
         by_id = {str(item.id): item for item in definition.territories}
-        geometry_by_id = {
-            str(item.id): self._element_geometries.get(item.svg_element_id)
-            for item in definition.territories
-        }
-        layer = ElementTree.SubElement(root, tag("g"), {"id": "topology-preview"})
+        nodes = {}
+        for territory in definition.territories:
+            if territory.kind is TerritoryKind.LAND:
+                point = definition.presentation.army_anchors.get(
+                    territory.id, definition.presentation.label_anchors[territory.id]
+                )
+                anchor_type = "army"
+            else:
+                point = definition.presentation.fleet_anchors.get(
+                    Location(territory.id), definition.presentation.label_anchors[territory.id]
+                )
+                anchor_type = "fleet"
+            nodes[str(territory.id)] = (point, anchor_type)
+
+        edge_layer = ElementTree.SubElement(root, tag("g"), {"id": "topology-edges"})
         pairs = sorted({tuple(sorted(pair)) for pair in directions})
         for left, right in pairs:
             forward = directions.get((left, right), set())
@@ -420,51 +441,65 @@ class MapWizard(QWidget):
                 kind = (
                     "both" if units == {UnitType.ARMY, UnitType.FLEET} else next(iter(units)).value
                 )
-                origin_anchor = definition.presentation.label_anchors[by_id[origin].id]
-                destination_anchor = definition.presentation.label_anchors[by_id[destination].id]
-                dx = destination_anchor.x - origin_anchor.x
-                dy = destination_anchor.y - origin_anchor.y
-                distance = max(math.hypot(dx, dy), 1)
-                ux, uy = dx / distance, dy / distance
-                origin_geometry = geometry_by_id[origin]
-                destination_geometry = geometry_by_id[destination]
-                if origin_geometry is not None and destination_geometry is not None:
-                    left_boundary, right_boundary = nearest_points(
-                        origin_geometry.boundary, destination_geometry.boundary
-                    )
-                    gap = left_boundary.distance(right_boundary)
-                    if gap <= 3:
-                        midpoint_x = (left_boundary.x + right_boundary.x) / 2
-                        midpoint_y = (left_boundary.y + right_boundary.y) / 2
-                        half_length = 5
-                        start_x = midpoint_x - ux * half_length
-                        start_y = midpoint_y - uy * half_length
-                        end_x = midpoint_x + ux * half_length
-                        end_y = midpoint_y + uy * half_length
-                    else:
-                        start_x, start_y = left_boundary.x, left_boundary.y
-                        end_x, end_y = right_boundary.x, right_boundary.y
-                else:
-                    midpoint_x = (origin_anchor.x + destination_anchor.x) / 2
-                    midpoint_y = (origin_anchor.y + destination_anchor.y) / 2
-                    start_x = midpoint_x - ux * 5
-                    start_y = midpoint_y - uy * 5
-                    end_x = midpoint_x + ux * 5
-                    end_y = midpoint_y + uy * 5
+                origin_anchor = nodes[origin][0]
+                destination_anchor = nodes[destination][0]
                 attributes = {
-                    "x1": str(start_x),
-                    "y1": str(start_y),
-                    "x2": str(end_x),
-                    "y2": str(end_y),
-                    "stroke": colours[kind],
-                    "stroke-width": "2",
-                    "stroke-opacity": "0.9",
+                    "x1": str(origin_anchor.x),
+                    "y1": str(origin_anchor.y),
+                    "x2": str(destination_anchor.x),
+                    "y2": str(destination_anchor.y),
+                    "fill": "none",
+                    "data-origin": origin,
+                    "data-destination": destination,
+                    "data-kind": kind,
                 }
-                if origin_geometry is not None and destination_geometry is not None and gap > 3:
-                    attributes["stroke-dasharray"] = "3 2"
+                halo = attributes | {
+                    "stroke": "#263238",
+                    "stroke-width": "5",
+                    "stroke-opacity": "0.72",
+                }
+                ElementTree.SubElement(edge_layer, tag("line"), halo)
+                attributes |= {
+                    "stroke": colours[kind],
+                    "stroke-width": "2.4",
+                    "stroke-opacity": "0.96",
+                }
                 if directed:
                     attributes["marker-end"] = f"url(#topology-arrow-{kind})"
-                ElementTree.SubElement(layer, tag("line"), attributes)
+                ElementTree.SubElement(edge_layer, tag("line"), attributes)
+
+        node_layer = ElementTree.SubElement(root, tag("g"), {"id": "topology-nodes"})
+        for territory_id, (point, anchor_type) in sorted(nodes.items()):
+            territory = by_id[territory_id]
+            ElementTree.SubElement(
+                node_layer,
+                tag("circle"),
+                {
+                    "cx": str(point.x),
+                    "cy": str(point.y),
+                    "r": "4.5",
+                    "fill": "#ffcc80" if anchor_type == "army" else "#80deea",
+                    "stroke": "#263238",
+                    "stroke-width": "1.8",
+                    "data-territory": territory_id,
+                    "data-anchor-type": anchor_type,
+                },
+            )
+            label = ElementTree.SubElement(
+                node_layer,
+                tag("text"),
+                {
+                    "x": str(point.x + 6),
+                    "y": str(point.y - 5),
+                    "font-size": "8",
+                    "font-weight": "700",
+                    "fill": "#1b1f1d",
+                    "stroke": "#fffdf5",
+                    "stroke-width": "2",
+                    "paint-order": "stroke",
+                },
+            )
+            label.text = territory.abbreviation
         return ElementTree.tostring(root, encoding="utf-8", xml_declaration=True)
 
     def _refresh_from_yaml_and_anchors(self) -> None:
