@@ -115,18 +115,24 @@ class MapCanvas(QGraphicsView):
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         device = event.device()
-        touchpad = device is not None and device.type() is QInputDevice.DeviceType.TouchPad
+        device_type = device.type() if device is not None else QInputDevice.DeviceType.Unknown
         pixel_delta = event.pixelDelta()
-        if touchpad or not pixel_delta.isNull():
-            angle_delta = event.angleDelta()
+        angle_delta = event.angleDelta()
+        if device_type == QInputDevice.DeviceType.TouchPad:
             delta = (
                 pixel_delta
                 if not pixel_delta.isNull()
                 else QPoint(round(angle_delta.x() / 8), round(angle_delta.y() / 8))
             )
             self.pan_by(delta)
-        elif event.angleDelta().y():
-            self.zoom_by(1.2 if event.angleDelta().y() > 0 else 1 / 1.2)
+        elif device_type == QInputDevice.DeviceType.Mouse:
+            vertical = angle_delta.y() or pixel_delta.y()
+            if vertical:
+                self.zoom_by(1.2 if vertical > 0 else 1 / 1.2)
+        elif not pixel_delta.isNull():
+            self.pan_by(pixel_delta)
+        elif angle_delta.y():
+            self.zoom_by(1.2 if angle_delta.y() > 0 else 1 / 1.2)
         event.accept()
 
     def pan_by(self, delta: QPoint) -> None:

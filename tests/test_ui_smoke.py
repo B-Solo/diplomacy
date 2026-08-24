@@ -4,7 +4,7 @@ from xml.etree import ElementTree
 
 import pytest
 from PySide6.QtCore import QPoint, QPointF, Qt
-from PySide6.QtGui import QNativeGestureEvent, QPointingDevice, QWheelEvent
+from PySide6.QtGui import QInputDevice, QNativeGestureEvent, QPointingDevice, QWheelEvent
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsView, QLabel, QPushButton
 
 from diplomacy_app.application.service import ApplicationService
@@ -125,6 +125,15 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.anchor_canvas.set_standard_zoom()
     before_scale = wizard.anchor_canvas.transform().m11()
     before_scroll = wizard.anchor_canvas.verticalScrollBar().value()
+    touchpad = QPointingDevice(
+        "Test trackpad",
+        10_001,
+        QInputDevice.DeviceType.TouchPad,
+        QPointingDevice.PointerType.Finger,
+        QInputDevice.Capability.Position | QInputDevice.Capability.PixelScroll,
+        10,
+        0,
+    )
     trackpad_scroll = QWheelEvent(
         QPointF(50, 50),
         QPointF(50, 50),
@@ -134,19 +143,34 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         Qt.KeyboardModifier.NoModifier,
         Qt.ScrollPhase.ScrollUpdate,
         False,
+        Qt.MouseEventSource.MouseEventNotSynthesized,
+        touchpad,
     )
     wizard.anchor_canvas.wheelEvent(trackpad_scroll)
     assert wizard.anchor_canvas.transform().m11() == before_scale
     assert wizard.anchor_canvas.verticalScrollBar().value() > before_scroll
+    mouse = QPointingDevice(
+        "Test mouse",
+        10_002,
+        QInputDevice.DeviceType.Mouse,
+        QPointingDevice.PointerType.Generic,
+        QInputDevice.Capability.Position
+        | QInputDevice.Capability.Scroll
+        | QInputDevice.Capability.PixelScroll,
+        1,
+        3,
+    )
     mouse_wheel = QWheelEvent(
         QPointF(50, 50),
         QPointF(50, 50),
-        QPoint(),
+        QPoint(0, 12),
         QPoint(0, 120),
         Qt.MouseButton.NoButton,
         Qt.KeyboardModifier.NoModifier,
         Qt.ScrollPhase.NoScrollPhase,
         False,
+        Qt.MouseEventSource.MouseEventNotSynthesized,
+        mouse,
     )
     wizard.anchor_canvas.wheelEvent(mouse_wheel)
     assert wizard.anchor_canvas.transform().m11() > before_scale
