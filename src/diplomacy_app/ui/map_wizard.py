@@ -56,12 +56,6 @@ class MapWizard(QWidget):
         self._element_geometries = territory_geometries(draft.svg, draft.element_roles)
         self._row_by_element: dict[str, int] = {}
         layout = QVBoxLayout(self)
-        intro = QLabel(
-            "Classify the SVG, edit the authored map definition, and place its anchors. "
-            "Validation must pass before the reusable map can be saved."
-        )
-        intro.setWordWrap(True)
-        layout.addWidget(intro)
         self.tabs = QTabWidget()
         layout.addWidget(self.tabs, 1)
         self._build_classification_tab()
@@ -106,7 +100,6 @@ class MapWizard(QWidget):
         map_layout.setContentsMargins(0, 0, 0, 0)
         map_layout.addWidget(self.preview, 1)
         self.regions_zoom = MapZoomControls(self.preview)
-        map_layout.addWidget(self.regions_zoom, 0, Qt.AlignmentFlag.AlignRight)
         map_layout.addWidget(self.hovered_territory)
         self.roles = QTableWidget(0, 3)
         self.roles.setHorizontalHeaderLabels(["Territory", "SVG element", "Role"])
@@ -131,12 +124,6 @@ class MapWizard(QWidget):
     def _build_yaml_tab(self) -> None:
         page = QWidget()
         layout = QVBoxLayout(page)
-        note = QLabel(
-            "Edit the durable map.yaml on the left. The validated adjacency graph on the right "
-            "uses army anchors for land/coastal nodes and fleet anchors for sea nodes."
-        )
-        note.setWordWrap(True)
-        layout.addWidget(note)
         legend = QLabel(
             '<span style="color:#f4511e; font-weight:700">━━ Army</span>&nbsp;&nbsp; '
             '<span style="color:#00b8d4; font-weight:700">━━ Fleet</span>&nbsp;&nbsp; '
@@ -153,7 +140,6 @@ class MapWizard(QWidget):
         topology_layout.setContentsMargins(0, 0, 0, 0)
         topology_layout.addWidget(self.topology_canvas, 1)
         self.topology_zoom = MapZoomControls(self.topology_canvas)
-        topology_layout.addWidget(self.topology_zoom, 0, Qt.AlignmentFlag.AlignRight)
         splitter.addWidget(self.yaml_editor)
         splitter.addWidget(topology_side)
         splitter.setSizes([650, 430])
@@ -171,12 +157,6 @@ class MapWizard(QWidget):
     def _build_anchor_tab(self) -> None:
         page = QWidget()
         layout = QVBoxLayout(page)
-        label = QLabel(
-            "Combine the layers below to find and remove overlaps. Drag any displayed label, "
-            "unit or supply-centre star to update only its presentation anchor."
-        )
-        label.setWordWrap(True)
-        layout.addWidget(label)
         preview_row = QHBoxLayout()
         preview_row.addWidget(QLabel("Show"))
         self.armies_preview = QCheckBox("Armies")
@@ -208,19 +188,12 @@ class MapWizard(QWidget):
         footer.addWidget(refresh)
         footer.addStretch()
         self.placement_zoom = MapZoomControls(self.anchor_canvas)
-        footer.addWidget(self.placement_zoom)
         layout.addLayout(footer)
         self.tabs.addTab(page, "3  Placement")
 
     def _build_assets_tab(self) -> None:
         page = QWidget()
         layout = QVBoxLayout(page)
-        layout.addWidget(
-            QLabel(
-                "The effective symbols are shown at their real map scale on a sample territory. "
-                "Defaults are used when custom files are omitted."
-            )
-        )
         previews = QHBoxLayout()
         army_column = QVBoxLayout()
         self.army_preview_label = QLabel()
@@ -228,14 +201,12 @@ class MapWizard(QWidget):
         self.army_asset_preview = MapCanvas()
         army_column.addWidget(self.army_asset_preview)
         self.army_asset_zoom = MapZoomControls(self.army_asset_preview)
-        army_column.addWidget(self.army_asset_zoom)
         fleet_column = QVBoxLayout()
         self.fleet_preview_label = QLabel()
         fleet_column.addWidget(self.fleet_preview_label)
         self.fleet_asset_preview = MapCanvas()
         fleet_column.addWidget(self.fleet_asset_preview)
         self.fleet_asset_zoom = MapZoomControls(self.fleet_asset_preview)
-        fleet_column.addWidget(self.fleet_asset_zoom)
         previews.addLayout(army_column)
         previews.addLayout(fleet_column)
         layout.addLayout(previews, 1)

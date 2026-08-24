@@ -20,7 +20,7 @@ Application workflows are pages in the main-window stack, with inline status and
 `MapScene` is displayed as sanitised SVG with active content disabled.
 The map workspace performs hover hit-testing only against the projected hotspots returned with that scene.
 Clipboard integration accepts only `ImageArtifact` values returned through the coordinator.
-The shared map canvas distinguishes pixel-based or touchpad wheel events from mouse-wheel angle events so two-finger scrolling pans while a mouse wheel zooms, and handles native trackpad magnification gestures as smooth pointer-centred zooming.
+The shared map canvas overlays compact zoom controls without reserving layout space, distinguishes pixel-based or touchpad wheel events from mouse-wheel angle events so two-finger scrolling pans while a mouse wheel zooms, and handles native trackpad magnification gestures as smooth pointer-centred zooming.
 
 ## Modules
 

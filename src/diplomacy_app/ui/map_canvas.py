@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 
-from PySide6.QtCore import QByteArray, QPoint, QPointF, QRectF, Qt, Signal
+from PySide6.QtCore import QByteArray, QEvent, QPoint, QPointF, QRectF, Qt, Signal
 from PySide6.QtGui import (
     QBrush,
     QColor,
@@ -25,7 +25,6 @@ from PySide6.QtWidgets import (
     QGraphicsSimpleTextItem,
     QGraphicsView,
     QHBoxLayout,
-    QLabel,
     QPushButton,
     QWidget,
 )
@@ -205,31 +204,62 @@ class MapCanvas(QGraphicsView):
 
 
 class MapZoomControls(QWidget):
-    """Visible, platform-independent controls for a map canvas transform."""
+    """Compact controls overlaid in the top-right corner of a map canvas."""
 
-    def __init__(self, canvas: MapCanvas, parent=None) -> None:
-        super().__init__(parent)
+    def __init__(self, canvas: MapCanvas) -> None:
+        super().__init__(canvas.viewport())
         self.canvas = canvas
+        self.setObjectName("mapZoomControls")
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
+        self.setStyleSheet(
+            "#mapZoomControls { background: rgba(255, 250, 240, 220); "
+            "border: 1px solid #8f846d; border-radius: 5px; } "
+            "#mapZoomControls QPushButton { min-width: 0; padding: 3px 6px; "
+            "border-radius: 3px; }"
+        )
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(QLabel("Zoom"))
-        self.zoom_out = QPushButton("Zoom out")
+        layout.setContentsMargins(3, 3, 3, 3)
+        layout.setSpacing(2)
+        self.zoom_out = QPushButton("−")
+        self.zoom_out.setAccessibleName("Zoom out")
         self.zoom_out.setToolTip("Zoom out one level")
+        self.zoom_out.setFixedWidth(28)
         self.zoom_out.clicked.connect(lambda: canvas.zoom_by(1 / 1.2))
         layout.addWidget(self.zoom_out)
-        self.percentage = QPushButton("100%")
+        self.percentage = QPushButton(f"{round(canvas.transform().m11() * 100)}%")
         self.percentage.setToolTip("Return to 100% zoom")
+        self.percentage.setMinimumWidth(46)
         self.percentage.clicked.connect(canvas.set_standard_zoom)
         layout.addWidget(self.percentage)
-        self.zoom_in = QPushButton("Zoom in")
+        self.zoom_in = QPushButton("+")
+        self.zoom_in.setAccessibleName("Zoom in")
         self.zoom_in.setToolTip("Zoom in one level")
+        self.zoom_in.setFixedWidth(28)
         self.zoom_in.clicked.connect(lambda: canvas.zoom_by(1.2))
         layout.addWidget(self.zoom_in)
-        self.fit = QPushButton("Fit map")
+        self.fit = QPushButton("Fit")
         self.fit.setToolTip("Fit the complete map in this pane")
         self.fit.clicked.connect(canvas.fit_map)
         layout.addWidget(self.fit)
         canvas.zoom_changed.connect(lambda value: self.percentage.setText(f"{value}%"))
+        canvas.viewport().installEventFilter(self)
+        self.adjustSize()
+        self._position_overlay()
+        self.show()
+
+    def eventFilter(self, watched, event) -> bool:
+        if watched is self.canvas.viewport() and event.type() in {
+            QEvent.Type.Resize,
+            QEvent.Type.Show,
+        }:
+            self._position_overlay()
+        return super().eventFilter(watched, event)
+
+    def _position_overlay(self) -> None:
+        self.adjustSize()
+        viewport = self.canvas.viewport()
+        self.move(max(8, viewport.width() - self.width() - 8), 8)
+        self.raise_()
 
 
 class AnchorItem(QGraphicsEllipseItem):

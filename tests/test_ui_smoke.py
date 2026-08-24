@@ -36,6 +36,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     qtbot.addWidget(window)
     window.set_session(service.start())
     assert window.stack.currentWidget() is window.welcome
+    assert window.map_workspace.zoom_controls.parent() is window.map_workspace.canvas.viewport()
+    assert window.map_workspace.zoom_controls.zoom_out.text() == "−"
+    assert window.map_workspace.zoom_controls.zoom_in.text() == "+"
 
     wizard = MapWizard(service, service.load_map_draft(maps.list()[0].map_id))
     qtbot.addWidget(wizard)
@@ -153,6 +156,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     ):
         assert not controls.zoom_in.isHidden()
         assert not controls.zoom_out.isHidden()
+        assert controls.parent() is controls.canvas.viewport()
+        assert controls.zoom_out.text() == "−"
+        assert controls.zoom_in.text() == "+"
+        assert controls.percentage.text() == f"{round(controls.canvas.transform().m11() * 100)}%"
+        assert controls.y() == 8
     army_items = [
         item for item in wizard.anchor_canvas.scene().items() if isinstance(item, UnitAnchorItem)
     ]

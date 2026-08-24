@@ -30,7 +30,7 @@ from diplomacy_app.domain.models import (
     SavedView,
     SavedViewId,
 )
-from diplomacy_app.ui.map_canvas import MapCanvas
+from diplomacy_app.ui.map_canvas import MapCanvas, MapZoomControls
 
 
 class MapWorkspace(QWidget):
@@ -96,21 +96,9 @@ class MapWorkspace(QWidget):
         outer.addWidget(self.fog_badge)
         self.canvas = MapCanvas()
         outer.addWidget(self.canvas, 1)
+        self.zoom_controls = MapZoomControls(self.canvas)
+        self.zoom = self.zoom_controls.percentage
         footer = QHBoxLayout()
-        footer.addStretch()
-        minus = QPushButton("−")
-        plus = QPushButton("+")
-        fit = QPushButton("Fit")
-        self.zoom = QPushButton("100%")
-        minus.clicked.connect(lambda: self.canvas.zoom_by(1 / 1.2))
-        plus.clicked.connect(lambda: self.canvas.zoom_by(1.2))
-        fit.clicked.connect(self.canvas.fit_map)
-        self.zoom.clicked.connect(self.canvas.set_standard_zoom)
-        self.canvas.zoom_changed.connect(lambda value: self.zoom.setText(f"{value}%"))
-        footer.addWidget(minus)
-        footer.addWidget(self.zoom)
-        footer.addWidget(plus)
-        footer.addWidget(fit)
         self.outcomes = QLabel()
         self.outcomes.setProperty("muted", True)
         footer.addWidget(self.outcomes)
