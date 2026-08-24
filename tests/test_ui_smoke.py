@@ -34,8 +34,20 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.validation_label.text().startswith("Valid:")
     assert wizard.next_button.text() == "Next"
     initial_zoom = wizard.anchor_canvas.transform().m11()
-    wizard.anchor_canvas.zoom_by(1.2)
+    wizard.placement_zoom.zoom_in.click()
     assert wizard.anchor_canvas.transform().m11() > initial_zoom
+    zoomed_in = wizard.anchor_canvas.transform().m11()
+    wizard.placement_zoom.zoom_out.click()
+    assert wizard.anchor_canvas.transform().m11() < zoomed_in
+    for controls in (
+        wizard.regions_zoom,
+        wizard.topology_zoom,
+        wizard.placement_zoom,
+        wizard.army_asset_zoom,
+        wizard.fleet_asset_zoom,
+    ):
+        assert not controls.zoom_in.isHidden()
+        assert not controls.zoom_out.isHidden()
     army_count = len(
         [item for item in wizard.anchor_canvas.scene().items() if isinstance(item, UnitAnchorItem)]
     )

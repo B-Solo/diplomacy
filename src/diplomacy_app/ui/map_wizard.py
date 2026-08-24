@@ -32,7 +32,12 @@ from shapely.ops import nearest_points
 from diplomacy_app.domain.models import MapDraft, SvgElementRole, UnitType
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import territory_geometries
-from diplomacy_app.ui.map_canvas import MapCanvas, TextAnchorItem, UnitAnchorItem
+from diplomacy_app.ui.map_canvas import (
+    MapCanvas,
+    MapZoomControls,
+    TextAnchorItem,
+    UnitAnchorItem,
+)
 
 
 class MapWizard(QWidget):
@@ -98,6 +103,8 @@ class MapWizard(QWidget):
         map_layout = QVBoxLayout(map_side)
         map_layout.setContentsMargins(0, 0, 0, 0)
         map_layout.addWidget(self.preview, 1)
+        self.regions_zoom = MapZoomControls(self.preview)
+        map_layout.addWidget(self.regions_zoom, 0, Qt.AlignmentFlag.AlignRight)
         map_layout.addWidget(self.hovered_territory)
         self.roles = QTableWidget(0, 3)
         self.roles.setHorizontalHeaderLabels(["Territory", "SVG element", "Role"])
@@ -140,8 +147,14 @@ class MapWizard(QWidget):
         self.yaml_editor = QPlainTextEdit()
         self.yaml_editor.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         self.topology_canvas = MapCanvas()
+        topology_side = QWidget()
+        topology_layout = QVBoxLayout(topology_side)
+        topology_layout.setContentsMargins(0, 0, 0, 0)
+        topology_layout.addWidget(self.topology_canvas, 1)
+        self.topology_zoom = MapZoomControls(self.topology_canvas)
+        topology_layout.addWidget(self.topology_zoom, 0, Qt.AlignmentFlag.AlignRight)
         splitter.addWidget(self.yaml_editor)
-        splitter.addWidget(self.topology_canvas)
+        splitter.addWidget(topology_side)
         splitter.setSizes([650, 430])
         layout.addWidget(splitter, 1)
         controls = QHBoxLayout()
@@ -193,15 +206,8 @@ class MapWizard(QWidget):
         refresh.clicked.connect(self._refresh_from_yaml_and_anchors)
         footer.addWidget(refresh)
         footer.addStretch()
-        minus = QPushButton("−")
-        plus = QPushButton("+")
-        fit = QPushButton("Fit")
-        minus.clicked.connect(lambda: self.anchor_canvas.zoom_by(1 / 1.2))
-        plus.clicked.connect(lambda: self.anchor_canvas.zoom_by(1.2))
-        fit.clicked.connect(self.anchor_canvas.fit_map)
-        footer.addWidget(minus)
-        footer.addWidget(plus)
-        footer.addWidget(fit)
+        self.placement_zoom = MapZoomControls(self.anchor_canvas)
+        footer.addWidget(self.placement_zoom)
         layout.addLayout(footer)
         self.tabs.addTab(page, "3  Placement")
 
@@ -220,11 +226,15 @@ class MapWizard(QWidget):
         army_column.addWidget(self.army_preview_label)
         self.army_asset_preview = MapCanvas()
         army_column.addWidget(self.army_asset_preview)
+        self.army_asset_zoom = MapZoomControls(self.army_asset_preview)
+        army_column.addWidget(self.army_asset_zoom)
         fleet_column = QVBoxLayout()
         self.fleet_preview_label = QLabel()
         fleet_column.addWidget(self.fleet_preview_label)
         self.fleet_asset_preview = MapCanvas()
         fleet_column.addWidget(self.fleet_asset_preview)
+        self.fleet_asset_zoom = MapZoomControls(self.fleet_asset_preview)
+        fleet_column.addWidget(self.fleet_asset_zoom)
         previews.addLayout(army_column)
         previews.addLayout(fleet_column)
         layout.addLayout(previews, 1)

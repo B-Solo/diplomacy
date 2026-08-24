@@ -190,7 +190,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.24:** Placement previews do not change game state or the map's starting setup; dragging a preview unit changes only its corresponding presentation anchor.
 - **GC.25:** Hovering a playable shape in the classification step identifies and selects its territory row; hovering or selecting a territory row highlights the corresponding shape on the map.
 - **GC.26:** The topology preview distinguishes army-only, fleet-only and shared connections with a visible key and directional marks where connections are asymmetric.
-- **GC.27:** The map editor uses the full main-window workspace, supports pointer-centred zooming in and out on every visual step and uses `Next` until the final step exposes `Save configured map`.
+- **GC.27:** The map editor uses the full main-window workspace, provides visible zoom-in, zoom-out, current-percentage and fit controls on every visual step, retains pointer-centred trackpad or mouse-wheel zooming and uses `Next` until the final step exposes `Save configured map`.
 - **GC.28:** The unit-symbol step displays the effective default or custom army and fleet symbols at useful map scale before saving.
 - **GC.29:** Placement label mode independently selects no labels, full territory names or abbreviations, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.

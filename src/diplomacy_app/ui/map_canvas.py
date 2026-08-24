@@ -15,6 +15,10 @@ from PySide6.QtWidgets import (
     QGraphicsScene,
     QGraphicsSimpleTextItem,
     QGraphicsView,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QWidget,
 )
 
 from diplomacy_app.domain.models import MapBounds, MapHotspot, MapScene, Point
@@ -150,6 +154,34 @@ class MapCanvas(QGraphicsView):
         highlight.setPos(self._renderer.boundsOnElement(element_id).topLeft())
         self.scene().addItem(highlight)
         self._highlight = highlight
+
+
+class MapZoomControls(QWidget):
+    """Visible, platform-independent controls for a map canvas transform."""
+
+    def __init__(self, canvas: MapCanvas, parent=None) -> None:
+        super().__init__(parent)
+        self.canvas = canvas
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(QLabel("Zoom"))
+        self.zoom_out = QPushButton("Zoom out")
+        self.zoom_out.setToolTip("Zoom out one level")
+        self.zoom_out.clicked.connect(lambda: canvas.zoom_by(1 / 1.2))
+        layout.addWidget(self.zoom_out)
+        self.percentage = QPushButton("100%")
+        self.percentage.setToolTip("Return to 100% zoom")
+        self.percentage.clicked.connect(canvas.set_standard_zoom)
+        layout.addWidget(self.percentage)
+        self.zoom_in = QPushButton("Zoom in")
+        self.zoom_in.setToolTip("Zoom in one level")
+        self.zoom_in.clicked.connect(lambda: canvas.zoom_by(1.2))
+        layout.addWidget(self.zoom_in)
+        self.fit = QPushButton("Fit map")
+        self.fit.setToolTip("Fit the complete map in this pane")
+        self.fit.clicked.connect(canvas.fit_map)
+        layout.addWidget(self.fit)
+        canvas.zoom_changed.connect(lambda value: self.percentage.setText(f"{value}%"))
 
 
 class AnchorItem(QGraphicsEllipseItem):
