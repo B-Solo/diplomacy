@@ -14,7 +14,6 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QMainWindow,
-    QMessageBox,
     QPushButton,
     QStackedWidget,
     QTabBar,
@@ -25,9 +24,10 @@ from PySide6.QtWidgets import (
 from diplomacy_app.application import build_application
 from diplomacy_app.domain.models import AdvancedPhase, FinalisationRequired, GameLocation
 from diplomacy_app.ui.background_tasks import BackgroundTask
-from diplomacy_app.ui.map_manager_dialog import MapManagerDialog
+from diplomacy_app.ui.map_manager_workspace import MapManagerWorkspace
+from diplomacy_app.ui.map_wizard import MapWizard
 from diplomacy_app.ui.map_workspace import MapWorkspace
-from diplomacy_app.ui.new_game_dialog import NewGameDialog
+from diplomacy_app.ui.new_game_workspace import NewGameWorkspace
 from diplomacy_app.ui.orders_workspace import OrdersWorkspace
 from diplomacy_app.ui.style import STYLE
 
@@ -53,6 +53,8 @@ class ApplicationWindow(QMainWindow):
         self.orders_workspace.save_requested.connect(self._save_orders)
         self.orders_workspace.final_requested.connect(self._set_final)
         self.orders_workspace.resolve_requested.connect(self._resolve)
+        self.orders_workspace.resolve_anyway_requested.connect(self._resolve_anyway)
+        self.map_workspace.message.connect(self._show_error)
         self.stack.addWidget(self.welcome)
         self.stack.addWidget(self.map_workspace)
         self.stack.addWidget(self.orders_workspace)
@@ -108,6 +110,10 @@ class ApplicationWindow(QMainWindow):
         maps_button.clicked.connect(self._configure_maps)
         buttons.addWidget(maps_button)
         layout.addLayout(buttons)
+        self.return_button = QPushButton("Return to current game")
+        self.return_button.clicked.connect(self._return_to_context)
+        self.return_button.setVisible(False)
+        layout.addWidget(self.return_button)
         self.recent_layout = QVBoxLayout()
         layout.addLayout(self.recent_layout)
         return page
@@ -137,8 +143,9 @@ class ApplicationWindow(QMainWindow):
         try:
             self.set_session(self.service.start())
         except Exception as exc:
-            QMessageBox.warning(self, "Could not reopen last game", str(exc))
-            self.set_session(self.service.start())
+            self._show_error(f"Could not reopen last game: {exc}")
+            self.session = None
+            self.stack.setCurrentWidget(self.welcome)
 
     def set_session(self, session, *, open_map: bool = False) -> None:
         self.session = session
@@ -148,9 +155,12 @@ class ApplicationWindow(QMainWindow):
         if game is None:
             self.stack.setCurrentWidget(self.welcome)
             self.game_button.setText("No game open")
+            self.return_button.setVisible(False)
             self._populate_recent(session)
             return
         self.game_button.setText(game.name + "  ▾")
+        self.return_button.setText(f"Return to {game.name}")
+        self.return_button.setVisible(True)
         self.phase_selector.blockSignals(True)
         self.phase_selector.clear()
         for phase in game.phases:
@@ -189,22 +199,11 @@ class ApplicationWindow(QMainWindow):
         self.stack.setCurrentWidget(self.map_workspace if index == 0 else self.orders_workspace)
 
     def _show_game_choices(self) -> None:
-        message = QMessageBox(self)
-        message.setWindowTitle("Game")
-        message.setText(
-            self.session.game.name if self.session and self.session.game else "Diplomacy"
-        )
-        open_button = message.addButton("Open game folder…", QMessageBox.ButtonRole.ActionRole)
-        new_button = message.addButton("New game…", QMessageBox.ButtonRole.ActionRole)
-        maps_button = message.addButton("Configure maps…", QMessageBox.ButtonRole.ActionRole)
-        message.addButton(QMessageBox.StandardButton.Cancel)
-        message.exec()
-        if message.clickedButton() is open_button:
-            self._open_game()
-        elif message.clickedButton() is new_button:
-            self._new_game()
-        elif message.clickedButton() is maps_button:
-            self._configure_maps()
+        self.tabs.setVisible(False)
+        self.season_bar.setVisible(False)
+        self.stack.setCurrentWidget(self.welcome)
+        if self.session:
+            self._populate_recent(self.session)
 
     def _open_game(self) -> None:
         folder = QFileDialog.getExistingDirectory(self, "Open game folder")
@@ -215,15 +214,64 @@ class ApplicationWindow(QMainWindow):
         try:
             self.set_session(self.service.open_game(location), open_map=True)
         except Exception as exc:
-            QMessageBox.critical(self, "Could not open game", str(exc))
+            self._show_error(f"Could not open game: {exc}")
 
     def _new_game(self) -> None:
-        dialog = NewGameDialog(self.service, self)
-        if dialog.exec() == dialog.DialogCode.Accepted:
-            self.set_session(dialog.created_session, open_map=True)
+        workspace = NewGameWorkspace(self.service)
+        workspace.cancelled.connect(lambda: self._close_setup_workspace(workspace))
+        workspace.created.connect(self._game_created)
+        workspace.edit_requested.connect(lambda draft: self._open_map_wizard(draft, workspace))
+        self._open_setup_workspace(workspace)
 
     def _configure_maps(self) -> None:
-        MapManagerDialog(self.service, self).exec()
+        workspace = MapManagerWorkspace(self.service)
+        workspace.cancelled.connect(lambda: self._close_setup_workspace(workspace))
+        workspace.edit_requested.connect(lambda draft: self._open_map_wizard(draft, workspace))
+        self._open_setup_workspace(workspace)
+
+    def _open_setup_workspace(self, workspace: QWidget) -> None:
+        self.stack.addWidget(workspace)
+        self.stack.setCurrentWidget(workspace)
+        self.tabs.setVisible(False)
+        self.season_bar.setVisible(False)
+
+    def _close_setup_workspace(self, workspace: QWidget) -> None:
+        self.stack.removeWidget(workspace)
+        workspace.deleteLater()
+        self._return_to_context()
+
+    def _open_map_wizard(self, draft, origin: QWidget) -> None:
+        wizard = MapWizard(self.service, draft)
+        wizard.cancelled.connect(lambda: self._close_wizard(wizard, origin))
+        wizard.saved.connect(lambda definition: self._map_saved(wizard, origin, definition))
+        self._open_setup_workspace(wizard)
+
+    def _close_wizard(self, wizard: QWidget, origin: QWidget) -> None:
+        self.stack.removeWidget(wizard)
+        wizard.deleteLater()
+        self.stack.setCurrentWidget(origin)
+
+    def _map_saved(self, wizard: QWidget, origin: QWidget, definition) -> None:
+        if hasattr(origin, "map_saved"):
+            origin.map_saved(definition)
+        elif hasattr(origin, "refresh"):
+            origin.refresh(definition.id)
+        self._close_wizard(wizard, origin)
+        self.statusBar().showMessage(f"Saved reusable map {definition.name}", 3000)
+
+    def _game_created(self, session) -> None:
+        workspace = self.stack.currentWidget()
+        self.stack.removeWidget(workspace)
+        workspace.deleteLater()
+        self.set_session(session, open_map=True)
+
+    def _return_to_context(self) -> None:
+        if self.session and self.session.game:
+            self.set_session(self.session)
+        else:
+            self.tabs.setVisible(False)
+            self.season_bar.setVisible(False)
+            self.stack.setCurrentWidget(self.welcome)
 
     def _phase_selected(self) -> None:
         phase = self.phase_selector.currentData()
@@ -232,7 +280,7 @@ class ApplicationWindow(QMainWindow):
         try:
             self.set_session(self.service.select_phase(phase))
         except Exception as exc:
-            QMessageBox.critical(self, "Could not open phase", str(exc))
+            self._show_error(f"Could not open phase: {exc}")
 
     def _step_phase(self, offset: int) -> None:
         target = self.phase_selector.currentIndex() + offset
@@ -249,14 +297,14 @@ class ApplicationWindow(QMainWindow):
             self._refresh_current_session()
             self.statusBar().showMessage("Orders saved and validated", 2000)
         except Exception as exc:
-            QMessageBox.critical(self, "Could not save orders", str(exc))
+            self._show_error(f"Could not save orders: {exc}")
 
     def _set_final(self, power_id, value: bool) -> None:
         try:
             self.service.set_orders_final(power_id, value)
             self._refresh_current_session()
         except Exception as exc:
-            QMessageBox.critical(self, "Could not change final state", str(exc))
+            self._show_error(f"Could not change final state: {exc}")
 
     def _resolve(self) -> None:
         self.orders_workspace.resolve.setEnabled(False)
@@ -273,19 +321,7 @@ class ApplicationWindow(QMainWindow):
             if self.session and self.session.game:
                 by_id = {power.id: power.name for power in self.session.game.map_definition.powers}
                 names = [by_id[value] for value in result.unfinalised_powers]
-            answer = QMessageBox.warning(
-                self,
-                "Orders are still open",
-                "These powers are not final:\n\n" + "\n".join(names) + "\n\nResolve anyway?",
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.Cancel,
-                QMessageBox.StandardButton.Cancel,
-            )
-            if answer is QMessageBox.StandardButton.Yes:
-                self.orders_workspace.resolve.setEnabled(False)
-                task = BackgroundTask(lambda: self.service.resolve_and_advance(True))
-                task.signals.succeeded.connect(self._resolved)
-                task.signals.failed.connect(self._resolve_failed)
-                self.thread_pool.start(task)
+            self.orders_workspace.show_unfinalised_confirmation(names)
             return
         if isinstance(result, AdvancedPhase):
             self.set_session(result.session, open_map=True)
@@ -293,8 +329,17 @@ class ApplicationWindow(QMainWindow):
 
     def _resolve_failed(self, error) -> None:
         self.orders_workspace.resolve.setEnabled(True)
-        self.statusBar().clearMessage()
-        QMessageBox.critical(self, "Could not resolve phase", str(error))
+        self._show_error(f"Could not resolve phase: {error}")
+
+    def _resolve_anyway(self) -> None:
+        self.orders_workspace.resolve.setEnabled(False)
+        task = BackgroundTask(lambda: self.service.resolve_and_advance(True))
+        task.signals.succeeded.connect(self._resolved)
+        task.signals.failed.connect(self._resolve_failed)
+        self.thread_pool.start(task)
+
+    def _show_error(self, text: str) -> None:
+        self.statusBar().showMessage(text, 8000)
 
 
 def run_application(arguments: list[str] | None = None) -> int:

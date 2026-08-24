@@ -12,9 +12,8 @@ from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
     QHBoxLayout,
-    QInputDialog,
     QLabel,
-    QMessageBox,
+    QLineEdit,
     QPushButton,
     QVBoxLayout,
     QWidget,
@@ -37,6 +36,7 @@ from diplomacy_app.ui.map_canvas import MapCanvas
 class MapWorkspace(QWidget):
     perspective_requested = Signal(object)
     view_saved = Signal(object)
+    message = Signal(str)
 
     def __init__(self, service, parent=None) -> None:
         super().__init__(parent)
@@ -67,8 +67,22 @@ class MapWorkspace(QWidget):
         self.views.currentIndexChanged.connect(self._view_changed)
         controls.addWidget(self.views)
         save = QPushButton("Save current")
-        save.clicked.connect(self._save_view)
+        save.clicked.connect(self._begin_save_view)
         controls.addWidget(save)
+        self.save_name = QLineEdit()
+        self.save_name.setPlaceholderText("View name")
+        self.save_name.setMaximumWidth(170)
+        self.save_name.returnPressed.connect(self._save_view)
+        self.save_name.setVisible(False)
+        controls.addWidget(self.save_name)
+        self.save_confirm = QPushButton("Save")
+        self.save_confirm.clicked.connect(self._save_view)
+        self.save_confirm.setVisible(False)
+        controls.addWidget(self.save_confirm)
+        self.save_cancel = QPushButton("Cancel")
+        self.save_cancel.clicked.connect(self._end_save_view)
+        self.save_cancel.setVisible(False)
+        controls.addWidget(self.save_cancel)
         copy = QPushButton("Copy map")
         copy.setProperty("primary", True)
         copy.clicked.connect(self._copy)
@@ -158,7 +172,7 @@ class MapWorkspace(QWidget):
             self._update_fog()
             self.schedule_refresh()
         except Exception as exc:
-            QMessageBox.critical(self, "Could not change perspective", str(exc))
+            self.message.emit(f"Could not change perspective: {exc}")
 
     def schedule_refresh(self) -> None:
         self.refresh_timer.start()
@@ -191,7 +205,7 @@ class MapWorkspace(QWidget):
             if visible and visible.width > 0:
                 self.canvas.show_bounds(visible)
         except Exception as exc:
-            QMessageBox.critical(self, "Could not render map", str(exc))
+            self.message.emit(f"Could not render map: {exc}")
 
     def _view_changed(self) -> None:
         view = self.views.currentData()
@@ -200,24 +214,35 @@ class MapWorkspace(QWidget):
         else:
             self.canvas.show_bounds(view.bounds)
 
+    def _begin_save_view(self) -> None:
+        self.save_name.setVisible(True)
+        self.save_confirm.setVisible(True)
+        self.save_cancel.setVisible(True)
+        self.save_name.setFocus()
+
+    def _end_save_view(self) -> None:
+        self.save_name.clear()
+        self.save_name.setVisible(False)
+        self.save_confirm.setVisible(False)
+        self.save_cancel.setVisible(False)
+
     def _save_view(self) -> None:
-        name, accepted = QInputDialog.getText(self, "Save map view", "View name")
-        if not accepted or not name.strip():
+        name = self.save_name.text().strip()
+        if not name:
             return
         bounds = self.canvas.visible_bounds()
         size = PixelSize(
             max(1, self.canvas.viewport().width()), max(1, self.canvas.viewport().height())
         )
         identifier = re.sub(r"[^a-z0-9]+", "-", name.casefold()).strip("-") or uuid.uuid4().hex[:8]
-        view = SavedView(
-            SavedViewId(identifier), name.strip(), bounds, bounds.width / bounds.height, size
-        )
+        view = SavedView(SavedViewId(identifier), name, bounds, bounds.width / bounds.height, size)
         try:
             self.service.save_view(view)
             self.views.addItem(view.name, view)
             self.views.setCurrentIndex(self.views.count() - 1)
+            self._end_save_view()
         except Exception as exc:
-            QMessageBox.critical(self, "Could not save view", str(exc))
+            self.message.emit(f"Could not save view: {exc}")
 
     def _copy(self) -> None:
         try:
@@ -236,4 +261,4 @@ class MapWorkspace(QWidget):
             self.copy_button.setText("Copied")
             QTimer.singleShot(1300, self._update_fog)
         except Exception as exc:
-            QMessageBox.critical(self, "Could not copy map", str(exc))
+            self.message.emit(f"Could not copy map: {exc}")

@@ -47,6 +47,8 @@ Player communication occurs outside the application using map images copied by t
 - **AN.3:** The in-game header identifies the open game and provides a compact way to open, create or switch games.
 - **AN.4:** The two primary workspaces are `Map` and `Orders`.
 - **AN.5:** Game, season and perspective context persists when switching between the primary workspaces.
+- **AN.6:** Game creation and reusable-map management replace the main workspace temporarily and return to the preceding application context when completed or cancelled.
+- **AN.7:** Application workflows, validation messages and confirmations remain inside the main window; operating-system file and folder choosers may use native windows.
 
 ### Season Navigation (SN)
 
@@ -175,7 +177,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.11:** Split coasts have separate fleet anchors.
 - **GC.12:** The importer generates likely adjacency from SVG geometry and assumes that every coastal province has one continuous coast.
 - **GC.13:** The generated ordinary topology is combined with explicit additions and removals, then materialised as the complete topology used for play.
-- **GC.14:** The wizard exposes the configured `map.yaml`, including its local connection overrides, in an in-app editor and provides an expandable read-only view of the complete effective topology.
+- **GC.14:** The map editor exposes the configured `map.yaml`, including its local connection overrides, alongside an initially validated graphical preview of the complete effective topology.
 - **GC.15:** The map-configuration editor supports split-coast connections, canals, off-map links, missed links and removal of incorrectly generated links through text.
 - **GC.16:** The saved `map.yaml` remains directly editable outside the application.
 - **GC.17:** The importer collects powers, colours, home and starting supply-centre ownership, initial territory control, starting units, territory abbreviations and supply-centre locations.
@@ -183,9 +185,15 @@ Player communication occurs outside the application using map images copied by t
 - **GC.19:** An existing reusable map can be reopened in the map-configuration editor without re-importing its SVG.
 - **GC.20:** Reopening a map provides the same visual placement step as initial import, including independent label, army, fleet, split-coast fleet and supply-centre anchors.
 - **GC.21:** Saving an edited reusable map changes the defaults used for games created afterwards and does not modify the private map snapshots of existing games.
-- **GC.22:** The visual placement step provides mutually exclusive `Armies` and `Fleets` preview buttons that display the selected unit symbol at every applicable anchor, independently of the configured starting units.
+- **GC.22:** The visual placement step provides independent `Armies`, `Fleets`, `Supply centres` and territory-label controls that display each selected layer at every applicable anchor, independently of the configured starting state.
 - **GC.23:** The `Armies` preview displays an army in every playable land territory, while the `Fleets` preview displays a fleet in every playable sea, every ordinary coastal territory and at every named anchor of a split-coast territory.
 - **GC.24:** Placement previews do not change game state or the map's starting setup; dragging a preview unit changes only its corresponding presentation anchor.
+- **GC.25:** Hovering a playable shape in the classification step identifies and selects its territory row; hovering or selecting a territory row highlights the corresponding shape on the map.
+- **GC.26:** The topology preview distinguishes army-only, fleet-only and shared connections with a visible key and directional marks where connections are asymmetric.
+- **GC.27:** The map editor uses the full main-window workspace, supports pointer-centred zooming in and out on every visual step and uses `Next` until the final step exposes `Save configured map`.
+- **GC.28:** The unit-symbol step displays the effective default or custom army and fleet symbols at useful map scale before saving.
+- **GC.29:** Placement label mode independently selects no labels, full territory names or abbreviations, and all placement layers can be hidden to inspect overlap combinations.
+- **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.
 
 ## Limitations and Restrictions
 
@@ -267,7 +275,10 @@ New game
 Manage configured maps
   -> Open an existing reusable map
   -> Edit configuration or visually reposition any presentation anchor
-     -> Preview armies at every army anchor or fleets at every fleet anchor
+     -> Inspect linked territory shapes and names
+     -> Review the effective topology graphically
+     -> Combine independent label, army, fleet and supply-centre placement layers
+     -> Preview the effective unit symbols
   -> Validate and save the reusable map
 ```
 

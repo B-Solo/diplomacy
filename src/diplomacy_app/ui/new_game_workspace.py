@@ -6,18 +6,15 @@ from pathlib import Path
 from types import MappingProxyType
 
 import yaml
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
-    QDialog,
-    QDialogButtonBox,
     QFileDialog,
     QFormLayout,
     QHBoxLayout,
-    QInputDialog,
     QLabel,
     QLineEdit,
-    QMessageBox,
     QPlainTextEdit,
     QPushButton,
     QSpinBox,
@@ -43,7 +40,6 @@ from diplomacy_app.domain.models import (
     UnitType,
     VisibilityPolicy,
 )
-from diplomacy_app.ui.map_wizard import MapWizard
 
 
 def _location_text(value: Location) -> str:
@@ -128,24 +124,38 @@ def parse_setup(text: str) -> StartingSetup:
     )
 
 
-class NewGameDialog(QDialog):
+class NewGameWorkspace(QWidget):
+    cancelled = Signal()
+    created = Signal(object)
+    edit_requested = Signal(object)
+
     def __init__(self, service, parent=None) -> None:
         super().__init__(parent)
         self.service = service
         self.created_session = None
-        self.setWindowTitle("New Diplomacy game")
-        self.resize(760, 650)
         layout = QVBoxLayout(self)
+        title = QLabel("New Diplomacy game")
+        title.setStyleSheet("font: 700 22pt Georgia, serif; color: #33483d")
+        layout.addWidget(title)
         self.tabs = QTabWidget()
         layout.addWidget(self.tabs, 1)
         self._build_game_tab()
         self._build_setup_tab()
-        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Cancel)
-        create = buttons.addButton("Create game", QDialogButtonBox.ButtonRole.AcceptRole)
+        buttons = QHBoxLayout()
+        cancel = QPushButton("Cancel")
+        cancel.clicked.connect(self.cancelled)
+        buttons.addWidget(cancel)
+        buttons.addStretch()
+        create = QPushButton("Create game")
         create.setProperty("primary", True)
         create.clicked.connect(self._create)
-        buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
+        buttons.addWidget(create)
+        layout.addLayout(buttons)
+        self.message = QLabel()
+        self.message.setWordWrap(True)
+        self.message.setStyleSheet("color: #8a302b")
+        self.message.setVisible(False)
+        layout.insertWidget(layout.count() - 1, self.message)
         self._refresh_maps()
 
     def _build_game_tab(self) -> None:
@@ -222,7 +232,7 @@ class NewGameDialog(QDialog):
             draft = self.service.prepare_new_game(map_id)
             self.setup_editor.setPlainText(setup_text(draft.starting_setup))
         except Exception as exc:
-            QMessageBox.critical(self, "Could not load map", str(exc))
+            self._show_error(f"Could not load map: {exc}")
 
     def _choose_folder(self) -> None:
         folder = QFileDialog.getExistingDirectory(self, "Choose an empty game folder")
@@ -235,32 +245,24 @@ class NewGameDialog(QDialog):
         )
         if not filename:
             return
-        name, accepted = QInputDialog.getText(
-            self,
-            "Map name",
-            "Name for this reusable map",
-            text=Path(filename).stem.replace("-", " ").title(),
-        )
-        if not accepted or not name.strip():
-            return
         try:
-            draft = self.service.begin_map_import(name.strip(), Path(filename).read_bytes())
-            wizard = MapWizard(self.service, draft, self)
-            if wizard.exec() == QDialog.DialogCode.Accepted and wizard.saved_definition is not None:
-                self._refresh_maps(wizard.saved_definition.id)
+            name = Path(filename).stem.replace("-", " ").title()
+            draft = self.service.begin_map_import(name, Path(filename).read_bytes())
+            self.edit_requested.emit(draft)
         except Exception as exc:
-            QMessageBox.critical(self, "Could not import SVG", str(exc))
+            self._show_error(f"Could not import SVG: {exc}")
 
     def _edit_map(self) -> None:
         map_id = self.map_selector.currentData()
         if map_id is None:
             return
         try:
-            wizard = MapWizard(self.service, self.service.load_map_draft(map_id), self)
-            if wizard.exec() == QDialog.DialogCode.Accepted and wizard.saved_definition is not None:
-                self._refresh_maps(wizard.saved_definition.id)
+            self.edit_requested.emit(self.service.load_map_draft(map_id))
         except Exception as exc:
-            QMessageBox.critical(self, "Could not edit map", str(exc))
+            self._show_error(f"Could not edit map: {exc}")
+
+    def map_saved(self, definition) -> None:
+        self._refresh_maps(definition.id)
 
     def _create(self) -> None:
         try:
@@ -279,6 +281,10 @@ class NewGameDialog(QDialog):
                 ),
             )
             self.created_session = self.service.create_game(request)
-            self.accept()
+            self.created.emit(self.created_session)
         except Exception as exc:
-            QMessageBox.critical(self, "Could not create game", str(exc))
+            self._show_error(f"Could not create game: {exc}")
+
+    def _show_error(self, text: str) -> None:
+        self.message.setText(text)
+        self.message.setVisible(True)

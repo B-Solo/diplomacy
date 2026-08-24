@@ -1,32 +1,32 @@
-"""Entry point for importing and editing reusable configured maps."""
+"""Main-window workspace for importing and editing reusable maps."""
 
 from __future__ import annotations
 
 from pathlib import Path
 
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
     QComboBox,
-    QDialog,
-    QDialogButtonBox,
     QFileDialog,
     QHBoxLayout,
-    QInputDialog,
     QLabel,
-    QMessageBox,
     QPushButton,
     QVBoxLayout,
+    QWidget,
 )
 
-from diplomacy_app.ui.map_wizard import MapWizard
 
+class MapManagerWorkspace(QWidget):
+    cancelled = Signal()
+    edit_requested = Signal(object)
 
-class MapManagerDialog(QDialog):
     def __init__(self, service, parent=None) -> None:
         super().__init__(parent)
         self.service = service
-        self.setWindowTitle("Configure reusable maps")
-        self.resize(620, 190)
         layout = QVBoxLayout(self)
+        title = QLabel("Configure reusable maps")
+        title.setStyleSheet("font: 700 22pt Georgia, serif; color: #33483d")
+        layout.addWidget(title)
         note = QLabel(
             "Import a structured SVG or reopen a configured map. Saving affects future games "
             "only; existing games retain their private map snapshots."
@@ -36,19 +36,26 @@ class MapManagerDialog(QDialog):
         row = QHBoxLayout()
         self.map_selector = QComboBox()
         row.addWidget(self.map_selector, 1)
-        edit = QPushButton("Edit selected map…")
+        edit = QPushButton("Edit selected map")
+        edit.setProperty("primary", True)
         edit.clicked.connect(self._edit)
         row.addWidget(edit)
         import_map = QPushButton("Import SVG…")
         import_map.clicked.connect(self._import)
         row.addWidget(import_map)
         layout.addLayout(row)
-        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
-        buttons.rejected.connect(self.reject)
-        layout.addWidget(buttons)
-        self._refresh()
+        self.message = QLabel()
+        self.message.setWordWrap(True)
+        self.message.setStyleSheet("color: #8a302b")
+        self.message.setVisible(False)
+        layout.addWidget(self.message)
+        layout.addStretch()
+        close = QPushButton("Back")
+        close.clicked.connect(self.cancelled)
+        layout.addWidget(close)
+        self.refresh()
 
-    def _refresh(self, select_id=None) -> None:
+    def refresh(self, select_id=None) -> None:
         self.map_selector.clear()
         for item in self.service.list_maps():
             self.map_selector.addItem(f"{item.name} — {item.power_count} powers", item.map_id)
@@ -62,11 +69,9 @@ class MapManagerDialog(QDialog):
         if map_id is None:
             return
         try:
-            wizard = MapWizard(self.service, self.service.load_map_draft(map_id), self)
-            if wizard.exec() == QDialog.DialogCode.Accepted and wizard.saved_definition is not None:
-                self._refresh(wizard.saved_definition.id)
+            self.edit_requested.emit(self.service.load_map_draft(map_id))
         except Exception as exc:
-            QMessageBox.critical(self, "Could not edit map", str(exc))
+            self._show_error(f"Could not edit map: {exc}")
 
     def _import(self) -> None:
         filename, _ = QFileDialog.getOpenFileName(
@@ -74,18 +79,14 @@ class MapManagerDialog(QDialog):
         )
         if not filename:
             return
-        name, accepted = QInputDialog.getText(
-            self,
-            "Map name",
-            "Name for this reusable map",
-            text=Path(filename).stem.replace("-", " ").title(),
-        )
-        if not accepted or not name.strip():
-            return
         try:
-            draft = self.service.begin_map_import(name.strip(), Path(filename).read_bytes())
-            wizard = MapWizard(self.service, draft, self)
-            if wizard.exec() == QDialog.DialogCode.Accepted and wizard.saved_definition is not None:
-                self._refresh(wizard.saved_definition.id)
+            name = Path(filename).stem.replace("-", " ").title()
+            self.edit_requested.emit(
+                self.service.begin_map_import(name, Path(filename).read_bytes())
+            )
         except Exception as exc:
-            QMessageBox.critical(self, "Could not import SVG", str(exc))
+            self._show_error(f"Could not import SVG: {exc}")
+
+    def _show_error(self, text: str) -> None:
+        self.message.setText(text)
+        self.message.setVisible(True)

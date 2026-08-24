@@ -41,6 +41,7 @@ The application provides the visual output used for that communication and assis
 The application is a local executable rather than a hosted website.
 It is intended to be written in Python and use an isolated environment so that it is straightforward to move between computers.
 Windows is the primary runtime platform, with portability and testing maintained on macOS.
+Application workflows remain within one main window so changing task does not create a stack of secondary application windows.
 
 The application engine and game data are separate.
 The gamemaster owns a self-contained game folder containing a structured SVG map whose territory shapes are individually identifiable, structured map definitions describing territory names, types, supply centres and connections, and JSON files describing the game state and orders.

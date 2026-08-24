@@ -142,6 +142,7 @@ class OrdersWorkspace(QWidget):
     save_requested = Signal(object, str)
     final_requested = Signal(object, bool)
     resolve_requested = Signal()
+    resolve_anyway_requested = Signal()
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -161,6 +162,23 @@ class OrdersWorkspace(QWidget):
         self.resolve.clicked.connect(self.resolve_requested)
         controls.addWidget(self.resolve)
         outer.addLayout(controls)
+        self.confirmation = QFrame()
+        self.confirmation.setStyleSheet(
+            "background: #f6dfc0; border: 1px solid #c99b63; border-radius: 4px"
+        )
+        confirmation_layout = QHBoxLayout(self.confirmation)
+        self.confirmation_text = QLabel()
+        self.confirmation_text.setWordWrap(True)
+        confirmation_layout.addWidget(self.confirmation_text, 1)
+        cancel = QPushButton("Keep editing")
+        cancel.clicked.connect(lambda: self.confirmation.setVisible(False))
+        confirmation_layout.addWidget(cancel)
+        proceed = QPushButton("Resolve anyway")
+        proceed.setProperty("danger", True)
+        proceed.clicked.connect(self._confirm_resolve)
+        confirmation_layout.addWidget(proceed)
+        self.confirmation.setVisible(False)
+        outer.addWidget(self.confirmation)
         self.scroll_area = QScrollArea()
         self.scroll_area.setWidgetResizable(True)
         self.container = QWidget()
@@ -170,12 +188,23 @@ class OrdersWorkspace(QWidget):
         outer.addWidget(self.scroll_area, 1)
         self.panels: list[PowerPanel] = []
 
+    def show_unfinalised_confirmation(self, names: list[str]) -> None:
+        self.confirmation_text.setText(
+            "Orders are still open for " + ", ".join(names) + ". Resolve anyway?"
+        )
+        self.confirmation.setVisible(True)
+
+    def _confirm_resolve(self) -> None:
+        self.confirmation.setVisible(False)
+        self.resolve_anyway_requested.emit()
+
     def set_session(self, session) -> None:
         while self.grid.count():
             item = self.grid.takeAt(0)
             if item.widget():
                 item.widget().deleteLater()
         self.panels = []
+        self.confirmation.setVisible(False)
         if not session.game or not session.phase or not session.phase_requirements:
             return
         self.phase_label.setText(session.phase.phase_id.label)

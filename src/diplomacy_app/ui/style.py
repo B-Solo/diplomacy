@@ -2,9 +2,11 @@
 
 STYLE = """
 QWidget { font-family: "Segoe UI", sans-serif; font-size: 10pt; color: #292820; }
-QMainWindow, QDialog { background: #e9e4d6; }
+QMainWindow { background: #e9e4d6; }
 QToolBar { background: #f6f1e3; border: 0; border-bottom: 1px solid #b7ae97; spacing: 7px; padding: 7px; }
 QPushButton, QToolButton, QComboBox, QSpinBox { background: #fffaf0; border: 1px solid #a89d83; border-radius: 4px; padding: 6px 10px; }
+QComboBox::drop-down { border: 0; width: 24px; }
+QComboBox::down-arrow { width: 9px; height: 6px; }
 QPushButton:hover, QToolButton:hover { background: #f0e5ca; border-color: #756a52; }
 QPushButton:pressed, QToolButton:pressed { background: #dfd1af; }
 QPushButton[primary="true"] { background: #42584b; color: #fffdf5; border-color: #2f4237; font-weight: 600; }

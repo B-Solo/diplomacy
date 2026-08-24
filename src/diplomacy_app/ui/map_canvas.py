@@ -5,13 +5,15 @@ from __future__ import annotations
 import math
 
 from PySide6.QtCore import QByteArray, QPointF, QRectF, Qt, Signal
-from PySide6.QtGui import QBrush, QColor, QPainter, QPen, QWheelEvent
+from PySide6.QtGui import QBrush, QColor, QFont, QPainter, QPen, QWheelEvent
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtSvgWidgets import QGraphicsSvgItem
 from PySide6.QtWidgets import (
+    QGraphicsColorizeEffect,
     QGraphicsEllipseItem,
     QGraphicsItemGroup,
     QGraphicsScene,
+    QGraphicsSimpleTextItem,
     QGraphicsView,
 )
 
@@ -21,6 +23,7 @@ from diplomacy_app.domain.models import MapBounds, MapHotspot, MapScene, Point
 class MapCanvas(QGraphicsView):
     zoom_changed = Signal(int)
     outcome_hovered = Signal(str)
+    scene_hovered = Signal(float, float)
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -33,6 +36,8 @@ class MapCanvas(QGraphicsView):
         self.setResizeAnchor(QGraphicsView.ViewportAnchor.AnchorViewCenter)
         self.setBackgroundBrush(QColor("#d7d1c2"))
         self._item: QGraphicsSvgItem | None = None
+        self._renderer: QSvgRenderer | None = None
+        self._highlight: QGraphicsSvgItem | None = None
         self._scene_bounds = QRectF()
         self._hotspots: tuple[MapHotspot, ...] = ()
         self.setMouseTracking(True)
@@ -46,6 +51,8 @@ class MapCanvas(QGraphicsView):
         item.setSharedRenderer(renderer)
         self.scene().addItem(item)
         self._item = item
+        self._renderer = renderer
+        self._highlight = None
         if bounds:
             self._scene_bounds = QRectF(bounds.x, bounds.y, bounds.width, bounds.height)
         else:
@@ -99,6 +106,7 @@ class MapCanvas(QGraphicsView):
     def mouseMoveEvent(self, event) -> None:
         super().mouseMoveEvent(event)
         point = self.mapToScene(event.position().toPoint())
+        self.scene_hovered.emit(point.x(), point.y())
         message = ""
         for hotspot in self._hotspots:
             for start, end in zip(hotspot.path, hotspot.path[1:], strict=False):
@@ -122,6 +130,26 @@ class MapCanvas(QGraphicsView):
             if message:
                 break
         self.outcome_hovered.emit(message)
+
+    def highlight_element(self, element_id: str | None) -> None:
+        """Overlay one SVG element without rebuilding or refitting the scene."""
+        if self._highlight is not None:
+            self.scene().removeItem(self._highlight)
+            self._highlight = None
+        if not element_id or self._renderer is None or not self._renderer.elementExists(element_id):
+            return
+        highlight = QGraphicsSvgItem()
+        highlight.setSharedRenderer(self._renderer)
+        highlight.setElementId(element_id)
+        effect = QGraphicsColorizeEffect(highlight)
+        effect.setColor(QColor("#e2a92f"))
+        effect.setStrength(0.82)
+        highlight.setGraphicsEffect(effect)
+        highlight.setOpacity(0.78)
+        highlight.setZValue(40)
+        highlight.setPos(self._renderer.boundsOnElement(element_id).topLeft())
+        self.scene().addItem(highlight)
+        self._highlight = highlight
 
 
 class AnchorItem(QGraphicsEllipseItem):
@@ -161,6 +189,44 @@ class UnitAnchorItem(QGraphicsItemGroup):
         marker = QGraphicsEllipseItem(-4, -4, 8, 8)
         marker.setBrush(QBrush(Qt.BrushStyle.NoBrush))
         marker.setPen(QPen(QColor(colour), 1.5))
+        self.addToGroup(marker)
+        self.setPos(QPointF(point.x, point.y))
+        self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)
+        self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsSelectable)
+        self.setZValue(50)
+        self.callback = callback
+
+    def mouseReleaseEvent(self, event) -> None:
+        super().mouseReleaseEvent(event)
+        position = self.pos()
+        self.callback(Point(position.x(), position.y()))
+
+
+class TextAnchorItem(QGraphicsItemGroup):
+    """Draggable rendered label or supply-centre glyph."""
+
+    def __init__(
+        self,
+        point: Point,
+        text: str,
+        colour: str,
+        callback,
+        *,
+        size: int = 11,
+        bold: bool = False,
+    ) -> None:
+        super().__init__()
+        glyph = QGraphicsSimpleTextItem(text)
+        font = QFont("Georgia", size)
+        font.setBold(bold)
+        glyph.setFont(font)
+        glyph.setBrush(QBrush(QColor(colour)))
+        bounds = glyph.boundingRect()
+        glyph.setPos(-bounds.center())
+        self.addToGroup(glyph)
+        marker = QGraphicsEllipseItem(-3, -3, 6, 6)
+        marker.setBrush(QBrush(Qt.BrushStyle.NoBrush))
+        marker.setPen(QPen(QColor(colour), 1))
         self.addToGroup(marker)
         self.setPos(QPointF(point.x, point.y))
         self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)

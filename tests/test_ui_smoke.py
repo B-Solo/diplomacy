@@ -7,8 +7,8 @@ from diplomacy_app.map_library import FileMapLibrary
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rules_engine import StandardRulesEngine
 from diplomacy_app.ui.application_window import ApplicationWindow
-from diplomacy_app.ui.map_canvas import UnitAnchorItem
-from diplomacy_app.ui.map_manager_dialog import MapManagerDialog
+from diplomacy_app.ui.map_canvas import TextAnchorItem, UnitAnchorItem
+from diplomacy_app.ui.map_manager_workspace import MapManagerWorkspace
 from diplomacy_app.ui.map_wizard import MapWizard
 from diplomacy_app.visibility import VisibilityProjector
 
@@ -31,18 +31,56 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     qtbot.addWidget(wizard)
     assert wizard.roles.rowCount() >= 74
     assert wizard.tabs.count() == 4
+    assert wizard.validation_label.text().startswith("Valid:")
+    assert wizard.next_button.text() == "Next"
+    initial_zoom = wizard.anchor_canvas.transform().m11()
+    wizard.anchor_canvas.zoom_by(1.2)
+    assert wizard.anchor_canvas.transform().m11() > initial_zoom
     army_count = len(
         [item for item in wizard.anchor_canvas.scene().items() if isinstance(item, UnitAnchorItem)]
     )
     assert army_count == len(wizard.draft.presentation.army_anchors)
     wizard.fleets_preview.click()
     assert wizard.fleets_preview.isChecked()
-    assert not wizard.armies_preview.isChecked()
-    fleet_count = len(
+    assert wizard.armies_preview.isChecked()
+    combined_count = len(
         [item for item in wizard.anchor_canvas.scene().items() if isinstance(item, UnitAnchorItem)]
     )
-    assert fleet_count == len(wizard.draft.presentation.fleet_anchors)
+    assert combined_count == len(wizard.draft.presentation.army_anchors) + len(
+        wizard.draft.presentation.fleet_anchors
+    )
+    wizard.armies_preview.click()
+    wizard.fleets_preview.click()
+    assert not wizard.armies_preview.isChecked()
+    assert not wizard.fleets_preview.isChecked()
+    assert not any(
+        isinstance(item, UnitAnchorItem) for item in wizard.anchor_canvas.scene().items()
+    )
+    assert any(isinstance(item, TextAnchorItem) for item in wizard.anchor_canvas.scene().items())
+    wizard.supply_preview.setChecked(False)
+    wizard.placement_labels.setCurrentIndex(0)
+    assert not any(
+        isinstance(item, TextAnchorItem) for item in wizard.anchor_canvas.scene().items()
+    )
+    territory = wizard.draft.territories[0]
+    point = wizard._territory_geometries[territory.svg_element_id].representative_point()
+    wizard._map_hovered(point.x, point.y)
+    assert territory.name in wizard.hovered_territory.text()
+    assert wizard.roles.currentRow() == wizard._row_by_element[territory.svg_element_id]
+    wizard.tabs.setCurrentIndex(3)
+    assert wizard.next_button.text() == "Save configured map"
 
-    manager = MapManagerDialog(service)
+    manager = MapManagerWorkspace(service)
     qtbot.addWidget(manager)
     assert manager.map_selector.count() >= 1
+
+    window._configure_maps()
+    assert isinstance(window.stack.currentWidget(), MapManagerWorkspace)
+    assert window.isWindow()
+    manager_page = window.stack.currentWidget()
+    manager_page._edit()
+    embedded_wizard = window.stack.currentWidget()
+    assert isinstance(embedded_wizard, MapWizard)
+    assert not embedded_wizard.isWindow()
+    embedded_wizard.cancelled.emit()
+    assert window.stack.currentWidget() is manager_page

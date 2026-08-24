@@ -204,7 +204,7 @@ That field is omitted for other starting seasons.
 When map setup is saved, the Map Library materialises the complete validated `MapDefinition` in `_compiled-map.json` and records a digest of `map.yaml` and the SVG assets.
 The compiled map is the representation loaded during play and remains stable across application upgrades.
 Editing an authored source makes the compiled digest stale and requires map validation before recompilation.
-The wizard offers an expandable read-only view of the complete effective topology while keeping the authored connection exceptions local to their territories.
+The map editor visualises the complete effective topology over the map while keeping the authored connection exceptions local to their territories.
 
 Validation covers unique identifiers and abbreviations, SVG references, required anchors, team starts and the complete effective topology.
 Connection additions cannot duplicate inferred movement, removals must identify inferred movement, and duplicate bidirectional exceptions are rejected even when written under opposite endpoints.
