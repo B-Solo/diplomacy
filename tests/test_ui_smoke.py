@@ -96,6 +96,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.validation_label.text().startswith("Valid:")
     assert wizard.outer_layout.contentsMargins().left() == 4
     assert wizard.tabs.widget(3).layout().contentsMargins().left() == 2
+    assert wizard.placement_layers_group.title() == "Preview layers"
+    assert wizard.placement_labels_group.title() == "Territory labels"
+    assert wizard.coast_label_group.title() == "Selected coast label"
+    assert wizard.placement_labels.minimumWidth() == 150
+    assert wizard.coast_rotation.minimumWidth() == 90
     assert wizard.yaml_editor.textCursor().selectedText() == "territories:"
     assert wizard.yaml_find.find_shortcut.key() in QKeySequence.keyBindings(
         QKeySequence.StandardKey.Find
