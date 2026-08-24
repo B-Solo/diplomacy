@@ -131,7 +131,19 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.setup_validation_label.text() == "Map preview regenerated"
     assert wizard.setup_canvas._renderer is not None
     assert wizard.setup_canvas._renderer.isValid()
-    assert b"#123456" in service.preview_map_setup(wizard.draft).svg
+    setup_preview = ElementTree.fromstring(service.preview_map_setup(wizard.draft).svg)
+    recoloured = next(
+        node
+        for node in setup_preview.iter()
+        if node.attrib.get("id")
+        == next(
+            territory.svg_element_id
+            for territory in wizard.draft.territories
+            if wizard.draft.default_starting_setup.state.territory_controllers.get(territory.id)
+            == power_id
+        )
+    )
+    assert recoloured.attrib["style"] == "fill:#123456"
     assert not any(
         button.text() == "Reload anchors from YAML" for button in wizard.findChildren(QPushButton)
     )

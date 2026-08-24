@@ -91,8 +91,8 @@ class MapRenderer:
                     fill = powers[item.controller].colour
                 else:
                     fill = "#d0c9aa"
-                previous = node.attrib.get("style", "")
-                node.set("style", previous + f";fill:{fill};")
+                previous = node.attrib.get("style", "").strip().rstrip(";")
+                node.set("style", (f"{previous};" if previous else "") + f"fill:{fill}")
 
             generated = ElementTree.SubElement(root, _tag("g"), {"id": "gamemaster-layers"})
             labels = ElementTree.SubElement(generated, _tag("g"), {"id": "territory-labels"})
