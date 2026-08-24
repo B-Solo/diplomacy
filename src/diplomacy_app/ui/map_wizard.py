@@ -49,9 +49,7 @@ class MapWizard(QWidget):
         self.service = service
         self.draft = draft
         self.saved_definition = None
-        self._territory_geometries = territory_geometries(
-            draft.svg, (territory.svg_element_id for territory in draft.territories)
-        )
+        self._element_geometries = territory_geometries(draft.svg, draft.element_roles)
         self._row_by_element: dict[str, int] = {}
         layout = QVBoxLayout(self)
         intro = QLabel(
@@ -260,7 +258,8 @@ class MapWizard(QWidget):
             row = self.roles.rowCount()
             self.roles.insertRow(row)
             self._row_by_element[element_id] = row
-            self.roles.setItem(row, 0, QTableWidgetItem(territory_names.get(element_id, "—")))
+            display_name = territory_names.get(element_id) or self._element_name(element_id, role)
+            self.roles.setItem(row, 0, QTableWidgetItem(display_name))
             self.roles.setItem(row, 1, QTableWidgetItem(element_id))
             selector = QComboBox()
             for value in SvgElementRole:
@@ -273,6 +272,12 @@ class MapWizard(QWidget):
             )
             self.roles.setCellWidget(row, 2, selector)
 
+    @staticmethod
+    def _element_name(element_id: str, role: SvgElementRole) -> str:
+        prefix = f"{role.value}-"
+        name = element_id.removeprefix(prefix).replace("-", " ").strip()
+        return name.title() if name else element_id
+
     def _highlight_row(self, row: int) -> None:
         element_item = self.roles.item(row, 1) if row >= 0 else None
         if element_item is None:
@@ -282,26 +287,37 @@ class MapWizard(QWidget):
         territory = next(
             (item for item in self.draft.territories if item.svg_element_id == element_id), None
         )
-        self.hovered_territory.setText(
-            f"{territory.name} ({territory.abbreviation}) — {element_id}"
-            if territory
-            else f"Unconfigured SVG element — {element_id}"
-        )
+        if territory:
+            text = f"{territory.name} ({territory.abbreviation}) — {element_id}"
+        else:
+            role = self.draft.element_roles[element_id]
+            text = f"{self._element_name(element_id, role)} — {role.value.title()} — {element_id}"
+        self.hovered_territory.setText(text)
 
     def _map_hovered(self, x: float, y: float) -> None:
         point = GeometryPoint(x, y)
-        for territory in self.draft.territories:
-            geometry = self._territory_geometries.get(territory.svg_element_id)
-            if geometry is not None and geometry.covers(point):
-                row = self._row_by_element.get(territory.svg_element_id)
-                if row is not None:
-                    self.roles.selectRow(row)
-                    territory_item = self.roles.item(row, 0)
-                    if territory_item is not None:
-                        self.roles.scrollToItem(territory_item)
-                self._highlight_row(row if row is not None else -1)
-                return
-        self.hovered_territory.setText("No playable territory under the pointer.")
+        priority = {
+            SvgElementRole.TERRITORY: 0,
+            SvgElementRole.IMPASSABLE: 1,
+            SvgElementRole.DECORATION: 2,
+        }
+        candidates = [
+            (priority[role], geometry.area, element_id)
+            for element_id, role in self.draft.element_roles.items()
+            if (geometry := self._element_geometries.get(element_id)) is not None
+            if geometry.covers(point)
+        ]
+        if candidates:
+            element_id = min(candidates)[2]
+            row = self._row_by_element.get(element_id)
+            if row is not None:
+                self.roles.selectRow(row)
+                territory_item = self.roles.item(row, 0)
+                if territory_item is not None:
+                    self.roles.scrollToItem(territory_item)
+            self._highlight_row(row if row is not None else -1)
+            return
+        self.hovered_territory.setText("No classified region under the pointer.")
         self.preview.highlight_element(None)
 
     def _role_changed(self, element_id: str, role: SvgElementRole) -> None:
@@ -309,9 +325,8 @@ class MapWizard(QWidget):
             self._commit_editor()
             self.draft = self.service.update_map_element_role(self.draft, element_id, role)
             self.yaml_editor.setPlainText(self.draft.map_yaml)
-            self._territory_geometries = territory_geometries(
-                self.draft.svg,
-                (territory.svg_element_id for territory in self.draft.territories),
+            self._element_geometries = territory_geometries(
+                self.draft.svg, self.draft.element_roles
             )
             self._populate_roles()
             self._reload_anchor_scene()
@@ -383,7 +398,7 @@ class MapWizard(QWidget):
                 directions.setdefault((origin, destination), set()).add(edge.unit_type)
         by_id = {str(item.id): item for item in definition.territories}
         geometry_by_id = {
-            str(item.id): self._territory_geometries.get(item.svg_element_id)
+            str(item.id): self._element_geometries.get(item.svg_element_id)
             for item in definition.territories
         }
         layer = ElementTree.SubElement(root, tag("g"), {"id": "topology-preview"})

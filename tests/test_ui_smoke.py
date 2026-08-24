@@ -109,10 +109,15 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         isinstance(item, TextAnchorItem) for item in wizard.anchor_canvas.scene().items()
     )
     territory = wizard.draft.territories[0]
-    point = wizard._territory_geometries[territory.svg_element_id].representative_point()
+    point = wizard._element_geometries[territory.svg_element_id].representative_point()
     wizard._map_hovered(point.x, point.y)
     assert territory.name in wizard.hovered_territory.text()
     assert wizard.roles.currentRow() == wizard._row_by_element[territory.svg_element_id]
+    scotland_id = "impassable-scotland"
+    scotland = wizard._element_geometries[scotland_id].representative_point()
+    wizard._map_hovered(scotland.x, scotland.y)
+    assert wizard.roles.currentRow() == wizard._row_by_element[scotland_id]
+    assert "Scotland — Impassable" in wizard.hovered_territory.text()
     wizard.tabs.setCurrentIndex(3)
     assert wizard.next_button.text() == "Save configured map"
 
