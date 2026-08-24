@@ -45,6 +45,7 @@ class MapCanvas(QGraphicsView):
             QPainter.RenderHint.Antialiasing | QPainter.RenderHint.SmoothPixmapTransform
         )
         self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
+        self.setViewportUpdateMode(QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate)
         self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
         self.setResizeAnchor(QGraphicsView.ViewportAnchor.AnchorViewCenter)
         self.setBackgroundBrush(QColor("#d7d1c2"))
@@ -240,7 +241,6 @@ class AnchorItem(QGraphicsEllipseItem):
         self.setBrush(QBrush(QColor(colour)))
         self.setPen(QPen(QColor("#fffdf7"), 2))
         self.setFlag(QGraphicsEllipseItem.GraphicsItemFlag.ItemIsMovable)
-        self.setFlag(QGraphicsEllipseItem.GraphicsItemFlag.ItemIsSelectable)
         self.setZValue(50)
         self.callback = callback
 
@@ -267,7 +267,6 @@ class UnitAnchorItem(QGraphicsItemGroup):
         self.addToGroup(symbol)
         self.setPos(QPointF(point.x, point.y))
         self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)
-        self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsSelectable)
         self.setZValue(50)
         self.callback = callback
 
@@ -301,7 +300,6 @@ class TextAnchorItem(QGraphicsItemGroup):
         self.addToGroup(glyph)
         self.setPos(QPointF(point.x, point.y))
         self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)
-        self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsSelectable)
         self.setZValue(50)
         self.callback = callback
 

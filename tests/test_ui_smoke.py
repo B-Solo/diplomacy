@@ -5,6 +5,7 @@ from xml.etree import ElementTree
 import pytest
 from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtGui import QNativeGestureEvent, QPointingDevice, QWheelEvent
+from PySide6.QtWidgets import QGraphicsItem, QGraphicsView
 
 from diplomacy_app.application.service import ApplicationService
 from diplomacy_app.game_repository import FileGameRepository
@@ -38,6 +39,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
 
     wizard = MapWizard(service, service.load_map_draft(maps.list()[0].map_id))
     qtbot.addWidget(wizard)
+    assert (
+        wizard.anchor_canvas.viewportUpdateMode()
+        is QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate
+    )
     assert wizard.roles.rowCount() >= 74
     assert wizard.tabs.count() == 4
     assert wizard.validation_label.text().startswith("Valid:")
@@ -154,8 +159,17 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     army_count = len(army_items)
     assert army_count == len(wizard.draft.presentation.army_anchors)
     assert all(len(item.childItems()) == 1 for item in army_items)
+    assert all(item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable for item in army_items)
+    assert all(
+        not item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable for item in army_items
+    )
     assert all(
         len(item.childItems()) == 1
+        for item in wizard.anchor_canvas.scene().items()
+        if isinstance(item, TextAnchorItem)
+    )
+    assert all(
+        not item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
         for item in wizard.anchor_canvas.scene().items()
         if isinstance(item, TextAnchorItem)
     )
