@@ -479,11 +479,8 @@ class MapWizard(QWidget):
                     "x": str(point.x + 6),
                     "y": str(point.y - 6),
                     "font-size": "11",
-                    "font-weight": "700",
-                    "fill": "#1b1f1d",
-                    "stroke": "#fffdf5",
-                    "stroke-width": "2",
-                    "paint-order": "stroke",
+                    "font-weight": "600",
+                    "fill": "#111111",
                 },
             )
             label.text = territory.abbreviation

@@ -126,6 +126,8 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert map_width > yaml_width
     wizard.tabs.setCurrentIndex(3)
     assert {label.attrib["font-size"] for label in node_layer.findall("{*}text")} == {"11"}
+    assert {label.attrib["fill"] for label in node_layer.findall("{*}text")} == {"#111111"}
+    assert all("stroke" not in label.attrib for label in node_layer.findall("{*}text"))
     assert wizard.army_asset_preview.size().width() == 340
     assert wizard.army_asset_preview.size().height() == 240
     assert wizard.army_asset_preview.transform().m11() < 1.2
