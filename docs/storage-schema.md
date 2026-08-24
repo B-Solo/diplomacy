@@ -165,9 +165,13 @@ territories:
     split_coasts:
       north:
         fleet_anchor: [600.0, 120.0]
+        label_anchor: [600.0, 102.0]
+        label_rotation: 0
         add_connections: [north-sea]
       south:
         fleet_anchor: [605.0, 165.0]
+        label_anchor: [605.0, 183.0]
+        label_rotation: 0
         add_connections: [south-sea]
 
 non_playable_elements:
@@ -182,6 +186,7 @@ Land abbreviations use initial-capital display form, and sea abbreviations use u
 Every playable territory references exactly one SVG element and owns its label, unit and optional supply-centre anchors.
 Coordinates use source-SVG view-box coordinates.
 Every territory has a label anchor, every land territory has an army anchor, every coastal location and sea has a fleet anchor, and every supply centre has a supply-centre anchor.
+Every named split coast has its own visible label anchor and rotation.
 
 The importer derives ordinary bidirectional movement from SVG geometry, territory types and the default single-coast assumption.
 Ordinary movement has no YAML entry.
@@ -191,6 +196,7 @@ An exception names the other endpoint and the affected `army` or `fleet` unit ty
 `split_coasts` is omitted for inland provinces, seas and ordinary coastal provinces with one continuous coast.
 Declaring split coasts suppresses inferred fleet connections for that province.
 Each named coast therefore supplies its fleet anchor and exceptional neighbouring fleet locations directly.
+Its optional `label_anchor` and `label_rotation` position the visible coast name; missing presentation values derive from the fleet anchor for compatibility with existing maps.
 
 Team identifiers compile to Rules Engine powers.
 `home_supply_centres` defines legal home build sites, while `starting_supply_centres` defines ownership at the beginning of the game.

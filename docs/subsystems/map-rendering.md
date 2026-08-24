@@ -14,6 +14,7 @@ The subsystem provides `MapRenderer` from [Subsystem API Contracts](../api-contr
 
 Composition clones the sanitised base SVG and adds deterministic layers for territory fills, labels, supply-centre stars, units and orders.
 Long territory labels wrap consistently at word and ampersand boundaries and remain centred on their configured visual anchors in both composed scenes and placement previews.
+Every named split coast renders as a map label at its independently configured anchor and rotation, with defaults derived from its fleet anchor when older map data omits those presentation fields.
 All coordinates use the source SVG view box so maps of different dimensions and aspect ratios follow the same pipeline.
 In retreat phases, a dislodged unit remains at its origin with an `R` marker and is offset when an active unit occupies the same territory.
 When projected adjudication explanations are present, composition returns map-coordinate hit paths alongside the SVG so the UI can implement order hover without parsing rendered content.

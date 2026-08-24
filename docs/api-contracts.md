@@ -119,6 +119,8 @@ class MapPresentation:
     label_anchors: Mapping[TerritoryId, Point]
     army_anchors: Mapping[TerritoryId, Point]
     fleet_anchors: Mapping[Location, Point]
+    coast_label_anchors: Mapping[Location, Point]
+    coast_label_rotations: Mapping[Location, float]
     supply_centre_anchors: Mapping[TerritoryId, Point]
 
 @dataclass(frozen=True, slots=True)

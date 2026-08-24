@@ -180,6 +180,13 @@ def authored_map_yaml(definition: MapDefinition) -> str:
                         definition.presentation.fleet_anchors[location].x,
                         definition.presentation.fleet_anchors[location].y,
                     ],
+                    "label_anchor": [
+                        definition.presentation.coast_label_anchors[location].x,
+                        definition.presentation.coast_label_anchors[location].y,
+                    ],
+                    "label_rotation": definition.presentation.coast_label_rotations.get(
+                        location, 0
+                    ),
                     "add_connections": sorted(
                         {
                             edge.destination.territory_id

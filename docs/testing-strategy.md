@@ -29,7 +29,7 @@ Single-file writes are tested for revision conflicts and preservation of the pre
 
 ### Rendering Tests
 
-Renderer tests first inspect the composed SVG structure for deterministic layers, centred multiline territory labels, clipped bounds and absence of forbidden hidden-state data.
+Renderer tests first inspect the composed SVG structure for deterministic layers, centred multiline territory labels, positioned and rotated named-coast labels, clipped bounds and absence of forbidden hidden-state data.
 A small set of representative scenes is rasterised as golden PNGs for full-map, cropped, Fog of War, split-coast, convoy, invalid-order, retreat and adjustment cases.
 Golden comparisons use a small pixel tolerance for platform rasterisation differences and always assert exact output dimensions and opaque bounds separately.
 
@@ -37,7 +37,7 @@ Golden comparisons use a small pixel tolerance for platform rasterisation differ
 
 Presenter and workspace tests run Qt in its offscreen mode and drive actions through the `ApplicationService` protocol.
 They cover startup recovery, current-versus-historical editing, inline order editing, automatic clearing of `Final`, warning expansion, the unfinalised filter, adjudication confirmation, saved views and clipboard requests.
-Map-setup tests verify maximised startup and standard close behaviour, reopen an existing reusable map in the main-window stack, access every configuration tab without sequencing, search both YAML editors through the platform-standard Find shortcut, merge focused power and starting-setup edits into the map YAML, save from an arbitrary tab, link classified rows and map highlights, verify the topology map is prioritised and its land and sea nodes use army and fleet anchors with readable labels and territory-YAML hover navigation, combine placement layers without artificial centre markers, exercise fixed compact zoom overlays with exact percentage entry and distinguish trackpad panning from mouse-wheel and pinch zooming, drag ordinary and split-coast anchors, constrain effective unit-asset previews and verify that an existing game's private map snapshot is unchanged.
+Map-setup tests verify maximised startup and standard close behaviour, reopen an existing reusable map in the main-window stack, access every configuration tab without sequencing, search both YAML editors through the platform-standard Find shortcut, merge focused power and starting-setup edits into the map YAML, save from an arbitrary tab, link classified rows and map highlights, verify the topology map is prioritised and its land and sea nodes use army and fleet anchors with readable labels and territory-YAML hover navigation, combine placement layers without artificial centre markers, move and rotate named-coast labels, exercise fixed compact zoom overlays with exact percentage entry and distinguish trackpad panning from mouse-wheel and pinch zooming, drag ordinary and split-coast anchors, constrain effective unit-asset previews and verify that an existing game's private map snapshot is unchanged.
 A short manual smoke checklist covers native clipboard transfer, pointer-centred zooming, panning, high-DPI rendering and window behaviour on Windows and macOS.
 
 ## End-to-End Scenarios

@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QPlainTextEdit,
     QPushButton,
+    QSpinBox,
     QSplitter,
     QTableWidget,
     QTableWidgetItem,
@@ -44,6 +45,7 @@ from diplomacy_app.domain.models import (
 )
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import territory_geometries
+from diplomacy_app.presentation import coast_label_text
 from diplomacy_app.ui.map_canvas import (
     MapCanvas,
     MapZoomControls,
@@ -143,6 +145,8 @@ class MapWizard(QWidget):
         self._topology_nodes: dict[str, Point] = {}
         self._topology_names: dict[str, str] = {}
         self._topology_hovered_territory: str | None = None
+        self._selected_coast_label: Location | None = None
+        self._coast_label_items: dict[Location, TextAnchorItem] = {}
         layout = QVBoxLayout(self)
         self.tabs = QTabWidget()
         layout.addWidget(self.tabs, 1)
@@ -274,14 +278,18 @@ class MapWizard(QWidget):
         self.armies_preview = QCheckBox("Armies")
         self.fleets_preview = QCheckBox("Fleets")
         self.supply_preview = QCheckBox("Supply centres")
+        self.coast_labels_preview = QCheckBox("Coast labels")
         self.armies_preview.setChecked(True)
         self.armies_preview.toggled.connect(self._preview_changed)
         self.fleets_preview.toggled.connect(self._preview_changed)
         self.supply_preview.setChecked(True)
         self.supply_preview.toggled.connect(self._preview_changed)
+        self.coast_labels_preview.setChecked(True)
+        self.coast_labels_preview.toggled.connect(self._preview_changed)
         preview_row.addWidget(self.armies_preview)
         preview_row.addWidget(self.fleets_preview)
         preview_row.addWidget(self.supply_preview)
+        preview_row.addWidget(self.coast_labels_preview)
         preview_row.addWidget(QLabel("Labels"))
         self.placement_labels = QComboBox()
         self.placement_labels.addItem("None", None)
@@ -290,6 +298,15 @@ class MapWizard(QWidget):
         self.placement_labels.setCurrentIndex(1)
         self.placement_labels.currentIndexChanged.connect(self._reload_anchor_scene)
         preview_row.addWidget(self.placement_labels)
+        preview_row.addWidget(QLabel("Coast rotation"))
+        self.coast_rotation = QSpinBox()
+        self.coast_rotation.setRange(-180, 180)
+        self.coast_rotation.setSingleStep(5)
+        self.coast_rotation.setSuffix("°")
+        self.coast_rotation.setFixedWidth(74)
+        self.coast_rotation.setEnabled(False)
+        self.coast_rotation.valueChanged.connect(self._coast_rotation_changed)
+        preview_row.addWidget(self.coast_rotation)
         preview_row.addStretch()
         layout.addLayout(preview_row)
         self.anchor_canvas = MapCanvas()
@@ -587,6 +604,32 @@ class MapWizard(QWidget):
                 },
             )
             label.text = territory.abbreviation
+        coast_label_layer = ElementTree.SubElement(root, tag("g"), {"id": "topology-coast-labels"})
+        for location, point in sorted(
+            definition.presentation.coast_label_anchors.items(),
+            key=lambda item: (item[0].territory_id, item[0].coast_id or ""),
+        ):
+            if location.coast_id is None:
+                continue
+            rotation = definition.presentation.coast_label_rotations.get(location, 0)
+            coast_label = ElementTree.SubElement(
+                coast_label_layer,
+                tag("text"),
+                {
+                    "x": str(point.x),
+                    "y": str(point.y),
+                    "text-anchor": "middle",
+                    "dominant-baseline": "central",
+                    "font-family": "Georgia, serif",
+                    "font-size": "10",
+                    "font-style": "italic",
+                    "font-weight": "600",
+                    "fill": "#111111",
+                    "transform": f"rotate({rotation:g} {point.x:g} {point.y:g})",
+                    "data-location": f"{location.territory_id}/{location.coast_id}",
+                },
+            )
+            coast_label.text = coast_label_text(location.coast_id)
         return ElementTree.tostring(root, encoding="utf-8", xml_declaration=True)
 
     def _topology_hovered(self, x: float, y: float) -> None:
@@ -640,6 +683,9 @@ class MapWizard(QWidget):
 
     def _reload_anchor_scene(self) -> None:
         self.anchor_canvas.set_svg(self.draft.svg, fit=True)
+        self._selected_coast_label = None
+        self._coast_label_items.clear()
+        self.coast_rotation.setEnabled(False)
         presentation = self.draft.presentation
         territories = {territory.id: territory for territory in self.draft.territories}
         label_mode = self.placement_labels.currentData()
@@ -657,6 +703,32 @@ class MapWizard(QWidget):
                     bold=True,
                 )
                 item.setToolTip(f"{definition.name}: label")
+                self.anchor_canvas.scene().addItem(item)
+        if self.coast_labels_preview.isChecked():
+            for location, point in presentation.coast_label_anchors.items():
+                if location.coast_id is None:
+                    continue
+                item = TextAnchorItem(
+                    point,
+                    coast_label_text(location.coast_id),
+                    "#171714",
+                    lambda new_point, location=location: self._anchor_moved(
+                        location.territory_id,
+                        "coast_label",
+                        str(location.coast_id),
+                        new_point,
+                    ),
+                    size=10,
+                    bold=True,
+                    italic=True,
+                    rotation=presentation.coast_label_rotations.get(location, 0),
+                    selection_callback=lambda location=location: self._select_coast_label(location),
+                )
+                item.setToolTip(
+                    f"{territories[location.territory_id].name}: "
+                    f"{coast_label_text(location.coast_id)} — drag, then set rotation"
+                )
+                self._coast_label_items[location] = item
                 self.anchor_canvas.scene().addItem(item)
         if self.supply_preview.isChecked():
             for territory, point in presentation.supply_centre_anchors.items():
@@ -711,6 +783,33 @@ class MapWizard(QWidget):
     def _preview_changed(self, checked: bool) -> None:
         del checked
         self._reload_anchor_scene()
+
+    def _select_coast_label(self, location: Location) -> None:
+        self._selected_coast_label = location
+        self.coast_rotation.blockSignals(True)
+        self.coast_rotation.setValue(
+            round(self.draft.presentation.coast_label_rotations.get(location, 0))
+        )
+        self.coast_rotation.blockSignals(False)
+        self.coast_rotation.setEnabled(True)
+
+    def _coast_rotation_changed(self, rotation: int) -> None:
+        location = self._selected_coast_label
+        if location is None or location.coast_id is None:
+            return
+        try:
+            self.draft = self.service.update_map_coast_label_rotation(
+                self.draft,
+                location.territory_id,
+                str(location.coast_id),
+                rotation,
+            )
+            self.yaml_editor.setPlainText(self.draft.map_yaml)
+            item = self._coast_label_items.get(location)
+            if item is not None:
+                item.setRotation(rotation)
+        except Exception as exc:
+            self._show_error(f"Could not rotate coast label: {exc}")
 
     def _anchor_moved(self, territory, anchor, coast, point) -> None:
         try:

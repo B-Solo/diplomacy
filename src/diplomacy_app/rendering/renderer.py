@@ -31,6 +31,7 @@ from diplomacy_app.domain.models import (
     WaiveOrder,
 )
 from diplomacy_app.map_library.svg_importer import view_box
+from diplomacy_app.presentation import coast_label_text
 from diplomacy_app.rendering.labels import label_lines
 
 _SVG = "http://www.w3.org/2000/svg"
@@ -95,6 +96,7 @@ class MapRenderer:
 
             generated = ElementTree.SubElement(root, _tag("g"), {"id": "gamemaster-layers"})
             labels = ElementTree.SubElement(generated, _tag("g"), {"id": "territory-labels"})
+            coast_labels = ElementTree.SubElement(generated, _tag("g"), {"id": "coast-labels"})
             centres = ElementTree.SubElement(generated, _tag("g"), {"id": "supply-centres"})
             units_layer = ElementTree.SubElement(generated, _tag("g"), {"id": "units"})
             orders_layer = ElementTree.SubElement(generated, _tag("g"), {"id": "orders"})
@@ -132,6 +134,33 @@ class MapRenderer:
                             },
                         )
                         tspan.text = line
+                for coast_id in territory.split_coast_ids:
+                    location = Location(territory.id, coast_id)
+                    coast_anchor = map_definition.presentation.coast_label_anchors[location]
+                    rotation = map_definition.presentation.coast_label_rotations.get(location, 0)
+                    coast_label = ElementTree.SubElement(
+                        coast_labels,
+                        _tag("text"),
+                        {
+                            "x": str(coast_anchor.x),
+                            "y": str(coast_anchor.y),
+                            "text-anchor": "middle",
+                            "dominant-baseline": "central",
+                            "font-family": "Georgia, serif",
+                            "font-size": "10",
+                            "font-style": "italic",
+                            "font-weight": "600",
+                            "fill": "#171714",
+                            "paint-order": "stroke",
+                            "stroke": "#f5f0df",
+                            "stroke-width": "1",
+                            "transform": (
+                                f"rotate({rotation:g} {coast_anchor.x:g} {coast_anchor.y:g})"
+                            ),
+                            "data-location": f"{territory.id}/{coast_id}",
+                        },
+                    )
+                    coast_label.text = coast_label_text(coast_id)
                 if isinstance(item, VisibleTerritory) and territory.is_supply_centre:
                     point = map_definition.presentation.supply_centre_anchors[territory.id]
                     owner_colour = (

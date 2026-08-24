@@ -3,9 +3,10 @@ from __future__ import annotations
 import pytest
 
 from diplomacy_app.domain.errors import MapLibraryError
-from diplomacy_app.domain.models import MapId, SvgElementRole
+from diplomacy_app.domain.models import CoastId, Location, MapId, SvgElementRole, TerritoryId
 from diplomacy_app.map_library import FileMapLibrary
 from diplomacy_app.map_library.svg_importer import sanitise_svg, shape_ids, territory_geometries
+from diplomacy_app.storage.serialization import map_definition_data, map_definition_from_data
 
 
 def test_england_compiles_complete_valid_topology(project_root, england):
@@ -19,6 +20,13 @@ def test_england_compiles_complete_valid_topology(project_root, england):
     assert sum(item.is_supply_centre for item in england.territories) == 34
     assert len(england.powers) == 6
     assert len(england.adjacencies) == 480
+    devon_north = Location(TerritoryId("devon"), CoastId("north"))
+    assert devon_north in england.presentation.coast_label_anchors
+    assert england.presentation.coast_label_rotations[devon_north] == 0
+    legacy_data = map_definition_data(england)
+    legacy_data["presentation"].pop("coast_labels")
+    restored = map_definition_from_data(legacy_data, england.assets)
+    assert devon_north in restored.presentation.coast_label_anchors
     assert all(
         type(edge)(edge.destination, edge.origin, edge.unit_type) in england.adjacencies
         for edge in england.adjacencies

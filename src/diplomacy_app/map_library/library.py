@@ -211,6 +211,8 @@ class FileMapLibrary:
                 MappingProxyType(army),
                 MappingProxyType(fleet),
                 MappingProxyType({}),
+                MappingProxyType({}),
+                MappingProxyType({}),
             ),
             None,
             None,
@@ -344,10 +346,31 @@ class FileMapLibrary:
         if coast_id:
             split = item.setdefault("split_coasts", {})
             coast = split.setdefault(coast_id, {})
-            coast["fleet_anchor"] = [round(point.x, 2), round(point.y, 2)]
+            field = "label_anchor" if anchor == "coast_label" else "fleet_anchor"
+            coast[field] = [round(point.x, 2), round(point.y, 2)]
         else:
             anchors = item.setdefault("anchors", {})
             anchors[anchor] = [round(point.x, 2), round(point.y, 2)]
+        text = yaml.safe_dump(document, sort_keys=False, allow_unicode=True)
+        return self.refresh_draft(replace(draft, map_yaml=text))
+
+    def update_coast_label_rotation(
+        self,
+        draft: MapDraft,
+        territory_id: TerritoryId,
+        coast_id: str,
+        rotation: float,
+    ) -> MapDraft:
+        document = load_yaml(draft.map_yaml)
+        territories = document.get("territories", {})
+        item = territories.get(str(territory_id))
+        if not isinstance(item, dict):
+            raise MapLibraryError(f"Unknown territory: {territory_id}")
+        split = item.setdefault("split_coasts", {})
+        coast = split.get(coast_id)
+        if not isinstance(coast, dict):
+            raise MapLibraryError(f"Unknown split coast: {territory_id}/{coast_id}")
+        coast["label_rotation"] = round(rotation, 2)
         text = yaml.safe_dump(document, sort_keys=False, allow_unicode=True)
         return self.refresh_draft(replace(draft, map_yaml=text))
 

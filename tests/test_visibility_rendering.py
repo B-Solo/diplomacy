@@ -101,3 +101,6 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     ]
     assert label_lines("Short Name") == ("Short Name",)
     assert label_lines("Manual\nBreak") == ("Manual", "Break")
+    coast_labels = root.findall(".//{*}g[@id='coast-labels']/{*}text")
+    assert {label.text for label in coast_labels} >= {"North Coast", "South Coast"}
+    assert all("rotate(" in label.attrib["transform"] for label in coast_labels)

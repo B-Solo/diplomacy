@@ -46,6 +46,7 @@ from diplomacy_app.domain.models import (
     UnitType,
     WaiveOrder,
 )
+from diplomacy_app.presentation import default_coast_label_anchor
 
 
 def location_data(value: Location) -> dict[str, str | None]:
@@ -393,6 +394,14 @@ def map_definition_data(value: MapDefinition) -> dict[str, Any]:
                 {"location": location_data(key), "point": [point.x, point.y]}
                 for key, point in value.presentation.fleet_anchors.items()
             ],
+            "coast_labels": [
+                {
+                    "location": location_data(key),
+                    "point": [point.x, point.y],
+                    "rotation": value.presentation.coast_label_rotations.get(key, 0),
+                }
+                for key, point in value.presentation.coast_label_anchors.items()
+            ],
             "supply_centres": {
                 str(key): [point.x, point.y]
                 for key, point in value.presentation.supply_centre_anchors.items()
@@ -409,6 +418,25 @@ def map_definition_from_data(value: Any, assets: MapAssets) -> MapDefinition:
 
     def point(item: Any) -> Point:
         return Point(float(item[0]), float(item[1]))
+
+    fleet_anchors = {
+        location_from_data(item["location"]): point(item["point"])
+        for item in presentation.get("fleets", [])
+    }
+    coast_label_items = presentation.get("coast_labels", [])
+    coast_label_anchors = {
+        location_from_data(item["location"]): point(item["point"]) for item in coast_label_items
+    }
+    coast_label_rotations = {
+        location_from_data(item["location"]): float(item.get("rotation", 0))
+        for item in coast_label_items
+    }
+    for location, fleet_anchor in fleet_anchors.items():
+        if location.coast_id is not None and location not in coast_label_anchors:
+            coast_label_anchors[location] = default_coast_label_anchor(
+                location.coast_id, fleet_anchor
+            )
+            coast_label_rotations[location] = 0
 
     return MapDefinition(
         MapId(str(value["map_id"])),
@@ -456,12 +484,9 @@ def map_definition_from_data(value: Any, assets: MapAssets) -> MapDefinition:
                     for key, item in presentation.get("armies", {}).items()
                 }
             ),
-            MappingProxyType(
-                {
-                    location_from_data(item["location"]): point(item["point"])
-                    for item in presentation.get("fleets", [])
-                }
-            ),
+            MappingProxyType(fleet_anchors),
+            MappingProxyType(coast_label_anchors),
+            MappingProxyType(coast_label_rotations),
             MappingProxyType(
                 {
                     TerritoryId(str(key)): point(item)

@@ -35,6 +35,7 @@ from diplomacy_app.domain.models import (
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.geometry import inferred_connections
 from diplomacy_app.map_library.svg_importer import sanitise_svg, territory_geometries
+from diplomacy_app.presentation import default_coast_label_anchor
 
 
 def load_yaml(text: str) -> dict[str, Any]:
@@ -99,6 +100,8 @@ def _parse_presentation(
     label: dict[TerritoryId, Point] = {}
     army: dict[TerritoryId, Point] = {}
     fleet: dict[Location, Point] = {}
+    coast_labels: dict[Location, Point] = {}
+    coast_rotations: dict[Location, float] = {}
     supply: dict[TerritoryId, Point] = {}
     for territory in territories:
         item = _mapping(raw[str(territory.id)], f"territories.{territory.id}")
@@ -119,13 +122,28 @@ def _parse_presentation(
         for coast_id, coast_value in split.items():
             coast = _mapping(coast_value, f"territories.{territory.id}.split_coasts.{coast_id}")
             if "fleet_anchor" in coast:
-                fleet[Location(territory.id, CoastId(coast_id))] = _point(
+                location = Location(territory.id, CoastId(coast_id))
+                fleet_anchor = _point(
                     coast["fleet_anchor"], f"{territory.id}.{coast_id}.fleet_anchor"
                 )
+                fleet[location] = fleet_anchor
+                coast_labels[location] = (
+                    _point(coast["label_anchor"], f"{territory.id}.{coast_id}.label_anchor")
+                    if "label_anchor" in coast
+                    else default_coast_label_anchor(CoastId(coast_id), fleet_anchor)
+                )
+                try:
+                    coast_rotations[location] = float(coast.get("label_rotation", 0))
+                except (TypeError, ValueError) as exc:
+                    raise MapLibraryError(
+                        f"{territory.id}.{coast_id}.label_rotation must be numeric"
+                    ) from exc
     return MapPresentation(
         MappingProxyType(label),
         MappingProxyType(army),
         MappingProxyType(fleet),
+        MappingProxyType(coast_labels),
+        MappingProxyType(coast_rotations),
         MappingProxyType(supply),
     )
 

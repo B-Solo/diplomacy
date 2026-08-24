@@ -132,6 +132,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     node_layer = next(
         group for group in topology.findall(".//{*}g") if group.attrib.get("id") == "topology-nodes"
     )
+    topology_coast_labels = next(
+        group
+        for group in topology.findall(".//{*}g")
+        if group.attrib.get("id") == "topology-coast-labels"
+    )
     assert underlay.attrib["opacity"] == "0.34"
     assert graph_edges
     wizard.tabs.setCurrentIndex(1)
@@ -142,6 +147,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert {label.attrib["font-size"] for label in node_layer.findall("{*}text")} == {"11"}
     assert {label.attrib["fill"] for label in node_layer.findall("{*}text")} == {"#111111"}
     assert all("stroke" not in label.attrib for label in node_layer.findall("{*}text"))
+    assert {label.text for label in topology_coast_labels.findall("{*}text")} >= {
+        "North Coast",
+        "South Coast",
+    }
     devon = next(item for item in definition.territories if str(item.id) == "devon")
     devon_point = definition.presentation.army_anchors[devon.id]
     wizard._topology_hovered(devon_point.x, devon_point.y)
@@ -323,11 +332,26 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         for item in wizard.anchor_canvas.scene().items()
         if isinstance(item, TextAnchorItem)
     )
-    assert all(
-        not item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
+    selectable_labels = [
+        item
         for item in wizard.anchor_canvas.scene().items()
         if isinstance(item, TextAnchorItem)
+        and item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
+    ]
+    assert len(selectable_labels) == len(wizard.draft.presentation.coast_label_anchors)
+    coast_location, coast_anchor = next(iter(wizard.draft.presentation.coast_label_anchors.items()))
+    moved_coast_anchor = Point(coast_anchor.x + 2, coast_anchor.y + 3)
+    wizard._anchor_moved(
+        coast_location.territory_id,
+        "coast_label",
+        str(coast_location.coast_id),
+        moved_coast_anchor,
     )
+    assert wizard.draft.presentation.coast_label_anchors[coast_location] == moved_coast_anchor
+    wizard._select_coast_label(coast_location)
+    wizard.coast_rotation.setValue(25)
+    assert wizard.draft.presentation.coast_label_rotations[coast_location] == 25
+    assert wizard._coast_label_items[coast_location].rotation() == 25
     wizard.fleets_preview.click()
     assert wizard.fleets_preview.isChecked()
     assert wizard.armies_preview.isChecked()
@@ -347,6 +371,8 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert any(isinstance(item, TextAnchorItem) for item in wizard.anchor_canvas.scene().items())
     wizard.supply_preview.setChecked(False)
     wizard.placement_labels.setCurrentIndex(0)
+    assert any(isinstance(item, TextAnchorItem) for item in wizard.anchor_canvas.scene().items())
+    wizard.coast_labels_preview.setChecked(False)
     assert not any(
         isinstance(item, TextAnchorItem) for item in wizard.anchor_canvas.scene().items()
     )

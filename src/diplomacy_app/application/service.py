@@ -244,6 +244,11 @@ class ApplicationService:
     ) -> MapDraft:
         return self.map_library.update_anchor(draft, territory_id, anchor, point, coast_id)
 
+    def update_map_coast_label_rotation(
+        self, draft: MapDraft, territory_id, coast_id, rotation
+    ) -> MapDraft:
+        return self.map_library.update_coast_label_rotation(draft, territory_id, coast_id, rotation)
+
     def update_map_element_role(self, draft: MapDraft, element_id, role) -> MapDraft:
         return self.map_library.update_element_role(draft, element_id, role)
 

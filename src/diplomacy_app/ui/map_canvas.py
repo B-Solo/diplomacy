@@ -380,11 +380,15 @@ class TextAnchorItem(QGraphicsItemGroup):
         *,
         size: int = 11,
         bold: bool = False,
+        italic: bool = False,
+        rotation: float = 0,
+        selection_callback=None,
     ) -> None:
         super().__init__()
         glyph = QGraphicsTextItem()
         font = QFont("Georgia", size)
         font.setBold(bold)
+        font.setItalic(italic)
         glyph.setFont(font)
         glyph.setDefaultTextColor(QColor(colour))
         glyph.document().setDocumentMargin(0)
@@ -394,9 +398,18 @@ class TextAnchorItem(QGraphicsItemGroup):
         glyph.setPos(-bounds.center())
         self.addToGroup(glyph)
         self.setPos(QPointF(point.x, point.y))
+        self.setRotation(rotation)
         self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable)
+        if selection_callback is not None:
+            self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsSelectable)
         self.setZValue(50)
         self.callback = callback
+        self.selection_callback = selection_callback
+
+    def mousePressEvent(self, event) -> None:
+        super().mousePressEvent(event)
+        if self.selection_callback is not None:
+            self.selection_callback()
 
     def mouseReleaseEvent(self, event) -> None:
         super().mouseReleaseEvent(event)

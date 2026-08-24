@@ -178,7 +178,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.8:** Imported shapes are classified as playable land, playable sea, impassable region or decorative/background content.
 - **GC.9:** Only playable regions require a territory name, abbreviation, topology and placement anchors.
 - **GC.10:** The importer calculates initial label, army, fleet and supply-centre anchors and provides a visual Placement tab in which each anchor can be dragged independently.
-- **GC.11:** Split coasts have separate fleet anchors.
+- **GC.11:** Split coasts have separate fleet anchors and visible named-coast labels with independently configurable anchors and rotations.
 - **GC.12:** The importer generates likely adjacency from SVG geometry and assumes that every coastal province has one continuous coast.
 - **GC.13:** The generated ordinary topology is combined with explicit additions and removals, then materialised as the complete topology used for play.
 - **GC.14:** The Topology tab gives the graphical adjacency preview more space than the configured `map.yaml`, includes readable territory labels, exposes local connection overrides alongside the complete effective topology and provides inline, wrapping text search through the platform-standard Find shortcut.
@@ -187,9 +187,9 @@ Player communication occurs outside the application using map images copied by t
 - **GC.17:** A focused Powers and setup tab edits the starting phase, powers, colours, home and starting supply-centre ownership, initial territory control and starting units, provides the same inline YAML search and applies those sections to the shared `map.yaml`.
 - **GC.18:** A map may provide one custom army SVG and one custom fleet SVG; the default symbols are used when either is absent.
 - **GC.19:** An existing reusable map can be reopened in the map-configuration editor without re-importing its SVG.
-- **GC.20:** Reopening a map provides the same visual Placement tab as initial import, including independent label, army, fleet, split-coast fleet and supply-centre anchors.
+- **GC.20:** Reopening a map provides the same visual Placement tab as initial import, including independent territory-label, named-coast-label, army, fleet, split-coast fleet and supply-centre anchors.
 - **GC.21:** Saving an edited reusable map changes the defaults used for games created afterwards and does not modify the private map snapshots of existing games.
-- **GC.22:** The visual Placement tab provides independent `Armies`, `Fleets`, `Supply centres` and territory-label controls that display each selected layer at every applicable anchor, independently of the configured starting state.
+- **GC.22:** The visual Placement tab provides independent `Armies`, `Fleets`, `Supply centres`, territory-label and named-coast-label controls that display each selected layer at every applicable anchor, independently of the configured starting state; selecting a coast label exposes its rotation control.
 - **GC.23:** The `Armies` preview displays an army in every playable land territory, while the `Fleets` preview displays a fleet in every playable sea, every ordinary coastal territory and at every named anchor of a split-coast territory.
 - **GC.24:** Placement previews do not change game state or the map's starting setup; dragging a preview unit changes only its corresponding presentation anchor.
 - **GC.25:** Hovering any classified shape in the SVG regions tab identifies and selects its row; hovering or selecting a row highlights the corresponding shape on the map.
