@@ -5,7 +5,7 @@ from xml.etree import ElementTree
 import pytest
 from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtGui import QNativeGestureEvent, QPointingDevice, QWheelEvent
-from PySide6.QtWidgets import QGraphicsItem, QGraphicsView
+from PySide6.QtWidgets import QGraphicsItem, QGraphicsView, QPushButton
 
 from diplomacy_app.application.service import ApplicationService
 from diplomacy_app.game_repository import FileGameRepository
@@ -50,6 +50,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.tabs.count() == 4
     assert wizard.validation_label.text().startswith("Valid:")
     assert wizard.next_button.text() == "Next"
+    assert not any(
+        button.text() == "Reload anchors from YAML" for button in wizard.findChildren(QPushButton)
+    )
     definition = service.preview_map_definition(wizard.draft)
     topology = ElementTree.fromstring(wizard._topology_svg(definition))
     topology_nodes = {

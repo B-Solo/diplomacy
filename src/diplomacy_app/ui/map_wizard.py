@@ -182,13 +182,7 @@ class MapWizard(QWidget):
         layout.addLayout(preview_row)
         self.anchor_canvas = MapCanvas()
         layout.addWidget(self.anchor_canvas, 1)
-        footer = QHBoxLayout()
-        refresh = QPushButton("Reload anchors from YAML")
-        refresh.clicked.connect(self._refresh_from_yaml_and_anchors)
-        footer.addWidget(refresh)
-        footer.addStretch()
         self.placement_zoom = MapZoomControls(self.anchor_canvas)
-        layout.addLayout(footer)
         self.tabs.addTab(page, "3  Placement")
 
     def _build_assets_tab(self) -> None:
@@ -472,10 +466,6 @@ class MapWizard(QWidget):
             )
             label.text = territory.abbreviation
         return ElementTree.tostring(root, encoding="utf-8", xml_declaration=True)
-
-    def _refresh_from_yaml_and_anchors(self) -> None:
-        if self._validate():
-            self._reload_anchor_scene()
 
     def _reload_anchor_scene(self) -> None:
         self.anchor_canvas.set_svg(self.draft.svg, fit=True)
