@@ -13,7 +13,9 @@ if errorlevel 1 exit /b 1
 
 call .venv\Scripts\activate.bat
 python -m pip install --upgrade pip
+if errorlevel 1 exit /b 1
 python -m pip install -c constraints.txt -e vendor\diplomacy
+if errorlevel 1 exit /b 1
 python -m pip install -c constraints.txt -e ".[dev]"
 if errorlevel 1 exit /b 1
 

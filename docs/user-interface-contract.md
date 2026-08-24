@@ -50,9 +50,9 @@ Player communication occurs outside the application using map images copied by t
 - **AN.5:** The application opens maximised to the usable desktop area rather than in borderless full-screen mode.
 - **AN.6:** The platform-standard close-window shortcut closes the application, including `Cmd+W` on macOS.
 - **AN.7:** When launched from a terminal, `Ctrl+C` requests a normal application shutdown without a traceback.
-- **AN.5:** Game, season and perspective context persists when switching between the primary workspaces.
-- **AN.6:** Game creation and reusable-map management replace the main workspace temporarily and return to the preceding application context when completed or cancelled.
-- **AN.7:** Application workflows, validation messages and confirmations remain inside the main window; operating-system file and folder choosers may use native windows.
+- **AN.8:** Game, season and perspective context persists when switching between the primary workspaces.
+- **AN.9:** Game creation and reusable-map management replace the main workspace temporarily and return to the preceding application context when completed or cancelled.
+- **AN.10:** Application workflows, validation messages and confirmations remain inside the main window; operating-system file and folder choosers may use native windows.
 
 ### Season Navigation (SN)
 
@@ -315,6 +315,5 @@ Clipboard output contains only the rendered map region selected by the gamemaste
 
 ## Open Issues and Risks
 
-- Exact visual styling, typography and spacing remain design work; the mockup establishes structure and behaviour only.
 - Geometry-derived adjacency can produce false positive and false negative links, so map creation must make the generated topology and its validation status conspicuous.
 - Automated placement can produce poor anchors for irregular or disconnected shapes; the Placement tab provides manual correction.

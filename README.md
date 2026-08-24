@@ -62,7 +62,7 @@ Illegal and unrecognised lines remain recorded with their issues, and missing or
 Select **New game**, then either edit a configured map or import a structured SVG.
 Every relevant SVG shape or group must have a unique identifier.
 
-The map wizard provides four stages:
+The map wizard provides four independently usable tabs:
 
 - Classify identified SVG regions as playable territory, impassable region, or decoration.
 - Edit and validate the durable `map.yaml` source while inspecting the complete compiled topology.
