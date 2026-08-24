@@ -188,6 +188,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         "North Coast",
         "South Coast",
     }
+    assert {label.attrib["font-size"] for label in topology_coast_labels.findall("{*}text")} == {
+        "9"
+    }
     assert {location for location in topology_nodes if location.startswith("devon")} == {
         "devon",
         "devon/north",
@@ -392,6 +395,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         and item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
     ]
     assert len(selectable_labels) == len(wizard.draft.presentation.coast_label_anchors)
+    assert {label.glyph.font().pointSize() for label in selectable_labels} == {9}
     coast_location, coast_anchor = next(iter(wizard.draft.presentation.coast_label_anchors.items()))
     moved_coast_anchor = Point(coast_anchor.x + 2, coast_anchor.y + 3)
     wizard._anchor_moved(

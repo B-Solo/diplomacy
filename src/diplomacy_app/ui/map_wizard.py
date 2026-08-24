@@ -47,7 +47,7 @@ from diplomacy_app.domain.models import (
 )
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import territory_geometries
-from diplomacy_app.presentation import coast_label_text, embedded_unit_svg
+from diplomacy_app.presentation import COAST_LABEL_FONT_SIZE, coast_label_text, embedded_unit_svg
 from diplomacy_app.ui.map_canvas import (
     MapCanvas,
     MapZoomControls,
@@ -764,7 +764,7 @@ class MapWizard(QWidget):
                     "text-anchor": "middle",
                     "dominant-baseline": "central",
                     "font-family": "Georgia, serif",
-                    "font-size": "10",
+                    "font-size": str(COAST_LABEL_FONT_SIZE),
                     "font-style": "italic",
                     "font-weight": "600",
                     "fill": "#111111",
@@ -862,7 +862,7 @@ class MapWizard(QWidget):
                         str(location.coast_id),
                         new_point,
                     ),
-                    size=10,
+                    size=COAST_LABEL_FONT_SIZE,
                     bold=True,
                     italic=True,
                     rotation=presentation.coast_label_rotations.get(location, 0),

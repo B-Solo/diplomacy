@@ -31,7 +31,7 @@ from diplomacy_app.domain.models import (
     WaiveOrder,
 )
 from diplomacy_app.map_library.svg_importer import view_box
-from diplomacy_app.presentation import coast_label_text, embedded_unit_svg
+from diplomacy_app.presentation import COAST_LABEL_FONT_SIZE, coast_label_text, embedded_unit_svg
 from diplomacy_app.rendering.labels import label_lines
 
 _SVG = "http://www.w3.org/2000/svg"
@@ -147,7 +147,7 @@ class MapRenderer:
                             "text-anchor": "middle",
                             "dominant-baseline": "central",
                             "font-family": "Georgia, serif",
-                            "font-size": "10",
+                            "font-size": str(COAST_LABEL_FONT_SIZE),
                             "font-style": "italic",
                             "font-weight": "600",
                             "fill": "#171714",

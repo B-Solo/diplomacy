@@ -6,6 +6,8 @@ from xml.etree import ElementTree
 
 from diplomacy_app.domain.models import CoastId, Point
 
+COAST_LABEL_FONT_SIZE = 9
+
 
 def coast_label_text(coast_id: CoastId) -> str:
     """Return a readable label for a stable coast identifier."""
