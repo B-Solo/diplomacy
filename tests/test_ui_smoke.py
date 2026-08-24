@@ -140,13 +140,16 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         is QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate
     )
     assert wizard.roles.rowCount() >= 74
-    assert wizard.tabs.count() == 5
+    assert wizard.tabs.count() == 4
     assert tuple(wizard.tabs.tabText(index) for index in range(wizard.tabs.count())) == (
         "SVG regions",
         "Topology",
         "Powers and setup",
         "Placement",
-        "Unit symbols",
+    )
+    assert not any(
+        button.text().startswith(("Choose army", "Choose fleet"))
+        for button in wizard.findChildren(QPushButton)
     )
     assert wizard.validation_label.text().startswith("Valid:")
     assert wizard.outer_layout.contentsMargins().left() == 4
@@ -277,24 +280,6 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert "split_coasts:" in topology_yaml_highlights[0].cursor.selectedText()
     assert wizard.yaml_editor.textCursor().block().text().strip() == "devon:"
     assert "Devon" in wizard.topology_canvas.toolTip()
-    assert wizard.army_asset_preview.minimumWidth() == 420
-    assert wizard.army_asset_preview.minimumHeight() == 320
-    assert wizard.army_asset_preview.transform().m11() < 1.2
-    assert wizard.fleet_asset_preview.transform().m11() < 1.2
-    for canvas, unit_type in (
-        (wizard.army_asset_preview, "army"),
-        (wizard.fleet_asset_preview, "fleet"),
-    ):
-        symbol_items = [item for item in canvas.scene().items() if isinstance(item, UnitAnchorItem)]
-        assert len(symbol_items) == len(
-            [
-                unit
-                for unit in definition.default_starting_setup.state.units
-                if unit.unit_type.value == unit_type
-            ]
-        )
-        assert not symbol_items[0].flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable
-        assert canvas._renderer.elementExists("territory-labels")
     assert wizard.setup_canvas._renderer.elementExists("units")
     assert wizard.preview._renderer.elementExists("gamemaster-layers")
     multiline_label = TextAnchorItem(
@@ -442,8 +427,6 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         wizard.topology_zoom,
         wizard.setup_zoom,
         wizard.placement_zoom,
-        wizard.army_asset_zoom,
-        wizard.fleet_asset_zoom,
     ):
         assert not controls.zoom_in.isHidden()
         assert not controls.zoom_out.isHidden()
@@ -732,7 +715,9 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root)
     )
     window = ApplicationWindow(service)
     qtbot.addWidget(window)
+    window.map_workspace.labels.setCurrentIndex(1)
     window.set_session(session, open_map=True)
+    assert LabelMode(window.map_workspace.labels.currentData()) is LabelMode.FULL_NAME
     assert not window.game_map_placement_button.isHidden()
     assert window.tabs.currentIndex() == 0
     assert window.stack.currentWidget() is window.map_workspace

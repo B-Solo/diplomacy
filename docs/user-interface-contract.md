@@ -190,7 +190,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.15:** The map-configuration editor supports split-coast connections, canals, off-map links, missed links and removal of incorrectly generated links through text.
 - **GC.16:** The saved `map.yaml` remains directly editable outside the application.
 - **GC.17:** A focused Powers and setup tab edits the starting phase, powers, power and map colours, home and starting supply-centre ownership, initial territory control and starting units, provides the same inline YAML search and regenerates a map preview when applying those sections to the shared `map.yaml`.
-- **GC.18:** A map may provide one custom army SVG and one custom fleet SVG; the default symbols are used when either is absent.
+- **GC.18:** Every map uses the fixed army and fleet symbols shown in Placement; map-specific unit artwork is not configurable.
 - **GC.19:** An existing reusable map can be reopened in the map-configuration editor without re-importing its SVG.
 - **GC.20:** Reopening a map provides the same visual Placement tab as initial import, including independent territory-label, named-coast-label, army, fleet, split-coast fleet and supply-centre anchors.
 - **GC.21:** Saving an edited reusable map changes the defaults used for games created afterwards and does not modify the private map snapshots of existing games.
@@ -200,7 +200,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.25:** Hovering any classified shape in the SVG regions tab identifies and selects its row; hovering or selecting a row highlights the corresponding shape on the map, and editing a playable territory's canonical name updates the map draft.
 - **GC.26:** The topology preview draws a colour-coded adjacency graph over a faded map, using an army node and separate fleet nodes for each named coast of a split-coast territory; its key distinguishes army-only, fleet-only and shared connections, arrowheads identify asymmetric connections, and hovering a node navigates to and highlights that territory's editable YAML block.
 - **GC.27:** The map editor uses independently accessible, non-sequential tabs with minimal page margins and a persistent `Save configured map` action, overlays compact `−`, current-percentage, `+` and `Fit` controls on every visual tab, and supports mouse-wheel and trackpad-pinch zoom plus trackpad scrolling consistently with the main map.
-- **GC.28:** The Unit symbols tab previews the effective default or custom army and fleet symbols at their real scale and anchors on the shared starting-position map before saving.
+- **GC.28:** Placement is the authoritative preview for the fixed army and fleet symbols, their rendered scale and their anchors.
 - **GC.29:** Placement label mode independently selects no labels, display names or abbreviations; display names and abbreviations have separate draggable positions, selected display names can be edited with Enter applying and Shift+Enter inserting explicit line breaks, territory and coast font sizes have separate map-wide half-point controls, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.
 - **GC.31:** Every visual map-editor tab uses the same starting-position colours, stripes, labels, font sizes, centres, unit symbols and presentation anchors as normal game rendering, with only its own editing overlays added or relevant layers made draggable.
@@ -273,11 +273,10 @@ The plain-text field is not visible until that text is selected.
 New game
   -> Choose configured map
      or Import SVG and create map
-       -> Open independent SVG regions, Topology, Powers and setup, Placement and Unit symbols tabs
+       -> Open independent SVG regions, Topology, Powers and setup, and Placement tabs
           -> Classify shapes and edit territory and topology configuration as YAML
           -> Configure powers, colours and the reusable starting setup in a focused panel
           -> Position labels, army anchors, fleet anchors and supply-centre anchors
-          -> Optionally provide army and fleet SVG symbols
        -> Validate and save the reusable map from any tab
   -> Confirm or adjust the game's starting setup
   -> Create game

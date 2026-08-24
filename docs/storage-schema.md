@@ -60,7 +60,7 @@ Powers, colours, home supply centres and topology remain those of the reusable c
 During game creation, the repository writes the selected setup into the private `map/map.yaml`, recompiles that snapshot and creates the corresponding first `state.json`.
 During play, the placement-only editor may transactionally replace presentation anchors and named-coast label rotations in the private `map/map.yaml` and `_compiled-map.json` without changing map identity or rules data.
 
-`army.svg` and `fleet.svg` are materialised from application defaults when the configured map does not provide custom symbols.
+`army.svg` and `fleet.svg` are materialised copies of the application's fixed Placement symbols; stored legacy unit files are ignored when games or maps are loaded.
 `_compiled-map.json` and `_engine.map` are generated from the authored map and are never authoritative.
 
 ## Game Configuration

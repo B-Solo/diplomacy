@@ -149,6 +149,9 @@ class MapWorkspace(QWidget):
             self._loaded_game_location = session.game.location
             self.scene = None
             self._first_scene = True
+            self.labels.blockSignals(True)
+            self.labels.setCurrentIndex(self.labels.findData(LabelMode.FULL_NAME))
+            self.labels.blockSignals(False)
         fog = session.game.settings.visibility_policy.enabled
         self.perspective_label.setVisible(fog)
         self.perspective.setVisible(fog)

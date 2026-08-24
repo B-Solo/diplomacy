@@ -545,8 +545,6 @@ class MapDraft:
     powers: tuple[PowerDefinition, ...]
     default_starting_setup: StartingSetup
     presentation: MapPresentation
-    army_svg: bytes | None
-    fleet_svg: bytes | None
     rules_engine_id: str
 
 @dataclass(frozen=True, slots=True)

@@ -15,6 +15,7 @@ from diplomacy_app.domain.models import (
 from diplomacy_app.game_repository import FileGameRepository
 from diplomacy_app.game_repository.recent_games import RecentGameStore
 from diplomacy_app.map_library import FileMapLibrary
+from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rules_engine import StandardRulesEngine
 from diplomacy_app.visibility import VisibilityProjector
@@ -47,11 +48,21 @@ def test_game_folder_round_trip_revision_conflict_and_advance(tmp_path, england)
     proposal = StandardRulesEngine().adjudicate(england, updated)
     advanced = repo.commit_adjudication(game.game_id, proposal, updated.revision)
     assert advanced.current_phase.label == "Summer 2000"
+    (location.path / "map" / "army.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 100"><rect width="20" height="100"/></svg>',
+        encoding="utf-8",
+    )
+    (location.path / "map" / "fleet.svg").write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 100"><rect width="20" height="100"/></svg>',
+        encoding="utf-8",
+    )
     reopened = repo.open(location)
     assert reopened.current_phase == advanced.current_phase
     assert (location.path / "map" / "_compiled-map.json").is_file()
     assert (location.path / "2000" / "Spring" / "orders.json").is_file()
     assert (location.path / "2000" / "Summer" / "state.json").is_file()
+    assert reopened.map_definition.assets.army_svg == DEFAULT_ARMY_SVG
+    assert reopened.map_definition.assets.fleet_svg == DEFAULT_FLEET_SVG
 
 
 def test_coordinator_complete_default_order_workflow(tmp_path, project_root):

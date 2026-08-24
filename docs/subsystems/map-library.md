@@ -26,7 +26,7 @@ The same validation components check a game-specific starting year, season, unit
 
 Saving writes a complete reusable map folder atomically.
 Saving a reopened draft replaces the reusable map but cannot access or modify map snapshots owned by existing games.
-Default army and fleet assets are substituted when a draft omits either optional custom symbol.
+The fixed army and fleet assets shown in Placement are materialised in every saved map.
 
 ## Modules
 

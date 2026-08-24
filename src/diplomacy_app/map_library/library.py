@@ -67,11 +67,7 @@ def _draft_from_folder(path: Path) -> MapDraft:
     if not isinstance(assets, dict):
         raise MapLibraryError("assets must be a mapping")
     svg = sanitise_svg((path / str(assets.get("map", "map.svg"))).read_bytes())
-    army_path = path / str(assets.get("army", "army.svg"))
-    fleet_path = path / str(assets.get("fleet", "fleet.svg"))
-    army = army_path.read_bytes() if army_path.exists() else None
-    fleet = fleet_path.read_bytes() if fleet_path.exists() else None
-    definition = compile_map(text, svg, army, fleet)
+    definition = compile_map(text, svg)
     configured_ids = {item.svg_element_id for item in definition.territories}
     non_playable = document.get("non_playable_elements", {})
     roles: dict[str, SvgElementRole] = {}
@@ -90,8 +86,6 @@ def _draft_from_folder(path: Path) -> MapDraft:
         definition.powers,
         definition.default_starting_setup,
         definition.presentation,
-        army,
-        fleet,
         definition.rules_engine_id,
     )
 
@@ -237,8 +231,6 @@ class FileMapLibrary:
                 DEFAULT_SEA_COLOUR,
                 DEFAULT_UNCLAIMED_REGION_COLOUR,
             ),
-            None,
-            None,
             "standard",
         )
 
@@ -254,7 +246,7 @@ class FileMapLibrary:
             )
 
         try:
-            definition = compile_map(draft.map_yaml, draft.svg, draft.army_svg, draft.fleet_svg)
+            definition = compile_map(draft.map_yaml, draft.svg)
         except MapLibraryError as exc:
             error("map.invalid", str(exc), "map_yaml")
             return MapValidation(tuple(issues))
@@ -359,7 +351,7 @@ class FileMapLibrary:
 
     def refresh_draft(self, draft: MapDraft) -> MapDraft:
         """Rebuild the derived portions of a draft after YAML editing."""
-        definition = compile_map(draft.map_yaml, draft.svg, draft.army_svg, draft.fleet_svg)
+        definition = compile_map(draft.map_yaml, draft.svg)
         return replace(
             draft,
             map_id=definition.id,
@@ -372,7 +364,7 @@ class FileMapLibrary:
         )
 
     def preview_definition(self, draft: MapDraft) -> MapDefinition:
-        return compile_map(draft.map_yaml, draft.svg, draft.army_svg, draft.fleet_svg)
+        return compile_map(draft.map_yaml, draft.svg)
 
     def update_anchor(
         self,
@@ -593,7 +585,7 @@ class FileMapLibrary:
         if not validation.is_valid:
             messages = "; ".join(item.issue.message for item in validation.issues)
             raise MapLibraryError(f"Map has validation errors: {messages}")
-        definition = compile_map(draft.map_yaml, draft.svg, draft.army_svg, draft.fleet_svg)
+        definition = compile_map(draft.map_yaml, draft.svg)
         self.user_maps_root.mkdir(parents=True, exist_ok=True)
         stage = Path(tempfile.mkdtemp(prefix=f".{definition.id}-", dir=self.user_maps_root))
         (stage / "map.yaml").write_text(draft.map_yaml, encoding="utf-8")

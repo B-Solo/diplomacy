@@ -5,7 +5,7 @@ import pytest
 from diplomacy_app.domain.errors import MapLibraryError
 from diplomacy_app.domain.models import CoastId, Location, MapId, SvgElementRole, TerritoryId
 from diplomacy_app.map_library import FileMapLibrary
-from diplomacy_app.map_library.defaults import DEFAULT_FLEET_SVG
+from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import sanitise_svg, shape_ids, territory_geometries
 from diplomacy_app.storage.serialization import map_definition_data, map_definition_from_data
 
@@ -77,7 +77,9 @@ def test_import_classifies_and_can_promote_structured_shapes(tmp_path, project_r
     </svg>"""
     library = FileMapLibrary(tmp_path / "user", tmp_path / "bundled")
     draft = library.import_svg("Tiny map", svg)
+    assert library.preview_definition(draft).assets.army_svg == DEFAULT_ARMY_SVG
     assert library.preview_definition(draft).assets.fleet_svg == DEFAULT_FLEET_SVG
+    assert (project_root / "maps/england/army.svg").read_bytes() == DEFAULT_ARMY_SVG
     assert (project_root / "maps/england/fleet.svg").read_bytes() == DEFAULT_FLEET_SVG
     assert draft.element_roles["territory-alpha"] is SvgElementRole.TERRITORY
     assert draft.element_roles["region-beta"] is SvgElementRole.DECORATION

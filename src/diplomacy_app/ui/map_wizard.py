@@ -5,7 +5,6 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import replace
-from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree
 
@@ -17,7 +16,6 @@ from PySide6.QtWidgets import (
     QColorDialog,
     QComboBox,
     QDoubleSpinBox,
-    QFileDialog,
     QGroupBox,
     QHBoxLayout,
     QHeaderView,
@@ -200,7 +198,6 @@ class MapWizard(QWidget):
             self._build_yaml_tab()
             self._build_setup_tab()
             self._build_anchor_tab()
-            self._build_assets_tab()
         self.message = QLabel()
         self.message.setWordWrap(True)
         self.message.setVisible(False)
@@ -482,39 +479,6 @@ class MapWizard(QWidget):
         layout.addWidget(self.anchor_canvas, 1)
         self.placement_zoom = MapZoomControls(self.anchor_canvas)
         self.tabs.addTab(page, "Placement")
-
-    def _build_assets_tab(self) -> None:
-        page = QWidget()
-        layout = QVBoxLayout(page)
-        layout.setContentsMargins(4, 3, 4, 3)
-        layout.setSpacing(3)
-        previews = QHBoxLayout()
-        army_column = QVBoxLayout()
-        self.army_preview_label = QLabel()
-        army_column.addWidget(self.army_preview_label)
-        self.army_asset_preview = MapCanvas()
-        self.army_asset_preview.setMinimumSize(420, 320)
-        army_column.addWidget(self.army_asset_preview, 1)
-        self.army_asset_zoom = MapZoomControls(self.army_asset_preview)
-        army = QPushButton("Choose army SVG…")
-        army.clicked.connect(lambda: self._choose_asset("army"))
-        army_column.addWidget(army)
-        fleet_column = QVBoxLayout()
-        self.fleet_preview_label = QLabel()
-        fleet_column.addWidget(self.fleet_preview_label)
-        self.fleet_asset_preview = MapCanvas()
-        self.fleet_asset_preview.setMinimumSize(420, 320)
-        fleet_column.addWidget(self.fleet_asset_preview, 1)
-        self.fleet_asset_zoom = MapZoomControls(self.fleet_asset_preview)
-        fleet = QPushButton("Choose fleet SVG…")
-        fleet.clicked.connect(lambda: self._choose_asset("fleet"))
-        fleet_column.addWidget(fleet)
-        previews.addLayout(army_column)
-        previews.addSpacing(8)
-        previews.addLayout(fleet_column)
-        layout.addLayout(previews, 1)
-        self.tabs.addTab(page, "Unit symbols")
-        self._update_asset_status()
 
     def _populate_roles(self) -> None:
         self._populating_roles = True
@@ -1019,7 +983,7 @@ class MapWizard(QWidget):
             ]
             self._add_unit_previews(
                 unit_entries,
-                self.draft.army_svg or DEFAULT_ARMY_SVG,
+                DEFAULT_ARMY_SVG,
                 UnitType.ARMY,
                 "#3f7b53",
             )
@@ -1033,7 +997,7 @@ class MapWizard(QWidget):
                 )
                 for location, point in presentation.fleet_anchors.items()
             ]
-            asset = self.draft.fleet_svg or DEFAULT_FLEET_SVG
+            asset = DEFAULT_FLEET_SVG
             colour = "#356f95"
             self._add_unit_previews(unit_entries, asset, UnitType.FLEET, colour)
 
@@ -1261,75 +1225,6 @@ class MapWizard(QWidget):
             self.setup_validation_label.setStyleSheet("color: #8a302b")
             return False
 
-    def _choose_asset(self, kind: str) -> None:
-        filename, _ = QFileDialog.getOpenFileName(
-            self, f"Choose {kind} SVG", "", "SVG files (*.svg)"
-        )
-        if not filename:
-            return
-        data = Path(filename).read_bytes()
-        self.draft = replace(
-            self.draft,
-            army_svg=data if kind == "army" else self.draft.army_svg,
-            fleet_svg=data if kind == "fleet" else self.draft.fleet_svg,
-        )
-        self._update_asset_status()
-        self._reload_anchor_scene()
-
-    def _update_asset_status(self) -> None:
-        army = self.draft.army_svg or DEFAULT_ARMY_SVG
-        fleet = self.draft.fleet_svg or DEFAULT_FLEET_SVG
-        self.army_preview_label.setText(
-            "Army — custom symbol" if self.draft.army_svg else "Army — supplied default"
-        )
-        self.fleet_preview_label.setText(
-            "Fleet — custom symbol" if self.draft.fleet_svg else "Fleet — supplied default"
-        )
-        self._set_asset_preview(self.army_asset_preview, army, UnitType.ARMY)
-        self._set_asset_preview(self.fleet_asset_preview, fleet, UnitType.FLEET)
-
-    def _set_asset_preview(self, canvas: MapCanvas, asset: bytes, unit_type: UnitType) -> None:
-        canvas.set_svg(self._preview_svg_without("units"), fit=True)
-        definition = self.service.preview_map_definition(self.draft)
-        powers = {power.id: power for power in definition.powers}
-        units = [
-            unit
-            for unit in definition.default_starting_setup.state.units
-            if unit.unit_type is unit_type
-        ]
-        for unit in units:
-            if unit_type is UnitType.ARMY:
-                point = definition.presentation.army_anchors[unit.location.territory_id]
-            else:
-                point = definition.presentation.fleet_anchors.get(unit.location)
-                if point is None:
-                    point = definition.presentation.fleet_anchors[
-                        Location(unit.location.territory_id)
-                    ]
-            colour = darken_colour(powers[unit.power_id].colour, 0.82)
-            canvas.scene().addItem(
-                UnitAnchorItem(
-                    point,
-                    embedded_unit_svg(asset, colour),
-                    movable=False,
-                )
-            )
-        if not units:
-            anchors = (
-                definition.presentation.army_anchors.values()
-                if unit_type is UnitType.ARMY
-                else definition.presentation.fleet_anchors.values()
-            )
-            point = next(iter(anchors), None)
-            if point is not None:
-                canvas.scene().addItem(
-                    UnitAnchorItem(
-                        point,
-                        embedded_unit_svg(asset, "#344d40"),
-                        movable=False,
-                    )
-                )
-
     def _tab_changed(self, index: int) -> None:
         if (
             index != 2
@@ -1350,8 +1245,6 @@ class MapWizard(QWidget):
                     self._reload_setup_preview()
                 elif index == 3:
                     self._reload_anchor_scene()
-                elif index == 4:
-                    self._update_asset_status()
         elif index == 0:
             self._reload_classification_preview()
         elif index == 2:
@@ -1359,8 +1252,6 @@ class MapWizard(QWidget):
             self._reload_setup_preview()
         elif index == 3:
             self._reload_anchor_scene()
-        elif index == 4:
-            self._update_asset_status()
 
     def _show_error(self, text: str) -> None:
         self.message.setText(text)

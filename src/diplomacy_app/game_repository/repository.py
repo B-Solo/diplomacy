@@ -227,8 +227,6 @@ class FileGameRepository:
             definition.powers,
             definition.default_starting_setup,
             definition.presentation,
-            definition.assets.army_svg,
-            definition.assets.fleet_svg,
             definition.rules_engine_id,
         )
 

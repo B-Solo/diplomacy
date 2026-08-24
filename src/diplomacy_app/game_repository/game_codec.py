@@ -21,6 +21,7 @@ from diplomacy_app.domain.models import (
     SavedViewId,
     VisibilityPolicy,
 )
+from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.storage.serialization import map_definition_from_data
 
 
@@ -66,8 +67,8 @@ def load_private_map(root: Path) -> MapDefinition:
     try:
         assets = MapAssets(
             (folder / "map.svg").read_bytes(),
-            (folder / "army.svg").read_bytes(),
-            (folder / "fleet.svg").read_bytes(),
+            DEFAULT_ARMY_SVG,
+            DEFAULT_FLEET_SVG,
         )
         value = json.loads((folder / "_compiled-map.json").read_text(encoding="utf-8"))
         return map_definition_from_data(value, assets)

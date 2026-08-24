@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import base64
 from dataclasses import replace
 from types import MappingProxyType
 from xml.etree import ElementTree
@@ -94,6 +93,15 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     assert artifact.size == PixelSize(640, 480)
 
     root = ElementTree.fromstring(scene.svg)
+    unit_layer = next(
+        group for group in root.findall(".//{*}g") if group.attrib.get("id") == "units"
+    )
+    unit_symbols = [
+        group for group in unit_layer.findall("{*}g") if group.attrib.get("class") == "unit-symbol"
+    ]
+    assert len(unit_symbols) == len(phase.state.units)
+    assert not unit_layer.findall("{*}image")
+    assert all(symbol.findall(".//{*}path") for symbol in unit_symbols)
     derbyshire = next(
         label
         for label in root.findall(".//{*}g[@id='territory-labels']/{*}text")
@@ -133,19 +141,6 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     owner = owners[owned_star.attrib["data-territory"]]
     assert owner is not None
     assert owned_star.attrib["fill"] == darken_colour(powers[owner].colour, 0.82)
-    asset_view_boxes = {
-        ElementTree.fromstring(asset).attrib["viewBox"]
-        for asset in (england.assets.army_svg, england.assets.fleet_svg)
-    }
-    unit_images = root.findall(".//{*}g[@id='units']/{*}image")
-    assert unit_images
-    for image in unit_images:
-        embedded = ElementTree.fromstring(base64.b64decode(image.attrib["href"].partition(",")[2]))
-        assert embedded.attrib["viewBox"] in asset_view_boxes
-        assert "width" not in embedded.attrib
-        assert "height" not in embedded.attrib
-        assert image.attrib["preserveAspectRatio"] == "xMidYMid meet"
-
     territory = england.territories[0]
     abbreviation_anchor = Point(17, 29)
     abbreviation_anchors = dict(england.presentation.abbreviation_anchors)

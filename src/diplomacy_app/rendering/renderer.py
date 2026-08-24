@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import base64
+import copy
 import math
 from xml.etree import ElementTree
 
@@ -56,9 +56,28 @@ def _anchor(map_definition: MapDefinition, unit: UnitRef) -> Point:
     return map_definition.presentation.fleet_anchors[Location(unit.location.territory_id)]
 
 
-def _image_href(svg: bytes, colour: str) -> str:
-    normalised = embedded_unit_svg(svg, colour)
-    return "data:image/svg+xml;base64," + base64.b64encode(normalised).decode()
+def _add_unit_symbol(
+    layer: ElementTree.Element,
+    asset: bytes,
+    colour: str,
+    point: Point,
+    offset: int,
+) -> None:
+    source = ElementTree.fromstring(embedded_unit_svg(asset, colour))
+    x, y, width, height = view_box(asset)
+    scale = min(32 / max(width, 1), 22 / max(height, 1))
+    translate_x = point.x + offset - (x + width / 2) * scale
+    translate_y = point.y + offset - (y + height / 2) * scale
+    symbol = ElementTree.SubElement(
+        layer,
+        _tag("g"),
+        {
+            "class": "unit-symbol",
+            "transform": f"translate({translate_x:g} {translate_y:g}) scale({scale:g})",
+        },
+    )
+    for child in source:
+        symbol.append(copy.deepcopy(child))
 
 
 def _set_fill(node: ElementTree.Element, colour: str) -> None:
@@ -260,18 +279,7 @@ class MapRenderer:
                             if unit.unit_type is UnitType.ARMY
                             else map_definition.assets.fleet_svg
                         )
-                        ElementTree.SubElement(
-                            units_layer,
-                            _tag("image"),
-                            {
-                                "x": str(point.x - 16 + offset),
-                                "y": str(point.y - 11 + offset),
-                                "width": "32",
-                                "height": "22",
-                                "preserveAspectRatio": "xMidYMid meet",
-                                "href": _image_href(asset, colour),
-                            },
-                        )
+                        _add_unit_symbol(units_layer, asset, colour, point, offset)
                         if dislodged:
                             marker = ElementTree.SubElement(
                                 units_layer,

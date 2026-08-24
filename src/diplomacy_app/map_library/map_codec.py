@@ -322,8 +322,6 @@ def _parse_powers_and_start(
 def compile_map(
     text: str,
     svg: bytes,
-    army_svg: bytes | None = None,
-    fleet_svg: bytes | None = None,
 ) -> MapDefinition:
     """Compile authored map content into a validated application snapshot."""
     document = load_yaml(text)
@@ -349,7 +347,7 @@ def compile_map(
         default_starting_setup=setup,
         presentation=presentation,
         inaccessible_svg_element_ids=inaccessible_ids,
-        assets=MapAssets(safe_svg, army_svg or DEFAULT_ARMY_SVG, fleet_svg or DEFAULT_FLEET_SVG),
+        assets=MapAssets(safe_svg, DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG),
         rules_engine_id=str(document.get("rules_engine", "standard")),
     )
 
@@ -359,11 +357,4 @@ def load_map_folder(path: Path) -> MapDefinition:
     document = load_yaml(text)
     assets = _mapping(document.get("assets", {}), "assets")
     map_path = path / str(assets.get("map", "map.svg"))
-    army_path = path / str(assets.get("army", "army.svg"))
-    fleet_path = path / str(assets.get("fleet", "fleet.svg"))
-    return compile_map(
-        text,
-        map_path.read_bytes(),
-        army_path.read_bytes() if army_path.exists() else None,
-        fleet_path.read_bytes() if fleet_path.exists() else None,
-    )
+    return compile_map(text, map_path.read_bytes())
