@@ -79,7 +79,8 @@ Its source and licence information are recorded in [maps/england/SOURCE.md](maps
 ## Game folders
 
 Each game folder is portable and self-contained.
-It includes static game settings, saved map views, an immutable private map snapshot, every reached phase state, original order text, canonical orders, validation, and adjudication results.
+It includes static game settings, saved map views, a private map snapshot, every reached phase state, original order text, canonical orders, validation, and adjudication results.
+The private map's visual anchors may be adjusted during play without changing its territory names, topology, powers or setup.
 
 Phase advancement uses recoverable redo transactions.
 Opening a game automatically completes an interrupted prepared transaction before exposing any phase snapshot.

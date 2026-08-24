@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 import shutil
@@ -19,6 +20,8 @@ from diplomacy_app.domain.models import (
     GameLocation,
     GameSnapshot,
     GameSummary,
+    MapDraft,
+    MapPresentation,
     OrderResult,
     OrderSubmission,
     PhaseId,
@@ -28,6 +31,7 @@ from diplomacy_app.domain.models import (
     SavedView,
     SavedViewId,
     Season,
+    SvgElementRole,
 )
 from diplomacy_app.game_repository.game_codec import (
     authored_map_yaml,
@@ -183,6 +187,30 @@ class FileGameRepository:
                 raise
             raise InvalidStoredData(f"Could not load phase {phase_id.label}: {exc}") from exc
 
+    def load_map_placement_draft(self, game_id: GameId) -> MapDraft:
+        self._root_for(game_id)
+        game = self._read_game(self._locations[game_id], record=False)
+        definition = game.map_definition
+        return MapDraft(
+            definition.id,
+            definition.name,
+            definition.assets.map_svg,
+            MappingProxyType(
+                {
+                    territory.svg_element_id: SvgElementRole.TERRITORY
+                    for territory in definition.territories
+                }
+            ),
+            definition.territories,
+            authored_map_yaml(definition),
+            definition.powers,
+            definition.default_starting_setup,
+            definition.presentation,
+            definition.assets.army_svg,
+            definition.assets.fleet_svg,
+            definition.rules_engine_id,
+        )
+
     def create(self, request: CreateStoredGame) -> GameSnapshot:
         target = request.location.path
         if target.exists() and any(target.iterdir()):
@@ -289,6 +317,53 @@ class FileGameRepository:
         game = self._read_game(location, record=False)
         views = tuple(item for item in game.saved_views if item.id != view_id)
         atomic_json(root / "views.json", views_data(views))
+        return self._read_game(location, record=False)
+
+    def save_map_presentation(
+        self,
+        game_id: GameId,
+        presentation: MapPresentation,
+        expected_revision: Revision,
+    ) -> GameSnapshot:
+        root = self._root_for(game_id)
+        self._check_revision(root, expected_revision)
+        location = self._locations[game_id]
+        game = self._read_game(location, record=False)
+        current = game.map_definition.presentation
+        fields = (
+            "label_anchors",
+            "army_anchors",
+            "fleet_anchors",
+            "coast_label_anchors",
+            "coast_label_rotations",
+            "supply_centre_anchors",
+        )
+        if any(
+            set(getattr(current, field)) != set(getattr(presentation, field)) for field in fields
+        ):
+            raise RepositoryError("Game map placement cannot add or remove visual anchors")
+        points = (
+            *presentation.label_anchors.values(),
+            *presentation.army_anchors.values(),
+            *presentation.fleet_anchors.values(),
+            *presentation.coast_label_anchors.values(),
+            *presentation.supply_centre_anchors.values(),
+        )
+        values = (
+            *(coordinate for point in points for coordinate in (point.x, point.y)),
+            *presentation.coast_label_rotations.values(),
+        )
+        if not all(math.isfinite(value) for value in values):
+            raise RepositoryError("Game map placement coordinates must be finite")
+        updated = replace(game.map_definition, presentation=presentation)
+        commit_files(
+            root,
+            [
+                ("map/map.yaml", authored_map_yaml(updated).encode("utf-8")),
+                ("map/_compiled-map.json", _json_bytes(map_definition_data(updated))),
+            ],
+            "map/_compiled-map.json",
+        )
         return self._read_game(location, record=False)
 
     def commit_adjudication(

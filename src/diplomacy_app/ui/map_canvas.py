@@ -50,6 +50,7 @@ class MapCanvas(QGraphicsView):
     zoom_changed = Signal(int)
     outcome_hovered = Signal(str)
     scene_hovered = Signal(float, float)
+    scene_pressed = Signal()
     resized = Signal()
 
     def __init__(self, parent=None) -> None:
@@ -221,6 +222,11 @@ class MapCanvas(QGraphicsView):
                 break
         self.outcome_hovered.emit(message)
 
+    def mousePressEvent(self, event) -> None:
+        self.scene().clearSelection()
+        self.scene_pressed.emit()
+        super().mousePressEvent(event)
+
     def highlight_element(self, element_id: str | None) -> None:
         """Overlay one SVG element without rebuilding or refitting the scene."""
         if self._highlight is not None:
@@ -254,7 +260,7 @@ class MapZoomControls(QWidget):
             "#mapZoomControls { background: rgba(255, 250, 240, 220); "
             "border: 1px solid #8f846d; border-radius: 5px; } "
             "#mapZoomControls QPushButton, #mapZoomControls QLineEdit { "
-            "min-width: 0; padding: 2px 4px; "
+            "min-width: 0; padding: 3px 5px; "
             "border-radius: 3px; }"
         )
         layout = QHBoxLayout(self)
@@ -263,7 +269,7 @@ class MapZoomControls(QWidget):
         self.zoom_out = QPushButton("−")
         self.zoom_out.setAccessibleName("Zoom out")
         self.zoom_out.setToolTip("Zoom out one level")
-        self.zoom_out.setFixedWidth(24)
+        self.zoom_out.setFixedWidth(28)
         self.zoom_out.clicked.connect(lambda: canvas.zoom_by(1 / 1.2))
         layout.addWidget(self.zoom_out)
         self.percentage = ZoomPercentageEdit(f"{round(canvas.transform().m11() * 100)}%")
@@ -276,7 +282,7 @@ class MapZoomControls(QWidget):
         self.zoom_in = QPushButton("+")
         self.zoom_in.setAccessibleName("Zoom in")
         self.zoom_in.setToolTip("Zoom in one level")
-        self.zoom_in.setFixedWidth(24)
+        self.zoom_in.setFixedWidth(28)
         self.zoom_in.clicked.connect(lambda: canvas.zoom_by(1.2))
         layout.addWidget(self.zoom_in)
         self.fit = QPushButton("Fit")

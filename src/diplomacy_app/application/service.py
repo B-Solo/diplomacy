@@ -11,6 +11,8 @@ from diplomacy_app.domain.models import (
     FinalisationRequired,
     GameLocation,
     GameSnapshot,
+    LabelMode,
+    MapBounds,
     MapDefinition,
     MapDraft,
     MapId,
@@ -22,12 +24,15 @@ from diplomacy_app.domain.models import (
     Perspective,
     PhaseId,
     PhaseSnapshot,
+    PixelSize,
+    ProjectedMapState,
     ProjectionRequest,
     RenderRequest,
     ResolveResult,
     SavedView,
     SavedViewId,
     SessionView,
+    VisibleTerritory,
 )
 from diplomacy_app.game_repository import FileGameRepository
 from diplomacy_app.map_library import FileMapLibrary
@@ -221,6 +226,19 @@ class ApplicationService:
         self._game = updated
         return updated
 
+    def begin_game_map_placement(self) -> MapDraft:
+        game, _ = self._require_game()
+        return self.repository.load_map_placement_draft(game.game_id)
+
+    def save_game_map_placement(self, draft: MapDraft) -> SessionView:
+        game, phase = self._require_game()
+        updated = self.repository.save_map_presentation(
+            game.game_id, draft.presentation, game.revision
+        )
+        self._game = updated
+        self._phase = self.repository.load_phase(updated.game_id, phase.phase_id)
+        return self._session()
+
     def list_maps(self) -> tuple[MapSummary, ...]:
         return self.map_library.list()
 
@@ -239,6 +257,36 @@ class ApplicationService:
     def preview_map_definition(self, draft: MapDraft) -> MapDefinition:
         return self.map_library.preview_definition(draft)
 
+    def preview_map_setup(self, draft: MapDraft) -> MapScene:
+        definition = self.map_library.preview_definition(draft)
+        state = definition.default_starting_setup.state
+        units = {unit.location.territory_id: unit for unit in state.units}
+        dislodged = {unit.unit.location.territory_id: unit.unit for unit in state.dislodged_units}
+        projection = ProjectedMapState(
+            definition.default_starting_setup.phase_id,
+            GAMEMASTER,
+            tuple(
+                VisibleTerritory(
+                    territory.id,
+                    territory.name,
+                    state.territory_controllers.get(territory.id),
+                    state.supply_centre_owners.get(territory.id),
+                    units.get(territory.id),
+                    dislodged.get(territory.id),
+                )
+                for territory in definition.territories
+            ),
+            (),
+            (),
+        )
+        request = RenderRequest(
+            DisplayMode.POSITION,
+            LabelMode.FULL_NAME,
+            MapBounds(0, 0, 1, 1),
+            PixelSize(1, 1),
+        )
+        return self.renderer.compose(definition, projection, request)
+
     def update_map_anchor(
         self, draft: MapDraft, territory_id, anchor, point, coast_id=None
     ) -> MapDraft:
@@ -251,6 +299,9 @@ class ApplicationService:
 
     def update_map_element_role(self, draft: MapDraft, element_id, role) -> MapDraft:
         return self.map_library.update_element_role(draft, element_id, role)
+
+    def update_map_territory_name(self, draft: MapDraft, territory_id, name) -> MapDraft:
+        return self.map_library.update_territory_name(draft, territory_id, name)
 
     def save_map_draft(self, draft: MapDraft) -> MapDefinition:
         return self.map_library.save(draft)

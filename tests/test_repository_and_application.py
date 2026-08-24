@@ -108,3 +108,40 @@ def test_reusable_map_edit_does_not_change_existing_game_snapshot(tmp_path, proj
 
     assert private_yaml.read_bytes() == before
     assert maps.load(configured.id).presentation.label_anchors[territory_id] != old_point
+
+
+def test_current_game_map_placement_changes_only_private_presentation(tmp_path, project_root):
+    maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
+    repo = repository(tmp_path)
+    service = ApplicationService(
+        repo,
+        maps,
+        StandardRulesEngine(),
+        VisibilityProjector(),
+        MapRenderer(),
+    )
+    configured = maps.load(maps.list()[0].map_id)
+    location = GameLocation((tmp_path / "placement-game").resolve())
+    original = service.create_game(
+        NewGameRequest(
+            "Placement game",
+            location,
+            configured.id,
+            configured.default_starting_setup,
+        )
+    ).game.map_definition
+    draft = service.begin_game_map_placement()
+    territory_id, old_point = next(iter(draft.presentation.label_anchors.items()))
+    moved_point = Point(old_point.x + 11, old_point.y - 4)
+    edited = service.update_map_anchor(draft, territory_id, "label", moved_point)
+    updated = service.save_game_map_placement(edited)
+
+    reopened = repository(tmp_path).open(location)
+    assert updated.game.map_definition.presentation.label_anchors[territory_id] == moved_point
+    assert reopened.map_definition.presentation.label_anchors[territory_id] == moved_point
+    assert reopened.map_definition.territories == original.territories
+    assert reopened.map_definition.adjacencies == original.adjacencies
+    assert reopened.map_definition.powers == original.powers
+    assert reopened.map_definition.default_starting_setup == original.default_starting_setup
+    assert reopened.phases == updated.game.phases
+    assert maps.load(configured.id).presentation.label_anchors[territory_id] == old_point

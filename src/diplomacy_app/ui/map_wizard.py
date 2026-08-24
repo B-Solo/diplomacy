@@ -36,6 +36,7 @@ from PySide6.QtWidgets import (
 from shapely.geometry import Point as GeometryPoint
 
 from diplomacy_app.domain.models import (
+    CoastId,
     Location,
     MapDraft,
     Point,
@@ -135,14 +136,21 @@ class MapWizard(QWidget):
     cancelled = Signal()
     saved = Signal(object)
 
-    def __init__(self, service, draft: MapDraft, parent=None) -> None:
+    def __init__(
+        self, service, draft: MapDraft, parent=None, *, game_placement_only: bool = False
+    ) -> None:
         super().__init__(parent)
         self.service = service
         self.draft = draft
+        self.game_placement_only = game_placement_only
         self.saved_definition = None
-        self._element_geometries = territory_geometries(draft.svg, draft.element_roles)
+        self._element_geometries = (
+            {} if game_placement_only else territory_geometries(draft.svg, draft.element_roles)
+        )
         self._row_by_element: dict[str, int] = {}
+        self._populating_roles = False
         self._topology_nodes: dict[str, Point] = {}
+        self._topology_node_territories: dict[str, str] = {}
         self._topology_names: dict[str, str] = {}
         self._topology_hovered_territory: str | None = None
         self._selected_coast_label: Location | None = None
@@ -151,13 +159,24 @@ class MapWizard(QWidget):
         layout.setContentsMargins(4, 3, 4, 3)
         layout.setSpacing(3)
         self.outer_layout = layout
+        if game_placement_only:
+            scope = QLabel(
+                "Adjust this game's private visual placement. Territory names, rules, "
+                "topology, powers and setup remain unchanged."
+            )
+            scope.setWordWrap(True)
+            scope.setProperty("muted", True)
+            layout.addWidget(scope)
         self.tabs = QTabWidget()
         layout.addWidget(self.tabs, 1)
-        self._build_classification_tab()
-        self._build_yaml_tab()
-        self._build_setup_tab()
-        self._build_anchor_tab()
-        self._build_assets_tab()
+        if game_placement_only:
+            self._build_anchor_tab()
+        else:
+            self._build_classification_tab()
+            self._build_yaml_tab()
+            self._build_setup_tab()
+            self._build_anchor_tab()
+            self._build_assets_tab()
         self.message = QLabel()
         self.message.setWordWrap(True)
         self.message.setVisible(False)
@@ -168,17 +187,21 @@ class MapWizard(QWidget):
         cancel.clicked.connect(self.cancelled)
         buttons.addWidget(cancel)
         buttons.addStretch()
-        self.save_button = QPushButton("Save configured map")
+        self.save_button = QPushButton(
+            "Save game map placement" if game_placement_only else "Save configured map"
+        )
         self.save_button.setProperty("primary", True)
         self.save_button.clicked.connect(self._save)
         buttons.addWidget(self.save_button)
         layout.addLayout(buttons)
-        self.yaml_editor.setPlainText(draft.map_yaml)
-        self._populate_roles()
         self._reload_anchor_scene()
-        self.tabs.currentChanged.connect(self._tab_changed)
-        self._validate()
-        self._focus_topology_section()
+        if not game_placement_only:
+            self.yaml_editor.setPlainText(draft.map_yaml)
+            self._populate_roles()
+            self.tabs.currentChanged.connect(self._tab_changed)
+            self._validate()
+            self._reload_setup_preview()
+            self._focus_topology_section()
 
     def _build_classification_tab(self) -> None:
         page = QWidget()
@@ -207,6 +230,7 @@ class MapWizard(QWidget):
         self.roles.currentCellChanged.connect(
             lambda row, _column, _old_row, _old_column: self._highlight_row(row)
         )
+        self.roles.itemChanged.connect(self._territory_name_changed)
         self.preview.scene_hovered.connect(self._map_hovered)
         splitter = QSplitter()
         splitter.setHandleWidth(2)
@@ -265,21 +289,37 @@ class MapWizard(QWidget):
     def _build_setup_tab(self) -> None:
         page = QWidget()
         layout = QVBoxLayout(page)
-        layout.setContentsMargins(4, 3, 4, 3)
+        layout.setContentsMargins(2, 2, 2, 2)
         layout.setSpacing(3)
+        splitter = QSplitter(Qt.Orientation.Horizontal)
+        splitter.setHandleWidth(2)
+        editor_side = QWidget()
+        editor_layout = QVBoxLayout(editor_side)
+        editor_layout.setContentsMargins(0, 0, 0, 0)
         self.setup_editor = QPlainTextEdit()
         self.setup_editor.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         self.setup_find = YamlFindBar(self.setup_editor, page)
-        layout.addWidget(self.setup_find)
-        layout.addWidget(self.setup_editor, 1)
+        editor_layout.addWidget(self.setup_find)
+        editor_layout.addWidget(self.setup_editor, 1)
         controls = QHBoxLayout()
-        apply_setup = QPushButton("Apply to map YAML")
+        apply_setup = QPushButton("Regenerate map preview")
         apply_setup.clicked.connect(self._apply_setup_changes)
         controls.addWidget(apply_setup)
         self.setup_validation_label = QLabel()
         self.setup_validation_label.setWordWrap(True)
         controls.addWidget(self.setup_validation_label, 1)
-        layout.addLayout(controls)
+        editor_layout.addLayout(controls)
+        self.setup_canvas = MapCanvas()
+        preview_side = QWidget()
+        preview_layout = QVBoxLayout(preview_side)
+        preview_layout.setContentsMargins(0, 0, 0, 0)
+        preview_layout.addWidget(self.setup_canvas, 1)
+        self.setup_zoom = MapZoomControls(self.setup_canvas)
+        splitter.addWidget(editor_side)
+        splitter.addWidget(preview_side)
+        splitter.setSizes([430, 730])
+        layout.addWidget(splitter, 1)
+        self.setup_splitter = splitter
         self.tabs.addTab(page, "Powers and setup")
 
     def _build_anchor_tab(self) -> None:
@@ -324,6 +364,7 @@ class MapWizard(QWidget):
         preview_row.addStretch()
         layout.addLayout(preview_row)
         self.anchor_canvas = MapCanvas()
+        self.anchor_canvas.scene_pressed.connect(self._clear_coast_label_selection)
         layout.addWidget(self.anchor_canvas, 1)
         self.placement_zoom = MapZoomControls(self.anchor_canvas)
         self.tabs.addTab(page, "Placement")
@@ -365,6 +406,7 @@ class MapWizard(QWidget):
         self._update_asset_status()
 
     def _populate_roles(self) -> None:
+        self._populating_roles = True
         self.roles.setRowCount(0)
         self._row_by_element.clear()
         territory_names = {
@@ -375,8 +417,13 @@ class MapWizard(QWidget):
             self.roles.insertRow(row)
             self._row_by_element[element_id] = row
             display_name = territory_names.get(element_id) or self._element_name(element_id, role)
-            self.roles.setItem(row, 0, QTableWidgetItem(display_name))
-            self.roles.setItem(row, 1, QTableWidgetItem(element_id))
+            name_item = QTableWidgetItem(display_name)
+            if role is not SvgElementRole.TERRITORY:
+                name_item.setFlags(name_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+            self.roles.setItem(row, 0, name_item)
+            element_item = QTableWidgetItem(element_id)
+            element_item.setFlags(element_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
+            self.roles.setItem(row, 1, element_item)
             selector = QComboBox()
             for value in SvgElementRole:
                 selector.addItem(value.value.replace("_", " ").title(), value)
@@ -387,6 +434,38 @@ class MapWizard(QWidget):
                 )
             )
             self.roles.setCellWidget(row, 2, selector)
+        self._populating_roles = False
+
+    def _territory_name_changed(self, item: QTableWidgetItem) -> None:
+        if self._populating_roles or item.column() != 0:
+            return
+        element_item = self.roles.item(item.row(), 1)
+        if element_item is None:
+            return
+        territory = next(
+            (
+                territory
+                for territory in self.draft.territories
+                if territory.svg_element_id == element_item.text()
+            ),
+            None,
+        )
+        if territory is None or item.text().strip() == territory.name:
+            return
+        try:
+            self._commit_editor()
+            self.draft = self.service.update_map_territory_name(
+                self.draft, territory.id, item.text()
+            )
+            self.yaml_editor.setPlainText(self.draft.map_yaml)
+            item.setText(
+                next(value.name for value in self.draft.territories if value.id == territory.id)
+            )
+        except Exception as exc:
+            self._populating_roles = True
+            item.setText(territory.name)
+            self._populating_roles = False
+            self._show_error(f"Could not rename territory: {exc}")
 
     @staticmethod
     def _element_name(element_id: str, role: SvgElementRole) -> str:
@@ -517,14 +596,20 @@ class MapWizard(QWidget):
                 tag("path"),
                 {"d": "M 0 0 L 10 5 L 0 10 z", "fill": colour},
             )
+
+        def location_id(location: Location) -> str:
+            return str(location.territory_id) + (
+                f"/{location.coast_id}" if location.coast_id is not None else ""
+            )
+
         directions: dict[tuple[str, str], set[UnitType]] = {}
         for edge in definition.adjacencies:
-            origin = str(edge.origin.territory_id)
-            destination = str(edge.destination.territory_id)
+            origin = location_id(edge.origin)
+            destination = location_id(edge.destination)
             if origin != destination:
                 directions.setdefault((origin, destination), set()).add(edge.unit_type)
         by_id = {str(item.id): item for item in definition.territories}
-        nodes = {}
+        nodes: dict[str, tuple[Point, str, str, str]] = {}
         for territory in definition.territories:
             if territory.kind is TerritoryKind.LAND:
                 point = definition.presentation.army_anchors.get(
@@ -536,12 +621,36 @@ class MapWizard(QWidget):
                     Location(territory.id), definition.presentation.label_anchors[territory.id]
                 )
                 anchor_type = "fleet"
-            nodes[str(territory.id)] = (point, anchor_type)
+            nodes[str(territory.id)] = (
+                point,
+                anchor_type,
+                str(territory.id),
+                territory.abbreviation,
+            )
+            for coast_id in territory.split_coast_ids:
+                location = Location(territory.id, coast_id)
+                nodes[location_id(location)] = (
+                    definition.presentation.fleet_anchors[location],
+                    "fleet",
+                    str(territory.id),
+                    f"{territory.abbreviation}/{coast_id}",
+                )
         self._topology_nodes = {
-            territory_id: point for territory_id, (point, _anchor_type) in nodes.items()
+            node_id: point
+            for node_id, (point, _anchor_type, _territory_id, _label) in nodes.items()
+        }
+        self._topology_node_territories = {
+            node_id: territory_id
+            for node_id, (_point, _anchor_type, territory_id, _label) in nodes.items()
         }
         self._topology_names = {
-            str(territory.id): territory.name for territory in definition.territories
+            node_id: by_id[territory_id].name
+            + (
+                f" — {coast_label_text(CoastId(node_id.partition('/')[2]))}"
+                if "/" in node_id
+                else ""
+            )
+            for node_id, territory_id in self._topology_node_territories.items()
         }
         self._topology_hovered_territory = None
 
@@ -592,8 +701,7 @@ class MapWizard(QWidget):
                 ElementTree.SubElement(edge_layer, tag("line"), attributes)
 
         node_layer = ElementTree.SubElement(root, tag("g"), {"id": "topology-nodes"})
-        for territory_id, (point, anchor_type) in sorted(nodes.items()):
-            territory = by_id[territory_id]
+        for node_id, (point, anchor_type, territory_id, node_label) in sorted(nodes.items()):
             ElementTree.SubElement(
                 node_layer,
                 tag("circle"),
@@ -605,6 +713,7 @@ class MapWizard(QWidget):
                     "stroke": "#263238",
                     "stroke-width": "1.8",
                     "data-territory": territory_id,
+                    "data-location": node_id,
                     "data-anchor-type": anchor_type,
                 },
             )
@@ -619,7 +728,7 @@ class MapWizard(QWidget):
                     "fill": "#111111",
                 },
             )
-            label.text = territory.abbreviation
+            label.text = node_label
         coast_label_layer = ElementTree.SubElement(root, tag("g"), {"id": "topology-coast-labels"})
         for location, point in sorted(
             definition.presentation.coast_label_anchors.items(),
@@ -651,7 +760,7 @@ class MapWizard(QWidget):
     def _topology_hovered(self, x: float, y: float) -> None:
         if not self._topology_nodes:
             return
-        territory_id, point = min(
+        node_id, point = min(
             self._topology_nodes.items(),
             key=lambda item: math.hypot(item[1].x - x, item[1].y - y),
         )
@@ -660,11 +769,12 @@ class MapWizard(QWidget):
             self.topology_canvas.setToolTip("")
             self._topology_hovered_territory = None
             return
-        if territory_id == self._topology_hovered_territory:
+        if node_id == self._topology_hovered_territory:
             return
+        territory_id = self._topology_node_territories[node_id]
         if self._highlight_yaml_territory(territory_id):
-            self._topology_hovered_territory = territory_id
-            name = self._topology_names.get(territory_id, territory_id)
+            self._topology_hovered_territory = node_id
+            name = self._topology_names.get(node_id, node_id)
             self.topology_canvas.setToolTip(
                 f"{name}: edit this highlighted YAML block, including split_coasts."
             )
@@ -809,6 +919,10 @@ class MapWizard(QWidget):
         self.coast_rotation.blockSignals(False)
         self.coast_rotation.setEnabled(True)
 
+    def _clear_coast_label_selection(self) -> None:
+        self._selected_coast_label = None
+        self.coast_rotation.setEnabled(False)
+
     def _coast_rotation_changed(self, rotation: int) -> None:
         location = self._selected_coast_label
         if location is None or location.coast_id is None:
@@ -820,7 +934,8 @@ class MapWizard(QWidget):
                 str(location.coast_id),
                 rotation,
             )
-            self.yaml_editor.setPlainText(self.draft.map_yaml)
+            if not self.game_placement_only:
+                self.yaml_editor.setPlainText(self.draft.map_yaml)
             item = self._coast_label_items.get(location)
             if item is not None:
                 item.setRotation(rotation)
@@ -830,7 +945,8 @@ class MapWizard(QWidget):
     def _anchor_moved(self, territory, anchor, coast, point) -> None:
         try:
             self.draft = self.service.update_map_anchor(self.draft, territory, anchor, point, coast)
-            self.yaml_editor.setPlainText(self.draft.map_yaml)
+            if not self.game_placement_only:
+                self.yaml_editor.setPlainText(self.draft.map_yaml)
         except Exception as exc:
             self._show_error(f"Could not move anchor: {exc}")
 
@@ -844,6 +960,15 @@ class MapWizard(QWidget):
         }
         self.setup_editor.setPlainText(yaml.safe_dump(setup, sort_keys=False, allow_unicode=True))
         self.setup_editor.document().setModified(False)
+
+    def _reload_setup_preview(self) -> bool:
+        try:
+            self.setup_canvas.set_scene(self.service.preview_map_setup(self.draft), fit=True)
+            return True
+        except Exception as exc:
+            self.setup_validation_label.setText(f"Could not render setup: {exc}")
+            self.setup_validation_label.setStyleSheet("color: #8a302b")
+            return False
 
     def _focus_topology_section(self) -> None:
         cursor = self.yaml_editor.document().find("territories:")
@@ -874,7 +999,9 @@ class MapWizard(QWidget):
                 self.setup_validation_label.setText("Map validation failed")
                 self.setup_validation_label.setStyleSheet("color: #8a302b")
                 return False
-            self.setup_validation_label.setText("Applied to map YAML")
+            if not self._reload_setup_preview():
+                return False
+            self.setup_validation_label.setText("Map preview regenerated")
             self.setup_validation_label.setStyleSheet("color: #2f6843")
             return True
         except Exception as exc:
@@ -932,10 +1059,14 @@ class MapWizard(QWidget):
         if index == 1:
             self._validate()
         elif self.yaml_editor.document().isModified():
-            if self._validate() and index == 3:
-                self._reload_anchor_scene()
+            if self._validate():
+                if index == 2:
+                    self._reload_setup_preview()
+                elif index == 3:
+                    self._reload_anchor_scene()
         elif index == 2:
             self._load_setup_editor()
+            self._reload_setup_preview()
         elif index == 3:
             self._reload_anchor_scene()
 
@@ -945,6 +1076,13 @@ class MapWizard(QWidget):
         self.message.setVisible(True)
 
     def _save(self) -> None:
+        if self.game_placement_only:
+            try:
+                self.saved_definition = self.service.save_game_map_placement(self.draft)
+                self.saved.emit(self.saved_definition)
+            except Exception as exc:
+                self._show_error(f"Could not save game map placement: {exc}")
+            return
         if self.setup_editor.document().isModified() and not self._apply_setup_changes():
             self.tabs.setCurrentIndex(2)
             return

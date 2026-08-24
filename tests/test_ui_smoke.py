@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (
 )
 
 from diplomacy_app.application.service import ApplicationService
-from diplomacy_app.domain.models import Point
+from diplomacy_app.domain.models import GameLocation, NewGameRequest, Point
 from diplomacy_app.game_repository import FileGameRepository
 from diplomacy_app.game_repository.recent_games import RecentGameStore
 from diplomacy_app.map_library import FileMapLibrary
@@ -39,6 +39,7 @@ from diplomacy_app.visibility import VisibilityProjector
 def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_root):
     assert "QComboBox QAbstractItemView::item:selected" in STYLE
     assert "selection-color: #fffdf5" in STYLE
+    assert "QPushButton, QToolButton { padding: 5px 9px; }" in STYLE
     maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     service = ApplicationService(
         FileGameRepository(RecentGameStore(tmp_path / "app.json")),
@@ -126,14 +127,17 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.setup_editor.document().setModified(True)
     wizard.tabs.setCurrentIndex(3)
     assert yaml.safe_load(wizard.draft.map_yaml)["teams"][power_id]["colour"] == "#123456"
-    assert wizard.setup_validation_label.text() == "Applied to map YAML"
+    assert wizard.setup_validation_label.text() == "Map preview regenerated"
+    assert wizard.setup_canvas._renderer is not None
+    assert wizard.setup_canvas._renderer.isValid()
+    assert b"#123456" in service.preview_map_setup(wizard.draft).svg
     assert not any(
         button.text() == "Reload anchors from YAML" for button in wizard.findChildren(QPushButton)
     )
     definition = service.preview_map_definition(wizard.draft)
     topology = ElementTree.fromstring(wizard._topology_svg(definition))
     topology_nodes = {
-        node.attrib["data-territory"]: node
+        node.attrib["data-location"]: node
         for node in topology.findall(".//{*}circle")
         if "data-territory" in node.attrib
     }
@@ -166,6 +170,21 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         "North Coast",
         "South Coast",
     }
+    assert {location for location in topology_nodes if location.startswith("devon")} == {
+        "devon",
+        "devon/north",
+        "devon/south",
+    }
+    assert {
+        topology_nodes[location].attrib["data-anchor-type"]
+        for location in topology_nodes
+        if location.startswith("devon/")
+    } == {"fleet"}
+    assert any(
+        line.attrib.get("data-origin", "").startswith("devon/")
+        or line.attrib.get("data-destination", "").startswith("devon/")
+        for line in graph_edges
+    )
     devon = next(item for item in definition.territories if str(item.id) == "devon")
     devon_point = definition.presentation.army_anchors[devon.id]
     wizard._topology_hovered(devon_point.x, devon_point.y)
@@ -321,6 +340,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     for controls in (
         wizard.regions_zoom,
         wizard.topology_zoom,
+        wizard.setup_zoom,
         wizard.placement_zoom,
         wizard.army_asset_zoom,
         wizard.fleet_asset_zoom,
@@ -367,6 +387,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.coast_rotation.setValue(25)
     assert wizard.draft.presentation.coast_label_rotations[coast_location] == 25
     assert wizard._coast_label_items[coast_location].rotation() == 25
+    wizard.anchor_canvas.scene_pressed.emit()
+    assert wizard._selected_coast_label is None
+    assert not wizard.coast_rotation.isEnabled()
     wizard.fleets_preview.click()
     assert wizard.fleets_preview.isChecked()
     assert wizard.armies_preview.isChecked()
@@ -405,12 +428,32 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     moved_anchor = Point(anchor_point.x + 1, anchor_point.y + 1)
     wizard._anchor_moved(anchor_id, "label", None, moved_anchor)
     assert wizard.draft.presentation.label_anchors[anchor_id] == moved_anchor
+    renamed_territory = wizard.draft.territories[0]
+    renamed_row = wizard._row_by_element[renamed_territory.svg_element_id]
+    wizard.roles.item(renamed_row, 0).setText("Persisted place name")
+    assert (
+        next(
+            territory.name
+            for territory in wizard.draft.territories
+            if territory.id == renamed_territory.id
+        )
+        == "Persisted place name"
+    )
     saved = []
     wizard.saved.connect(saved.append)
     wizard.tabs.setCurrentIndex(3)
     wizard.save_button.click()
     assert saved and saved[0].id == wizard.draft.map_id
     assert maps.load(saved[0].id).presentation.label_anchors[anchor_id] == moved_anchor
+    reopened_maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
+    assert (
+        next(
+            territory.name
+            for territory in reopened_maps.load_draft(saved[0].id).territories
+            if territory.id == renamed_territory.id
+        )
+        == "Persisted place name"
+    )
 
     manager = MapManagerWorkspace(service)
     qtbot.addWidget(manager)
@@ -445,3 +488,45 @@ def test_terminal_interrupt_requests_normal_application_quit():
     app = ApplicationProbe()
     _quit_on_interrupt(app, 2, None)
     assert app.quit_requested
+
+
+def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root):
+    maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
+    service = ApplicationService(
+        FileGameRepository(RecentGameStore(tmp_path / "app.json")),
+        maps,
+        StandardRulesEngine(),
+        VisibilityProjector(),
+        MapRenderer(),
+    )
+    configured = maps.load(maps.list()[0].map_id)
+    session = service.create_game(
+        NewGameRequest(
+            "Placement UI game",
+            GameLocation((tmp_path / "game").resolve()),
+            configured.id,
+            configured.default_starting_setup,
+        )
+    )
+    window = ApplicationWindow(service)
+    qtbot.addWidget(window)
+    window.set_session(session, open_map=True)
+    assert not window.game_map_placement_button.isHidden()
+
+    window.game_map_placement_button.click()
+    editor = window.stack.currentWidget()
+    assert isinstance(editor, MapWizard)
+    assert editor.game_placement_only
+    assert editor.tabs.count() == 1
+    assert editor.tabs.tabText(0) == "Placement"
+    assert editor.save_button.text() == "Save game map placement"
+    assert not hasattr(editor, "yaml_editor")
+
+    territory_id, old_point = next(iter(editor.draft.presentation.label_anchors.items()))
+    moved_point = Point(old_point.x + 3, old_point.y + 5)
+    editor._anchor_moved(territory_id, "label", None, moved_point)
+    editor.save_button.click()
+    assert window.stack.currentWidget() is window.map_workspace
+    assert (
+        window.session.game.map_definition.presentation.label_anchors[territory_id] == moved_point
+    )

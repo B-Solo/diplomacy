@@ -5,6 +5,7 @@ QWidget { font-family: "Segoe UI", sans-serif; font-size: 10pt; color: #292820; 
 QMainWindow { background: #e9e4d6; }
 QToolBar { background: #f6f1e3; border: 0; border-bottom: 1px solid #b7ae97; spacing: 4px; padding: 4px; }
 QPushButton, QToolButton, QComboBox, QSpinBox { background: #fffaf0; border: 1px solid #a89d83; border-radius: 3px; padding: 4px 7px; }
+QPushButton, QToolButton { padding: 5px 9px; }
 QComboBox { color: #292820; }
 QComboBox::drop-down { border: 0; width: 24px; }
 QComboBox::down-arrow { width: 9px; height: 6px; }

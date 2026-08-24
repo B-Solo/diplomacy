@@ -54,10 +54,11 @@ Only phase folders reached by the game exist.
 Every reached phase has `state.json`; `orders.json` is created on the first order edit or when an empty phase is resolved.
 The chronologically latest phase containing `state.json` is the current phase, whether or not its editable `orders.json` already exists.
 
-The `map/` directory is an immutable snapshot of the configured map at game creation.
+The `map/` directory is a private snapshot of the configured map at game creation.
 Changing a reusable map does not affect existing games, while a game-specific starting year, season, unit placement, supply-centre ownership or territory control is materialised only in its private snapshot before play begins.
 Powers, colours, home supply centres and topology remain those of the reusable configured map.
 During game creation, the repository writes the selected setup into the private `map/map.yaml`, recompiles that snapshot and creates the corresponding first `state.json`.
+During play, the placement-only editor may transactionally replace presentation anchors and named-coast label rotations in the private `map/map.yaml` and `_compiled-map.json` without changing map identity or rules data.
 
 `army.svg` and `fleet.svg` are materialised from application defaults when the configured map does not provide custom symbols.
 `_compiled-map.json` and `_engine.map` are generated from the authored map and are never authoritative.

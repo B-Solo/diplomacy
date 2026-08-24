@@ -431,6 +431,21 @@ class FileMapLibrary:
             replace(draft, map_yaml=text, element_roles=MappingProxyType(roles))
         )
 
+    def update_territory_name(
+        self, draft: MapDraft, territory_id: TerritoryId, name: str
+    ) -> MapDraft:
+        document = load_yaml(draft.map_yaml)
+        territories = document.get("territories", {})
+        item = territories.get(str(territory_id))
+        if not isinstance(item, dict):
+            raise MapLibraryError(f"Unknown territory: {territory_id}")
+        cleaned = name.strip()
+        if not cleaned:
+            raise MapLibraryError("Territory name cannot be empty")
+        item["name"] = cleaned
+        text = yaml.safe_dump(document, sort_keys=False, allow_unicode=True)
+        return self.refresh_draft(replace(draft, map_yaml=text))
+
     def validate_starting_setup(
         self, map_definition: MapDefinition, starting_setup: StartingSetup
     ) -> MapValidation:
