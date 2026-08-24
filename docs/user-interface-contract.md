@@ -69,8 +69,8 @@ Player communication occurs outside the application using map images copied by t
 - **MW.2:** Loading a map fits the entire map into the workspace without stretching it; later state refreshes preserve the user's viewport.
 - **MW.3:** The gamemaster zooms with a mouse wheel, a trackpad pinch or visible controls, pans by dragging, and pans vertically or horizontally with two-finger trackpad scrolling.
 - **MW.4:** Mouse-wheel zoom is centred on the pointer.
-- **MW.5:** Compact `−`, current-percentage, `+` and `Fit` controls overlay the map; wheel and button zoom use the same discrete levels.
-- **MW.6:** Activating the percentage control returns to the standard `100%` level; `Fit` returns to the full-map view.
+- **MW.5:** Compact `−`, editable current-percentage, `+` and `Fit` controls overlay the map; wheel and button zoom use the same discrete levels.
+- **MW.6:** Entering a whole percentage from `8%` to `1200%` applies that exact zoom level; `Fit` returns to the full-map view.
 - **MW.7:** Pan is clamped to the map bounds.
 - **MW.8:** The map display switches between `Position` and `Orders`.
 - **MW.9:** Territory labels switch between full names and three-letter codes, never displaying both modes together; long full names use centred multiple lines broken at spaces or ampersands.

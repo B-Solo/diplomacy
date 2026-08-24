@@ -200,6 +200,14 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         or wizard.anchor_canvas.verticalScrollBar().isVisible()
     )
     assert wizard.placement_zoom.pos() == fitted_control_position
+    wizard.placement_zoom.percentage.setText("175%")
+    wizard.placement_zoom.percentage.editingFinished.emit()
+    assert wizard.anchor_canvas.transform().m11() == pytest.approx(1.75)
+    assert wizard.placement_zoom.percentage.text() == "175%"
+    assert wizard.placement_zoom.pos() == fitted_control_position
+    wizard.placement_zoom.percentage.setText("not a percentage")
+    wizard.placement_zoom.percentage.editingFinished.emit()
+    assert wizard.placement_zoom.percentage.text() == "175%"
     zoomed_in = wizard.anchor_canvas.transform().m11()
     wizard.placement_zoom.zoom_out.click()
     assert wizard.anchor_canvas.transform().m11() < zoomed_in

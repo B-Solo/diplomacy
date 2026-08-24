@@ -25,6 +25,7 @@ from PySide6.QtWidgets import (
     QGraphicsTextItem,
     QGraphicsView,
     QHBoxLayout,
+    QLineEdit,
     QPushButton,
     QWidget,
 )
@@ -104,6 +105,10 @@ class MapCanvas(QGraphicsView):
         self._fit_active = False
         self.resetTransform()
         self._emit_zoom()
+
+    def set_zoom_percentage(self, percentage: int) -> None:
+        """Set an exact bounded zoom percentage."""
+        self.zoom_by(max(8, min(1200, percentage)) / 100 / self.transform().m11())
 
     def zoom_by(self, factor: float, position: QPointF | None = None) -> None:
         self._fit_active = False
@@ -244,7 +249,8 @@ class MapZoomControls(QWidget):
         self.setStyleSheet(
             "#mapZoomControls { background: rgba(255, 250, 240, 220); "
             "border: 1px solid #8f846d; border-radius: 5px; } "
-            "#mapZoomControls QPushButton { min-width: 0; padding: 3px 6px; "
+            "#mapZoomControls QPushButton, #mapZoomControls QLineEdit { "
+            "min-width: 0; padding: 3px 6px; "
             "border-radius: 3px; }"
         )
         layout = QHBoxLayout(self)
@@ -256,10 +262,12 @@ class MapZoomControls(QWidget):
         self.zoom_out.setFixedWidth(28)
         self.zoom_out.clicked.connect(lambda: canvas.zoom_by(1 / 1.2))
         layout.addWidget(self.zoom_out)
-        self.percentage = QPushButton(f"{round(canvas.transform().m11() * 100)}%")
-        self.percentage.setToolTip("Return to 100% zoom")
-        self.percentage.setMinimumWidth(46)
-        self.percentage.clicked.connect(canvas.set_standard_zoom)
+        self.percentage = ZoomPercentageEdit(f"{round(canvas.transform().m11() * 100)}%")
+        self.percentage.setAccessibleName("Zoom percentage")
+        self.percentage.setToolTip("Enter a zoom percentage from 8% to 1200%")
+        self.percentage.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.percentage.setFixedWidth(54)
+        self.percentage.editingFinished.connect(self._apply_percentage)
         layout.addWidget(self.percentage)
         self.zoom_in = QPushButton("+")
         self.zoom_in.setAccessibleName("Zoom in")
@@ -289,10 +297,31 @@ class MapZoomControls(QWidget):
         self.percentage.setText(f"{value}%")
         self._position_overlay()
 
+    def _apply_percentage(self) -> None:
+        value = self.percentage.text().strip().removesuffix("%").strip()
+        try:
+            percentage = int(value)
+        except ValueError:
+            self._zoom_changed(round(self.canvas.transform().m11() * 100))
+            return
+        self.canvas.set_zoom_percentage(percentage)
+
     def _position_overlay(self) -> None:
         self.adjustSize()
         self.move(max(8, self.canvas.width() - self.width() - 12), 8)
         self.raise_()
+
+
+class ZoomPercentageEdit(QLineEdit):
+    """Compact percentage field that replaces its value on click."""
+
+    def focusInEvent(self, event) -> None:
+        super().focusInEvent(event)
+        self.selectAll()
+
+    def mousePressEvent(self, event) -> None:
+        super().mousePressEvent(event)
+        self.selectAll()
 
 
 class AnchorItem(QGraphicsEllipseItem):
