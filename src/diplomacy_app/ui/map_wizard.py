@@ -1,4 +1,4 @@
-"""Custom SVG map configuration and correction wizard."""
+"""Tabbed custom SVG map configuration editor."""
 
 from __future__ import annotations
 
@@ -71,21 +71,15 @@ class MapWizard(QWidget):
         cancel.clicked.connect(self.cancelled)
         buttons.addWidget(cancel)
         buttons.addStretch()
-        self.back_button = QPushButton("Back")
-        self.back_button.clicked.connect(
-            lambda: self.tabs.setCurrentIndex(self.tabs.currentIndex() - 1)
-        )
-        buttons.addWidget(self.back_button)
-        self.next_button = QPushButton("Next")
-        self.next_button.setProperty("primary", True)
-        self.next_button.clicked.connect(self._advance)
-        buttons.addWidget(self.next_button)
+        self.save_button = QPushButton("Save configured map")
+        self.save_button.setProperty("primary", True)
+        self.save_button.clicked.connect(self._save)
+        buttons.addWidget(self.save_button)
         layout.addLayout(buttons)
         self.yaml_editor.setPlainText(draft.map_yaml)
         self._populate_roles()
         self._reload_anchor_scene()
-        self.tabs.currentChanged.connect(self._step_changed)
-        self._step_changed(0)
+        self.tabs.currentChanged.connect(self._tab_changed)
         self._validate()
 
     def _build_classification_tab(self) -> None:
@@ -119,7 +113,7 @@ class MapWizard(QWidget):
         splitter.addWidget(self.roles)
         splitter.setSizes([720, 330])
         layout.addWidget(splitter)
-        self.tabs.addTab(page, "1  SVG regions")
+        self.tabs.addTab(page, "SVG regions")
 
     def _build_yaml_tab(self) -> None:
         page = QWidget()
@@ -152,7 +146,7 @@ class MapWizard(QWidget):
         self.validation_label.setWordWrap(True)
         controls.addWidget(self.validation_label, 1)
         layout.addLayout(controls)
-        self.tabs.addTab(page, "2  Topology")
+        self.tabs.addTab(page, "Topology")
 
     def _build_anchor_tab(self) -> None:
         page = QWidget()
@@ -183,7 +177,7 @@ class MapWizard(QWidget):
         self.anchor_canvas = MapCanvas()
         layout.addWidget(self.anchor_canvas, 1)
         self.placement_zoom = MapZoomControls(self.anchor_canvas)
-        self.tabs.addTab(page, "3  Placement")
+        self.tabs.addTab(page, "Placement")
 
     def _build_assets_tab(self) -> None:
         page = QWidget()
@@ -213,7 +207,7 @@ class MapWizard(QWidget):
         self.asset_status = QLabel()
         layout.addWidget(self.asset_status)
         layout.addStretch()
-        self.tabs.addTab(page, "4  Unit symbols")
+        self.tabs.addTab(page, "Unit symbols")
         self._update_asset_status()
 
     def _populate_roles(self) -> None:
@@ -324,6 +318,7 @@ class MapWizard(QWidget):
                 f"{len(definition.adjacencies)} directed unit connections"
             )
             self.validation_label.setStyleSheet("color: #2f6843")
+            self.yaml_editor.document().setModified(False)
             return True
         except Exception as exc:
             self.validation_label.setText(str(exc))
@@ -589,22 +584,14 @@ class MapWizard(QWidget):
                  href="data:image/svg+xml;base64,{encoded}"/>
         </svg>""".encode()
 
-    def _step_changed(self, index: int) -> None:
-        self.back_button.setEnabled(index > 0)
-        self.next_button.setText(
-            "Save configured map" if index == self.tabs.count() - 1 else "Next"
-        )
+    def _tab_changed(self, index: int) -> None:
         if index == 1:
             self._validate()
-
-    def _advance(self) -> None:
-        index = self.tabs.currentIndex()
-        if index == 1 and not self._validate():
-            return
-        if index < self.tabs.count() - 1:
-            self.tabs.setCurrentIndex(index + 1)
-        else:
-            self._save()
+        elif self.yaml_editor.document().isModified():
+            if self._validate() and index == 2:
+                self._reload_anchor_scene()
+        elif index == 2:
+            self._reload_anchor_scene()
 
     def _show_error(self, text: str) -> None:
         self.message.setText(text)

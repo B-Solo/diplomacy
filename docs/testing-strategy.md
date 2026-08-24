@@ -37,7 +37,7 @@ Golden comparisons use a small pixel tolerance for platform rasterisation differ
 
 Presenter and workspace tests run Qt in its offscreen mode and drive actions through the `ApplicationService` protocol.
 They cover startup recovery, current-versus-historical editing, inline order editing, automatic clearing of `Final`, warning expansion, the unfinalised filter, adjudication confirmation, saved views and clipboard requests.
-Map-setup tests reopen an existing reusable map in the main-window stack, link classified rows and map highlights, verify land and sea topology nodes use their army and fleet anchors, combine placement layers without artificial centre markers, exercise compact overlaid zoom controls and distinguish trackpad panning from mouse-wheel and pinch zooming, drag ordinary and split-coast anchors, preview effective unit assets, save the edited map and verify that an existing game's private map snapshot is unchanged.
+Map-setup tests reopen an existing reusable map in the main-window stack, access every configuration tab without sequencing, save from an arbitrary tab, link classified rows and map highlights, verify land and sea topology nodes use their army and fleet anchors, combine placement layers without artificial centre markers, exercise compact overlaid zoom controls and distinguish trackpad panning from mouse-wheel and pinch zooming, drag ordinary and split-coast anchors, preview effective unit assets and verify that an existing game's private map snapshot is unchanged.
 A short manual smoke checklist covers native clipboard transfer, pointer-centred zooming, panning, high-DPI rendering and window behaviour on Windows and macOS.
 
 ## End-to-End Scenarios

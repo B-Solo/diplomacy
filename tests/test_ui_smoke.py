@@ -8,6 +8,7 @@ from PySide6.QtGui import QNativeGestureEvent, QPointingDevice, QWheelEvent
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsView, QPushButton
 
 from diplomacy_app.application.service import ApplicationService
+from diplomacy_app.domain.models import Point
 from diplomacy_app.game_repository import FileGameRepository
 from diplomacy_app.game_repository.recent_games import RecentGameStore
 from diplomacy_app.map_library import FileMapLibrary
@@ -48,8 +49,23 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     )
     assert wizard.roles.rowCount() >= 74
     assert wizard.tabs.count() == 4
+    assert tuple(wizard.tabs.tabText(index) for index in range(wizard.tabs.count())) == (
+        "SVG regions",
+        "Topology",
+        "Placement",
+        "Unit symbols",
+    )
     assert wizard.validation_label.text().startswith("Valid:")
-    assert wizard.next_button.text() == "Next"
+    assert wizard.save_button.text() == "Save configured map"
+    for index in range(wizard.tabs.count()):
+        wizard.tabs.setCurrentIndex(index)
+        assert wizard.save_button.isEnabled()
+    wizard.tabs.setCurrentIndex(1)
+    wizard.yaml_editor.appendPlainText("\n# Retained when changing tabs")
+    assert wizard.yaml_editor.document().isModified()
+    wizard.tabs.setCurrentIndex(2)
+    assert "# Retained when changing tabs" in wizard.draft.map_yaml
+    assert not wizard.yaml_editor.document().isModified()
     assert not any(
         button.text() == "Reload anchors from YAML" for button in wizard.findChildren(QPushButton)
     )
@@ -216,8 +232,16 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard._map_hovered(scotland.x, scotland.y)
     assert wizard.roles.currentRow() == wizard._row_by_element[scotland_id]
     assert "Scotland — Impassable" in wizard.hovered_territory.text()
-    wizard.tabs.setCurrentIndex(3)
-    assert wizard.next_button.text() == "Save configured map"
+    anchor_id, anchor_point = next(iter(wizard.draft.presentation.label_anchors.items()))
+    moved_anchor = Point(anchor_point.x + 1, anchor_point.y + 1)
+    wizard._anchor_moved(anchor_id, "label", None, moved_anchor)
+    assert wizard.draft.presentation.label_anchors[anchor_id] == moved_anchor
+    saved = []
+    wizard.saved.connect(saved.append)
+    wizard.tabs.setCurrentIndex(2)
+    wizard.save_button.click()
+    assert saved and saved[0].id == wizard.draft.map_id
+    assert maps.load(saved[0].id).presentation.label_anchors[anchor_id] == moved_anchor
 
     manager = MapManagerWorkspace(service)
     qtbot.addWidget(manager)
