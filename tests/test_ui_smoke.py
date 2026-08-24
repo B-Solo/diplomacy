@@ -231,11 +231,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         group for group in topology.findall(".//{*}g") if group.attrib.get("id") == "topology-nodes"
     )
     topology_coast_labels = next(
-        group
-        for group in topology.findall(".//{*}g")
-        if group.attrib.get("id") == "topology-coast-labels"
+        group for group in underlay.findall(".//{*}g") if group.attrib.get("id") == "coast-labels"
     )
-    assert underlay.attrib["opacity"] == "0.34"
+    assert underlay.attrib["opacity"] == "0.58"
     assert graph_edges
     wizard.tabs.setCurrentIndex(1)
     QApplication.processEvents()
@@ -252,6 +250,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     }
     assert {label.attrib["font-size"] for label in topology_coast_labels.findall("{*}text")} == {
         "9"
+    }
+    assert {label.attrib["fill"] for label in topology_coast_labels.findall("{*}text")} == {
+        definition.presentation.label_colour
     }
     assert {location for location in topology_nodes if location.startswith("devon")} == {
         "devon",
@@ -276,22 +277,26 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert "split_coasts:" in topology_yaml_highlights[0].cursor.selectedText()
     assert wizard.yaml_editor.textCursor().block().text().strip() == "devon:"
     assert "Devon" in wizard.topology_canvas.toolTip()
-    assert wizard.army_asset_preview.size().width() == 340
-    assert wizard.army_asset_preview.size().height() == 240
+    assert wizard.army_asset_preview.minimumWidth() == 420
+    assert wizard.army_asset_preview.minimumHeight() == 320
     assert wizard.army_asset_preview.transform().m11() < 1.2
     assert wizard.fleet_asset_preview.transform().m11() < 1.2
-    for canvas in (wizard.army_asset_preview, wizard.fleet_asset_preview):
+    for canvas, unit_type in (
+        (wizard.army_asset_preview, "army"),
+        (wizard.fleet_asset_preview, "fleet"),
+    ):
         symbol_items = [item for item in canvas.scene().items() if isinstance(item, UnitAnchorItem)]
-        assert len(symbol_items) == 1
+        assert len(symbol_items) == len(
+            [
+                unit
+                for unit in definition.default_starting_setup.state.units
+                if unit.unit_type.value == unit_type
+            ]
+        )
         assert not symbol_items[0].flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable
-    setup_symbol_items = [
-        item for item in wizard.setup_canvas.scene().items() if isinstance(item, UnitAnchorItem)
-    ]
-    assert len(setup_symbol_items) == len(definition.default_starting_setup.state.units)
-    assert all(
-        not item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable
-        for item in setup_symbol_items
-    )
+        assert canvas._renderer.elementExists("territory-labels")
+    assert wizard.setup_canvas._renderer.elementExists("units")
+    assert wizard.preview._renderer.elementExists("gamemaster-layers")
     multiline_label = TextAnchorItem(
         Point(0, 0), "Derbyshire & Nottinghamshire", "#111111", lambda _point: None
     )
@@ -482,7 +487,9 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     ]
     assert len(selectable_coast_labels) == len(wizard.draft.presentation.coast_label_anchors)
     assert len(selectable_territory_labels) == len(wizard.draft.presentation.label_anchors)
-    assert {label.glyph.font().pointSizeF() for label in selectable_coast_labels} == {9.0}
+    assert {
+        label.glyph.font().pixelSize() * label.scale() for label in selectable_coast_labels
+    } == {9.0}
     display_territory = wizard.draft.territories[0]
     canonical_name = display_territory.name
     wizard._select_territory_label(display_territory.id)
@@ -514,10 +521,14 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         item for item in wizard.anchor_canvas.scene().items() if isinstance(item, TextAnchorItem)
     ]
     assert {
-        item.glyph.font().pointSizeF() for item in resized_labels if not item.glyph.font().italic()
+        item.glyph.font().pixelSize() * item.scale()
+        for item in resized_labels
+        if not item.glyph.font().italic()
     } == {12.5}
     assert {
-        item.glyph.font().pointSizeF() for item in resized_labels if item.glyph.font().italic()
+        item.glyph.font().pixelSize() * item.scale()
+        for item in resized_labels
+        if item.glyph.font().italic()
     } == {8.5}
     wizard._set_map_colour("label_colour", "#201810")
     wizard._set_map_colour("inaccessible_region_colour", "#303030")
@@ -550,6 +561,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         if node.attrib.get("id") == "gamemaster-inaccessible-stripes"
     )
     assert inaccessible_pattern.find("{*}rect").attrib["fill"] == "#303030"
+    assert "patternTransform" not in inaccessible_pattern.attrib
+    stripe = inaccessible_pattern.find("{*}path")
+    assert stripe is not None
+    assert stripe.attrib["d"].count("M") == 3
     assert sea_node.attrib["style"].endswith("fill:#406080")
     assert land_node.attrib["style"].endswith("fill:#d8c8a8")
     coast_location, coast_anchor = next(iter(wizard.draft.presentation.coast_label_anchors.items()))

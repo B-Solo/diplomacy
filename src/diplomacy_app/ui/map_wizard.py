@@ -224,6 +224,7 @@ class MapWizard(QWidget):
             self._populate_roles()
             self.tabs.currentChanged.connect(self._tab_changed)
             self._validate()
+            self._reload_classification_preview()
             self._reload_setup_preview()
             self._focus_topology_section()
 
@@ -488,13 +489,12 @@ class MapWizard(QWidget):
         layout.setContentsMargins(4, 3, 4, 3)
         layout.setSpacing(3)
         previews = QHBoxLayout()
-        previews.addStretch()
         army_column = QVBoxLayout()
         self.army_preview_label = QLabel()
         army_column.addWidget(self.army_preview_label)
         self.army_asset_preview = MapCanvas()
-        self.army_asset_preview.setFixedSize(340, 240)
-        army_column.addWidget(self.army_asset_preview)
+        self.army_asset_preview.setMinimumSize(420, 320)
+        army_column.addWidget(self.army_asset_preview, 1)
         self.army_asset_zoom = MapZoomControls(self.army_asset_preview)
         army = QPushButton("Choose army SVG…")
         army.clicked.connect(lambda: self._choose_asset("army"))
@@ -503,18 +503,16 @@ class MapWizard(QWidget):
         self.fleet_preview_label = QLabel()
         fleet_column.addWidget(self.fleet_preview_label)
         self.fleet_asset_preview = MapCanvas()
-        self.fleet_asset_preview.setFixedSize(340, 240)
-        fleet_column.addWidget(self.fleet_asset_preview)
+        self.fleet_asset_preview.setMinimumSize(420, 320)
+        fleet_column.addWidget(self.fleet_asset_preview, 1)
         self.fleet_asset_zoom = MapZoomControls(self.fleet_asset_preview)
         fleet = QPushButton("Choose fleet SVG…")
         fleet.clicked.connect(lambda: self._choose_asset("fleet"))
         fleet_column.addWidget(fleet)
         previews.addLayout(army_column)
-        previews.addSpacing(12)
+        previews.addSpacing(8)
         previews.addLayout(fleet_column)
-        previews.addStretch()
-        layout.addLayout(previews)
-        layout.addStretch()
+        layout.addLayout(previews, 1)
         self.tabs.addTab(page, "Unit symbols")
         self._update_asset_status()
 
@@ -574,6 +572,7 @@ class MapWizard(QWidget):
             item.setText(
                 next(value.name for value in self.draft.territories if value.id == territory.id)
             )
+            self._reload_classification_preview()
         except Exception as exc:
             self._populating_roles = True
             item.setText(territory.name)
@@ -637,12 +636,28 @@ class MapWizard(QWidget):
                 self.draft.svg, self.draft.element_roles
             )
             self._populate_roles()
+            self._reload_classification_preview()
             self._reload_anchor_scene()
         except Exception as exc:
             self._show_error(f"Could not change region role: {exc}")
 
     def _commit_editor(self) -> None:
         self.draft = replace(self.draft, map_yaml=self.yaml_editor.toPlainText())
+
+    def _preview_svg_without(self, *layer_ids: str) -> bytes:
+        root = ElementTree.fromstring(self.service.preview_map_setup(self.draft).svg)
+        for layer_id in layer_ids:
+            layer = root.find(f".//{{*}}g[@id='{layer_id}']")
+            if layer is not None:
+                for child in list(layer):
+                    layer.remove(child)
+        return ElementTree.tostring(root, encoding="utf-8", xml_declaration=True)
+
+    def _reload_classification_preview(self) -> None:
+        try:
+            self.preview.set_svg(self._preview_svg_without(), fit=True)
+        except Exception:
+            self.preview.set_svg(self.draft.svg, fit=True)
 
     def _validate(self) -> bool:
         self._commit_editor()
@@ -674,14 +689,14 @@ class MapWizard(QWidget):
             return False
 
     def _topology_svg(self, definition) -> bytes:
-        root = ElementTree.fromstring(definition.assets.map_svg)
+        root = ElementTree.fromstring(self._preview_svg_without())
         namespace = "http://www.w3.org/2000/svg"
 
         def tag(name: str) -> str:
             return f"{{{namespace}}}{name}"
 
         original_children = list(root)
-        underlay = ElementTree.Element(tag("g"), {"id": "topology-map-underlay", "opacity": "0.34"})
+        underlay = ElementTree.Element(tag("g"), {"id": "topology-map-underlay", "opacity": "0.58"})
         for child in original_children:
             if child.tag.rsplit("}", 1)[-1] not in {"defs", "style", "title", "desc"}:
                 root.remove(child)
@@ -842,32 +857,6 @@ class MapWizard(QWidget):
                 },
             )
             label.text = node_label
-        coast_label_layer = ElementTree.SubElement(root, tag("g"), {"id": "topology-coast-labels"})
-        for location, point in sorted(
-            definition.presentation.coast_label_anchors.items(),
-            key=lambda item: (item[0].territory_id, item[0].coast_id or ""),
-        ):
-            if location.coast_id is None:
-                continue
-            rotation = definition.presentation.coast_label_rotations.get(location, 0)
-            coast_label = ElementTree.SubElement(
-                coast_label_layer,
-                tag("text"),
-                {
-                    "x": str(point.x),
-                    "y": str(point.y),
-                    "text-anchor": "middle",
-                    "dominant-baseline": "central",
-                    "font-family": "Georgia, serif",
-                    "font-size": f"{definition.presentation.coast_label_font_size:g}",
-                    "font-style": "italic",
-                    "font-weight": "600",
-                    "fill": "#111111",
-                    "transform": f"rotate({rotation:g} {point.x:g} {point.y:g})",
-                    "data-location": f"{location.territory_id}/{location.coast_id}",
-                },
-            )
-            coast_label.text = coast_label_text(location.coast_id)
         return ElementTree.tostring(root, encoding="utf-8", xml_declaration=True)
 
     def _topology_hovered(self, x: float, y: float) -> None:
@@ -921,7 +910,16 @@ class MapWizard(QWidget):
         return True
 
     def _reload_anchor_scene(self) -> None:
-        self.anchor_canvas.set_svg(self.service.preview_map_base(self.draft), fit=True)
+        self.anchor_canvas.set_svg(
+            self._preview_svg_without(
+                "territory-labels",
+                "coast-labels",
+                "supply-centres",
+                "units",
+                "orders",
+            ),
+            fit=True,
+        )
         self._selected_coast_label = None
         self._coast_label_items.clear()
         self.coast_rotation.setEnabled(False)
@@ -996,10 +994,18 @@ class MapWizard(QWidget):
                 self._coast_label_items[location] = item
                 self.anchor_canvas.scene().addItem(item)
         if self.supply_preview.isChecked():
+            powers = {power.id: power for power in self.draft.powers}
+            owners = self.draft.default_starting_setup.state.supply_centre_owners
             for territory, point in presentation.supply_centre_anchors.items():
+                owner = owners.get(territory)
+                colour = (
+                    darken_colour(powers[owner].colour, 0.82)
+                    if owner is not None and owner in powers
+                    else "#eee6c8"
+                )
                 centre_item = SupplyCentreAnchorItem(
                     point,
-                    "#eee6c8",
+                    colour,
                     lambda new_point, territory=territory: self._anchor_moved(
                         territory, "supply_centre", None, new_point
                     ),
@@ -1014,6 +1020,7 @@ class MapWizard(QWidget):
             self._add_unit_previews(
                 unit_entries,
                 self.draft.army_svg or DEFAULT_ARMY_SVG,
+                UnitType.ARMY,
                 "#3f7b53",
             )
         if self.fleets_preview.isChecked():
@@ -1028,18 +1035,33 @@ class MapWizard(QWidget):
             ]
             asset = self.draft.fleet_svg or DEFAULT_FLEET_SVG
             colour = "#356f95"
-            self._add_unit_previews(unit_entries, asset, colour)
+            self._add_unit_previews(unit_entries, asset, UnitType.FLEET, colour)
 
-    def _add_unit_previews(self, unit_entries, asset: bytes, colour: str) -> None:
-        tinted_asset = embedded_unit_svg(asset, colour)
+    def _add_unit_previews(
+        self, unit_entries, asset: bytes, unit_type: UnitType, fallback_colour: str
+    ) -> None:
+        state = self.draft.default_starting_setup.state
+        powers = {power.id: power for power in self.draft.powers}
+        starting_units = {(unit.unit_type, unit.location): unit.power_id for unit in state.units}
         for territory, anchor, coast, point in unit_entries:
+            location = Location(territory, CoastId(coast) if coast is not None else None)
+            power_id = starting_units.get((unit_type, location))
+            if power_id is None:
+                power_id = state.territory_controllers.get(territory)
+            colour = (
+                darken_colour(powers[power_id].colour, 0.82)
+                if power_id is not None and power_id in powers
+                else fallback_colour
+            )
             unit_item = UnitAnchorItem(
                 point,
-                tinted_asset,
+                embedded_unit_svg(asset, colour),
                 lambda new_point, territory=territory, anchor=anchor, coast=coast: (
                     self._anchor_moved(territory, anchor, coast, new_point)
                 ),
             )
+            if (unit_type, location) not in starting_units:
+                unit_item.setOpacity(0.68)
             unit_item.setToolTip(f"{territory}: {anchor}" + (f" ({coast})" if coast else ""))
             self.anchor_canvas.scene().addItem(unit_item)
 
@@ -1193,30 +1215,7 @@ class MapWizard(QWidget):
     def _reload_setup_preview(self) -> bool:
         try:
             scene = self.service.preview_map_setup(self.draft)
-            root = ElementTree.fromstring(scene.svg)
-            units_layer = root.find(".//{*}g[@id='units']")
-            if units_layer is not None:
-                units_layer.clear()
-            self.setup_canvas.set_scene(
-                replace(scene, svg=ElementTree.tostring(root, encoding="utf-8")), fit=True
-            )
-            definition = self.service.preview_map_definition(self.draft)
-            powers = {power.id: power for power in definition.powers}
-            for unit in definition.default_starting_setup.state.units:
-                if unit.unit_type is UnitType.ARMY:
-                    point = definition.presentation.army_anchors[unit.location.territory_id]
-                    asset = definition.assets.army_svg
-                else:
-                    point = definition.presentation.fleet_anchors.get(unit.location)
-                    if point is None:
-                        point = definition.presentation.fleet_anchors[
-                            Location(unit.location.territory_id)
-                        ]
-                    asset = definition.assets.fleet_svg
-                colour = darken_colour(powers[unit.power_id].colour, 0.82)
-                self.setup_canvas.scene().addItem(
-                    UnitAnchorItem(point, embedded_unit_svg(asset, colour), movable=False)
-                )
+            self.setup_canvas.set_scene(scene, fit=True)
             return True
         except Exception as exc:
             self.setup_validation_label.setText(f"Could not render setup: {exc}")
@@ -1286,23 +1285,50 @@ class MapWizard(QWidget):
         self.fleet_preview_label.setText(
             "Fleet — custom symbol" if self.draft.fleet_svg else "Fleet — supplied default"
         )
-        self._set_asset_preview(self.army_asset_preview, army)
-        self._set_asset_preview(self.fleet_asset_preview, fleet)
+        self._set_asset_preview(self.army_asset_preview, army, UnitType.ARMY)
+        self._set_asset_preview(self.fleet_asset_preview, fleet, UnitType.FLEET)
 
-    @staticmethod
-    def _set_asset_preview(canvas: MapCanvas, asset: bytes) -> None:
-        background = b"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220">
-          <path d="M35 38 Q110 15 180 34 T285 48 L272 190 Q170 208 48 182 Z"
-                fill="#d0c9aa" stroke="#665f4f" stroke-width="2"/>
-        </svg>"""
-        canvas.set_svg(background, fit=True)
-        canvas.scene().addItem(
-            UnitAnchorItem(
-                Point(160, 110),
-                embedded_unit_svg(asset, "#344d40"),
-                movable=False,
+    def _set_asset_preview(self, canvas: MapCanvas, asset: bytes, unit_type: UnitType) -> None:
+        canvas.set_svg(self._preview_svg_without("units"), fit=True)
+        definition = self.service.preview_map_definition(self.draft)
+        powers = {power.id: power for power in definition.powers}
+        units = [
+            unit
+            for unit in definition.default_starting_setup.state.units
+            if unit.unit_type is unit_type
+        ]
+        for unit in units:
+            if unit_type is UnitType.ARMY:
+                point = definition.presentation.army_anchors[unit.location.territory_id]
+            else:
+                point = definition.presentation.fleet_anchors.get(unit.location)
+                if point is None:
+                    point = definition.presentation.fleet_anchors[
+                        Location(unit.location.territory_id)
+                    ]
+            colour = darken_colour(powers[unit.power_id].colour, 0.82)
+            canvas.scene().addItem(
+                UnitAnchorItem(
+                    point,
+                    embedded_unit_svg(asset, colour),
+                    movable=False,
+                )
             )
-        )
+        if not units:
+            anchors = (
+                definition.presentation.army_anchors.values()
+                if unit_type is UnitType.ARMY
+                else definition.presentation.fleet_anchors.values()
+            )
+            point = next(iter(anchors), None)
+            if point is not None:
+                canvas.scene().addItem(
+                    UnitAnchorItem(
+                        point,
+                        embedded_unit_svg(asset, "#344d40"),
+                        movable=False,
+                    )
+                )
 
     def _tab_changed(self, index: int) -> None:
         if (
@@ -1318,15 +1344,23 @@ class MapWizard(QWidget):
             self._validate()
         elif self.yaml_editor.document().isModified():
             if self._validate():
-                if index == 2:
+                if index == 0:
+                    self._reload_classification_preview()
+                elif index == 2:
                     self._reload_setup_preview()
                 elif index == 3:
                     self._reload_anchor_scene()
+                elif index == 4:
+                    self._update_asset_status()
+        elif index == 0:
+            self._reload_classification_preview()
         elif index == 2:
             self._load_setup_editor()
             self._reload_setup_preview()
         elif index == 3:
             self._reload_anchor_scene()
+        elif index == 4:
+            self._update_asset_status()
 
     def _show_error(self, text: str) -> None:
         self.message.setText(text)

@@ -199,11 +199,11 @@ Player communication occurs outside the application using map images copied by t
 - **GC.25:** Hovering any classified shape in the SVG regions tab identifies and selects its row; hovering or selecting a row highlights the corresponding shape on the map, and editing a playable territory's canonical name updates the map draft.
 - **GC.26:** The topology preview draws a colour-coded adjacency graph over a faded map, using an army node and separate fleet nodes for each named coast of a split-coast territory; its key distinguishes army-only, fleet-only and shared connections, arrowheads identify asymmetric connections, and hovering a node navigates to and highlights that territory's editable YAML block.
 - **GC.27:** The map editor uses independently accessible, non-sequential tabs with minimal page margins and a persistent `Save configured map` action, overlays compact `−`, current-percentage, `+` and `Fit` controls on every visual tab, and supports mouse-wheel and trackpad-pinch zoom plus trackpad scrolling consistently with the main map.
-- **GC.28:** The Unit symbols tab displays compact previews of the effective default or custom army and fleet symbols at approximately their real map scale before saving.
+- **GC.28:** The Unit symbols tab previews the effective default or custom army and fleet symbols at their real scale and anchors on the shared starting-position map before saving.
 - **GC.29:** Placement label mode independently selects no labels, display names or abbreviations; display names and abbreviations have separate draggable positions, selected display names can be edited with Enter applying and Shift+Enter inserting explicit line breaks, territory and coast font sizes have separate map-wide half-point controls, and all placement layers can be hidden to inspect overlap combinations.
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.
-- **GC.31:** Powers and setup, Unit symbols and normal game rendering use the effective symbols and visual anchors shown in Placement; their additional topology or game-state overlays do not substitute different presentation assets.
-- **GC.32:** Powers and setup provides map-wide controls for text, inaccessible-region, sea and unclaimed-land colours, previews those colours immediately, and renders inaccessible regions with stripes.
+- **GC.31:** Every visual map-editor tab uses the same starting-position colours, stripes, labels, font sizes, centres, unit symbols and presentation anchors as normal game rendering, with only its own editing overlays added or relevant layers made draggable.
+- **GC.32:** Powers and setup provides map-wide controls for text, inaccessible-region, sea and unclaimed-land colours, previews those colours immediately, and renders inaccessible regions with single-direction stripes.
 
 ## Limitations and Restrictions
 

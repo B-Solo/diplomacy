@@ -87,7 +87,6 @@ def _add_inaccessible_pattern(root: ElementTree.Element, colour: str) -> str:
             "width": "12",
             "height": "12",
             "patternUnits": "userSpaceOnUse",
-            "patternTransform": "rotate(45)",
         },
     )
     ElementTree.SubElement(
@@ -97,12 +96,13 @@ def _add_inaccessible_pattern(root: ElementTree.Element, colour: str) -> str:
     )
     ElementTree.SubElement(
         pattern,
-        _tag("rect"),
+        _tag("path"),
         {
-            "width": "4",
-            "height": "12",
-            "fill": "#fffdf7",
-            "fill-opacity": "0.24",
+            "d": "M -3 3 L 3 -3 M 0 12 L 12 0 M 9 15 L 15 9",
+            "fill": "none",
+            "stroke": "#fffdf7",
+            "stroke-opacity": "0.24",
+            "stroke-width": "3",
         },
     )
     return pattern_id
