@@ -628,6 +628,12 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root)
     )
     scrollbar.setValue(target)
     assert window.map_workspace.views.currentText() == "Custom view"
+    copy_errors = []
+    window.map_workspace.message.connect(copy_errors.append)
+    window.map_workspace._copy()
+    assert not copy_errors
+    assert not QApplication.clipboard().image().isNull()
+    assert window.map_workspace.copy_button.text() == "Copied"
 
     window.game_map_placement_button.click()
     editor = window.stack.currentWidget()

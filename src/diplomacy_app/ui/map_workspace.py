@@ -316,7 +316,7 @@ class MapWorkspace(QWidget):
             if isinstance(selected, SavedView):
                 bounds, size = selected.bounds, selected.output_size
             artifact = self.service.export_map(self._request(bounds, size))
-            image = QImage.fromData(artifact.data, b"PNG")
+            image = QImage.fromData(artifact.data)
             if image.isNull():
                 raise ValueError("Exported image could not be loaded")
             QApplication.clipboard().setImage(image)
