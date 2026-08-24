@@ -48,6 +48,7 @@ QScrollBar::add-page, QScrollBar::sub-page { background: transparent; }
 
 class MapCanvas(QGraphicsView):
     zoom_changed = Signal(int)
+    viewport_changed = Signal()
     outcome_hovered = Signal(str)
     scene_hovered = Signal(float, float)
     scene_pressed = Signal()
@@ -67,13 +68,20 @@ class MapCanvas(QGraphicsView):
         self.setBackgroundBrush(QColor("#d7d1c2"))
         self.horizontalScrollBar().setStyleSheet(_SCROLLBAR_STYLE)
         self.verticalScrollBar().setStyleSheet(_SCROLLBAR_STYLE)
+        self.horizontalScrollBar().valueChanged.connect(self._scroll_changed)
+        self.verticalScrollBar().valueChanged.connect(self._scroll_changed)
         self._item: QGraphicsSvgItem | None = None
         self._renderer: QSvgRenderer | None = None
         self._highlight: QGraphicsSvgItem | None = None
         self._scene_bounds = QRectF()
         self._hotspots: tuple[MapHotspot, ...] = ()
         self._fit_active = False
+        self._suppress_viewport_changed = False
         self.setMouseTracking(True)
+
+    def _scroll_changed(self) -> None:
+        if not self._suppress_viewport_changed:
+            self.viewport_changed.emit()
 
     def set_svg(self, svg: bytes, bounds: MapBounds | None = None, fit: bool = True) -> None:
         renderer = QSvgRenderer(QByteArray(svg), self)
@@ -99,11 +107,16 @@ class MapCanvas(QGraphicsView):
         self.set_svg(scene.svg, scene.map_bounds, fit)
         self._hotspots = scene.hotspots
 
-    def fit_map(self) -> None:
+    def fit_map(self, *, notify: bool = True) -> None:
         if not self._scene_bounds.isEmpty():
             self._fit_active = True
-            self.fitInView(self._scene_bounds, Qt.AspectRatioMode.KeepAspectRatio)
-            self._emit_zoom()
+            previous_suppression = self._suppress_viewport_changed
+            self._suppress_viewport_changed = previous_suppression or not notify
+            try:
+                self.fitInView(self._scene_bounds, Qt.AspectRatioMode.KeepAspectRatio)
+            finally:
+                self._suppress_viewport_changed = previous_suppression
+            self._emit_zoom(notify=notify)
 
     def set_standard_zoom(self) -> None:
         self._fit_active = False
@@ -169,8 +182,10 @@ class MapCanvas(QGraphicsView):
         horizontal.setValue(horizontal.value() - delta.x())
         vertical.setValue(vertical.value() - delta.y())
 
-    def _emit_zoom(self) -> None:
+    def _emit_zoom(self, *, notify: bool = True) -> None:
         self.zoom_changed.emit(round(self.transform().m11() * 100))
+        if notify:
+            self.viewport_changed.emit()
 
     def visible_bounds(self) -> MapBounds:
         rect = (
@@ -189,9 +204,14 @@ class MapCanvas(QGraphicsView):
             self._emit_zoom()
 
     def resizeEvent(self, event) -> None:
-        super().resizeEvent(event)
-        if self._fit_active:
-            self.fit_map()
+        previous_suppression = self._suppress_viewport_changed
+        self._suppress_viewport_changed = True
+        try:
+            super().resizeEvent(event)
+            if self._fit_active:
+                self.fit_map(notify=False)
+        finally:
+            self._suppress_viewport_changed = previous_suppression
         self.resized.emit()
 
     def mouseMoveEvent(self, event) -> None:

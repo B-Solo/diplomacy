@@ -24,7 +24,15 @@ from PySide6.QtWidgets import (
 )
 
 from diplomacy_app.application.service import ApplicationService
-from diplomacy_app.domain.models import GameLocation, NewGameRequest, Point
+from diplomacy_app.domain.models import (
+    GameLocation,
+    MapBounds,
+    NewGameRequest,
+    PixelSize,
+    Point,
+    SavedView,
+    SavedViewId,
+)
 from diplomacy_app.game_repository import FileGameRepository
 from diplomacy_app.game_repository.recent_games import RecentGameStore
 from diplomacy_app.map_library import FileMapLibrary
@@ -594,6 +602,32 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root)
     assert window.stack.currentWidget() is window.orders_workspace
     window.tabs.setCurrentIndex(0)
     assert window.stack.currentWidget() is window.map_workspace
+    window.map_workspace.refresh()
+    saved_view = SavedView(
+        SavedViewId("close-up"),
+        "Close-up of the western approaches",
+        MapBounds(0, 0, 240, 240),
+        1,
+        PixelSize(800, 800),
+    )
+    window.map_workspace.views.addItem(saved_view.name, saved_view)
+    window.map_workspace.views.setCurrentIndex(window.map_workspace.views.count() - 1)
+    assert window.map_workspace.views.currentText() == saved_view.name
+    window.map_workspace.canvas.zoom_by(1.2)
+    assert window.map_workspace.views.currentText() == "Custom view"
+    assert window.map_workspace.views.currentData() == "custom"
+    window.map_workspace.views.setCurrentIndex(window.map_workspace.views.findData(saved_view))
+    assert window.map_workspace.views.currentText() == saved_view.name
+    scrollbars = (
+        window.map_workspace.canvas.horizontalScrollBar(),
+        window.map_workspace.canvas.verticalScrollBar(),
+    )
+    scrollbar = next(item for item in scrollbars if item.maximum() > item.minimum())
+    target = (
+        scrollbar.value() + 1 if scrollbar.value() < scrollbar.maximum() else scrollbar.value() - 1
+    )
+    scrollbar.setValue(target)
+    assert window.map_workspace.views.currentText() == "Custom view"
 
     window.game_map_placement_button.click()
     editor = window.stack.currentWidget()

@@ -90,6 +90,7 @@ Player communication occurs outside the application using map images copied by t
 - **IC.6:** `Copy map` copies the map exactly as currently presented, including its position or order display, territory-label mode, units and permitted Fog of War content.
 - **IC.7:** The copied image excludes application controls, badges, outlines and any workspace beyond the SVG map bounds.
 - **IC.8:** When a saved or current view reaches a map edge, the copied image aligns exactly with that edge rather than including padding outside it.
+- **IC.9:** After recalling `Full map` or a named saved view, any subsequent pan or zoom changes the view selector to `Custom view`; programmatic rendering and window resizing do not clear the selection.
 
 ### Fog of War (FW)
 

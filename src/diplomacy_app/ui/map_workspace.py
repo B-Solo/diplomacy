@@ -32,6 +32,8 @@ from diplomacy_app.domain.models import (
 )
 from diplomacy_app.ui.map_canvas import MapCanvas, MapZoomControls
 
+_CUSTOM_VIEW = "custom"
+
 
 class MapWorkspace(QWidget):
     perspective_requested = Signal(object)
@@ -45,6 +47,7 @@ class MapWorkspace(QWidget):
         self.scene = None
         self._first_scene = True
         self._loaded_game_location = None
+        self._applying_viewport = False
         outer = QVBoxLayout(self)
         outer.setContentsMargins(4, 3, 4, 3)
         outer.setSpacing(3)
@@ -117,6 +120,7 @@ class MapWorkspace(QWidget):
         self.outcomes.setVisible(False)
         self.canvas.outcome_hovered.connect(self._outcome_hovered)
         self.canvas.resized.connect(self._position_overlays)
+        self.canvas.viewport_changed.connect(self._viewport_changed)
         self.refresh_timer = QTimer(self)
         self.refresh_timer.setSingleShot(True)
         self.refresh_timer.setInterval(60)
@@ -227,19 +231,45 @@ class MapWorkspace(QWidget):
             visible = self.canvas.visible_bounds() if self.scene else None
             new_scene = self.service.compose_map(self._request())
             self.scene = new_scene
-            self.canvas.set_scene(new_scene, fit=self._first_scene)
-            self._first_scene = False
-            if visible and visible.width > 0:
-                self.canvas.show_bounds(visible)
+            self._applying_viewport = True
+            try:
+                self.canvas.set_scene(new_scene, fit=self._first_scene)
+                self._first_scene = False
+                if visible and visible.width > 0:
+                    self.canvas.show_bounds(visible)
+            finally:
+                self._applying_viewport = False
         except Exception as exc:
             self.message.emit(f"Could not render map: {exc}")
 
     def _view_changed(self) -> None:
         view = self.views.currentData()
-        if view is None:
-            self.canvas.fit_map()
-        else:
-            self.canvas.show_bounds(view.bounds)
+        if view == _CUSTOM_VIEW:
+            return
+        self._applying_viewport = True
+        try:
+            if view is None:
+                self.canvas.fit_map()
+            else:
+                self.canvas.show_bounds(view.bounds)
+        finally:
+            self._applying_viewport = False
+
+    def _viewport_changed(self) -> None:
+        if self._applying_viewport or self.views.currentData() == _CUSTOM_VIEW:
+            return
+        self._applying_viewport = True
+        try:
+            index = self.views.findData(_CUSTOM_VIEW)
+            if index < 0:
+                self.views.insertItem(0, "Custom view", _CUSTOM_VIEW)
+                self.views.setItemData(
+                    0, "Viewport differs from a saved view", Qt.ItemDataRole.ToolTipRole
+                )
+                index = 0
+            self.views.setCurrentIndex(index)
+        finally:
+            self._applying_viewport = False
 
     def _begin_save_view(self) -> None:
         self.save_name.setVisible(True)
@@ -283,7 +313,7 @@ class MapWorkspace(QWidget):
             size = PixelSize(
                 max(1, self.canvas.viewport().width()), max(1, self.canvas.viewport().height())
             )
-            if selected is not None:
+            if isinstance(selected, SavedView):
                 bounds, size = selected.bounds, selected.output_size
             artifact = self.service.export_map(self._request(bounds, size))
             image = QImage.fromData(artifact.data, b"PNG")
