@@ -23,6 +23,7 @@ QTabWidget::pane { border: 0; }
 QGroupBox { background: #fbf7eb; border: 1px solid #b9b09b; border-radius: 4px; margin-top: 8px; padding: 8px; font-weight: 600; }
 QGroupBox::title { subcontrol-origin: margin; left: 9px; padding: 0 4px; }
 QPlainTextEdit, QTextEdit, QLineEdit, QListWidget, QTableWidget, QTreeWidget { background: #fffdf7; color: #171714; border: 1px solid #aaa18e; border-radius: 2px; selection-background-color: #698273; }
+QPlainTextEdit#setupEditor { background: #fffdf7; color: #171714; selection-background-color: #c8d5cc; selection-color: #171714; }
 QStatusBar { background: #f4eedf; border-top: 1px solid #b7ae97; }
 QScrollArea { border: 0; background: transparent; }
 QLabel[muted="true"] { color: #6f6a5d; }

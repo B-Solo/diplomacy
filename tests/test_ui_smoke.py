@@ -41,6 +41,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert "selection-color: #fffdf5" in STYLE
     assert "QPushButton, QToolButton { padding: 5px 9px; }" in STYLE
     assert "background: #fffdf7; color: #171714" in STYLE
+    assert "QPlainTextEdit#setupEditor" in STYLE
     maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     service = ApplicationService(
         FileGameRepository(RecentGameStore(tmp_path / "app.json")),
@@ -112,6 +113,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     wizard.yaml_find.close_find()
     assert wizard.yaml_find.isHidden()
     wizard.tabs.setCurrentIndex(2)
+    assert wizard.setup_editor.objectName() == "setupEditor"
     wizard.setup_find.show_find()
     wizard.setup_find.query.setText("teams:")
     assert wizard.setup_editor.textCursor().selectedText() == "teams:"

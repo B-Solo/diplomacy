@@ -298,6 +298,7 @@ class MapWizard(QWidget):
         editor_layout = QVBoxLayout(editor_side)
         editor_layout.setContentsMargins(0, 0, 0, 0)
         self.setup_editor = QPlainTextEdit()
+        self.setup_editor.setObjectName("setupEditor")
         self.setup_editor.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         self.setup_find = YamlFindBar(self.setup_editor, page)
         editor_layout.addWidget(self.setup_find)
@@ -912,7 +913,7 @@ class MapWizard(QWidget):
             self._add_unit_previews(unit_entries, asset, colour)
 
     def _add_unit_previews(self, unit_entries, asset: bytes, colour: str) -> None:
-        tinted_asset = asset.replace(b"currentColor", colour.encode())
+        tinted_asset = embedded_unit_svg(asset, colour)
         for territory, anchor, coast, point in unit_entries:
             unit_item = UnitAnchorItem(
                 point,
