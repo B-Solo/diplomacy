@@ -40,6 +40,7 @@ from diplomacy_app.domain.models import (
 from diplomacy_app.game_repository import FileGameRepository
 from diplomacy_app.game_repository.recent_games import RecentGameStore
 from diplomacy_app.map_library import FileMapLibrary
+from diplomacy_app.presentation import aspect_fitted_size
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rules_engine import StandardRulesEngine
 from diplomacy_app.ui.application_window import ApplicationWindow, _quit_on_interrupt
@@ -780,6 +781,21 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     window.tabs.setCurrentIndex(0)
     assert window.stack.currentWidget() is window.map_workspace
     window.map_workspace.refresh()
+    window.map_workspace.views.setCurrentIndex(window.map_workspace.views.findData(None))
+    window.map_workspace._view_changed()
+    full_map_output = window.map_workspace._export_current_view()
+    expected_full_map_size = aspect_fitted_size(
+        window.map_workspace.canvas.visible_bounds(),
+        PixelSize(
+            window.map_workspace.canvas.viewport().width(),
+            window.map_workspace.canvas.viewport().height(),
+        ),
+    )
+    assert full_map_output.size == expected_full_map_size
+    assert full_map_output.size.width / full_map_output.size.height == pytest.approx(
+        window.map_workspace.scene.map_bounds.width / window.map_workspace.scene.map_bounds.height,
+        abs=1 / full_map_output.size.height,
+    )
     saved_view = SavedView(
         SavedViewId("close-up"),
         "Close-up of the western approaches",

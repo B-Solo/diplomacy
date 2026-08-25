@@ -4,6 +4,7 @@ from dataclasses import replace
 from types import MappingProxyType
 from xml.etree import ElementTree
 
+import pytest
 from PySide6.QtCore import QRectF
 from PySide6.QtGui import QColor, QImage, QPainter
 from PySide6.QtWidgets import QGraphicsScene
@@ -25,7 +26,7 @@ from diplomacy_app.domain.models import (
     Revision,
     VisibilityPolicy,
 )
-from diplomacy_app.presentation import darken_colour
+from diplomacy_app.presentation import aspect_fitted_size, darken_colour
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rendering.labels import label_lines
 from diplomacy_app.rules_engine import StandardRulesEngine
@@ -209,7 +210,16 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     artifact = renderer.export(scene, request)
     assert artifact.media_type == "image/png"
     assert artifact.data.startswith(b"\x89PNG")
-    assert artifact.size == PixelSize(640, 480)
+    assert artifact.size == aspect_fitted_size(scene.map_bounds, request.output_size)
+    artifact_image = QImage.fromData(artifact.data)
+    assert (artifact_image.width(), artifact_image.height()) == (
+        artifact.size.width,
+        artifact.size.height,
+    )
+    assert artifact.size.width / artifact.size.height == pytest.approx(
+        scene.map_bounds.width / scene.map_bounds.height,
+        abs=1 / artifact.size.height,
+    )
 
     root = ElementTree.fromstring(scene.svg)
     unit_layer = next(

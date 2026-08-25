@@ -23,7 +23,7 @@ Move paths are constructed before dependent support and convoy graphics.
 Support-to-move paths terminate on the computed move path; convoy connectors use a pronounced wave and terminate on the convoyed move path.
 A convoyed move may use a smoothed representative path through the ordered convoy fleet chain, selected deterministically from topology when several chains exist.
 
-Export intersects requested bounds with the source map bounds before rasterisation.
+Export intersects requested bounds with the source map bounds and fits the output pixel dimensions to that intersection's aspect ratio before rasterisation.
 Unit and order strokes use map-space sizing rules with sensible screen-space limits so zooming does not recreate oversized graphics.
 
 ## Modules

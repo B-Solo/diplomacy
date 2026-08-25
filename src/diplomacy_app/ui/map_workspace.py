@@ -34,6 +34,7 @@ from diplomacy_app.domain.models import (
     SavedViewId,
     game_folder_name,
 )
+from diplomacy_app.presentation import aspect_fitted_size
 from diplomacy_app.ui.map_canvas import MapCanvas, MapZoomControls
 
 _CUSTOM_VIEW = "custom"
@@ -306,6 +307,7 @@ class MapWorkspace(QWidget):
         size = PixelSize(
             max(1, self.canvas.viewport().width()), max(1, self.canvas.viewport().height())
         )
+        size = aspect_fitted_size(bounds, size)
         identifier = re.sub(r"[^a-z0-9]+", "-", name.casefold()).strip("-") or uuid.uuid4().hex[:8]
         view = SavedView(SavedViewId(identifier), name, bounds, bounds.width / bounds.height, size)
         try:
@@ -329,6 +331,7 @@ class MapWorkspace(QWidget):
         )
         if isinstance(selected, SavedView):
             bounds, size = selected.bounds, selected.output_size
+        size = aspect_fitted_size(bounds, size)
         return self.service.export_map(self._request(bounds, size))
 
     def _copy(self) -> None:

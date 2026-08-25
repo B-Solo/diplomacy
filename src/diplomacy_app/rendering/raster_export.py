@@ -2,12 +2,13 @@
 
 from __future__ import annotations
 
-from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QRectF
+from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QRectF, Qt
 from PySide6.QtGui import QColor, QImage, QPainter
 from PySide6.QtSvg import QSvgRenderer
 
 from diplomacy_app.domain.errors import RenderingError
 from diplomacy_app.domain.models import ImageArtifact, MapBounds, MapScene, RenderRequest
+from diplomacy_app.presentation import aspect_fitted_size
 
 
 def export_scene(scene: MapScene, request: RenderRequest) -> ImageArtifact:
@@ -20,13 +21,13 @@ def export_scene(scene: MapScene, request: RenderRequest) -> ImageArtifact:
     if right <= left or bottom <= top:
         raise RenderingError("The selected view does not intersect the map")
     bounds = MapBounds(left, top, right - left, bottom - top)
+    output_size = aspect_fitted_size(bounds, request.output_size)
     renderer = QSvgRenderer(QByteArray(scene.svg))
     if not renderer.isValid():
         raise RenderingError("Composed SVG could not be rasterised")
+    renderer.setAspectRatioMode(Qt.AspectRatioMode.KeepAspectRatio)
     renderer.setViewBox(QRectF(bounds.x, bounds.y, bounds.width, bounds.height))
-    image = QImage(
-        request.output_size.width, request.output_size.height, QImage.Format.Format_ARGB32
-    )
+    image = QImage(output_size.width, output_size.height, QImage.Format.Format_ARGB32)
     image.fill(QColor("transparent"))
     painter = QPainter(image)
     renderer.render(painter)
@@ -36,4 +37,4 @@ def export_scene(scene: MapScene, request: RenderRequest) -> ImageArtifact:
     buffer.open(QIODevice.OpenModeFlag.WriteOnly)
     if not image.save(buffer, "PNG"):  # type: ignore[call-overload]
         raise RenderingError("Qt failed to encode the map as PNG")
-    return ImageArtifact("image/png", data.data(), request.output_size)
+    return ImageArtifact("image/png", data.data(), output_size)

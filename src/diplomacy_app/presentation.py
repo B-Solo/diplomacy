@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from xml.etree import ElementTree
 
-from diplomacy_app.domain.models import CoastId, Point
+from diplomacy_app.domain.models import CoastId, MapBounds, PixelSize, Point
 
 DEFAULT_TERRITORY_LABEL_FONT_SIZE = 11.0
 DEFAULT_COAST_LABEL_FONT_SIZE = 9.0
@@ -15,6 +15,16 @@ DEFAULT_SEA_COLOUR = "#9ebbd2"
 DEFAULT_UNCLAIMED_REGION_COLOUR = "#d0c9aa"
 SUPPLY_CENTRE_STAR_OUTER_RADIUS = 9.0
 SUPPLY_CENTRE_STAR_INNER_RADIUS = 3.5
+
+
+def aspect_fitted_size(bounds: MapBounds, maximum: PixelSize) -> PixelSize:
+    """Fit pixel dimensions inside a maximum without distorting map bounds."""
+    if bounds.width <= 0 or bounds.height <= 0:
+        return maximum
+    aspect_ratio = bounds.width / bounds.height
+    if maximum.width / maximum.height > aspect_ratio:
+        return PixelSize(max(1, round(maximum.height * aspect_ratio)), maximum.height)
+    return PixelSize(maximum.width, max(1, round(maximum.width / aspect_ratio)))
 
 
 def supply_centre_star_points(centre: Point | None = None) -> tuple[Point, ...]:

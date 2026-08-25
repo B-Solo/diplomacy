@@ -94,6 +94,7 @@ Player communication occurs outside the application using map images copied by t
 - **IC.8:** When a saved or current view reaches a map edge, the copied image aligns exactly with that edge rather than including padding outside it.
 - **IC.9:** After recalling `Full map` or a named saved view, any subsequent pan or zoom changes the view selector to `Custom view`; programmatic rendering and window resizing do not clear the selection.
 - **IC.10:** `Save image` writes the same bounded PNG that `Copy map` places on the clipboard, using a native file chooser.
+- **IC.11:** Copied and saved images preserve the selected geographic bounds' aspect ratio without stretching; saved views retain fitted pixel dimensions so repeated output has the same size.
 
 ### Fog of War (FW)
 
