@@ -7,7 +7,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from PySide6.QtCore import Qt, QTimer, Signal
+from PySide6.QtCore import QSettings, Qt, QTimer, Signal
 from PySide6.QtGui import QImage
 from PySide6.QtWidgets import (
     QApplication,
@@ -38,6 +38,8 @@ from diplomacy_app.presentation import aspect_fitted_size
 from diplomacy_app.ui.map_canvas import MapCanvas, MapZoomControls
 
 _CUSTOM_VIEW = "custom"
+_DEFAULT_IMAGE_EXPORT_SCALE = 2
+_LAST_IMAGE_DIRECTORY_KEY = "imageSharing/lastDirectory"
 
 
 class MapWorkspace(QWidget):
@@ -45,9 +47,10 @@ class MapWorkspace(QWidget):
     view_saved = Signal(object)
     message = Signal(str)
 
-    def __init__(self, service, parent=None) -> None:
+    def __init__(self, service, parent=None, settings: QSettings | None = None) -> None:
         super().__init__(parent)
         self.service = service
+        self.settings = settings if settings is not None else QSettings()
         self.session: Any = None
         self.scene = None
         self._first_scene = True
@@ -332,6 +335,10 @@ class MapWorkspace(QWidget):
         if isinstance(selected, SavedView):
             bounds, size = selected.bounds, selected.output_size
         size = aspect_fitted_size(bounds, size)
+        size = PixelSize(
+            size.width * _DEFAULT_IMAGE_EXPORT_SCALE,
+            size.height * _DEFAULT_IMAGE_EXPORT_SCALE,
+        )
         return self.service.export_map(self._request(bounds, size))
 
     def _copy(self) -> None:
@@ -350,10 +357,12 @@ class MapWorkspace(QWidget):
         game_name = self.session.game.name if self.session and self.session.game else "map"
         phase = self.session.phase.phase_id.label if self.session and self.session.phase else ""
         suggested = game_folder_name(f"{game_name} {phase}") + ".png"
+        last_directory = self.settings.value(_LAST_IMAGE_DIRECTORY_KEY, "")
+        initial_path = Path(str(last_directory)) / suggested if last_directory else Path(suggested)
         filename, _ = QFileDialog.getSaveFileName(
             self,
             "Save map image",
-            suggested,
+            str(initial_path),
             "PNG images (*.png)",
         )
         if not filename:
@@ -364,6 +373,8 @@ class MapWorkspace(QWidget):
         try:
             artifact = self._export_current_view()
             path.write_bytes(artifact.data)
+            self.settings.setValue(_LAST_IMAGE_DIRECTORY_KEY, str(path.resolve().parent))
+            self.settings.sync()
             self.save_image_button.setText("Saved")
             QTimer.singleShot(1300, lambda: self.save_image_button.setText("Save image…"))
         except Exception as exc:

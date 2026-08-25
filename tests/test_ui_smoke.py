@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from pathlib import Path
 from xml.etree import ElementTree
 
 import pytest
 import yaml
-from PySide6.QtCore import QPoint, QPointF, Qt
+from PySide6.QtCore import QPoint, QPointF, QSettings, Qt
 from PySide6.QtGui import (
     QInputDevice,
     QKeySequence,
@@ -107,7 +108,8 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         VisibilityProjector(),
         MapRenderer(),
     )
-    window = ApplicationWindow(service)
+    settings = QSettings(str(tmp_path / "settings.ini"), QSettings.Format.IniFormat)
+    window = ApplicationWindow(service, settings=settings)
     qtbot.addWidget(window)
     assert window.windowState() & Qt.WindowState.WindowMaximized
     assert set(window.close_window_action.shortcuts()) == set(
@@ -768,7 +770,8 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
             configured.default_starting_setup,
         )
     )
-    window = ApplicationWindow(service)
+    settings = QSettings(str(tmp_path / "image-settings.ini"), QSettings.Format.IniFormat)
+    window = ApplicationWindow(service, settings=settings)
     qtbot.addWidget(window)
     window.map_workspace.labels.setCurrentIndex(1)
     window.set_session(session, open_map=True)
@@ -790,6 +793,10 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
             window.map_workspace.canvas.viewport().width(),
             window.map_workspace.canvas.viewport().height(),
         ),
+    )
+    expected_full_map_size = PixelSize(
+        expected_full_map_size.width * 2,
+        expected_full_map_size.height * 2,
     )
     assert full_map_output.size == expected_full_map_size
     assert full_map_output.size.width / full_map_output.size.height == pytest.approx(
@@ -828,14 +835,29 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert not QApplication.clipboard().image().isNull()
     assert window.map_workspace.copy_button.text() == "Copied"
     saved_image = tmp_path / "saved-map.png"
-    monkeypatch.setattr(
-        QFileDialog,
-        "getSaveFileName",
-        lambda *_args, **_kwargs: (str(saved_image), "PNG images (*.png)"),
-    )
+    dialog_initial_paths = []
+
+    def choose_saved_image(_parent, _title, initial_path, _filter):
+        dialog_initial_paths.append(initial_path)
+        return str(saved_image), "PNG images (*.png)"
+
+    monkeypatch.setattr(QFileDialog, "getSaveFileName", choose_saved_image)
     window.map_workspace._save_image()
     assert saved_image.read_bytes().startswith(b"\x89PNG")
     assert window.map_workspace.save_image_button.text() == "Saved"
+    assert Path(dialog_initial_paths[0]).parent == Path(".")
+
+    second_image = tmp_path / "another-folder" / "second-map.png"
+    second_image.parent.mkdir()
+
+    def choose_second_image(_parent, _title, initial_path, _filter):
+        dialog_initial_paths.append(initial_path)
+        return str(second_image), "PNG images (*.png)"
+
+    monkeypatch.setattr(QFileDialog, "getSaveFileName", choose_second_image)
+    window.map_workspace._save_image()
+    assert Path(dialog_initial_paths[1]).parent == tmp_path
+    assert settings.value("imageSharing/lastDirectory") == str(second_image.parent.resolve())
 
     window.game_map_placement_button.click()
     editor = window.stack.currentWidget()

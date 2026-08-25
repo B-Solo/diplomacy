@@ -6,7 +6,7 @@ import signal
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import Qt, QThreadPool, QTimer
+from PySide6.QtCore import QSettings, Qt, QThreadPool, QTimer
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import (
     QApplication,
@@ -35,7 +35,7 @@ from diplomacy_app.ui.style import STYLE, light_palette
 
 
 class ApplicationWindow(QMainWindow):
-    def __init__(self, service) -> None:
+    def __init__(self, service, settings: QSettings | None = None) -> None:
         super().__init__()
         self.service = service
         self.session = None
@@ -56,7 +56,7 @@ class ApplicationWindow(QMainWindow):
         layout.addWidget(self._header())
         self.stack = QStackedWidget()
         self.welcome = self._welcome_page()
-        self.map_workspace = MapWorkspace(service)
+        self.map_workspace = MapWorkspace(service, settings=settings)
         self.orders_workspace = OrdersWorkspace()
         self.orders_workspace.save_requested.connect(self._save_orders)
         self.orders_workspace.final_requested.connect(self._set_final)
