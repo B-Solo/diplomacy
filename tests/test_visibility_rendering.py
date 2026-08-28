@@ -190,13 +190,23 @@ def test_order_graphics(england):
     phase = phase_for(england)
     engine = StandardRulesEngine()
     power = england.powers[0]
-    submission = OrderProcessor(engine).prepare_submission(
+    move_submission = OrderProcessor(engine).prepare_submission(
         england,
         phase,
         power.id,
         "A Merseyside - Greater Manchester",
     )
-    phase = replace(phase, submissions=MappingProxyType({power.id: submission}))
+    up_north = next(item for item in england.powers if item.name == "Up North")
+    support_submission = OrderProcessor(engine).prepare_submission(
+        england,
+        phase,
+        up_north.id,
+        "A NBL S A DUR - CUM\nA DUR - CUM",
+    )
+    phase = replace(
+        phase,
+        submissions=MappingProxyType({power.id: move_submission, up_north.id: support_submission}),
+    )
     projection = VisibilityProjector().project(
         england,
         phase,
@@ -224,10 +234,24 @@ def test_order_graphics(england):
     assert move_line.attrib["stroke-linecap"] == "butt"
     tip_x, tip_y = arrowhead.attrib["points"].split()[0].split(",")
     assert (move_line.attrib["x2"], move_line.attrib["y2"]) != (tip_x, tip_y)
+    support_move = orders.find("{*}path[@class='support-move']")
+    assert support_move is not None
+    assert support_move.attrib["stroke-width"] == move_line.attrib["stroke-width"] == "3"
+    path_values = support_move.attrib["d"].split()
+    control = Point(float(path_values[4]), float(path_values[5]))
+    target = Point(float(path_values[6]), float(path_values[7]))
+    durham = next(item for item in england.territories if item.abbreviation == "Dur")
+    cumbria = next(item for item in england.territories if item.abbreviation == "Cum")
+    supported_start = england.presentation.army_anchors[durham.id]
+    supported_end = england.presentation.army_anchors[cumbria.id]
+    approach = Point(target.x - control.x, target.y - control.y)
+    move = Point(supported_end.x - supported_start.x, supported_end.y - supported_start.y)
+    assert approach.x * move.y - approach.y * move.x == pytest.approx(0, abs=1e-9)
+    assert approach.x * move.x + approach.y * move.y > 0
     hold_markers = [
         group for group in orders.findall("{*}g") if group.attrib.get("class") == "hold-marker"
     ]
-    assert len(hold_markers) == len(phase.state.units) - 1
+    assert len(hold_markers) == len(phase.state.units) - 3
     assert {marker.find("{*}circle").attrib["r"] for marker in hold_markers} == {"8.5"}
     assert {marker.find("{*}text").text for marker in hold_markers} == {"H"}
 

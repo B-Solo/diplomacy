@@ -56,6 +56,29 @@ def _anchor(map_definition: MapDefinition, unit: UnitRef) -> Point:
     return map_definition.presentation.fleet_anchors[Location(unit.location.territory_id)]
 
 
+def _support_move_curve(start: Point, move_start: Point, move_end: Point) -> tuple[Point, Point]:
+    """Calculate a support curve that merges into the supported move.
+
+    :param start: Anchor of the unit providing support.
+    :param move_start: Start of the supported move.
+    :param move_end: Destination of the supported move.
+    :return: Quadratic control point and join point on the supported move.
+    """
+    target = Point((move_start.x + move_end.x) / 2, (move_start.y + move_end.y) / 2)
+    move_dx = move_end.x - move_start.x
+    move_dy = move_end.y - move_start.y
+    move_length = math.hypot(move_dx, move_dy)
+    if move_length == 0:
+        return Point((start.x + target.x) / 2, (start.y + target.y) / 2), target
+    distance_to_target = math.hypot(target.x - start.x, target.y - start.y)
+    handle_length = min(max(distance_to_target * 0.4, 16), move_length * 0.45)
+    control = Point(
+        target.x - move_dx / move_length * handle_length,
+        target.y - move_dy / move_length * handle_length,
+    )
+    return control, target
+
+
 def _add_unit_symbol(
     layer: ElementTree.Element,
     asset: bytes,
@@ -373,6 +396,7 @@ class MapRenderer:
                 elif isinstance(order, SupportOrder):
                     start = _anchor(map_definition, order.unit)
                     target = _anchor(map_definition, order.supported_unit)
+                    support_class = "support-hold"
                     if (
                         order.destination
                         and (order.supported_unit.location, order.destination) in move_paths
@@ -380,19 +404,23 @@ class MapRenderer:
                         move_start, move_end = move_paths[
                             (order.supported_unit.location, order.destination)
                         ]
-                        target = Point(
-                            (move_start.x + move_end.x) / 2, (move_start.y + move_end.y) / 2
+                        control, target = _support_move_curve(start, move_start, move_end)
+                        support_class = "support-move"
+                    else:
+                        control = Point(
+                            (start.x + target.x) / 2,
+                            min(start.y, target.y) - abs(target.x - start.x) * 0.16,
                         )
-                    control_y = min(start.y, target.y) - abs(target.x - start.x) * 0.16
                     ElementTree.SubElement(
                         orders_layer,
                         _tag("path"),
                         {
-                            "d": f"M {start.x} {start.y} Q {(start.x + target.x) / 2} {control_y} {target.x} {target.y}",
+                            "d": f"M {start.x} {start.y} Q {control.x} {control.y} {target.x} {target.y}",
                             "fill": "none",
                             "stroke": "#3b3d37",
-                            "stroke-width": "2",
+                            "stroke-width": "3",
                             "stroke-dasharray": "3 5",
+                            "class": support_class,
                         },
                     )
                 elif isinstance(order, ConvoyOrder):
