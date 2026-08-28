@@ -433,7 +433,10 @@ class ApplicationWindow(QMainWindow):
 
     def _order_editing_finished(self) -> None:
         """Refresh canonical orders after an editor has genuinely lost focus."""
+        focused_power = self.orders_workspace.focused_editor_power()
         self._refresh_current_session()
+        if focused_power is not None:
+            self.orders_workspace.begin_editing(focused_power)
 
     def _set_final(self, power_id, value: bool) -> None:
         try:

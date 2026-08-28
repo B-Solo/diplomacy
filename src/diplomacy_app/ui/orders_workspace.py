@@ -126,9 +126,7 @@ class PowerPanel(QFrame):
             return
         self.stack = QStackedWidget()
         self.canonical = CanonicalOrdersView(self._canonical_html())
-        self.canonical.activated.connect(
-            lambda: self.stack.setCurrentIndex(1) if self.editable else None
-        )
+        self.canonical.activated.connect(self.begin_editing)
         self.stack.addWidget(self.canonical)
         self.editor = QPlainTextEdit(submission.raw_text if submission else "")
         self.editor.setPlaceholderText("One order per line")
@@ -155,6 +153,13 @@ class PowerPanel(QFrame):
         self.timer.setInterval(500)
         self.timer.timeout.connect(self._save)
         self.editor.textChanged.connect(self._edited)
+
+    def begin_editing(self) -> None:
+        """Reveal and focus the source editor when this panel is editable."""
+        if not self.editable or self.editor is None:
+            return
+        self.stack.setCurrentWidget(self.editor)
+        self.editor.setFocus(Qt.FocusReason.MouseFocusReason)
 
     def _issues(self) -> list[tuple[int, str]]:
         result: list[tuple[int, str]] = []
@@ -210,7 +215,7 @@ class PowerPanel(QFrame):
                 self.timer.stop()
                 self._save()
             self.stack.setCurrentIndex(0)
-            QTimer.singleShot(0, self.editing_finished.emit)
+            self.editing_finished.emit()
         return super().eventFilter(watched, event)
 
 
@@ -292,6 +297,26 @@ class OrdersWorkspace(QWidget):
             pending.append((panel.power.id, raw_text))
         return tuple(pending)
 
+    def focused_editor_power(self) -> PowerId | None:
+        """Return the power whose source editor currently owns keyboard focus."""
+        for panel in self.panels:
+            if panel.editor is not None and panel.editor.hasFocus():
+                return panel.power.id
+        return None
+
+    def begin_editing(self, power_id: PowerId) -> None:
+        """Focus a power's source editor after the workspace has refreshed.
+
+        :param power_id: Power whose editor should remain active.
+        """
+        panel = next((item for item in self.panels if item.power.id == power_id), None)
+        if panel is not None:
+            panel.begin_editing()
+
+    def _panel_editing_finished(self) -> None:
+        """Defer canonical refresh until the current focus event is complete."""
+        QTimer.singleShot(0, self.editing_finished.emit)
+
     def show_unfinalised_confirmation(self, names: list[str]) -> None:
         self.confirmation_text.setText(
             "Orders are still open for " + ", ".join(names) + ". Resolve anyway?"
@@ -303,6 +328,8 @@ class OrdersWorkspace(QWidget):
         self.resolve_anyway_requested.emit()
 
     def set_session(self, session) -> None:
+        for panel in self.panels:
+            panel.editing_finished.disconnect()
         while self.grid.count():
             item = self.grid.takeAt(0)
             if item.widget():
@@ -321,7 +348,7 @@ class OrdersWorkspace(QWidget):
             panel = PowerPanel(power, submission, requirement, editable)
             panel.save_requested.connect(self.save_requested)
             panel.final_requested.connect(self.final_requested)
-            panel.editing_finished.connect(self.editing_finished.emit)
+            panel.editing_finished.connect(self._panel_editing_finished)
             self.panels.append(panel)
             self.grid.addWidget(panel, index // 2, index % 2)
             if not requirement.requires_submission or (submission and submission.is_final):

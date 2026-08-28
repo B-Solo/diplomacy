@@ -751,6 +751,8 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert window.stack.currentWidget() is window.map_workspace
     window.tabs.setCurrentIndex(1)
     assert window.stack.currentWidget() is window.orders_workspace
+    window.show()
+    QApplication.processEvents()
     preview_unit = session.phase.state.units[0]
     preview_territory = next(
         territory
@@ -774,24 +776,39 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
         preview_panel.editor.maximumHeight(),
     } == {96}
     canonical_height = preview_panel.sizeHint().height()
-    preview_panel.stack.setCurrentIndex(1)
+    qtbot.mouseClick(canonical_orders, Qt.MouseButton.LeftButton)
+    assert preview_panel.editor.hasFocus()
     assert preview_panel.sizeHint().height() == canonical_height
     preview_panel.editor.setPlainText("A Not Yet Complete -")
     qtbot.wait(550)
     assert preview_panel in window.orders_workspace.panels
     assert preview_panel.stack.currentIndex() == 1
     assert preview_panel.sizeHint().height() == canonical_height
-    QApplication.sendEvent(preview_panel.editor, QFocusEvent(QEvent.Type.FocusOut))
+    other_panel = next(
+        panel for panel in window.orders_workspace.panels if panel.power.id != preview_unit.power_id
+    )
+    other_power_id = other_panel.power.id
+    qtbot.mouseClick(other_panel.canonical, Qt.MouseButton.LeftButton)
     qtbot.waitUntil(lambda: preview_panel not in window.orders_workspace.panels)
     preview_panel = next(
         panel for panel in window.orders_workspace.panels if panel.power.id == preview_unit.power_id
     )
+    other_panel = next(
+        panel for panel in window.orders_workspace.panels if panel.power.id == other_power_id
+    )
+    assert other_panel.stack.currentIndex() == 1
+    assert other_panel.editor is not None and other_panel.editor.hasFocus()
     unparseable_summary = preview_panel.canonical.text()
     assert "#a32620" in unparseable_summary
     assert "A&nbsp;Not&nbsp;Yet&nbsp;Complete&nbsp;- (??)" in unparseable_summary
     qtbot.mouseClick(preview_panel.canonical, Qt.MouseButton.LeftButton)
+    qtbot.waitUntil(lambda: other_panel not in window.orders_workspace.panels)
+    preview_panel = next(
+        panel for panel in window.orders_workspace.panels if panel.power.id == preview_unit.power_id
+    )
     assert preview_panel.stack.currentIndex() == 1
     assert preview_panel.editor is not None
+    assert preview_panel.editor.hasFocus()
     assert preview_panel.editor.toPlainText() == "A Not Yet Complete -"
     preview_panel.editor.setPlainText(
         f"{preview_unit.unit_type.value[0].upper()} {preview_territory.name} H"

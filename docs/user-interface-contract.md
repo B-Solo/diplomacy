@@ -141,7 +141,7 @@ Player communication occurs outside the application using map images copied by t
 - **OW.3:** A power panel normally shows the power, its `Final` state and its orders in canonical compact notation using configured territory abbreviations.
 - **OW.4:** Selecting the canonical order text reveals a same-height plain-text editor containing the player's exact original submission, including its names, abbreviations, whitespace, punctuation and line breaks, without resizing its power panel or grid row.
 - **OW.5:** The editor accepts one order per line using territory names or abbreviations, including `A|F <unit territory> - <destination>` for moves and `A|F <supporting territory> S A|F <supported territory> - <destination>` for support moves, with multi-word locations and `->` accepted in place of `-`; Enter inserts a line break, and parsing tolerates reasonable differences in case, whitespace and punctuation.
-- **OW.6:** Only leaving the editor reparses the complete original submission and returns the panel to canonical presentation; selecting that presentation again restores the exact original text rather than the canonical text.
+- **OW.6:** Leaving an editor, including by selecting another power's order editor, reparses the complete original submission and returns the previous panel to canonical presentation; the newly selected editor remains open and focused, and selecting any canonical presentation restores its exact original text rather than the canonical text.
 - **OW.7:** Changes are saved and validated as they are entered without replacing or closing the active editor.
 - **OW.8:** Editing any text clears that power's `Final` state.
 - **OW.9:** Each editable power panel provides an explicit `Orders final` action.
