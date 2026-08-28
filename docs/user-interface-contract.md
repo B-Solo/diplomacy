@@ -77,7 +77,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.5:** Compact `−`, read-only current-percentage, `+` and `Fit` controls overlay the map; wheel and button zoom use the same discrete levels.
 - **MW.6:** `Fit` returns to the full-map view without changing the map state.
 - **MW.7:** Pan is clamped to the map bounds.
-- **MW.8:** The map display switches between `Position` and `Orders`, and an explicit `Preview orders on map` action switches to the non-adjudicating order-overlay view from the Map toolbar as well as from the Orders workspace.
+- **MW.8:** The map display switches between `Position` and `Orders`, and an explicit `Preview orders on map` action follows the contiguous perspective, display-mode and label controls in the Map toolbar without separating them; the same action is available from the Orders workspace.
 - **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
 - **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current`, `Copy map` and `Save image` actions.
@@ -124,12 +124,12 @@ Player communication occurs outside the application using map images copied by t
 ### Order Graphics (OG)
 
 - **OG.1:** A move is a solid arrow from its unit to its destination whose shaft ends beneath the triangular head without a protruding rounded target dot.
-- **OG.2:** Support for a move is a dotted curved line with the same stroke weight as a move; it approaches the supported move at the same angle so the two paths visibly merge.
+- **OG.2:** Support for a move is a dotted cubic curve with the same stroke weight as a move; its join adapts to the supporter's position, remains clear of the move arrowhead and uses only a short final tangent so the paths visibly merge without substantially overlapping.
 - **OG.3:** Support for a hold is a dotted line ending at the supported unit.
 - **OG.4:** A convoy order is a pronounced wavy line from the convoying fleet to the convoyed move arrow, normally joining the portion of the route within that fleet's territory.
 - **OG.5:** A convoyed move uses a smoothed piecewise arrow through the relevant convoy chain when a straight arrow would misleadingly cross land.
-- **OG.6:** A hold is a compact `H` badge beside the unit.
-- **OG.7:** An invalid movement order is displayed as a dashed `H` badge because holding is its effective behaviour.
+- **OG.6:** A hold is a short solid black underline beneath the unit.
+- **OG.7:** An invalid movement order is displayed as a dashed underline because holding is its effective behaviour.
 - **OG.8:** A build or disband displays the affected unit with a `+` or `−` over it.
 - **OG.9:** Order graphics remain visually subordinate to the map and units.
 - **OG.10:** A waived build appears in the canonical order list without a map graphic.
@@ -242,6 +242,7 @@ The header and season bar remain stable while the central toolbar and workspace 
 ```text
 ┌─────────────────────────────────────────────────────────────────────┐
 │ Viewing as [Gamemaster ▾]  Position | Orders  Labels [Names ▾]      │
+│                                      [Preview orders on map]        │
 │          View [Full map ▾] [Save current] [Copy map] [Save image]   │
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │

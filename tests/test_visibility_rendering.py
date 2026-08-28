@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from dataclasses import replace
 from types import MappingProxyType
 from xml.etree import ElementTree
@@ -201,7 +202,7 @@ def test_order_graphics(england):
         england,
         phase,
         up_north.id,
-        "A NBL S A DUR - CUM\nA DUR - CUM",
+        "A DUR S A NBL - CUM\nA NBL - CUM",
     )
     phase = replace(
         phase,
@@ -237,23 +238,36 @@ def test_order_graphics(england):
     support_move = orders.find("{*}path[@class='support-move']")
     assert support_move is not None
     assert support_move.attrib["stroke-width"] == move_line.attrib["stroke-width"] == "3"
+    assert support_move.attrib["stroke-linecap"] == "round"
     path_values = support_move.attrib["d"].split()
-    control = Point(float(path_values[4]), float(path_values[5]))
-    target = Point(float(path_values[6]), float(path_values[7]))
+    assert path_values[3] == "C"
+    first_control = Point(float(path_values[4]), float(path_values[5]))
+    second_control = Point(float(path_values[6]), float(path_values[7]))
+    target = Point(float(path_values[8]), float(path_values[9]))
     durham = next(item for item in england.territories if item.abbreviation == "Dur")
+    northumberland = next(item for item in england.territories if item.abbreviation == "Nbl")
     cumbria = next(item for item in england.territories if item.abbreviation == "Cum")
-    supported_start = england.presentation.army_anchors[durham.id]
+    supporting_start = england.presentation.army_anchors[durham.id]
+    supported_start = england.presentation.army_anchors[northumberland.id]
     supported_end = england.presentation.army_anchors[cumbria.id]
-    approach = Point(target.x - control.x, target.y - control.y)
+    approach = Point(target.x - second_control.x, target.y - second_control.y)
     move = Point(supported_end.x - supported_start.x, supported_end.y - supported_start.y)
     assert approach.x * move.y - approach.y * move.x == pytest.approx(0, abs=1e-9)
     assert approach.x * move.x + approach.y * move.y > 0
+    assert math.hypot(approach.x, approach.y) <= 18
+    chord = Point(target.x - supporting_start.x, target.y - supporting_start.y)
+    first_handle = Point(
+        first_control.x - supporting_start.x,
+        first_control.y - supporting_start.y,
+    )
+    assert abs(first_handle.x * chord.y - first_handle.y * chord.x) > 1
+    assert math.hypot(target.x - supported_end.x, target.y - supported_end.y) > 20
     hold_markers = [
-        group for group in orders.findall("{*}g") if group.attrib.get("class") == "hold-marker"
+        line for line in orders.findall("{*}line") if line.attrib.get("class") == "hold-marker"
     ]
     assert len(hold_markers) == len(phase.state.units) - 3
-    assert {marker.find("{*}circle").attrib["r"] for marker in hold_markers} == {"8.5"}
-    assert {marker.find("{*}text").text for marker in hold_markers} == {"H"}
+    assert {marker.attrib["stroke-dasharray"] for marker in hold_markers} == {"none"}
+    assert all(marker.attrib["y1"] == marker.attrib["y2"] for marker in hold_markers)
 
 
 def test_renderer_composes_safe_scene_and_exact_png(qapp, england):

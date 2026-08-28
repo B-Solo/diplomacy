@@ -20,7 +20,7 @@ In retreat phases, a dislodged unit remains at its origin with an `R` marker and
 When projected adjudication explanations are present, composition returns map-coordinate hit paths alongside the SVG so the UI can implement order hover without parsing rendered content.
 
 Move paths are constructed before dependent support and convoy graphics.
-Support-to-move paths use the supported move vector as their final tangent and terminate on the computed move path; convoy connectors use a pronounced wave and terminate on the convoyed move path.
+Support-to-move paths choose a join from the supporter's projection onto the move, shed their lateral offset through a cubic curve and use the supported move vector only for a short final tangent; convoy connectors use a pronounced wave and terminate on the convoyed move path.
 A convoyed move may use a smoothed representative path through the ordered convoy fleet chain, selected deterministically from topology when several chains exist.
 
 Export intersects requested bounds with the source map bounds and fits the output pixel dimensions to that intersection's aspect ratio before rasterisation.
@@ -31,7 +31,7 @@ Unit and order strokes use map-space sizing rules with sensible screen-space lim
 - `renderer` implements `MapRenderer` and coordinates deterministic SVG composition and projected hover hotspots.
 - `territory_layers` applies controller fills, labels and supply-centre ownership stars from projected territory values.
 - `unit_layers` places active and dislodged army or fleet symbols with power-derived fill, outline colours, retreat markers and collision offsets.
-- `order_geometry` calculates move paths and the support, convoy, hold, invalid-movement, build and disband conventions that depend on them, including dotted effective holds for invalid movement orders.
+- `order_geometry` calculates move paths and the support, convoy, underlined hold, invalid-movement, build and disband conventions that depend on them, including dashed effective holds for invalid movement orders.
 - `svg_scene` assembles sanitised base content and generated layers into a self-contained `MapScene`.
 - `raster_export` clips requested bounds and encodes a PNG at the requested output dimensions.
 

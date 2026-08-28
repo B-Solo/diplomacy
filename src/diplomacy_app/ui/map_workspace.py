@@ -77,12 +77,12 @@ class MapWorkspace(QWidget):
             "Show order arrows and markers over the current position without resolving the phase"
         )
         self.preview_orders.clicked.connect(self._preview_orders)
-        controls.addWidget(self.preview_orders)
         self.labels = QComboBox()
         self.labels.addItem("Display names", LabelMode.FULL_NAME)
         self.labels.addItem("Three-letter codes", LabelMode.ABBREVIATION)
         self.labels.currentIndexChanged.connect(self.schedule_refresh)
         controls.addWidget(self.labels)
+        controls.addWidget(self.preview_orders)
         controls.addStretch()
         controls.addWidget(QLabel("View"))
         self.views = QComboBox()

@@ -56,27 +56,57 @@ def _anchor(map_definition: MapDefinition, unit: UnitRef) -> Point:
     return map_definition.presentation.fleet_anchors[Location(unit.location.territory_id)]
 
 
-def _support_move_curve(start: Point, move_start: Point, move_end: Point) -> tuple[Point, Point]:
+def _support_move_curve(
+    start: Point, move_start: Point, move_end: Point
+) -> tuple[Point, Point, Point]:
     """Calculate a support curve that merges into the supported move.
 
     :param start: Anchor of the unit providing support.
     :param move_start: Start of the supported move.
     :param move_end: Destination of the supported move.
-    :return: Quadratic control point and join point on the supported move.
+    :return: Cubic control points and join point on the supported move.
     """
-    target = Point((move_start.x + move_end.x) / 2, (move_start.y + move_end.y) / 2)
     move_dx = move_end.x - move_start.x
     move_dy = move_end.y - move_start.y
     move_length = math.hypot(move_dx, move_dy)
     if move_length == 0:
-        return Point((start.x + target.x) / 2, (start.y + target.y) / 2), target
-    distance_to_target = math.hypot(target.x - start.x, target.y - start.y)
-    handle_length = min(max(distance_to_target * 0.4, 16), move_length * 0.45)
-    control = Point(
-        target.x - move_dx / move_length * handle_length,
-        target.y - move_dy / move_length * handle_length,
+        target = move_start
+        control = Point((start.x + target.x) / 2, (start.y + target.y) / 2)
+        return control, control, target
+    unit_x = move_dx / move_length
+    unit_y = move_dy / move_length
+    normal_x = -unit_y
+    normal_y = unit_x
+    relative_x = start.x - move_start.x
+    relative_y = start.y - move_start.y
+    projected_distance = relative_x * unit_x + relative_y * unit_y
+    side_distance = relative_x * normal_x + relative_y * normal_y
+    lead_distance = min(30, max(14, move_length * 0.12))
+    end_margin = min(22, move_length * 0.25)
+    join_distance = max(
+        move_length * 0.35,
+        min(
+            projected_distance + lead_distance,
+            move_length * 0.8,
+            move_length - end_margin,
+        ),
     )
-    return control, target
+    target = Point(
+        move_start.x + unit_x * join_distance,
+        move_start.y + unit_y * join_distance,
+    )
+    forward_distance = join_distance - projected_distance
+    curve_side = side_distance if abs(side_distance) >= 18 else (18 if side_distance >= 0 else -18)
+    first_control = Point(
+        start.x + unit_x * forward_distance * 0.35 - normal_x * curve_side * 0.25,
+        start.y + unit_y * forward_distance * 0.35 - normal_y * curve_side * 0.25,
+    )
+    final_handle = min(18, max(9, abs(forward_distance) * 0.18))
+    second_control = Point(
+        target.x - unit_x * final_handle,
+        target.y - unit_y * final_handle,
+    )
+    return first_control, second_control, target
 
 
 def _add_unit_symbol(
@@ -356,43 +386,23 @@ class MapRenderer:
                 order = projected_order.order
                 if isinstance(order, HoldOrder):
                     point = _anchor(map_definition, order.unit)
-                    badge = ElementTree.SubElement(
-                        orders_layer,
-                        _tag("g"),
-                        {"class": "hold-marker"},
-                    )
-                    badge_x = point.x + 17
-                    badge_y = point.y - 13
                     ElementTree.SubElement(
-                        badge,
-                        _tag("circle"),
+                        orders_layer,
+                        _tag("line"),
                         {
-                            "cx": str(badge_x),
-                            "cy": str(badge_y),
-                            "r": "8.5",
-                            "fill": "#fffaf0",
-                            "fill-opacity": "0.94",
+                            "x1": str(point.x - 13),
+                            "y1": str(point.y + 13),
+                            "x2": str(point.x + 13),
+                            "y2": str(point.y + 13),
                             "stroke": "#22251f",
-                            "stroke-width": "1.5",
-                            "stroke-dasharray": "2 2"
+                            "stroke-width": "2.5",
+                            "stroke-linecap": "round",
+                            "stroke-dasharray": "5 4"
                             if projected_order.is_valid is False
                             else "none",
+                            "class": "hold-marker",
                         },
                     )
-                    marker = ElementTree.SubElement(
-                        badge,
-                        _tag("text"),
-                        {
-                            "x": str(badge_x),
-                            "y": str(badge_y),
-                            "fill": "#22251f",
-                            "font-size": "10",
-                            "font-weight": "700",
-                            "text-anchor": "middle",
-                            "dominant-baseline": "central",
-                        },
-                    )
-                    marker.text = "H"
                 elif isinstance(order, SupportOrder):
                     start = _anchor(map_definition, order.unit)
                     target = _anchor(map_definition, order.supported_unit)
@@ -404,22 +414,32 @@ class MapRenderer:
                         move_start, move_end = move_paths[
                             (order.supported_unit.location, order.destination)
                         ]
-                        control, target = _support_move_curve(start, move_start, move_end)
+                        first_control, second_control, target = _support_move_curve(
+                            start, move_start, move_end
+                        )
+                        path = (
+                            f"M {start.x} {start.y} C {first_control.x} {first_control.y} "
+                            f"{second_control.x} {second_control.y} {target.x} {target.y}"
+                        )
                         support_class = "support-move"
                     else:
                         control = Point(
                             (start.x + target.x) / 2,
                             min(start.y, target.y) - abs(target.x - start.x) * 0.16,
                         )
+                        path = (
+                            f"M {start.x} {start.y} Q {control.x} {control.y} {target.x} {target.y}"
+                        )
                     ElementTree.SubElement(
                         orders_layer,
                         _tag("path"),
                         {
-                            "d": f"M {start.x} {start.y} Q {control.x} {control.y} {target.x} {target.y}",
+                            "d": path,
                             "fill": "none",
                             "stroke": "#3b3d37",
                             "stroke-width": "3",
                             "stroke-dasharray": "3 5",
+                            "stroke-linecap": "round",
                             "class": support_class,
                         },
                     )

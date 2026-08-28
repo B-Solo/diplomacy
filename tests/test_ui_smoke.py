@@ -123,6 +123,12 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert window.map_workspace.zoom_controls.zoom_out.text() == "−"
     assert window.map_workspace.zoom_controls.zoom_in.text() == "+"
     assert window.map_workspace.outer_layout.contentsMargins().left() == 4
+    map_controls = window.map_workspace.outer_layout.itemAt(0).layout()
+    assert (
+        map_controls.indexOf(window.map_workspace.mode)
+        < map_controls.indexOf(window.map_workspace.labels)
+        < map_controls.indexOf(window.map_workspace.preview_orders)
+    )
     assert window.map_workspace.fog_badge.parent() is window.map_workspace.canvas
     assert window.map_workspace.outcomes.parent() is window.map_workspace.canvas
     assert window.map_workspace.canvas.frameShape() is QFrame.Shape.NoFrame
@@ -827,7 +833,7 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     preview_orders = next(
         group for group in preview_svg.findall(".//{*}g") if group.attrib.get("id") == "orders"
     )
-    assert preview_orders.find(".//{*}g[@class='hold-marker']/{*}circle") is not None
+    assert preview_orders.find(".//{*}line[@class='hold-marker']") is not None
     window.tabs.setCurrentIndex(0)
     assert window.stack.currentWidget() is window.map_workspace
     window.map_workspace.refresh()
