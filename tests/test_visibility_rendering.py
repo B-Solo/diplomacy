@@ -26,6 +26,7 @@ from diplomacy_app.domain.models import (
     Revision,
     VisibilityPolicy,
 )
+from diplomacy_app.order_processing import OrderProcessor
 from diplomacy_app.presentation import aspect_fitted_size, darken_colour
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rendering.labels import label_lines
@@ -183,6 +184,52 @@ def test_exported_multiline_label_paints_two_distinct_lines(qapp, england):
             row_groups.append([])
         row_groups[-1].append(row)
     assert len(row_groups) == 2
+
+
+def test_order_graphics(england):
+    phase = phase_for(england)
+    engine = StandardRulesEngine()
+    power = england.powers[0]
+    submission = OrderProcessor(engine).prepare_submission(
+        england,
+        phase,
+        power.id,
+        "A Merseyside - Greater Manchester",
+    )
+    phase = replace(phase, submissions=MappingProxyType({power.id: submission}))
+    projection = VisibilityProjector().project(
+        england,
+        phase,
+        engine.effective_orders(england, phase),
+        VisibilityPolicy(False, 1),
+        ProjectionRequest(
+            Perspective(PerspectiveKind.GAMEMASTER),
+            LabelMode.FULL_NAME,
+            True,
+            False,
+        ),
+    )
+    request = RenderRequest(
+        DisplayMode.ORDERS,
+        LabelMode.FULL_NAME,
+        MapBounds(0, 0, 1013, 1026),
+        PixelSize(640, 480),
+    )
+    root = ElementTree.fromstring(MapRenderer().compose(england, projection, request).svg)
+    orders = next(group for group in root.findall(".//{*}g") if group.attrib.get("id") == "orders")
+    move_line = orders.find("{*}line")
+    arrowhead = orders.find("{*}polygon")
+    assert move_line is not None
+    assert arrowhead is not None
+    assert move_line.attrib["stroke-linecap"] == "butt"
+    tip_x, tip_y = arrowhead.attrib["points"].split()[0].split(",")
+    assert (move_line.attrib["x2"], move_line.attrib["y2"]) != (tip_x, tip_y)
+    hold_markers = [
+        group for group in orders.findall("{*}g") if group.attrib.get("class") == "hold-marker"
+    ]
+    assert len(hold_markers) == len(phase.state.units) - 1
+    assert {marker.find("{*}circle").attrib["r"] for marker in hold_markers} == {"8.5"}
+    assert {marker.find("{*}text").text for marker in hold_markers} == {"H"}
 
 
 def test_renderer_composes_safe_scene_and_exact_png(qapp, england):

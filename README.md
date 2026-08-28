@@ -48,6 +48,7 @@ Examples include:
 A London H
 F NTH - Yorkshire
 A Wales S F London
+F TYN S A DUR - CLE
 F North Sea C A London - Belgium
 A Yorkshire R Lancashire
 A London B

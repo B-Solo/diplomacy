@@ -122,13 +122,13 @@ Player communication occurs outside the application using map images copied by t
 
 ### Order Graphics (OG)
 
-- **OG.1:** A move is a solid arrow from its unit to its destination.
+- **OG.1:** A move is a solid arrow from its unit to its destination whose shaft ends beneath the triangular head without a protruding rounded target dot.
 - **OG.2:** Support for a move is a dotted curved line that joins the supported move arrow.
 - **OG.3:** Support for a hold is a dotted line ending at the supported unit.
 - **OG.4:** A convoy order is a pronounced wavy line from the convoying fleet to the convoyed move arrow, normally joining the portion of the route within that fleet's territory.
 - **OG.5:** A convoyed move uses a smoothed piecewise arrow through the relevant convoy chain when a straight arrow would misleadingly cross land.
-- **OG.6:** A hold is a ring around the unit.
-- **OG.7:** An invalid movement order is displayed as a dotted hold ring because holding is its effective behaviour.
+- **OG.6:** A hold is a compact `H` badge beside the unit.
+- **OG.7:** An invalid movement order is displayed as a dashed `H` badge because holding is its effective behaviour.
 - **OG.8:** A build or disband displays the affected unit with a `+` or `−` over it.
 - **OG.9:** Order graphics remain visually subordinate to the map and units.
 - **OG.10:** A waived build appears in the canonical order list without a map graphic.
@@ -139,7 +139,7 @@ Player communication occurs outside the application using map images copied by t
 - **OW.2:** Power panels use a two-column layout on wide windows and a single column on narrow windows; each non-stretching card has a compact power header and an edge-to-edge order surface that occupies most of its height.
 - **OW.3:** A power panel normally shows the power, its `Final` state and its orders in canonical compact notation using configured territory abbreviations.
 - **OW.4:** Selecting the canonical order text reveals a same-height plain-text editor containing the player's exact original submission, including its names, abbreviations, whitespace, punctuation and line breaks, without resizing its power panel or grid row.
-- **OW.5:** The editor accepts one order per line using territory names or abbreviations, including `A|F <unit territory> - <destination>` and `A|F <unit territory> -> <destination>` with multi-word locations; Enter inserts a line break, and parsing tolerates reasonable differences in case, whitespace and punctuation.
+- **OW.5:** The editor accepts one order per line using territory names or abbreviations, including `A|F <unit territory> - <destination>` for moves and `A|F <supporting territory> S A|F <supported territory> - <destination>` for support moves, with multi-word locations and `->` accepted in place of `-`; Enter inserts a line break, and parsing tolerates reasonable differences in case, whitespace and punctuation.
 - **OW.6:** Only leaving the editor reparses the complete original submission and returns the panel to canonical presentation; selecting that presentation again restores the exact original text rather than the canonical text.
 - **OW.7:** Changes are saved and validated as they are entered without replacing or closing the active editor.
 - **OW.8:** Editing any text clears that power's `Final` state.
@@ -158,7 +158,6 @@ Player communication occurs outside the application using map images copied by t
 - **OI.4:** An unrecognisable line is retained even when it cannot be associated with a unit and appears in the canonical summary as its original text in red followed by `(??)`.
 - **OI.5:** A missing order has no fabricated submitted text or source line and receives the standard phase-specific default effect.
 - **OI.6:** The default order display omits engine outcome categories such as bounce, no convoy, cut and dislodged.
-- **OI.7:** Original submitted text and parsed canonical orders remain separate values; validation, order previews and adjudication consume the parsed orders without overwriting the original text.
 - **OI.7:** Submission validation and the adjudicator's later `VOID` result remain distinct.
 - **OI.8:** The `ui.explain_adjudication_outcomes` game-YAML setting controls optional adjudication explanations and defaults to `false`.
 - **OI.9:** When optional explanations are enabled, hovering an order graphic may display its engine outcome category.
@@ -167,6 +166,7 @@ Player communication occurs outside the application using map images copied by t
 - **OI.12:** In a build phase, an invalid or omitted build becomes a waived build, and the editor accepts an explicit `Waive` order.
 - **OI.13:** In a disband phase, the Rules Engine selects any disbands still required after valid submitted disbands have been applied.
 - **OI.14:** Multiple submitted orders for the same unit are invalid as a group and receive the applicable phase-specific default.
+- **OI.15:** Original submitted text and parsed canonical orders remain separate values; validation, order previews and adjudication consume the parsed orders without overwriting the original text.
 
 ### Adjudication and Advancement (AA)
 

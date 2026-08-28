@@ -817,7 +817,7 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     preview_orders = next(
         group for group in preview_svg.findall(".//{*}g") if group.attrib.get("id") == "orders"
     )
-    assert preview_orders.find("{*}circle") is not None
+    assert preview_orders.find(".//{*}g[@class='hold-marker']/{*}circle") is not None
     window.tabs.setCurrentIndex(0)
     assert window.stack.currentWidget() is window.map_workspace
     window.map_workspace.refresh()

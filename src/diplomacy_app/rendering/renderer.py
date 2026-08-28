@@ -289,20 +289,24 @@ class MapRenderer:
                             label_anchors[destination_definition.id],
                         )
                     move_paths[(order.unit.location, order.destination)] = (start, end)
+                    angle = math.atan2(end.y - start.y, end.x - start.x)
+                    shaft_end = Point(
+                        end.x - 8.8 * math.cos(angle),
+                        end.y - 8.8 * math.sin(angle),
+                    )
                     ElementTree.SubElement(
                         orders_layer,
                         _tag("line"),
                         {
                             "x1": str(start.x),
                             "y1": str(start.y),
-                            "x2": str(end.x),
-                            "y2": str(end.y),
+                            "x2": str(shaft_end.x),
+                            "y2": str(shaft_end.y),
                             "stroke": "#22251f",
                             "stroke-width": "3",
-                            "stroke-linecap": "round",
+                            "stroke-linecap": "butt",
                         },
                     )
-                    angle = math.atan2(end.y - start.y, end.x - start.x)
                     points = [
                         end,
                         Point(
@@ -329,21 +333,43 @@ class MapRenderer:
                 order = projected_order.order
                 if isinstance(order, HoldOrder):
                     point = _anchor(map_definition, order.unit)
-                    ElementTree.SubElement(
+                    badge = ElementTree.SubElement(
                         orders_layer,
+                        _tag("g"),
+                        {"class": "hold-marker"},
+                    )
+                    badge_x = point.x + 17
+                    badge_y = point.y - 13
+                    ElementTree.SubElement(
+                        badge,
                         _tag("circle"),
                         {
-                            "cx": str(point.x),
-                            "cy": str(point.y),
-                            "r": "17",
-                            "fill": "none",
+                            "cx": str(badge_x),
+                            "cy": str(badge_y),
+                            "r": "8.5",
+                            "fill": "#fffaf0",
+                            "fill-opacity": "0.94",
                             "stroke": "#22251f",
-                            "stroke-width": "2.5",
-                            "stroke-dasharray": "3 5"
+                            "stroke-width": "1.5",
+                            "stroke-dasharray": "2 2"
                             if projected_order.is_valid is False
                             else "none",
                         },
                     )
+                    marker = ElementTree.SubElement(
+                        badge,
+                        _tag("text"),
+                        {
+                            "x": str(badge_x),
+                            "y": str(badge_y),
+                            "fill": "#22251f",
+                            "font-size": "10",
+                            "font-weight": "700",
+                            "text-anchor": "middle",
+                            "dominant-baseline": "central",
+                        },
+                    )
+                    marker.text = "H"
                 elif isinstance(order, SupportOrder):
                     start = _anchor(map_definition, order.unit)
                     target = _anchor(map_definition, order.supported_unit)
