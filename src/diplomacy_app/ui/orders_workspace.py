@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+from html import escape
+
 from PySide6.QtCore import QEvent, Qt, QTimer, Signal
+from PySide6.QtGui import QMouseEvent
 from PySide6.QtWidgets import (
     QCheckBox,
     QFrame,
@@ -22,6 +25,47 @@ from diplomacy_app.domain.models import IssueSeverity, PowerId
 
 _ORDER_ENTRY_HEIGHT = 96
 _ORDER_HEADER_HEIGHT = 34
+
+
+def _preserved_html(text: str) -> str:
+    """Escape text for rich display while preserving horizontal whitespace.
+
+    :param text: One submitted or canonical order line.
+    :return: Safe HTML whose spaces and tabs remain visible.
+    """
+    return escape(text).replace("\t", "    ").replace(" ", "&nbsp;")
+
+
+class CanonicalOrdersView(QLabel):
+    """Fixed-height rich order summary that opens its source editor when clicked."""
+
+    activated = Signal()
+
+    def __init__(self, content: str, parent=None) -> None:
+        """Create a clickable canonical-order surface.
+
+        :param content: Safe rich text describing every submitted order line.
+        :param parent: Optional owning widget.
+        """
+        super().__init__(content, parent)
+        self.setTextFormat(Qt.TextFormat.RichText)
+        self.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.setFixedHeight(_ORDER_ENTRY_HEIGHT)
+        self.setStyleSheet(
+            "background: #fffdf7; color: #171714; font-family: monospace; "
+            "padding: 7px; border: 0; border-top: 1px solid #d8cfb8; "
+            "border-bottom-left-radius: 5px; border-bottom-right-radius: 5px"
+        )
+
+    def mousePressEvent(self, event: QMouseEvent) -> None:
+        """Open the source editor in response to a primary-button click.
+
+        :param event: Mouse press delivered to the canonical-order surface.
+        """
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.activated.emit()
+        super().mousePressEvent(event)
 
 
 class PowerPanel(QFrame):
@@ -81,23 +125,18 @@ class PowerPanel(QFrame):
             self.issue_box = None
             return
         self.stack = QStackedWidget()
-        canonical = QPushButton(self._canonical_text())
-        canonical.setFlat(True)
-        canonical.setCursor(Qt.CursorShape.PointingHandCursor)
-        canonical.setStyleSheet(
-            "background: #fffdf7; color: #171714; text-align: left; "
-            "font-family: monospace; padding: 7px; border: 0; "
-            "border-top: 1px solid #d8cfb8; border-radius: 0 0 5px 5px"
+        self.canonical = CanonicalOrdersView(self._canonical_html())
+        self.canonical.activated.connect(
+            lambda: self.stack.setCurrentIndex(1) if self.editable else None
         )
-        canonical.setFixedHeight(_ORDER_ENTRY_HEIGHT)
-        canonical.clicked.connect(lambda: self.stack.setCurrentIndex(1) if self.editable else None)
-        self.stack.addWidget(canonical)
+        self.stack.addWidget(self.canonical)
         self.editor = QPlainTextEdit(submission.raw_text if submission else "")
         self.editor.setPlaceholderText("One order per line")
         self.editor.setStyleSheet(
             "QPlainTextEdit { background: #fffdf7; color: #171714; "
             "font-family: monospace; padding: 6px; border: 0; "
-            "border-top: 1px solid #d8cfb8; border-radius: 0 0 5px 5px; }"
+            "border-top: 1px solid #d8cfb8; border-bottom-left-radius: 5px; "
+            "border-bottom-right-radius: 5px; }"
         )
         self.editor.setFixedHeight(_ORDER_ENTRY_HEIGHT)
         self.editor.installEventFilter(self)
@@ -130,13 +169,22 @@ class PowerPanel(QFrame):
                     result.append((line.candidate.source.number, issue.message))
         return result
 
-    def _canonical_text(self) -> str:
+    def _canonical_html(self) -> str:
+        """Render recognised and unparseable submission lines for the summary.
+
+        :return: Safe rich text with unparseable source lines marked in red.
+        """
         if not self.submission or not self.submission.lines:
             return "Click to enter orders…"
-        return "\n".join(
-            line.candidate.canonical_text or f"?  {line.candidate.source.text}"
-            for line in self.submission.lines
-        )
+        lines: list[str] = []
+        for line in self.submission.lines:
+            candidate = line.candidate
+            if candidate.canonical_text is not None:
+                lines.append(_preserved_html(candidate.canonical_text))
+            else:
+                source = _preserved_html(candidate.source.text)
+                lines.append(f'<span style="color:#a32620; font-weight:700">{source} (??)</span>')
+        return "<br>".join(lines)
 
     def _toggle_issues(self) -> None:
         if self.issue_box:

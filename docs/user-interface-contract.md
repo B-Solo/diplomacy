@@ -155,7 +155,7 @@ Player communication occurs outside the application using map images copied by t
 - **OI.1:** Canonical order display uses conventional compact Diplomacy notation.
 - **OI.2:** Recognised valid orders display their canonical interpretation.
 - **OI.3:** A recognised invalid order is retained with its validation reason and receives the standard phase-specific default effect.
-- **OI.4:** An unrecognisable line is retained even when it cannot be associated with a unit.
+- **OI.4:** An unrecognisable line is retained even when it cannot be associated with a unit and appears in the canonical summary as its original text in red followed by `(??)`.
 - **OI.5:** A missing order has no fabricated submitted text or source line and receives the standard phase-specific default effect.
 - **OI.6:** The default order display omits engine outcome categories such as bounce, no convoy, cut and dislodged.
 - **OI.7:** Original submitted text and parsed canonical orders remain separate values; validation, order previews and adjudication consume the parsed orders without overwriting the original text.

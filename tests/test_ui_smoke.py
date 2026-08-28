@@ -762,6 +762,18 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert preview_panel in window.orders_workspace.panels
     assert preview_panel.stack.currentIndex() == 1
     assert preview_panel.sizeHint().height() == canonical_height
+    QApplication.sendEvent(preview_panel.editor, QFocusEvent(QEvent.Type.FocusOut))
+    qtbot.waitUntil(lambda: preview_panel not in window.orders_workspace.panels)
+    preview_panel = next(
+        panel for panel in window.orders_workspace.panels if panel.power.id == preview_unit.power_id
+    )
+    unparseable_summary = preview_panel.canonical.text()
+    assert "#a32620" in unparseable_summary
+    assert "A&nbsp;Not&nbsp;Yet&nbsp;Complete&nbsp;- (??)" in unparseable_summary
+    qtbot.mouseClick(preview_panel.canonical, Qt.MouseButton.LeftButton)
+    assert preview_panel.stack.currentIndex() == 1
+    assert preview_panel.editor is not None
+    assert preview_panel.editor.toPlainText() == "A Not Yet Complete -"
     preview_panel.editor.setPlainText(
         f"{preview_unit.unit_type.value[0].upper()} {preview_territory.name} H"
     )
@@ -780,8 +792,8 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert preview_panel.stack.currentIndex() == 0
     assert preview_panel.editor is not None
     canonical_orders = preview_panel.stack.widget(0)
-    assert canonical_orders.text() == f"A {preview_territory.abbreviation} H"
-    canonical_orders.click()
+    assert canonical_orders.text() == f"A&nbsp;{preview_territory.abbreviation}&nbsp;H"
+    qtbot.mouseClick(canonical_orders, Qt.MouseButton.LeftButton)
     assert preview_panel.stack.currentIndex() == 1
     assert preview_panel.editor.toPlainText() == original_text
     preview_panel.editor.setPlainText(
