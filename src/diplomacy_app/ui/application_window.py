@@ -65,6 +65,7 @@ class ApplicationWindow(QMainWindow):
         self.orders_workspace = OrdersWorkspace()
         self.orders_workspace.save_requested.connect(self._save_orders)
         self.orders_workspace.final_requested.connect(self._set_final)
+        self.orders_workspace.editing_finished.connect(self._order_editing_finished)
         self.orders_workspace.preview_requested.connect(self._preview_orders)
         self.orders_workspace.resolve_requested.connect(self._resolve)
         self.orders_workspace.resolve_anyway_requested.connect(self._resolve_anyway)
@@ -411,10 +412,13 @@ class ApplicationWindow(QMainWindow):
     def _save_orders(self, power_id, raw_text: str) -> None:
         try:
             self.service.update_orders(power_id, raw_text)
-            self._refresh_current_session()
             self.statusBar().showMessage("Orders saved and validated", 2000)
         except Exception as exc:
             self._show_error(f"Could not save orders: {exc}")
+
+    def _order_editing_finished(self) -> None:
+        """Refresh canonical orders after an editor has genuinely lost focus."""
+        self._refresh_current_session()
 
     def _set_final(self, power_id, value: bool) -> None:
         try:

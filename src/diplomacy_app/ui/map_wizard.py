@@ -52,6 +52,8 @@ from diplomacy_app.ui.map_canvas import (
 from diplomacy_app.ui.map_setup_page import MapSetupPage
 from diplomacy_app.ui.map_topology import build_topology_diagram
 
+_TERRITORY_FIELD_HEIGHT = 34
+
 
 class MapWizard(QWidget):
     cancelled = Signal()
@@ -250,28 +252,53 @@ class MapWizard(QWidget):
                 self.territory_selector.addItem(territory.name, territory.id)
             self.territory_selector.setCurrentIndex(-1)
             self.territory_selector.currentIndexChanged.connect(self._territory_selected)
-            territory_layout.addWidget(self.territory_selector)
+            self.territory_selector.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
+            selector_layout = QVBoxLayout()
+            selector_layout.setSpacing(2)
+            selector_label = QLabel("Territory")
+            selector_label.setBuddy(self.territory_selector)
+            selector_layout.addWidget(selector_label)
+            selector_layout.addWidget(self.territory_selector)
+            territory_layout.addLayout(selector_layout, 2)
             self.canonical_name_editor = QLineEdit()
-            self.canonical_name_editor.setPlaceholderText("Canonical name")
             self.canonical_name_editor.setMinimumWidth(150)
-            territory_layout.addWidget(self.canonical_name_editor)
+            self.canonical_name_editor.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
+            canonical_layout = QVBoxLayout()
+            canonical_layout.setSpacing(2)
+            canonical_label = QLabel("Canonical name")
+            canonical_label.setBuddy(self.canonical_name_editor)
+            canonical_layout.addWidget(canonical_label)
+            canonical_layout.addWidget(self.canonical_name_editor)
+            territory_layout.addLayout(canonical_layout, 2)
             self.abbreviation_editor = QLineEdit()
             self.abbreviation_editor.setPlaceholderText("ABC")
             self.abbreviation_editor.setMaxLength(3)
-            self.abbreviation_editor.setFixedWidth(58)
-            territory_layout.addWidget(self.abbreviation_editor)
+            self.abbreviation_editor.setMinimumWidth(95)
+            self.abbreviation_editor.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
+            abbreviation_layout = QVBoxLayout()
+            abbreviation_layout.setSpacing(2)
+            abbreviation_label = QLabel("Abbreviation")
+            abbreviation_label.setBuddy(self.abbreviation_editor)
+            abbreviation_layout.addWidget(abbreviation_label)
+            abbreviation_layout.addWidget(self.abbreviation_editor)
+            territory_layout.addLayout(abbreviation_layout)
             self.display_name_editor = DisplayNameEdit()
-            self.display_name_editor.setPlaceholderText("Map display name")
             self.display_name_editor.setToolTip(
                 "Press Enter to apply; press Shift+Enter to insert a line break."
             )
-            self.display_name_editor.setFixedHeight(48)
+            self.display_name_editor.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
             self.display_name_editor.setMinimumWidth(190)
             self.display_name_editor.apply_requested.connect(self._apply_territory_details)
-            territory_layout.addWidget(self.display_name_editor)
+            display_layout = QVBoxLayout()
+            display_layout.setSpacing(2)
+            display_label = QLabel("Map display name")
+            display_label.setBuddy(self.display_name_editor)
+            display_layout.addWidget(display_label)
+            display_layout.addWidget(self.display_name_editor)
+            territory_layout.addLayout(display_layout, 3)
             apply_territory = QPushButton("Apply")
             apply_territory.clicked.connect(self._apply_territory_details)
-            territory_layout.addWidget(apply_territory)
+            territory_layout.addWidget(apply_territory, 0, Qt.AlignmentFlag.AlignBottom)
             self.territory_group.setEnabled(False)
             editing_row.addWidget(self.territory_group, 1)
 
@@ -495,7 +522,9 @@ class MapWizard(QWidget):
                         territory, "supply_centre", None, new_point
                     ),
                 )
-                centre_item.setToolTip(f"{territories[territory].name}: supply centre")
+                centre_item.setToolTip(
+                    f"Home territory: {territories[territory].name} — supply centre"
+                )
                 self.anchor_canvas.scene().addItem(centre_item)
         if self.armies_preview.isChecked():
             unit_entries: list[tuple[Any, str, str | None, Any]] = [
@@ -533,6 +562,7 @@ class MapWizard(QWidget):
     ) -> None:
         state = definition.default_starting_setup.state
         powers = {power.id: power for power in definition.powers}
+        territories = {territory.id: territory for territory in definition.territories}
         starting_units = {(unit.unit_type, unit.location): unit.power_id for unit in state.units}
         for territory, anchor, coast, point in unit_entries:
             location = Location(territory, CoastId(coast) if coast is not None else None)
@@ -553,7 +583,10 @@ class MapWizard(QWidget):
             )
             if (unit_type, location) not in starting_units:
                 unit_item.setOpacity(0.68)
-            unit_item.setToolTip(f"{territory}: {anchor}" + (f" ({coast})" if coast else ""))
+            tooltip = f"Home territory: {territories[territory].name} — {unit_type.value}"
+            if location.coast_id is not None:
+                tooltip += f", {coast_label_text(location.coast_id)}"
+            unit_item.setToolTip(tooltip)
             self.anchor_canvas.scene().addItem(unit_item)
 
     def _preview_changed(self, checked: bool) -> None:

@@ -123,7 +123,7 @@ def parse_line(
 ) -> OrderCandidate:
     names, display = _indexes(map_definition)
     text = _normalise_locations(source.text.strip(), names, display)
-    text = re.sub(r"(?:->|→|–|—)", " - ", text)
+    text = re.sub(r"(?:-\s*>|→|–|—)", " - ", text)
     text = re.sub(r"\b(?:moves?|to)\b", " - ", text, flags=re.IGNORECASE)
     tokens = [value for value in re.split(r"\s+", text) if value]
     order: CanonicalOrder

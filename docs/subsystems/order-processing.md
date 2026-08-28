@@ -13,9 +13,10 @@ The subsystem provides `OrderProcessor` from [Subsystem API Contracts](../api-co
 ## Implementation Notes
 
 Parsing is line-oriented so every issue and engine result can be traced back to the original text.
-Territory resolution uses a case-insensitive index of canonical names and abbreviations from `MapDefinition`; canonical output uses the map's configured abbreviation casing.
+Territory resolution uses a case-insensitive index of canonical names and abbreviations from `MapDefinition`; canonical output uses configured territory abbreviations while the original submitted text remains unchanged.
+Move parsing accepts `-` or `->` separators and resolves multi-word names on either side before tokenising the remaining order grammar.
 
-The parser produces a typed order syntax tree before rule validation.
+The parser produces a typed order syntax tree before rule validation without rewriting the source text stored alongside it.
 It reports textual ambiguity and missing structure but does not inspect adjacency, unit ownership or phase legality.
 Unrecognised lines survive unchanged, while recognised invalid orders retain the effective order returned by the Rules Engine.
 Adjustment parsing accepts an explicit `Waive` order, which canonicalises without a unit or map location.

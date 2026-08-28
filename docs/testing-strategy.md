@@ -11,7 +11,7 @@ Tests follow the application-owned contracts so third-party libraries and the de
 
 Each subsystem has fast tests against its public protocol using immutable contract values and in-memory or temporary-directory collaborators.
 These tests cover successful operations, structured user-input issues, typed operational failures and revision conflicts.
-Order tests cover every phase, canonical names and abbreviations, canonicalisation, malformed lines, duplicate unit orders, omitted orders and engine validation attribution.
+Order tests cover every phase, canonical names and abbreviations, abbreviation-based canonicalisation, exact original-text round trips, multi-word move locations with `-` and `->`, malformed lines, duplicate unit orders, omitted orders and engine validation attribution.
 Visibility tests assert complete returned values rather than selected fields so restricted information cannot leak through newly added fields.
 
 ### Adapter Conformance Tests
@@ -36,7 +36,7 @@ Golden comparisons use a small pixel tolerance for platform rasterisation differ
 ### User Interface Tests
 
 Presenter and workspace tests run Qt in its offscreen mode and drive actions through the `ApplicationService` protocol.
-They cover startup recovery, confirmed game deletion, current-versus-historical editing, inline order editing, automatic clearing of `Final`, warning expansion, the unfinalised filter, order-overlay preview without phase advancement, adjudication confirmation, saved views, aspect-preserving clipboard requests and PNG file output.
+They cover startup recovery, confirmed game deletion, current-versus-historical editing, stable-height inline order editing across debounced saves and focus loss, automatic clearing of `Final`, warning expansion, the unfinalised filter, order-overlay preview without phase advancement, adjudication confirmation, saved views, aspect-preserving clipboard requests and PNG file output.
 Map-setup tests verify compact map-facing margins, frameless canvases and a strongly map-weighted topology split, maximised startup and standard close behaviour, reopen an existing reusable map in the main-window stack, access Definition, Powers & start and Placement without sequencing, search the complete YAML source through the platform-standard Find shortcut, apply structured power and starting-state fields to the map YAML, compare the setup preview with gameplay-renderer output, edit territory names, save from an arbitrary tab, verify land and split-coast topology nodes use the correct anchors with readable labels and territory-YAML hover navigation, combine placement layers with the fixed unit symbols, move and rotate named-coast labels, exercise compact discrete zoom controls and drag panning, drag ordinary and split-coast anchors, keep reusable-map changes out of existing games and save current-game placement without changing its rules data.
 A short manual smoke checklist covers native clipboard transfer, pointer-centred zooming, panning, high-DPI rendering and window behaviour on Windows and macOS.
 

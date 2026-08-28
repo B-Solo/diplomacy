@@ -19,10 +19,13 @@ from PySide6.QtWidgets import (
 
 from diplomacy_app.domain.models import IssueSeverity, PowerId
 
+_ORDER_ENTRY_HEIGHT = 112
+
 
 class PowerPanel(QFrame):
     save_requested = Signal(object, str)
     final_requested = Signal(object, bool)
+    editing_finished = Signal()
 
     def __init__(self, power, submission, requirement, editable: bool, parent=None) -> None:
         super().__init__(parent)
@@ -71,13 +74,15 @@ class PowerPanel(QFrame):
             "background: #fffdf7; color: #171714; text-align: left; "
             "font-family: monospace; padding: 8px; border: 0"
         )
+        canonical.setFixedHeight(_ORDER_ENTRY_HEIGHT)
         canonical.clicked.connect(lambda: self.stack.setCurrentIndex(1) if self.editable else None)
         self.stack.addWidget(canonical)
         self.editor = QPlainTextEdit(submission.raw_text if submission else "")
         self.editor.setPlaceholderText("One order per line")
-        self.editor.setMinimumHeight(105)
+        self.editor.setFixedHeight(_ORDER_ENTRY_HEIGHT)
         self.editor.installEventFilter(self)
         self.stack.addWidget(self.editor)
+        self.stack.setFixedHeight(_ORDER_ENTRY_HEIGHT)
         layout.addWidget(self.stack)
         self.issue_box = QLabel("\n".join(f"Line {line}: {message}" for line, message in issues))
         self.issue_box.setWordWrap(True)
@@ -137,12 +142,14 @@ class PowerPanel(QFrame):
                 self.timer.stop()
                 self._save()
             self.stack.setCurrentIndex(0)
+            QTimer.singleShot(0, self.editing_finished.emit)
         return super().eventFilter(watched, event)
 
 
 class OrdersWorkspace(QWidget):
     save_requested = Signal(object, str)
     final_requested = Signal(object, bool)
+    editing_finished = Signal()
     preview_requested = Signal()
     resolve_requested = Signal()
     resolve_anyway_requested = Signal()
@@ -246,6 +253,7 @@ class OrdersWorkspace(QWidget):
             panel = PowerPanel(power, submission, requirement, editable)
             panel.save_requested.connect(self.save_requested)
             panel.final_requested.connect(self.final_requested)
+            panel.editing_finished.connect(self.editing_finished.emit)
             self.panels.append(panel)
             self.grid.addWidget(panel, index // 2, index % 2)
             if not requirement.requires_submission or (submission and submission.is_final):

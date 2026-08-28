@@ -137,11 +137,11 @@ Player communication occurs outside the application using map images copied by t
 
 - **OW.1:** The current season displays one power panel for every configured power.
 - **OW.2:** Power panels use a two-column layout on wide windows and a single column on narrow windows.
-- **OW.3:** A power panel normally shows the power, its `Final` state and its orders in canonical notation.
-- **OW.4:** Selecting the canonical order text reveals a plain-text editor containing the player's original submission.
-- **OW.5:** The editor accepts one order per line using territory names or abbreviations and tolerates reasonable differences in case and punctuation.
-- **OW.6:** Leaving the editor returns the panel to canonical presentation while preserving the original submitted text separately.
-- **OW.7:** Changes are saved and validated as they are entered and do not prevent the gamemaster from leaving the panel.
+- **OW.3:** A power panel normally shows the power, its `Final` state and its orders in canonical compact notation using configured territory abbreviations.
+- **OW.4:** Selecting the canonical order text reveals a same-height plain-text editor containing the player's exact original submission, including its names, abbreviations, whitespace, punctuation and line breaks, without resizing its power panel or grid row.
+- **OW.5:** The editor accepts one order per line using territory names or abbreviations, including `A|F <unit territory> - <destination>` and `A|F <unit territory> -> <destination>` with multi-word locations; Enter inserts a line break, and parsing tolerates reasonable differences in case, whitespace and punctuation.
+- **OW.6:** Only leaving the editor reparses the complete original submission and returns the panel to canonical presentation; selecting that presentation again restores the exact original text rather than the canonical text.
+- **OW.7:** Changes are saved and validated as they are entered without replacing or closing the active editor.
 - **OW.8:** Editing any text clears that power's `Final` state.
 - **OW.9:** Each editable power panel provides an explicit `Orders final` action.
 - **OW.10:** The workspace provides an `Unfinalised only` filter.
@@ -158,6 +158,7 @@ Player communication occurs outside the application using map images copied by t
 - **OI.4:** An unrecognisable line is retained even when it cannot be associated with a unit.
 - **OI.5:** A missing order has no fabricated submitted text or source line and receives the standard phase-specific default effect.
 - **OI.6:** The default order display omits engine outcome categories such as bounce, no convoy, cut and dislodged.
+- **OI.7:** Original submitted text and parsed canonical orders remain separate values; validation, order previews and adjudication consume the parsed orders without overwriting the original text.
 - **OI.7:** Submission validation and the adjudicator's later `VOID` result remain distinct.
 - **OI.8:** The `ui.explain_adjudication_outcomes` game-YAML setting controls optional adjudication explanations and defaults to `false`.
 - **OI.9:** When optional explanations are enabled, hovering an order graphic may display its engine outcome category.
@@ -199,7 +200,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.20:** Reopening a map provides the same visual Placement tab as initial import, including independent territory-label, named-coast-label, army, fleet, split-coast fleet and supply-centre anchors.
 - **GC.21:** Saving an edited reusable map changes the defaults used for games created afterwards and does not modify the private map snapshots of existing games.
 - **GC.22:** The visual Placement tab provides independent `Armies`, `Fleets`, `Supply centres`, territory-label and named-coast-label controls that display each selected layer at every applicable anchor, independently of the configured starting state; selecting a coast label exposes its rotation control.
-- **GC.23:** The `Armies` preview displays an army in every playable land territory, while the `Fleets` preview displays a fleet in every playable sea, every ordinary coastal territory and at every named anchor of a split-coast territory.
+- **GC.23:** The `Armies` preview displays an army in every playable land territory, while the `Fleets` preview displays a fleet in every playable sea, every ordinary coastal territory and at every named anchor of a split-coast territory; delayed hover tooltips identify the home territory of every army, fleet and supply-centre marker and identify named coasts where applicable.
 - **GC.24:** Placement previews do not change game state or the map's starting setup; dragging a preview unit changes only its corresponding presentation anchor.
 - **GC.25:** Import initially classifies well-identified SVG elements without requiring a dedicated classification page; uncommon classification corrections remain directly editable in Definition's complete YAML source.
 - **GC.26:** The topology preview draws a colour-coded adjacency graph over a faded map, using an army node and separate fleet nodes for each named coast of a split-coast territory; its key distinguishes army-only, fleet-only and shared connections, arrowheads identify asymmetric connections, and hovering a node navigates to and highlights that territory's editable YAML block.

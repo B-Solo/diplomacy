@@ -5,8 +5,8 @@ from xml.etree import ElementTree
 
 import pytest
 import yaml
-from PySide6.QtCore import QPoint, QPointF, QSettings, Qt
-from PySide6.QtGui import QKeySequence, QPalette, QTextCursor, QWheelEvent
+from PySide6.QtCore import QEvent, QPoint, QPointF, QSettings, Qt
+from PySide6.QtGui import QFocusEvent, QKeySequence, QPalette, QTextCursor, QWheelEvent
 from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
@@ -181,6 +181,20 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.setup_page.map_colours_group.title() == "Map colours"
     assert wizard.tabs.widget(1).isAncestorOf(wizard.setup_page.map_colours_group)
     assert wizard.territory_group.title() == "Selected territory"
+    assert {label.text() for label in wizard.territory_group.findChildren(QLabel)} >= {
+        "Territory",
+        "Canonical name",
+        "Abbreviation",
+        "Map display name",
+    }
+    territory_fields = (
+        wizard.territory_selector,
+        wizard.canonical_name_editor,
+        wizard.abbreviation_editor,
+        wizard.display_name_editor,
+    )
+    assert {field.minimumHeight() for field in territory_fields} == {34}
+    assert {field.maximumHeight() for field in territory_fields} == {34}
     assert wizard.coast_label_group.title() == "Selected coast label"
     assert wizard.placement_labels.minimumWidth() == 150
     assert wizard.territory_font_size.singleStep() == 0.5
@@ -390,6 +404,13 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert all(
         not item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable for item in army_items
     )
+    territory_names = {territory.name for territory in wizard.draft.territories}
+    assert all(
+        item.toolTip().startswith("Home territory: ")
+        and any(name in item.toolTip() for name in territory_names)
+        and item.toolTip().endswith("— army")
+        for item in army_items
+    )
     assert all(
         len(item.childItems()) == 1
         for item in wizard.anchor_canvas.scene().items()
@@ -403,6 +424,12 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert len(centre_items) == len(wizard.draft.presentation.supply_centre_anchors)
     assert all(len(item.childItems()) == 1 for item in centre_items)
     assert all(item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable for item in centre_items)
+    assert all(
+        item.toolTip().startswith("Home territory: ")
+        and any(name in item.toolTip() for name in territory_names)
+        and item.toolTip().endswith("— supply centre")
+        for item in centre_items
+    )
     selectable_labels = [
         item
         for item in wizard.anchor_canvas.scene().items()
@@ -541,6 +568,20 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     )
     assert combined_count == len(wizard.draft.presentation.army_anchors) + len(
         wizard.draft.presentation.fleet_anchors
+    )
+    fleet_items = [
+        item
+        for item in wizard.anchor_canvas.scene().items()
+        if isinstance(item, UnitAnchorItem) and "— fleet" in item.toolTip()
+    ]
+    assert len(fleet_items) == len(wizard.draft.presentation.fleet_anchors)
+    assert all(
+        item.toolTip().startswith("Home territory: ")
+        and any(name in item.toolTip() for name in territory_names)
+        for item in fleet_items
+    )
+    assert sum(", " in item.toolTip() for item in fleet_items) == sum(
+        location.coast_id is not None for location in wizard.draft.presentation.fleet_anchors
     )
     wizard.armies_preview.click()
     wizard.fleets_preview.click()
@@ -701,6 +742,42 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
         panel for panel in window.orders_workspace.panels if panel.power.id == preview_unit.power_id
     )
     assert preview_panel.editor is not None
+    canonical_orders = preview_panel.stack.widget(0)
+    assert {
+        preview_panel.stack.minimumHeight(),
+        preview_panel.stack.maximumHeight(),
+        canonical_orders.minimumHeight(),
+        canonical_orders.maximumHeight(),
+        preview_panel.editor.minimumHeight(),
+        preview_panel.editor.maximumHeight(),
+    } == {112}
+    preview_panel.stack.setCurrentIndex(1)
+    preview_panel.editor.setPlainText("A Not Yet Complete -")
+    qtbot.wait(550)
+    assert preview_panel in window.orders_workspace.panels
+    assert preview_panel.stack.currentIndex() == 1
+    preview_panel.editor.setPlainText(
+        f"{preview_unit.unit_type.value[0].upper()} {preview_territory.name} H"
+    )
+    preview_panel.editor.moveCursor(QTextCursor.MoveOperation.End)
+    qtbot.keyClick(preview_panel.editor, Qt.Key.Key_Return)
+    qtbot.wait(550)
+    assert preview_panel in window.orders_workspace.panels
+    assert preview_panel.stack.currentIndex() == 1
+    assert "\n" in preview_panel.editor.toPlainText()
+    original_text = preview_panel.editor.toPlainText()
+    QApplication.sendEvent(preview_panel.editor, QFocusEvent(QEvent.Type.FocusOut))
+    qtbot.waitUntil(lambda: preview_panel not in window.orders_workspace.panels)
+    preview_panel = next(
+        panel for panel in window.orders_workspace.panels if panel.power.id == preview_unit.power_id
+    )
+    assert preview_panel.stack.currentIndex() == 0
+    assert preview_panel.editor is not None
+    canonical_orders = preview_panel.stack.widget(0)
+    assert canonical_orders.text() == f"A {preview_territory.abbreviation} H"
+    canonical_orders.click()
+    assert preview_panel.stack.currentIndex() == 1
+    assert preview_panel.editor.toPlainText() == original_text
     preview_panel.editor.setPlainText(
         f"{preview_unit.unit_type.value[0].upper()} {preview_territory.name} H"
     )
@@ -713,6 +790,7 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert DisplayMode(window.map_workspace.mode.currentData()) is DisplayMode.ORDERS
     assert window.session.phase.phase_id == session.phase.phase_id
     assert window.session.phase.state == session.phase.state
+    window.map_workspace.refresh_timer.stop()
     window.map_workspace.refresh()
     preview_svg = ElementTree.fromstring(window.map_workspace.scene.svg)
     preview_orders = next(
@@ -735,6 +813,10 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     expected_full_map_size = PixelSize(
         expected_full_map_size.width * 2,
         expected_full_map_size.height * 2,
+    )
+    expected_full_map_size = aspect_fitted_size(
+        window.map_workspace.scene.map_bounds,
+        expected_full_map_size,
     )
     assert full_map_output.size == expected_full_map_size
     assert full_map_output.size.width / full_map_output.size.height == pytest.approx(

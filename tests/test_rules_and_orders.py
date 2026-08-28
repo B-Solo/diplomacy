@@ -45,6 +45,17 @@ def test_parser_accepts_names_abbreviations_and_reports_duplicates(england):
     ]
     assert all(line.validation and line.validation.is_valid for line in submission.lines)
 
+    up_north = next(power for power in england.powers if power.name == "Up North")
+    multiword_moves = processor.interpret(
+        england,
+        up_north.id,
+        "F Tyne & Wear -> North Sea\nF Tyne & Wear - > North Sea",
+    )
+    assert [candidate.canonical_text for candidate in multiword_moves] == [
+        "F Tyn - NTH",
+        "F Tyn - NTH",
+    ]
+
     duplicate = processor.prepare_submission(
         england, phase, power.id, "A Cheshire H\nA Cheshire - Shropshire"
     )

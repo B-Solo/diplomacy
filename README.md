@@ -41,6 +41,7 @@ Spring, Summer, Fall, Winter, and Year End are retained even when a retreat or a
 ## Order notation
 
 The editor accepts full territory names or configured three-letter abbreviations without case sensitivity.
+Movement orders use `A|F <unit territory> - <destination>` or `A|F <unit territory> -> <destination>`, including territory names that contain spaces.
 Examples include:
 
 ```text
