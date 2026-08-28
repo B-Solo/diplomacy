@@ -63,7 +63,7 @@ def _unit_text(unit: UnitPosition, names: dict[Location, str]) -> str:
 def make_game(map_definition: MapDefinition, phase_id: PhaseId, state: GameState) -> Game:
     try:
         path = engine_map_path(map_definition)
-        game = Game(map_name=str(path), rules=["DONT_SKIP_PHASES"])
+        game = Game(map_name=str(path), rules=[])
         if game.map.error:
             raise RulesEngineError(
                 "Compiled map was rejected: " + "; ".join(map(str, game.map.error))

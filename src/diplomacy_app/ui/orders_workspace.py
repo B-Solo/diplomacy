@@ -73,7 +73,24 @@ class PowerPanel(QFrame):
     final_requested = Signal(object, bool)
     editing_finished = Signal()
 
-    def __init__(self, power, submission, requirement, editable: bool, parent=None) -> None:
+    def __init__(
+        self,
+        power,
+        submission,
+        requirement,
+        editable: bool,
+        finalisation_enabled: bool,
+        parent=None,
+    ) -> None:
+        """Build one power's order entry and optional finalisation controls.
+
+        :param power: Power represented by this panel.
+        :param submission: Existing order submission, when one has been saved.
+        :param requirement: Orders required from the power in this phase.
+        :param editable: Whether the selected phase is editable.
+        :param finalisation_enabled: Whether this game tracks final order submissions.
+        :param parent: Optional owning widget.
+        """
         super().__init__(parent)
         self.power = power
         self.submission = submission
@@ -105,13 +122,15 @@ class PowerPanel(QFrame):
             warning.setToolTip("Show order issues")
             warning.clicked.connect(self._toggle_issues)
             header.addWidget(warning)
-        self.final = QCheckBox("Orders final")
-        self.final.setEnabled(self.editable)
-        self.final.setChecked(
-            not requirement.requires_submission or bool(submission and submission.is_final)
-        )
-        self.final.toggled.connect(self._final_toggled)
-        header.addWidget(self.final)
+        self.final: QCheckBox | None = None
+        if finalisation_enabled:
+            self.final = QCheckBox("Orders final")
+            self.final.setEnabled(self.editable)
+            self.final.setChecked(
+                not requirement.requires_submission or bool(submission and submission.is_final)
+            )
+            self.final.toggled.connect(self._final_toggled)
+            header.addWidget(self.final)
         layout.addWidget(header_widget)
         if not requirement.requires_submission:
             no_orders = QLabel("No orders required")
@@ -196,9 +215,10 @@ class PowerPanel(QFrame):
             self.issue_box.setVisible(not self.issue_box.isVisible())
 
     def _edited(self) -> None:
-        self.final.blockSignals(True)
-        self.final.setChecked(False)
-        self.final.blockSignals(False)
+        if self.final is not None:
+            self.final.blockSignals(True)
+            self.final.setChecked(False)
+            self.final.blockSignals(False)
         self.timer.start()
 
     def _save(self) -> None:
@@ -276,6 +296,7 @@ class OrdersWorkspace(QWidget):
         self.scroll_area.setWidget(self.container)
         outer.addWidget(self.scroll_area, 1)
         self.panels: list[PowerPanel] = []
+        self.finalisation_enabled = False
 
     def pending_order_texts(self) -> tuple[tuple[PowerId, str], ...]:
         """Take order text that has changed since the displayed session was loaded.
@@ -340,12 +361,21 @@ class OrdersWorkspace(QWidget):
             return
         self.phase_label.setText(session.phase.phase_id.label)
         editable = session.phase.phase_id == session.game.current_phase
+        self.finalisation_enabled = session.game.settings.require_order_finalisation
+        self.unfinalised.setVisible(self.finalisation_enabled)
+        self.final_count.setVisible(self.finalisation_enabled)
         self.resolve.setVisible(editable)
         complete = 0
         for index, power in enumerate(session.game.map_definition.powers):
             requirement = session.phase_requirements.by_power[power.id]
             submission = session.phase.submissions.get(power.id)
-            panel = PowerPanel(power, submission, requirement, editable)
+            panel = PowerPanel(
+                power,
+                submission,
+                requirement,
+                editable,
+                self.finalisation_enabled,
+            )
             panel.save_requested.connect(self.save_requested)
             panel.final_requested.connect(self.final_requested)
             panel.editing_finished.connect(self._panel_editing_finished)
@@ -353,13 +383,16 @@ class OrdersWorkspace(QWidget):
             self.grid.addWidget(panel, index // 2, index % 2)
             if not requirement.requires_submission or (submission and submission.is_final):
                 complete += 1
-        self.final_count.setText(f"{complete} of {len(self.panels)} final")
+        if self.finalisation_enabled:
+            self.final_count.setText(f"{complete} of {len(self.panels)} final")
         self._apply_filter()
 
     def _apply_filter(self) -> None:
         for panel in self.panels:
-            is_final = panel.final.isChecked()
-            panel.setVisible(not self.unfinalised.isChecked() or not is_final)
+            is_final = bool(panel.final and panel.final.isChecked())
+            panel.setVisible(
+                not self.finalisation_enabled or not self.unfinalised.isChecked() or not is_final
+            )
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

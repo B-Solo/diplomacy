@@ -74,6 +74,8 @@ name: Northern England
 fog_of_war:
   enabled: true
   adjacency_depth: 1
+orders:
+  require_finalisation: false
 ui:
   explain_adjudication_outcomes: false
 ```
@@ -243,7 +245,7 @@ Home and starting supply centres are actual supply centres, starting territories
 It contains `schema_version`, the phase identifier, active units, dislodged units, legal retreat destinations, territory controllers and supply-centre owners using stable map identifiers.
 Dislodged units and their retreat destinations are present only in retreat-phase state.
 
-`orders.json` is machine-managed and records each power's original text, canonical candidates, parser issues, rule validation, final flag, effective orders and adjudication results.
+`orders.json` is machine-managed and records each power's original text, canonical candidates, parser issues, rule validation, final flag, effective orders and adjudication results. The final flag is used only when `orders.require_finalisation` is enabled; the setting defaults to `false` when absent.
 The file preserves unrecognised lines and distinguishes submission invalidity from the later `VOID` outcome.
 Effective orders record phase-specific defaults: movement holds, retreat disbands, waived builds and automatically selected disbands.
 

@@ -66,6 +66,8 @@ def test_new_game_uses_a_named_folder_below_the_selected_location(qtbot, tmp_pat
 
     workspace.name.setText("Friday Night Game")
     workspace.folder.setText(str(games_location))
+    assert not workspace.order_finalisation.isChecked()
+    workspace.order_finalisation.setChecked(True)
 
     expected = games_location / "friday-night-game"
     assert workspace.destination.text() == str(expected)
@@ -75,6 +77,10 @@ def test_new_game_uses_a_named_folder_below_the_selected_location(qtbot, tmp_pat
     assert workspace.created_session is not None
     assert workspace.created_session.game.game_id == "friday-night-game"
     assert workspace.created_session.game.location.path == expected
+    assert workspace.created_session.game.settings.require_order_finalisation
+    assert yaml.safe_load((expected / "game.yaml").read_text(encoding="utf-8"))["orders"] == {
+        "require_finalisation": True
+    }
     assert expected.is_dir()
 
 
@@ -772,6 +778,9 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert window.stack.currentWidget() is window.map_workspace
     window.tabs.setCurrentIndex(1)
     assert window.stack.currentWidget() is window.orders_workspace
+    assert window.orders_workspace.unfinalised.isHidden()
+    assert window.orders_workspace.final_count.isHidden()
+    assert all(panel.final is None for panel in window.orders_workspace.panels)
     window.show()
     QApplication.processEvents()
     preview_unit = session.phase.state.units[0]

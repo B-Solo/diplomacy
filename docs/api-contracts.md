@@ -198,6 +198,7 @@ class Revision:
 class GameSettings:
     visibility_policy: VisibilityPolicy
     explain_adjudication_outcomes: bool
+    require_order_finalisation: bool
 
 @dataclass(frozen=True, slots=True)
 class GameSnapshot:
@@ -725,7 +726,7 @@ class OrderProcessor(Protocol):
 
 The Order Processor receives a `RulesEngine` implementation when constructed.
 `prepare_submission` calls `interpret`, sends recognised candidates to `RulesEngine.validate`, then combines results by source-line number.
-The returned submission is open; finalisation is a distinct repository mutation.
+The returned submission is open; when enabled for the game, finalisation is a distinct repository mutation.
 
 ## Rules Engine Contract
 

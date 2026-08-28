@@ -16,7 +16,7 @@ The standard adapter reconstructs package state from the supplied immutable snap
 This makes calls deterministic, avoids hidden state between validation and adjudication and permits independent adapter tests.
 
 Validation submits recognised candidates in source order to a strict isolated game and translates the errors added by each attempt.
-Adjudication enables `NO_CHECK` so recognised invalid orders remain recorded with `VOID`, and `DONT_SKIP_PHASES` keeps empty retreat and adjustment seasons in application history.
+Adjudication enables `NO_CHECK` so recognised invalid orders remain recorded with `VOID`; retreat and adjustment seasons with no legal decisions are skipped.
 Effective-order completion follows standard phase behaviour: movement orders hold, retreat orders disband, unused builds waive and missing disbands are selected automatically.
 
 The adapter translates map topology, split coasts, units, ownership and orders into package values, then maps package results back to stable application codes.

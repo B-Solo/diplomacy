@@ -171,7 +171,16 @@ class ApplicationService:
         return updated
 
     def set_orders_final(self, power_id, is_final: bool) -> PhaseSnapshot:
+        """Set one power's finalisation state when the game tracks it.
+
+        :param power_id: Power whose current submission state is changing.
+        :param is_final: Whether the power has declared its orders final.
+        :return: Updated current-phase snapshot.
+        :raises RepositoryError: If finalisation is disabled or the phase is historical.
+        """
         game, phase = self._require_current()
+        if not game.settings.require_order_finalisation:
+            raise RepositoryError("Order finalisation is not enabled for this game")
         fresh = self.repository.load_phase(game.game_id, phase.phase_id)
         updated = self.repository.set_final(
             game.game_id, fresh.phase_id, power_id, is_final, fresh.revision
@@ -181,16 +190,25 @@ class ApplicationService:
         return updated
 
     def resolve_and_advance(self, allow_unfinalised: bool = False) -> ResolveResult:
+        """Adjudicate the current phase, optionally overriding enabled finalisation.
+
+        :param allow_unfinalised: Whether to proceed past an enabled finalisation warning.
+        :return: Either the advanced session or powers still awaiting finalisation.
+        """
         game, phase = self._require_current()
         fresh = self.repository.load_phase(game.game_id, phase.phase_id)
         requirements = self.rules_engine.describe_phase(
             game.map_definition, fresh.phase_id, fresh.state
         )
-        unfinalised = tuple(
-            power.id
-            for power in game.map_definition.powers
-            if requirements.by_power[power.id].requires_submission
-            and not (fresh.submissions.get(power.id) and fresh.submissions[power.id].is_final)
+        unfinalised = (
+            tuple(
+                power.id
+                for power in game.map_definition.powers
+                if requirements.by_power[power.id].requires_submission
+                and not (fresh.submissions.get(power.id) and fresh.submissions[power.id].is_final)
+            )
+            if game.settings.require_order_finalisation
+            else ()
         )
         if unfinalised and not allow_unfinalised:
             return FinalisationRequired(unfinalised)

@@ -18,11 +18,11 @@ The package was exercised under Python 3.13 with the following results:
 - Strict order submission rejected illegal moves, fleet movement onto land and unreachable support with distinct human-readable errors.
 - Processing exposed stable result markers including `VOID`, `NO_CONVOY`, `BOUNCE`, `CUT`, `DISLODGED`, `DISRUPTED` and `DISBAND`.
 - `NO_CHECK` retained recognised invalid movement orders for adjudication, applied an effective hold and produced `VOID`.
-- `DONT_SKIP_PHASES` produced every movement, retreat and adjustment phase even when no decisions were required.
+- Default phase advancement skipped retreat and adjustment phases when no decisions were required.
 - The focused upstream engine and map tests passed under Python 3.13.
 
 The adapter validates recognised candidates in source order on an isolated strict game instance and attributes only the errors added by each submission attempt.
-Adjudication uses a separately reconstructed game with `NO_CHECK` and `DONT_SKIP_PHASES` enabled.
+Adjudication uses a separately reconstructed game with `NO_CHECK` enabled and the package's normal actionable-phase progression.
 Order Processing prevents unrecognised text from reaching the package because the package assumes recognisable order structure.
 
 The Map Library compiles each validated application map into the package's text map format.

@@ -211,6 +211,7 @@ class VisibilityPolicy:
 class GameSettings:
     visibility_policy: VisibilityPolicy = VisibilityPolicy()
     explain_adjudication_outcomes: bool = False
+    require_order_finalisation: bool = False
 
 
 @dataclass(frozen=True, slots=True)

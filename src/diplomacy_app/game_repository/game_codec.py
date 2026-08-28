@@ -31,6 +31,7 @@ def load_game_config(root: Path) -> tuple[GameId, str, GameSettings]:
         if not isinstance(value, dict) or value.get("schema_version") != 1:
             raise InvalidStoredData("Unsupported game.yaml schema")
         fog = value.get("fog_of_war", {})
+        orders = value.get("orders", {})
         ui = value.get("ui", {})
         return (
             GameId(str(value["game_id"])),
@@ -40,6 +41,7 @@ def load_game_config(root: Path) -> tuple[GameId, str, GameSettings]:
                     bool(fog.get("enabled", False)), int(fog.get("adjacency_depth", 1))
                 ),
                 bool(ui.get("explain_adjudication_outcomes", False)),
+                bool(orders.get("require_finalisation", False)),
             ),
         )
     except (OSError, KeyError, TypeError, ValueError, yaml.YAMLError) as exc:
@@ -57,6 +59,7 @@ def game_config_data(game_id: GameId, name: str, settings: GameSettings) -> str:
             "enabled": settings.visibility_policy.enabled,
             "adjacency_depth": settings.visibility_policy.adjacency_depth,
         },
+        "orders": {"require_finalisation": settings.require_order_finalisation},
         "ui": {"explain_adjudication_outcomes": settings.explain_adjudication_outcomes},
     }
     return yaml.safe_dump(value, sort_keys=False, allow_unicode=True)

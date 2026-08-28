@@ -268,7 +268,7 @@ Repository revisions protect commits from stale snapshots even when work is perf
 ### `diplomacy`
 
 Only the standard Rules Engine adapter depends on the vendored `diplomacy` 1.1.2 package.
-The adapter enables `DONT_SKIP_PHASES`, uses strict instances for validation, uses `NO_CHECK` for adjudication and translates package behaviour and failures into the `RulesEngine` contract.
+The adapter uses strict instances for validation, uses `NO_CHECK` for adjudication, skips phases with no legal decisions and translates package behaviour and failures into the `RulesEngine` contract.
 
 ### GUI and Operating-System Integration
 

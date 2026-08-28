@@ -65,12 +65,12 @@ def test_parser_accepts_names_abbreviations_and_reports_duplicates(england):
     assert all(line.validation.issues[0].code == "order.duplicate_unit" for line in duplicate.lines)
 
 
-def test_default_orders_advance_without_skipping_empty_retreat(england):
+def test_default_orders_skip_empty_retreat(england):
     engine = StandardRulesEngine()
     phase = empty_phase(england)
     effective = engine.effective_orders(england, phase)
     assert len(effective) == len(phase.state.units)
     proposal = engine.adjudicate(england, phase)
-    assert proposal.next_phase.label == "Summer 2000"
+    assert proposal.next_phase.label == "Fall 2000"
     assert len(proposal.next_state.units) == len(phase.state.units)
     assert len(proposal.results) == len(phase.state.units)

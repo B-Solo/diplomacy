@@ -138,15 +138,15 @@ Player communication occurs outside the application using map images copied by t
 
 - **OW.1:** The current season displays one power panel for every configured power.
 - **OW.2:** Power panels use a two-column layout on wide windows and a single column on narrow windows; each non-stretching card has a compact power header and an edge-to-edge order surface that occupies most of its height.
-- **OW.3:** A power panel normally shows the power, its `Final` state and its orders in canonical compact notation using configured territory abbreviations.
+- **OW.3:** A power panel shows the power and its orders in canonical compact notation using configured territory abbreviations; games with order finalisation enabled also show its final state.
 - **OW.4:** Selecting the canonical order text reveals a same-height plain-text editor containing the player's exact original submission, including its names, abbreviations, whitespace, punctuation and line breaks, without resizing its power panel or grid row.
 - **OW.5:** The editor accepts one order per line using territory names or abbreviations, including `A|F <unit territory> - <destination>` for moves and `A|F <supporting territory> S A|F <supported territory> - <destination>` for support moves, with multi-word locations and `->` accepted in place of `-`; Enter inserts a line break, and parsing tolerates reasonable differences in case, whitespace and punctuation.
 - **OW.6:** Leaving an editor, including by selecting another power's order editor, reparses the complete original submission and returns the previous panel to canonical presentation; the newly selected editor remains open and focused, and selecting any canonical presentation restores its exact original text rather than the canonical text.
 - **OW.7:** Changes are saved and validated as they are entered without replacing or closing the active editor.
-- **OW.8:** Editing any text clears that power's `Final` state.
-- **OW.9:** Each editable power panel provides an explicit `Orders final` action.
-- **OW.10:** The workspace provides an `Unfinalised only` filter.
-- **OW.11:** During retreat and build seasons, powers with no legal decisions have inert `No orders required` panels and count as final.
+- **OW.8:** When order finalisation is enabled, editing any text clears that power's `Final` state.
+- **OW.9:** When order finalisation is enabled, each editable power panel provides an explicit `Orders final` action.
+- **OW.10:** When order finalisation is enabled, the workspace provides an `Unfinalised only` filter and final count; neither is present otherwise.
+- **OW.11:** During reached retreat and build seasons, powers with no legal decisions have inert `No orders required` panels and count as final when finalisation is enabled.
 - **OW.12:** An order issue is represented only by a warning flag until selected.
 - **OW.13:** Selecting a warning flag expands the affected panel and reveals the warning.
 - **OW.14:** `Preview orders on map` saves any text awaiting validation, opens the map in Orders mode and draws the effective order arrows and markers over the current position without adjudicating or moving units.
@@ -172,9 +172,9 @@ Player communication occurs outside the application using map images copied by t
 ### Adjudication and Advancement (AA)
 
 - **AA.1:** The Orders workspace provides one `Resolve and advance` action.
-- **AA.2:** When all relevant powers are final, the action adjudicates immediately without confirmation.
-- **AA.3:** When one or more relevant powers are not final, the action warns the gamemaster and names those powers before allowing adjudication to continue.
-- **AA.4:** Successful adjudication records the submitted orders and results, creates the next season's state, selects that season and opens the Map workspace.
+- **AA.2:** With order finalisation disabled, the action adjudicates immediately; with it enabled, adjudication is immediate when all relevant powers are final.
+- **AA.3:** Only when order finalisation is enabled and relevant powers are not final, the action warns the gamemaster and names those powers before allowing adjudication to continue.
+- **AA.4:** Successful adjudication records the submitted orders and results, skips retreat or adjustment seasons with no legal decisions, creates the next actionable season's state, selects it and opens the Map workspace.
 - **AA.5:** An adjudication or file-write failure leaves the current season unchanged and displays the error.
 
 ### Game and Map Creation (GC)
@@ -212,6 +212,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.31:** Powers & start composes its preview through the normal gameplay renderer; Placement uses the same compiled colours, stripes, labels, font sizes, centres, fixed unit symbols and presentation anchors while adding only selection and dragging affordances.
 - **GC.32:** Powers and setup provides map-wide controls for text, inaccessible-region, sea and unclaimed-land colours, previews those colours immediately, and renders inaccessible regions with single-direction stripes.
 - **GC.33:** Placement displays a hold underline with every visible army and fleet preview; stacked `Armies` and `Fleets` side panels adjust its horizontal and vertical offset from the corresponding unit anchor, update every matching preview immediately and persist the same offsets used by gameplay rendering.
+- **GC.34:** New game provides an opt-in order-finalisation control which writes `orders.require_finalisation`; it defaults off.
 
 ## Limitations and Restrictions
 
@@ -260,14 +261,13 @@ Controls and Fog of War warnings sit outside the copied image.
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────┐
-│ Spring 1902                  [Unfinalised only]  4 of 7 final        │
-│                                             [Resolve and advance]    │
+│ Spring 1902                              [Resolve and advance]       │
 ├───────────────────────────────┬─────────────────────────────────────┤
-│ Red                     Final │ Blue                         Draft   │
+│ Red                           │ Blue                                 │
 │ A Lon - Wal                   │ F NTH - Yor                         │
 │ F Edi - NTH                   │ A Dur H                             │
 ├───────────────────────────────┼─────────────────────────────────────┤
-│ Green                   Draft │ Yellow                  ⚠     Draft │
+│ Green                         │ Yellow                        ⚠       │
 │ ...                           │ ...                                 │
 └───────────────────────────────┴─────────────────────────────────────┘
 ```

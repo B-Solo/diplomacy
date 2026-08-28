@@ -8,7 +8,7 @@ It also maintains the small application-owned record of recent and last-opened g
 ## External API
 
 The subsystem provides `GameRepository` from [Subsystem API Contracts](../api-contracts.md).
-Its callers can discover, open, create and delete games; load phases; save submissions, views and private-map presentation; change finalisation; and commit adjudication proposals.
+Its callers can discover, open, create and delete games; load phases; save submissions, views and private-map presentation; change enabled finalisation state; and commit adjudication proposals.
 
 ## Implementation Notes
 

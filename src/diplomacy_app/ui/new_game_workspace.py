@@ -201,6 +201,8 @@ class NewGameWorkspace(QWidget):
         self.fog_depth.setRange(0, 10)
         self.fog_depth.setValue(1)
         form.addRow("Visibility adjacency depth", self.fog_depth)
+        self.order_finalisation = QCheckBox("Track when each power's orders are final")
+        form.addRow("Order finalisation", self.order_finalisation)
         explanation = QCheckBox("Show adjudication outcomes when hovering orders")
         self.explanations = explanation
         form.addRow("Optional explanations", explanation)
@@ -298,6 +300,7 @@ class NewGameWorkspace(QWidget):
                 GameSettings(
                     VisibilityPolicy(self.fog.isChecked(), self.fog_depth.value()),
                     self.explanations.isChecked(),
+                    self.order_finalisation.isChecked(),
                 ),
             )
             self.created_session = self.service.create_game(request)

@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import pytest
+import yaml
 
 from diplomacy_app.application.service import ApplicationService
-from diplomacy_app.domain.errors import RevisionConflict
+from diplomacy_app.domain.errors import RepositoryError, RevisionConflict
 from diplomacy_app.domain.models import (
     AdvancedPhase,
     CreateStoredGame,
+    FinalisationRequired,
     GameLocation,
+    GameSettings,
     NewGameRequest,
     OrderSubmission,
     Point,
@@ -31,6 +34,14 @@ def test_game_folder_round_trip_revision_conflict_and_advance(tmp_path, england)
     game = repo.create(
         CreateStoredGame("Portable game", location, england, england.default_starting_setup)
     )
+    config_path = location.path / "game.yaml"
+    legacy_config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    legacy_config.pop("orders")
+    config_path.write_text(
+        yaml.safe_dump(legacy_config, sort_keys=False, allow_unicode=True), encoding="utf-8"
+    )
+    game = repo.open(location)
+    assert not game.settings.require_order_finalisation
     phase = repo.load_phase(game.game_id, game.current_phase)
     updated = repo.save_submission(
         game.game_id,
@@ -47,7 +58,7 @@ def test_game_folder_round_trip_revision_conflict_and_advance(tmp_path, england)
         )
     proposal = StandardRulesEngine().adjudicate(england, updated)
     advanced = repo.commit_adjudication(game.game_id, proposal, updated.revision)
-    assert advanced.current_phase.label == "Summer 2000"
+    assert advanced.current_phase.label == "Fall 2000"
     (location.path / "map" / "army.svg").write_text(
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 100"><rect width="20" height="100"/></svg>',
         encoding="utf-8",
@@ -60,7 +71,7 @@ def test_game_folder_round_trip_revision_conflict_and_advance(tmp_path, england)
     assert reopened.current_phase == advanced.current_phase
     assert (location.path / "map" / "_compiled-map.json").is_file()
     assert (location.path / "2000" / "Spring" / "orders.json").is_file()
-    assert (location.path / "2000" / "Summer" / "state.json").is_file()
+    assert (location.path / "2000" / "Fall" / "state.json").is_file()
     assert reopened.map_definition.assets.army_svg == DEFAULT_ARMY_SVG
     assert reopened.map_definition.assets.fleet_svg == DEFAULT_FLEET_SVG
 
@@ -82,14 +93,32 @@ def test_coordinator_complete_default_order_workflow(tmp_path, project_root):
             GameLocation((tmp_path / "coordinator-game").resolve()),
             draft.map_id,
             draft.starting_setup,
+            GameSettings(require_order_finalisation=True),
         )
     )
+    blocked = service.resolve_and_advance()
+    assert isinstance(blocked, FinalisationRequired)
     for power in session.game.map_definition.powers:
         service.set_orders_final(power.id, True)
     result = service.resolve_and_advance()
     assert isinstance(result, AdvancedPhase)
-    assert result.session.phase.phase_id.label == "Summer 2000"
+    assert result.session.phase.phase_id.label == "Fall 2000"
     assert service.start().game.name == "Coordinator game"
+
+    untracked = service.create_game(
+        NewGameRequest(
+            "Untracked game",
+            GameLocation((tmp_path / "untracked-game").resolve()),
+            draft.map_id,
+            draft.starting_setup,
+        )
+    )
+    assert not untracked.game.settings.require_order_finalisation
+    with pytest.raises(RepositoryError, match="not enabled"):
+        service.set_orders_final(untracked.game.map_definition.powers[0].id, True)
+    untracked_result = service.resolve_and_advance()
+    assert isinstance(untracked_result, AdvancedPhase)
+    assert untracked_result.session.phase.phase_id.label == "Fall 2000"
 
 
 def test_coordinator_deletes_recent_and_current_games(tmp_path, project_root):
