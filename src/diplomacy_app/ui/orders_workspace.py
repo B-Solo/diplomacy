@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QPlainTextEdit,
     QPushButton,
     QScrollArea,
+    QSizePolicy,
     QStackedWidget,
     QVBoxLayout,
     QWidget,
@@ -19,7 +20,8 @@ from PySide6.QtWidgets import (
 
 from diplomacy_app.domain.models import IssueSeverity, PowerId
 
-_ORDER_ENTRY_HEIGHT = 112
+_ORDER_ENTRY_HEIGHT = 96
+_ORDER_HEADER_HEIGHT = 34
 
 
 class PowerPanel(QFrame):
@@ -33,15 +35,24 @@ class PowerPanel(QFrame):
         self.submission = submission
         self.requirement = requirement
         self.editable = editable and requirement.requires_submission
+        self.setObjectName("powerPanel")
         self.setFrameShape(QFrame.Shape.StyledPanel)
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
         self.setStyleSheet(
-            f"QFrame {{ border-top: 4px solid {power.colour}; background: #fbf7eb; "
+            f"QFrame#powerPanel {{ border: 1px solid #c9bea3; "
+            f"border-top: 4px solid {power.colour}; background: #fbf7eb; "
             "color: #292820; border-radius: 6px; }"
         )
         layout = QVBoxLayout(self)
-        header = QHBoxLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        header_widget = QWidget()
+        header_widget.setFixedHeight(_ORDER_HEADER_HEIGHT)
+        header = QHBoxLayout(header_widget)
+        header.setContentsMargins(8, 2, 7, 2)
+        header.setSpacing(5)
         name = QLabel(power.name)
-        name.setStyleSheet("font-size: 12pt; font-weight: 700; border: 0")
+        name.setStyleSheet("font-size: 11pt; font-weight: 700; border: 0")
         header.addWidget(name)
         header.addStretch()
         issues = self._issues()
@@ -57,11 +68,14 @@ class PowerPanel(QFrame):
         )
         self.final.toggled.connect(self._final_toggled)
         header.addWidget(self.final)
-        layout.addLayout(header)
+        layout.addWidget(header_widget)
         if not requirement.requires_submission:
             no_orders = QLabel("No orders required")
             no_orders.setProperty("muted", True)
-            no_orders.setStyleSheet("font-style: italic; border: 0")
+            no_orders.setStyleSheet(
+                "font-style: italic; border: 0; border-top: 1px solid #d8cfb8; "
+                "padding: 8px; background: #fffdf7"
+            )
             layout.addWidget(no_orders)
             self.editor = None
             self.issue_box = None
@@ -72,13 +86,19 @@ class PowerPanel(QFrame):
         canonical.setCursor(Qt.CursorShape.PointingHandCursor)
         canonical.setStyleSheet(
             "background: #fffdf7; color: #171714; text-align: left; "
-            "font-family: monospace; padding: 8px; border: 0"
+            "font-family: monospace; padding: 7px; border: 0; "
+            "border-top: 1px solid #d8cfb8; border-radius: 0 0 5px 5px"
         )
         canonical.setFixedHeight(_ORDER_ENTRY_HEIGHT)
         canonical.clicked.connect(lambda: self.stack.setCurrentIndex(1) if self.editable else None)
         self.stack.addWidget(canonical)
         self.editor = QPlainTextEdit(submission.raw_text if submission else "")
         self.editor.setPlaceholderText("One order per line")
+        self.editor.setStyleSheet(
+            "QPlainTextEdit { background: #fffdf7; color: #171714; "
+            "font-family: monospace; padding: 6px; border: 0; "
+            "border-top: 1px solid #d8cfb8; border-radius: 0 0 5px 5px; }"
+        )
         self.editor.setFixedHeight(_ORDER_ENTRY_HEIGHT)
         self.editor.installEventFilter(self)
         self.stack.addWidget(self.editor)

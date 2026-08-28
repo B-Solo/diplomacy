@@ -136,7 +136,7 @@ Player communication occurs outside the application using map images copied by t
 ### Orders Workspace (OW)
 
 - **OW.1:** The current season displays one power panel for every configured power.
-- **OW.2:** Power panels use a two-column layout on wide windows and a single column on narrow windows.
+- **OW.2:** Power panels use a two-column layout on wide windows and a single column on narrow windows; each non-stretching card has a compact power header and an edge-to-edge order surface that occupies most of its height.
 - **OW.3:** A power panel normally shows the power, its `Final` state and its orders in canonical compact notation using configured territory abbreviations.
 - **OW.4:** Selecting the canonical order text reveals a same-height plain-text editor containing the player's exact original submission, including its names, abbreviations, whitespace, punctuation and line breaks, without resizing its power panel or grid row.
 - **OW.5:** The editor accepts one order per line using territory names or abbreviations, including `A|F <unit territory> - <destination>` and `A|F <unit territory> -> <destination>` with multi-word locations; Enter inserts a line break, and parsing tolerates reasonable differences in case, whitespace and punctuation.

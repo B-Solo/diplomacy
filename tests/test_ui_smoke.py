@@ -742,6 +742,9 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
         panel for panel in window.orders_workspace.panels if panel.power.id == preview_unit.power_id
     )
     assert preview_panel.editor is not None
+    assert preview_panel.objectName() == "powerPanel"
+    assert "QFrame#powerPanel" in preview_panel.styleSheet()
+    assert "QFrame {" not in preview_panel.styleSheet()
     canonical_orders = preview_panel.stack.widget(0)
     assert {
         preview_panel.stack.minimumHeight(),
@@ -750,12 +753,15 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
         canonical_orders.maximumHeight(),
         preview_panel.editor.minimumHeight(),
         preview_panel.editor.maximumHeight(),
-    } == {112}
+    } == {96}
+    canonical_height = preview_panel.sizeHint().height()
     preview_panel.stack.setCurrentIndex(1)
+    assert preview_panel.sizeHint().height() == canonical_height
     preview_panel.editor.setPlainText("A Not Yet Complete -")
     qtbot.wait(550)
     assert preview_panel in window.orders_workspace.panels
     assert preview_panel.stack.currentIndex() == 1
+    assert preview_panel.sizeHint().height() == canonical_height
     preview_panel.editor.setPlainText(
         f"{preview_unit.unit_type.value[0].upper()} {preview_territory.name} H"
     )
