@@ -124,7 +124,7 @@ Player communication occurs outside the application using map images copied by t
 ### Order Graphics (OG)
 
 - **OG.1:** A move is a solid arrow from its unit to its destination whose shaft ends beneath the triangular head without a protruding rounded target dot.
-- **OG.2:** Support for a move is a dotted cubic curve with the same stroke weight as a move; its join adapts to the supporter's position, remains clear of the move arrowhead and uses only a short final tangent so the paths visibly merge without substantially overlapping.
+- **OG.2:** Support for a move is a dotted cubic curve with the same stroke weight as a move; its join adapts to the supporter's position, remains clear of the move arrowhead and turns gradually through a long final tangent so the paths visibly merge without substantially overlapping.
 - **OG.3:** Support for a hold is a dotted line ending at the supported unit.
 - **OG.4:** A convoy order is a pronounced wavy line from the convoying fleet to the convoyed move arrow, normally joining the portion of the route within that fleet's territory.
 - **OG.5:** A convoyed move uses a smoothed piecewise arrow through the relevant convoy chain when a straight arrow would misleadingly cross land.

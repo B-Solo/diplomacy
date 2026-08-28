@@ -101,7 +101,11 @@ def _support_move_curve(
         start.x + unit_x * forward_distance * 0.35 - normal_x * curve_side * 0.25,
         start.y + unit_y * forward_distance * 0.35 - normal_y * curve_side * 0.25,
     )
-    final_handle = min(18, max(9, abs(forward_distance) * 0.18))
+    final_handle = min(
+        48,
+        move_length * 0.32,
+        max(24, abs(side_distance) * 0.45),
+    )
     second_control = Point(
         target.x - unit_x * final_handle,
         target.y - unit_y * final_handle,

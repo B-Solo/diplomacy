@@ -254,7 +254,7 @@ def test_order_graphics(england):
     move = Point(supported_end.x - supported_start.x, supported_end.y - supported_start.y)
     assert approach.x * move.y - approach.y * move.x == pytest.approx(0, abs=1e-9)
     assert approach.x * move.x + approach.y * move.y > 0
-    assert math.hypot(approach.x, approach.y) <= 18
+    assert 24 <= math.hypot(approach.x, approach.y) <= 48
     chord = Point(target.x - supporting_start.x, target.y - supporting_start.y)
     first_handle = Point(
         first_control.x - supporting_start.x,
