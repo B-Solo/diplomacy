@@ -72,6 +72,12 @@ class MapWorkspace(QWidget):
         self.mode.addItem("Orders", DisplayMode.ORDERS)
         self.mode.currentIndexChanged.connect(self.schedule_refresh)
         controls.addWidget(self.mode)
+        self.preview_orders = QPushButton("Preview orders on map")
+        self.preview_orders.setToolTip(
+            "Show order arrows and markers over the current position without resolving the phase"
+        )
+        self.preview_orders.clicked.connect(self._preview_orders)
+        controls.addWidget(self.preview_orders)
         self.labels = QComboBox()
         self.labels.addItem("Display names", LabelMode.FULL_NAME)
         self.labels.addItem("Three-letter codes", LabelMode.ABBREVIATION)
@@ -136,6 +142,14 @@ class MapWorkspace(QWidget):
         self.refresh_timer.setSingleShot(True)
         self.refresh_timer.setInterval(60)
         self.refresh_timer.timeout.connect(self.refresh)
+
+    def _preview_orders(self) -> None:
+        """Switch the map to its non-adjudicating order-overlay display."""
+        index = self.mode.findData(DisplayMode.ORDERS)
+        if self.mode.currentIndex() == index:
+            self.schedule_refresh()
+        else:
+            self.mode.setCurrentIndex(index)
 
     def _outcome_hovered(self, text: str) -> None:
         self.outcomes.setText(text)

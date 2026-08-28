@@ -76,7 +76,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.5:** Compact `−`, read-only current-percentage, `+` and `Fit` controls overlay the map; wheel and button zoom use the same discrete levels.
 - **MW.6:** `Fit` returns to the full-map view without changing the map state.
 - **MW.7:** Pan is clamped to the map bounds.
-- **MW.8:** The map display switches between `Position` and `Orders`.
+- **MW.8:** The map display switches between `Position` and `Orders`, and an explicit `Preview orders on map` action switches to the non-adjudicating order-overlay view from the Map toolbar as well as from the Orders workspace.
 - **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
 - **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current`, `Copy map` and `Save image` actions.

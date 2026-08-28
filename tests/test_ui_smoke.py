@@ -132,7 +132,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         window.map_workspace.views.sizeAdjustPolicy()
         is QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
     )
-    window.map_workspace.mode.setCurrentIndex(1)
+    window.map_workspace.mode.setCurrentIndex(
+        window.map_workspace.mode.findData(DisplayMode.POSITION)
+    )
+    window.map_workspace.preview_orders.click()
     window.map_workspace.labels.setCurrentIndex(1)
     render_request = window.map_workspace._request()
     assert render_request.display_mode is DisplayMode.ORDERS
