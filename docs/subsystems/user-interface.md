@@ -23,17 +23,22 @@ The main window binds Qt's platform-standard Close shortcut so macOS supplies `C
 The map workspace performs hover hit-testing only against the projected hotspots returned with that scene.
 Image output sends only `ImageArtifact` values returned through the coordinator to the clipboard or a user-selected PNG file.
 The shared map canvas removes native frames and overlays fixed-position compact zoom, Fog of War and hover-status controls without reserving layout space.
-Map-facing layouts use narrow margins, spacing and splitter handles, while the canvas distinguishes pixel-based or touchpad wheel events from mouse-wheel angle events so two-finger scrolling pans, a mouse wheel zooms and native trackpad magnification gestures provide smooth pointer-centred zooming.
+Map-facing layouts use narrow margins, spacing and splitter handles.
+The canvas deliberately exposes one simple input model: a mouse wheel and compact buttons zoom, while dragging pans.
 
 ## Modules
 
 - `application_window` creates the main window, binds global actions and swaps startup, game, new-game, map-manager and map-setup workspaces.
 - `session_presenter` maps `SessionView` and typed failures onto widgets without adding domain decisions.
 - `map_workspace` displays `MapScene`, fits a newly loaded game's map, preserves zoom and pan during later state refreshes, converts the visible viewport into `RenderRequest` values and transfers returned PNG artifacts through the clipboard or a native save-file chooser.
-- `orders_workspace` owns one inline text editor per configured power, warning expansion, final toggles and the unfinalised-power filter.
+- `orders_workspace` owns one inline text editor per configured power, warning expansion, final toggles, the unfinalised-power filter and collection of pending text before an order-overlay preview.
 - `new_game_workspace` edits game metadata and game-specific starting state inside the main-window stack.
 - `map_manager_workspace` selects reusable maps and starts existing-map or imported-SVG configuration.
-- `map_wizard` presents independently accessible configuration tabs built on one shared starting-position rendering, provides inline wrapping search for both YAML editors, links editable classified rows with SVG hover highlights, displays a large readable army and split-coast fleet adjacency graph over the map, links topology nodes to highlighted territory YAML blocks, merges focused power and starting-setup YAML into the complete document with a rendered preview, combines independently selectable placement layers using the fixed unit symbols, moves and rotates named-coast labels, drags every anchor and validates or saves their shared immutable draft from any tab; its current-game mode exposes only placement and saves only private presentation values.
+- `map_wizard` coordinates the independently accessible Definition, Powers & start and Placement pages, keeps their immutable draft in sync, displays the effective adjacency graph beside the complete searchable YAML source, edits territory names, combines independently selectable placement layers using the fixed unit symbols, moves and rotates named-coast labels, drags every anchor and validates or saves from any tab; its current-game mode exposes only placement and saves only private presentation values.
+- `map_setup_page` presents structured power, ownership, control, starting-unit and colour controls beside a preview composed by the gameplay renderer.
+- `map_setup_model` converts the setup table's toolkit-independent row values into domain definitions and a validated starting state.
+- `editor_widgets` contains the reusable YAML find bar and multiline display-name editor.
+- `map_topology` builds the effective-adjacency SVG and immutable hover metadata without depending on or mutating Qt widgets.
 - `background_tasks` executes blocking service calls and returns their completion to the GUI event thread.
 
 ## Dependencies

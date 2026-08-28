@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Iterable
+from functools import lru_cache
 from io import BytesIO
 from xml.etree import ElementTree
 
@@ -136,7 +137,29 @@ def _rings(path: Path) -> Iterable[list[tuple[float, float]]]:
 
 
 def territory_geometries(svg: bytes, svg_ids: Iterable[str]) -> dict[str, Polygon | MultiPolygon]:
-    """Convert selected SVG shapes into transformed Shapely geometry."""
+    """Convert selected SVG shapes into transformed Shapely geometry.
+
+    Geometry extraction dominates map compilation for detailed SVGs. Draft
+    presentation edits reuse the same immutable SVG and territory elements, so
+    cache that pure result while returning a fresh mapping to each caller.
+
+    :param svg: Sanitised SVG document bytes.
+    :param svg_ids: Shape or group identifiers to extract.
+    :return: Extracted geometry keyed by requested SVG identifier.
+    """
+    return dict(_territory_geometries(svg, tuple(svg_ids)))
+
+
+@lru_cache(maxsize=8)
+def _territory_geometries(
+    svg: bytes, svg_ids: tuple[str, ...]
+) -> dict[str, Polygon | MultiPolygon]:
+    """Return cached geometry for an immutable SVG and identifier sequence.
+
+    :param svg: Sanitised SVG document bytes.
+    :param svg_ids: Stable sequence of shape or group identifiers to extract.
+    :return: Cached extracted geometry; callers must not mutate this mapping.
+    """
     wanted = set(svg_ids)
     geometries: dict[str, Polygon | MultiPolygon] = {}
     try:

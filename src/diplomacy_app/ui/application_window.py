@@ -24,7 +24,12 @@ from PySide6.QtWidgets import (
 )
 
 from diplomacy_app.application import build_application
-from diplomacy_app.domain.models import AdvancedPhase, FinalisationRequired, GameLocation
+from diplomacy_app.domain.models import (
+    AdvancedPhase,
+    DisplayMode,
+    FinalisationRequired,
+    GameLocation,
+)
 from diplomacy_app.ui.background_tasks import BackgroundTask
 from diplomacy_app.ui.map_manager_workspace import MapManagerWorkspace
 from diplomacy_app.ui.map_wizard import MapWizard
@@ -60,6 +65,7 @@ class ApplicationWindow(QMainWindow):
         self.orders_workspace = OrdersWorkspace()
         self.orders_workspace.save_requested.connect(self._save_orders)
         self.orders_workspace.final_requested.connect(self._set_final)
+        self.orders_workspace.preview_requested.connect(self._preview_orders)
         self.orders_workspace.resolve_requested.connect(self._resolve)
         self.orders_workspace.resolve_anyway_requested.connect(self._resolve_anyway)
         self.map_workspace.message.connect(self._show_error)
@@ -416,6 +422,24 @@ class ApplicationWindow(QMainWindow):
             self._refresh_current_session()
         except Exception as exc:
             self._show_error(f"Could not change final state: {exc}")
+
+    def _preview_orders(self) -> None:
+        """Save pending order text and show its overlays on the current position."""
+        if not self.session or not self.session.phase:
+            return
+        phase_id = self.session.phase.phase_id
+        try:
+            for power_id, raw_text in self.orders_workspace.pending_order_texts():
+                self.service.update_orders(power_id, raw_text)
+            session = self.service.select_phase(phase_id)
+            self.map_workspace.mode.setCurrentIndex(
+                self.map_workspace.mode.findData(DisplayMode.ORDERS)
+            )
+            self.set_session(session, open_map=True)
+            self.statusBar().showMessage("Previewing orders on the current position", 3000)
+        except Exception as exc:
+            self._refresh_current_session()
+            self._show_error(f"Could not preview orders: {exc}")
 
     def _resolve(self) -> None:
         self.orders_workspace.resolve.setEnabled(False)

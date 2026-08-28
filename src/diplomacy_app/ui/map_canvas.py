@@ -4,12 +4,10 @@ from __future__ import annotations
 
 import math
 
-from PySide6.QtCore import QByteArray, QEvent, QPoint, QPointF, QRectF, Qt, Signal
+from PySide6.QtCore import QByteArray, QEvent, QPointF, QRectF, Qt, Signal
 from PySide6.QtGui import (
     QBrush,
     QColor,
-    QInputDevice,
-    QNativeGestureEvent,
     QPainter,
     QPen,
     QPolygonF,
@@ -26,7 +24,7 @@ from PySide6.QtWidgets import (
     QGraphicsScene,
     QGraphicsView,
     QHBoxLayout,
-    QLineEdit,
+    QLabel,
     QPushButton,
     QWidget,
 )
@@ -124,10 +122,6 @@ class MapCanvas(QGraphicsView):
         self.resetTransform()
         self._emit_zoom()
 
-    def set_zoom_percentage(self, percentage: int) -> None:
-        """Set an exact bounded zoom percentage."""
-        self.zoom_by(max(8, min(1200, percentage)) / 100 / self.transform().m11())
-
     def zoom_by(self, factor: float, position: QPointF | None = None) -> None:
         self._fit_active = False
         current = self.transform().m11()
@@ -144,44 +138,15 @@ class MapCanvas(QGraphicsView):
             self.setTransformationAnchor(anchor)
         self._emit_zoom()
 
-    def viewportEvent(self, event) -> bool:
-        if (
-            isinstance(event, QNativeGestureEvent)
-            and event.gestureType() is Qt.NativeGestureType.ZoomNativeGesture
-        ):
-            self.zoom_by(math.exp(event.value()), event.position())
-            event.accept()
-            return True
-        return super().viewportEvent(event)
-
     def wheelEvent(self, event: QWheelEvent) -> None:
-        device = event.device()
-        device_type = device.type() if device is not None else QInputDevice.DeviceType.Unknown
-        pixel_delta = event.pixelDelta()
-        angle_delta = event.angleDelta()
-        if device_type == QInputDevice.DeviceType.TouchPad:
-            delta = (
-                pixel_delta
-                if not pixel_delta.isNull()
-                else QPoint(round(angle_delta.x() / 8), round(angle_delta.y() / 8))
-            )
-            self.pan_by(delta)
-        elif device_type == QInputDevice.DeviceType.Mouse:
-            vertical = angle_delta.y() or pixel_delta.y()
-            if vertical:
-                self.zoom_by(1.2 if vertical > 0 else 1 / 1.2)
-        elif not pixel_delta.isNull():
-            self.pan_by(pixel_delta)
-        elif angle_delta.y():
-            self.zoom_by(1.2 if angle_delta.y() > 0 else 1 / 1.2)
-        event.accept()
+        """Zoom one discrete level around the wheel pointer.
 
-    def pan_by(self, delta: QPoint) -> None:
-        """Pan by a trackpad-style pixel delta without changing zoom."""
-        horizontal = self.horizontalScrollBar()
-        vertical = self.verticalScrollBar()
-        horizontal.setValue(horizontal.value() - delta.x())
-        vertical.setValue(vertical.value() - delta.y())
+        :param event: Mouse-wheel event whose vertical delta selects direction.
+        """
+        vertical = event.angleDelta().y() or event.pixelDelta().y()
+        if vertical:
+            self.zoom_by(1.2 if vertical > 0 else 1 / 1.2, event.position())
+        event.accept()
 
     def _emit_zoom(self, *, notify: bool = True) -> None:
         self.zoom_changed.emit(round(self.transform().m11() * 100))
@@ -280,7 +245,7 @@ class MapZoomControls(QWidget):
         self.setStyleSheet(
             "#mapZoomControls { background: rgba(255, 250, 240, 220); "
             "color: #292820; border: 1px solid #8f846d; border-radius: 5px; } "
-            "#mapZoomControls QPushButton, #mapZoomControls QLineEdit { "
+            "#mapZoomControls QPushButton, #mapZoomControls QLabel { "
             "background: #fffaf0; color: #292820; border: 1px solid #a89d83; "
             "min-width: 0; padding: 3px 5px; "
             "border-radius: 3px; }"
@@ -294,12 +259,11 @@ class MapZoomControls(QWidget):
         self.zoom_out.setFixedWidth(28)
         self.zoom_out.clicked.connect(lambda: canvas.zoom_by(1 / 1.2))
         layout.addWidget(self.zoom_out)
-        self.percentage = ZoomPercentageEdit(f"{round(canvas.transform().m11() * 100)}%")
+        self.percentage = QLabel(f"{round(canvas.transform().m11() * 100)}%")
         self.percentage.setAccessibleName("Zoom percentage")
-        self.percentage.setToolTip("Enter a zoom percentage from 8% to 1200%")
+        self.percentage.setToolTip("Current zoom percentage")
         self.percentage.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.percentage.setFixedWidth(50)
-        self.percentage.editingFinished.connect(self._apply_percentage)
         layout.addWidget(self.percentage)
         self.zoom_in = QPushButton("+")
         self.zoom_in.setAccessibleName("Zoom in")
@@ -329,31 +293,10 @@ class MapZoomControls(QWidget):
         self.percentage.setText(f"{value}%")
         self._position_overlay()
 
-    def _apply_percentage(self) -> None:
-        value = self.percentage.text().strip().removesuffix("%").strip()
-        try:
-            percentage = int(value)
-        except ValueError:
-            self._zoom_changed(round(self.canvas.transform().m11() * 100))
-            return
-        self.canvas.set_zoom_percentage(percentage)
-
     def _position_overlay(self) -> None:
         self.adjustSize()
         self.move(max(8, self.canvas.width() - self.width() - 12), 8)
         self.raise_()
-
-
-class ZoomPercentageEdit(QLineEdit):
-    """Compact percentage field that replaces its value on click."""
-
-    def focusInEvent(self, event) -> None:
-        super().focusInEvent(event)
-        self.selectAll()
-
-    def mousePressEvent(self, event) -> None:
-        super().mousePressEvent(event)
-        self.selectAll()
 
 
 class AnchorItem(QGraphicsEllipseItem):

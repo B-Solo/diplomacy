@@ -6,15 +6,7 @@ from xml.etree import ElementTree
 import pytest
 import yaml
 from PySide6.QtCore import QPoint, QPointF, QSettings, Qt
-from PySide6.QtGui import (
-    QInputDevice,
-    QKeySequence,
-    QNativeGestureEvent,
-    QPalette,
-    QPointingDevice,
-    QTextCursor,
-    QWheelEvent,
-)
+from PySide6.QtGui import QKeySequence, QPalette, QTextCursor, QWheelEvent
 from PySide6.QtWidgets import (
     QApplication,
     QComboBox,
@@ -95,7 +87,6 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert "selection-color: #fffdf5" in STYLE
     assert "QPushButton, QToolButton { padding: 5px 9px; }" in STYLE
     assert "background: #fffdf7; color: #171714" in STYLE
-    assert "QPlainTextEdit#setupEditor" in STYLE
     assert "QComboBox::down-arrow" in STYLE
     assert "border-top: 6px solid #39372f" in STYLE
     assert "QScrollBar::handle" in STYLE
@@ -162,7 +153,6 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         page = wizard.tabs.widget(index)
         assert page.palette().color(QPalette.ColorRole.WindowText).name() == "#292820"
     assert wizard.yaml_editor.palette().color(QPalette.ColorRole.Text).name() == "#171714"
-    assert wizard.setup_editor.palette().color(QPalette.ColorRole.Text).name() == "#171714"
     default_fit_canvas = MapCanvas()
     qtbot.addWidget(default_fit_canvas)
     default_fit_canvas.resize(320, 240)
@@ -172,12 +162,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         wizard.anchor_canvas.viewportUpdateMode()
         is QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate
     )
-    assert wizard.roles.rowCount() >= 74
-    assert wizard.tabs.count() == 4
+    assert wizard.tabs.count() == 3
     assert tuple(wizard.tabs.tabText(index) for index in range(wizard.tabs.count())) == (
-        "SVG regions",
-        "Topology",
-        "Powers and setup",
+        "Definition",
+        "Powers & start",
         "Placement",
     )
     assert not any(
@@ -186,13 +174,13 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     )
     assert wizard.validation_label.text().startswith("Valid:")
     assert wizard.outer_layout.contentsMargins().left() == 4
-    assert wizard.tabs.widget(3).layout().contentsMargins().left() == 2
+    assert wizard.tabs.widget(2).layout().contentsMargins().left() == 2
     assert wizard.placement_layers_group.title() == "Preview layers"
     assert wizard.placement_labels_group.title() == "Territory labels"
     assert wizard.label_sizes_group.title() == "Label sizes"
-    assert wizard.map_colours_group.title() == "Map colours"
-    assert wizard.tabs.widget(2).isAncestorOf(wizard.map_colours_group)
-    assert wizard.display_name_group.title() == "Selected territory display name"
+    assert wizard.setup_page.map_colours_group.title() == "Map colours"
+    assert wizard.tabs.widget(1).isAncestorOf(wizard.setup_page.map_colours_group)
+    assert wizard.territory_group.title() == "Selected territory"
     assert wizard.coast_label_group.title() == "Selected coast label"
     assert wizard.placement_labels.minimumWidth() == 150
     assert wizard.territory_font_size.singleStep() == 0.5
@@ -202,38 +190,30 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.yaml_find.find_shortcut.key() in QKeySequence.keyBindings(
         QKeySequence.StandardKey.Find
     )
-    wizard.tabs.setCurrentIndex(1)
+    wizard.tabs.setCurrentIndex(0)
     wizard.yaml_find.show_find()
     wizard.yaml_find.query.setText("split_coasts:")
     assert wizard.yaml_editor.textCursor().selectedText() == "split_coasts:"
     wizard.yaml_find.close_find()
     assert wizard.yaml_find.isHidden()
-    wizard.tabs.setCurrentIndex(2)
-    assert wizard.setup_editor.objectName() == "setupEditor"
-    wizard.setup_find.show_find()
-    wizard.setup_find.query.setText("teams:")
-    assert wizard.setup_editor.textCursor().selectedText() == "teams:"
-    wizard.setup_find.close_find()
     assert wizard.save_button.text() == "Save configured map"
     for index in range(wizard.tabs.count()):
         wizard.tabs.setCurrentIndex(index)
         assert wizard.save_button.isEnabled()
-    wizard.tabs.setCurrentIndex(1)
+    wizard.tabs.setCurrentIndex(0)
     wizard.yaml_editor.appendPlainText("\n# Retained when changing tabs")
     assert wizard.yaml_editor.document().isModified()
-    wizard.tabs.setCurrentIndex(2)
+    wizard.tabs.setCurrentIndex(1)
     assert "# Retained when changing tabs" in wizard.draft.map_yaml
     assert not wizard.yaml_editor.document().isModified()
-    setup = yaml.safe_load(wizard.setup_editor.toPlainText())
-    power_id = next(iter(setup["teams"]))
-    setup["teams"][power_id]["colour"] = "#123456"
-    wizard.setup_editor.setPlainText(yaml.safe_dump(setup, sort_keys=False))
-    wizard.setup_editor.document().setModified(True)
-    wizard.tabs.setCurrentIndex(3)
+    power_id = wizard.setup_page.powers.item(0, 0).text()
+    wizard.setup_page._set_power_colour(0, "#123456")
+    assert wizard.setup_page.apply_changes(), wizard.setup_page.status.text()
+    wizard.tabs.setCurrentIndex(2)
     assert yaml.safe_load(wizard.draft.map_yaml)["teams"][power_id]["colour"] == "#123456"
-    assert wizard.setup_validation_label.text() == "Map preview regenerated"
-    assert wizard.setup_canvas._renderer is not None
-    assert wizard.setup_canvas._renderer.isValid()
+    assert wizard.setup_page.status.text() == "Powers and starting position applied"
+    assert wizard.setup_page.canvas._renderer is not None
+    assert wizard.setup_page.canvas._renderer.isValid()
     setup_preview = ElementTree.fromstring(service.preview_map_setup(wizard.draft).svg)
     recoloured = next(
         node
@@ -271,12 +251,12 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     )
     assert underlay.attrib["opacity"] == "0.58"
     assert graph_edges
-    wizard.tabs.setCurrentIndex(1)
+    wizard.tabs.setCurrentIndex(0)
     QApplication.processEvents()
     yaml_width, map_width = wizard.topology_splitter.sizes()
     assert map_width >= yaml_width * 2
     assert wizard.topology_splitter.handleWidth() == 2
-    wizard.tabs.setCurrentIndex(3)
+    wizard.tabs.setCurrentIndex(2)
     assert {label.attrib["font-size"] for label in node_layer.findall("{*}text")} == {"11"}
     assert {label.attrib["fill"] for label in node_layer.findall("{*}text")} == {"#111111"}
     assert all("stroke" not in label.attrib for label in node_layer.findall("{*}text"))
@@ -313,8 +293,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert "split_coasts:" in topology_yaml_highlights[0].cursor.selectedText()
     assert wizard.yaml_editor.textCursor().block().text().strip() == "devon:"
     assert "Devon" in wizard.topology_canvas.toolTip()
-    assert wizard.setup_canvas._renderer.elementExists("units")
-    assert wizard.preview._renderer.elementExists("gamemaster-layers")
+    assert wizard.setup_page.canvas._renderer.elementExists("units")
     multiline_label = TextAnchorItem(
         Point(0, 0), "Derbyshire & Nottinghamshire", "#111111", lambda _point: None
     )
@@ -361,64 +340,22 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         or wizard.anchor_canvas.verticalScrollBar().isVisible()
     )
     assert wizard.placement_zoom.pos() == fitted_control_position
-    wizard.placement_zoom.percentage.setText("175%")
-    wizard.placement_zoom.percentage.editingFinished.emit()
-    assert wizard.anchor_canvas.transform().m11() == pytest.approx(1.75)
-    assert wizard.placement_zoom.percentage.text() == "175%"
-    assert wizard.placement_zoom.pos() == fitted_control_position
-    wizard.placement_zoom.percentage.setText("not a percentage")
-    wizard.placement_zoom.percentage.editingFinished.emit()
-    assert wizard.placement_zoom.percentage.text() == "175%"
+    assert not wizard.placement_zoom.percentage.focusPolicy() & Qt.FocusPolicy.TabFocus
     zoomed_in = wizard.anchor_canvas.transform().m11()
     wizard.placement_zoom.zoom_out.click()
     assert wizard.anchor_canvas.transform().m11() < zoomed_in
     wizard.anchor_canvas.set_standard_zoom()
     before_scale = wizard.anchor_canvas.transform().m11()
-    before_scroll = wizard.anchor_canvas.verticalScrollBar().value()
-    touchpad = QPointingDevice(
-        "Test trackpad",
-        10_001,
-        QInputDevice.DeviceType.TouchPad,
-        QPointingDevice.PointerType.Finger,
-        QInputDevice.Capability.Position | QInputDevice.Capability.PixelScroll,
-        10,
-        0,
-    )
-    trackpad_scroll = QWheelEvent(
-        QPointF(50, 50),
-        QPointF(50, 50),
-        QPoint(0, -40),
-        QPoint(0, -120),
-        Qt.MouseButton.NoButton,
-        Qt.KeyboardModifier.NoModifier,
-        Qt.ScrollPhase.ScrollUpdate,
-        False,
-        Qt.MouseEventSource.MouseEventNotSynthesized,
-        touchpad,
-    )
-    wizard.anchor_canvas.wheelEvent(trackpad_scroll)
-    assert wizard.anchor_canvas.transform().m11() == before_scale
-    assert wizard.anchor_canvas.verticalScrollBar().value() > before_scroll
     assert wizard.placement_zoom.y() == 8
     assert (
         wizard.placement_zoom.x()
         == wizard.anchor_canvas.width() - wizard.placement_zoom.width() - 12
     )
     anchored_position = wizard.placement_zoom.pos()
-    mouse = QPointingDevice(
-        "Test mouse",
-        10_002,
-        QInputDevice.DeviceType.Mouse,
-        QPointingDevice.PointerType.Generic,
-        QInputDevice.Capability.Position
-        | QInputDevice.Capability.Scroll
-        | QInputDevice.Capability.PixelScroll,
-        1,
-        3,
-    )
+    wheel_position = QPointF(50, 50)
     mouse_wheel = QWheelEvent(
-        QPointF(50, 50),
-        QPointF(50, 50),
+        wheel_position,
+        wheel_position,
         QPoint(0, 12),
         QPoint(0, 120),
         Qt.MouseButton.NoButton,
@@ -426,39 +363,14 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         Qt.ScrollPhase.NoScrollPhase,
         False,
         Qt.MouseEventSource.MouseEventNotSynthesized,
-        mouse,
     )
     wizard.anchor_canvas.wheelEvent(mouse_wheel)
     assert wizard.anchor_canvas.transform().m11() > before_scale
     assert wizard.placement_zoom.pos() == anchored_position
     assert wizard.anchor_canvas.verticalScrollBar().width() <= 8
-    pinch_position = QPointF(
-        wizard.anchor_canvas.viewport().width() / 2,
-        wizard.anchor_canvas.viewport().height() / 2,
-    )
-    pinch_scene_position = wizard.anchor_canvas.mapToScene(pinch_position.toPoint())
-    pointing_device = QPointingDevice.primaryPointingDevice()
-    pinch = QNativeGestureEvent(
-        Qt.NativeGestureType.ZoomNativeGesture,
-        pointing_device,
-        2,
-        pinch_position,
-        pinch_position,
-        pinch_position,
-        0.15,
-        QPointF(),
-        1,
-    )
-    before_pinch_scale = wizard.anchor_canvas.transform().m11()
-    assert wizard.anchor_canvas.viewportEvent(pinch)
-    assert wizard.anchor_canvas.transform().m11() > before_pinch_scale
-    moved_scene_position = wizard.anchor_canvas.mapToScene(pinch_position.toPoint())
-    assert moved_scene_position.x() == pytest.approx(pinch_scene_position.x())
-    assert moved_scene_position.y() == pytest.approx(pinch_scene_position.y())
     for controls in (
-        wizard.regions_zoom,
         wizard.topology_zoom,
-        wizard.setup_zoom,
+        wizard.setup_page.zoom,
         wizard.placement_zoom,
     ):
         assert not controls.zoom_in.isHidden()
@@ -535,8 +447,6 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         "First display line",
         "Second display line",
     ]
-    wizard._reload_classification_preview()
-    assert wizard.preview._renderer.elementExists("territory-labels")
     composed_preview = ElementTree.fromstring(wizard._preview_svg_without())
     composed_label = next(
         label
@@ -559,8 +469,8 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         == "First display lineSecond display line"
         for label in topology_preview.findall(".//{*}g[@id='territory-labels']/{*}g")
     )
-    assert wizard._reload_setup_preview()
-    assert wizard.setup_canvas._renderer.elementExists("territory-labels")
+    assert wizard.setup_page.reload_preview()
+    assert wizard.setup_page.canvas._renderer.elementExists("territory-labels")
     wizard.territory_font_size.setValue(12.5)
     wizard.coast_font_size.setValue(8.5)
     assert wizard.draft.presentation.territory_label_font_size == 12.5
@@ -570,14 +480,14 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     ]
     assert {item.font_size for item in resized_labels if not item.italic} == {12.5}
     assert {item.font_size for item in resized_labels if item.italic} == {8.5}
-    wizard._set_map_colour("label_colour", "#201810")
-    wizard._set_map_colour("inaccessible_region_colour", "#303030")
-    wizard._set_map_colour("sea_colour", "#406080")
-    wizard._set_map_colour("unclaimed_region_colour", "#d8c8a8")
-    assert wizard.label_colour_button.text() == "Text #201810"
-    assert wizard.inaccessible_colour_button.text() == "Inaccessible #303030"
-    assert wizard.sea_colour_button.text() == "Sea #406080"
-    assert wizard.unclaimed_colour_button.text() == "Unclaimed #D8C8A8"
+    wizard.setup_page._set_map_colour("label_colour", "#201810")
+    wizard.setup_page._set_map_colour("inaccessible_region_colour", "#303030")
+    wizard.setup_page._set_map_colour("sea_colour", "#406080")
+    wizard.setup_page._set_map_colour("unclaimed_region_colour", "#d8c8a8")
+    assert wizard.setup_page.label_colour_button.text() == "Text #201810"
+    assert wizard.setup_page.inaccessible_colour_button.text() == "Inaccessible #303030"
+    assert wizard.setup_page.sea_colour_button.text() == "Sea #406080"
+    assert wizard.setup_page.unclaimed_colour_button.text() == "Unclaimed #D8C8A8"
     base_preview = ElementTree.fromstring(service.preview_map_base(wizard.draft))
     inaccessible_node = next(
         node for node in base_preview.iter() if node.attrib.get("id") == "impassable-scotland"
@@ -647,16 +557,6 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert not any(
         isinstance(item, TextAnchorItem) for item in wizard.anchor_canvas.scene().items()
     )
-    territory = wizard.draft.territories[0]
-    point = wizard._element_geometries[territory.svg_element_id].representative_point()
-    wizard._map_hovered(point.x, point.y)
-    assert territory.name in wizard.hovered_territory.text()
-    assert wizard.roles.currentRow() == wizard._row_by_element[territory.svg_element_id]
-    scotland_id = "impassable-scotland"
-    scotland = wizard._element_geometries[scotland_id].representative_point()
-    wizard._map_hovered(scotland.x, scotland.y)
-    assert wizard.roles.currentRow() == wizard._row_by_element[scotland_id]
-    assert "Scotland — Impassable" in wizard.hovered_territory.text()
     anchor_id, anchor_point = next(iter(wizard.draft.presentation.label_anchors.items()))
     moved_anchor = Point(anchor_point.x + 1, anchor_point.y + 1)
     wizard._anchor_moved(anchor_id, "label", None, moved_anchor)
@@ -674,8 +574,10 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert wizard.draft.presentation.label_anchors[anchor_id] == moved_anchor
     assert original_abbreviation_anchor != moved_abbreviation_anchor
     renamed_territory = wizard.draft.territories[0]
-    renamed_row = wizard._row_by_element[renamed_territory.svg_element_id]
-    wizard.roles.item(renamed_row, 0).setText("Persisted place name")
+    wizard._select_territory_label(renamed_territory.id)
+    wizard.canonical_name_editor.setText("Persisted place name")
+    wizard.abbreviation_editor.setText("Ppn")
+    wizard._apply_territory_details()
     assert (
         next(
             territory.name
@@ -684,9 +586,17 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         )
         == "Persisted place name"
     )
+    assert (
+        next(
+            territory.abbreviation
+            for territory in wizard.draft.territories
+            if territory.id == renamed_territory.id
+        )
+        == "Ppn"
+    )
     saved = []
     wizard.saved.connect(saved.append)
-    wizard.tabs.setCurrentIndex(3)
+    wizard.tabs.setCurrentIndex(2)
     wizard.save_button.click()
     assert saved and saved[0].id == wizard.draft.map_id
     assert maps.load(saved[0].id).presentation.label_anchors[anchor_id] == moved_anchor
@@ -781,6 +691,34 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert window.stack.currentWidget() is window.map_workspace
     window.tabs.setCurrentIndex(1)
     assert window.stack.currentWidget() is window.orders_workspace
+    preview_unit = session.phase.state.units[0]
+    preview_territory = next(
+        territory
+        for territory in configured.territories
+        if territory.id == preview_unit.location.territory_id
+    )
+    preview_panel = next(
+        panel for panel in window.orders_workspace.panels if panel.power.id == preview_unit.power_id
+    )
+    assert preview_panel.editor is not None
+    preview_panel.editor.setPlainText(
+        f"{preview_unit.unit_type.value[0].upper()} {preview_territory.name} H"
+    )
+    assert window.orders_workspace.pending_order_texts() == (
+        (preview_unit.power_id, preview_panel.editor.toPlainText()),
+    )
+    window.orders_workspace.preview.click()
+    assert window.tabs.currentIndex() == 0
+    assert window.stack.currentWidget() is window.map_workspace
+    assert DisplayMode(window.map_workspace.mode.currentData()) is DisplayMode.ORDERS
+    assert window.session.phase.phase_id == session.phase.phase_id
+    assert window.session.phase.state == session.phase.state
+    window.map_workspace.refresh()
+    preview_svg = ElementTree.fromstring(window.map_workspace.scene.svg)
+    preview_orders = next(
+        group for group in preview_svg.findall(".//{*}g") if group.attrib.get("id") == "orders"
+    )
+    assert preview_orders.find("{*}circle") is not None
     window.tabs.setCurrentIndex(0)
     assert window.stack.currentWidget() is window.map_workspace
     window.map_workspace.refresh()

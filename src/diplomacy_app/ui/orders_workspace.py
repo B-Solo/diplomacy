@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from diplomacy_app.domain.models import IssueSeverity
+from diplomacy_app.domain.models import IssueSeverity, PowerId
 
 
 class PowerPanel(QFrame):
@@ -143,6 +143,7 @@ class PowerPanel(QFrame):
 class OrdersWorkspace(QWidget):
     save_requested = Signal(object, str)
     final_requested = Signal(object, bool)
+    preview_requested = Signal()
     resolve_requested = Signal()
     resolve_anyway_requested = Signal()
 
@@ -159,6 +160,12 @@ class OrdersWorkspace(QWidget):
         controls.addWidget(self.unfinalised)
         self.final_count = QLabel()
         controls.addWidget(self.final_count)
+        self.preview = QPushButton("Preview orders on map")
+        self.preview.setToolTip(
+            "Show order arrows and markers over the current position without resolving the phase"
+        )
+        self.preview.clicked.connect(self.preview_requested.emit)
+        controls.addWidget(self.preview)
         self.resolve = QPushButton("Resolve and advance")
         self.resolve.setProperty("primary", True)
         self.resolve.clicked.connect(self.resolve_requested)
@@ -189,6 +196,26 @@ class OrdersWorkspace(QWidget):
         self.scroll_area.setWidget(self.container)
         outer.addWidget(self.scroll_area, 1)
         self.panels: list[PowerPanel] = []
+
+    def pending_order_texts(self) -> tuple[tuple[PowerId, str], ...]:
+        """Take order text that has changed since the displayed session was loaded.
+
+        Active debounce timers are stopped because the caller assumes responsibility
+        for saving every returned value before changing workspace.
+
+        :return: Power identifiers and their currently entered raw order text.
+        """
+        pending: list[tuple[PowerId, str]] = []
+        for panel in self.panels:
+            if panel.editor is None:
+                continue
+            raw_text = panel.editor.toPlainText()
+            saved_text = panel.submission.raw_text if panel.submission else ""
+            if raw_text == saved_text:
+                continue
+            panel.timer.stop()
+            pending.append((panel.power.id, raw_text))
+        return tuple(pending)
 
     def show_unfinalised_confirmation(self, names: list[str]) -> None:
         self.confirmation_text.setText(

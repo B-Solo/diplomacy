@@ -62,14 +62,15 @@ Illegal and unrecognised lines remain recorded with their issues, and missing or
 Select **New game**, then either edit a configured map or import a structured SVG.
 Every relevant SVG shape or group must have a unique identifier.
 
-The map wizard provides four independently usable tabs:
+The map wizard provides three independently usable tabs:
 
-- Classify identified SVG regions as playable territory, impassable region, or decoration.
-- Edit and validate the durable `map.yaml` source while inspecting the complete compiled topology.
-- Drag label, army, fleet, split-coast, and supply-centre anchors on the map.
-- Supply optional custom army and fleet SVG symbols.
+- **Definition** edits and validates the complete durable `map.yaml` source while displaying the compiled topology.
+- **Powers & start** provides fields for powers, colours, ownership, control and starting units beside an exact gameplay-renderer preview.
+- **Placement** edits territory names and drags label, army, fleet, split-coast and supply-centre anchors on the map.
 
-Geometry supplies ordinary adjacency suggestions.
+Uncommon region-classification corrections remain available through the complete YAML definition.
+
+SVG identifiers provide the initial region classification, and geometry supplies ordinary adjacency suggestions.
 The authored YAML records additions, removals, split coasts, canals, and off-map links.
 Saving a correction creates a user-owned configured-map copy and does not silently alter an existing game's private map snapshot.
 

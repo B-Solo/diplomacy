@@ -272,6 +272,11 @@ class ApplicationService:
         return self.renderer.base_map_svg(self.map_library.preview_definition(draft))
 
     def preview_map_setup(self, draft: MapDraft) -> MapScene:
+        """Render a draft's starting position through the gameplay renderer.
+
+        :param draft: Map draft whose configured starting position should be rendered.
+        :return: Composed scene using the same path as the in-game position view.
+        """
         definition = self.map_library.preview_definition(draft)
         state = definition.default_starting_setup.state
         units = {unit.location.territory_id: unit for unit in state.units}
@@ -321,6 +326,32 @@ class ApplicationService:
         self, draft: MapDraft, territory_id, display_name
     ) -> MapDraft:
         return self.map_library.update_territory_display_name(draft, territory_id, display_name)
+
+    def update_map_territory_details(
+        self, draft: MapDraft, territory_id, name, display_name, abbreviation
+    ) -> MapDraft:
+        """Update every editable user-facing name for one territory.
+
+        :param draft: Authored map draft to update.
+        :param territory_id: Stable territory whose names should change.
+        :param name: Canonical name accepted by order entry.
+        :param display_name: Potentially multiline rendered label.
+        :param abbreviation: Unique three-letter order abbreviation.
+        :return: Recompiled draft containing the updated territory.
+        """
+        return self.map_library.update_territory_details(
+            draft, territory_id, name, display_name, abbreviation
+        )
+
+    def update_map_setup(self, draft: MapDraft, powers, starting_setup) -> MapDraft:
+        """Update powers and the reusable starting state in one compilation.
+
+        :param draft: Authored map draft to update.
+        :param powers: Complete ordered power definitions.
+        :param starting_setup: Complete starting phase and state.
+        :return: Recompiled draft containing the updated setup.
+        """
+        return self.map_library.update_setup(draft, powers, starting_setup)
 
     def update_map_label_font_sizes(self, draft: MapDraft, territory_size, coast_size) -> MapDraft:
         return self.map_library.update_label_font_sizes(draft, territory_size, coast_size)
