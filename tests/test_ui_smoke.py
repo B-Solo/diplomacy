@@ -152,6 +152,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert control_palette.color(QPalette.ColorRole.Button).name() == "#fffaf0"
     assert control_palette.color(QPalette.ColorRole.ButtonText).name() == "#292820"
     assert window.statusBar().isHidden()
+    assert not hasattr(window, "current_label")
 
     wizard = MapWizard(service, service.load_map_draft(maps.list()[0].map_id))
     qtbot.addWidget(wizard)

@@ -195,14 +195,12 @@ class ApplicationWindow(QMainWindow):
             QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
         )
         self.phase_selector.setMinimumWidth(170)
-        self.current_label = QLabel("Current")
         self.previous.clicked.connect(lambda: self._step_phase(-1))
         self.next.clicked.connect(lambda: self._step_phase(1))
         self.phase_selector.currentIndexChanged.connect(self._phase_selected)
         layout.addStretch()
         layout.addWidget(self.previous)
         layout.addWidget(self.phase_selector)
-        layout.addWidget(self.current_label)
         layout.addWidget(self.next)
         layout.addStretch()
         self.season_bar = bar
@@ -239,7 +237,6 @@ class ApplicationWindow(QMainWindow):
             self.phase_selector.addItem(phase.label, phase)
         self.phase_selector.setCurrentIndex(self.phase_selector.findData(session.phase.phase_id))
         self.phase_selector.blockSignals(False)
-        self.current_label.setVisible(session.phase.phase_id == game.current_phase)
         self._update_phase_navigation()
         self.map_workspace.set_session(session)
         self.orders_workspace.set_session(session)

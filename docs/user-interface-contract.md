@@ -64,7 +64,7 @@ Player communication occurs outside the application using map images copied by t
 - **SN.2:** A compact previous button, full-label-width season selector and next button navigate history without truncating season names.
 - **SN.3:** Season labels contain only the season and year, for example `Spring 1901` or `Year End 1901`.
 - **SN.4:** The history includes Spring, Summer, Fall, Winter and Year End for every year, including retreat or build seasons in which no orders are required.
-- **SN.5:** The latest season is visibly marked `Current`.
+- **SN.5:** The selected season is identified by the season selector alone; the latest season has no redundant `Current` annotation.
 - **SN.6:** Historical orders are visible but read-only.
 - **SN.7:** Previous and next buttons are disabled and visibly subdued when no earlier or later recorded season exists.
 
@@ -232,7 +232,7 @@ Player communication occurs outside the application using map images copied by t
 │                         Active workspace                            │
 │                                                                     │
 ├─────────────────────────────────────────────────────────────────────┤
-│      [←]              [Spring 1902 ▾]  Current              [→]     │
+│      [←]                  [Spring 1902 ▾]                    [→]     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
