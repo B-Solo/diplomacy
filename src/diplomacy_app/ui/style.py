@@ -9,6 +9,7 @@ QToolBar { background: #f6f1e3; color: #292820; border: 0; border-bottom: 1px so
 QPushButton, QToolButton, QComboBox, QSpinBox { background: #fffaf0; color: #292820; border: 1px solid #a89d83; border-radius: 3px; padding: 4px 7px; }
 QPushButton, QToolButton { padding: 5px 9px; }
 QPushButton:disabled, QToolButton:disabled { background: #ddd8cb; color: #777165; border-color: #c2baa8; }
+QPushButton[seasonNavigation="true"]:disabled { background: #eeeae0; color: #b8b1a3; border-color: #d8d1c2; }
 QComboBox { padding-right: 30px; selection-background-color: #42584b; selection-color: #fffdf5; }
 QComboBox::drop-down { subcontrol-origin: padding; subcontrol-position: top right; background: #e8dec7; border: 0; border-left: 1px solid #b8ad94; width: 24px; }
 QComboBox::down-arrow { image: none; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 6px solid #39372f; }

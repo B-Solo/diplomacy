@@ -185,7 +185,16 @@ class ApplicationWindow(QMainWindow):
         layout.setSpacing(4)
         self.previous = QPushButton("←")
         self.next = QPushButton("→")
+        for button in (self.previous, self.next):
+            button.setFixedWidth(34)
+            button.setProperty("seasonNavigation", True)
         self.phase_selector = QComboBox()
+        self.phase_selector.setAccessibleName("Season")
+        self.phase_selector.setMinimumContentsLength(len("Year End 1901"))
+        self.phase_selector.setSizeAdjustPolicy(
+            QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+        )
+        self.phase_selector.setMinimumWidth(170)
         self.current_label = QLabel("Current")
         self.previous.clicked.connect(lambda: self._step_phase(-1))
         self.next.clicked.connect(lambda: self._step_phase(1))
@@ -231,9 +240,7 @@ class ApplicationWindow(QMainWindow):
         self.phase_selector.setCurrentIndex(self.phase_selector.findData(session.phase.phase_id))
         self.phase_selector.blockSignals(False)
         self.current_label.setVisible(session.phase.phase_id == game.current_phase)
-        index = self.phase_selector.currentIndex()
-        self.previous.setEnabled(index > 0)
-        self.next.setEnabled(index < self.phase_selector.count() - 1)
+        self._update_phase_navigation()
         self.map_workspace.set_session(session)
         self.orders_workspace.set_session(session)
         if open_map:
@@ -392,6 +399,7 @@ class ApplicationWindow(QMainWindow):
             self.stack.setCurrentWidget(self.welcome)
 
     def _phase_selected(self) -> None:
+        self._update_phase_navigation()
         phase = self.phase_selector.currentData()
         if phase is None or not self.session or phase == self.session.phase.phase_id:
             return
@@ -399,6 +407,13 @@ class ApplicationWindow(QMainWindow):
             self.set_session(self.service.select_phase(phase))
         except Exception as exc:
             self._show_error(f"Could not open phase: {exc}")
+
+    def _update_phase_navigation(self) -> None:
+        """Match the season arrows to the selector's available history."""
+        index = self.phase_selector.currentIndex()
+        count = self.phase_selector.count()
+        self.previous.setEnabled(0 < index < count)
+        self.next.setEnabled(0 <= index < count - 1)
 
     def _step_phase(self, offset: int) -> None:
         target = self.phase_selector.currentIndex() + offset

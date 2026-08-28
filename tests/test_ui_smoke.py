@@ -730,6 +730,16 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     window.map_workspace.labels.setCurrentIndex(1)
     window.set_session(session, open_map=True)
     assert LabelMode(window.map_workspace.labels.currentData()) is LabelMode.FULL_NAME
+    assert window.phase_selector.minimumWidth() == 170
+    assert window.phase_selector.minimumContentsLength() == len("Year End 1901")
+    assert (
+        window.phase_selector.sizeAdjustPolicy()
+        is QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+    )
+    assert not window.previous.isEnabled()
+    assert not window.next.isEnabled()
+    assert window.previous.property("seasonNavigation")
+    assert window.next.property("seasonNavigation")
     assert not window.game_map_placement_button.isHidden()
     assert window.tabs.currentIndex() == 0
     assert window.stack.currentWidget() is window.map_workspace
