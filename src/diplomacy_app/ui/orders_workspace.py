@@ -271,6 +271,20 @@ class OrdersWorkspace(QWidget):
         self.resolve.clicked.connect(self.resolve_requested)
         controls.addWidget(self.resolve)
         outer.addLayout(controls)
+        self.syntax_examples = QLabel(
+            "Examples — replace the locations:  "
+            "A London H   ·   A London - Wales   ·   "
+            "F North Sea S A Yorkshire - London\n"
+            "Retreat: A London R Wales   ·   Build: A London B   ·   "
+            "Disband: A London D   ·   Waive"
+        )
+        self.syntax_examples.setWordWrap(True)
+        self.syntax_examples.setProperty("muted", True)
+        self.syntax_examples.setStyleSheet(
+            "background: #f6f1e3; border: 1px solid #d8cfb8; "
+            "border-radius: 4px; padding: 5px 8px; font-family: monospace"
+        )
+        outer.addWidget(self.syntax_examples)
         self.confirmation = QFrame()
         self.confirmation.setStyleSheet(
             "background: #f6dfc0; color: #713d22; border: 1px solid #c99b63; border-radius: 4px"

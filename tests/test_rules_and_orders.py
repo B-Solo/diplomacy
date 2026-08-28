@@ -57,6 +57,17 @@ def test_parser_accepts_names_abbreviations_and_reports_duplicates(england):
     ]
     support = processor.interpret(england, up_north.id, "F TYN S A DUR - CLE")
     assert [candidate.canonical_text for candidate in support] == ["F Tyn S A Dur - Cle"]
+    phase_examples = processor.interpret(
+        england,
+        power.id,
+        "A Cheshire R Shropshire\nA Cheshire B\nA Cheshire D\nWaive",
+    )
+    assert [candidate.canonical_text for candidate in phase_examples] == [
+        "A Che R Shr",
+        "A Che B",
+        "A Che D",
+        "Waive",
+    ]
 
     duplicate = processor.prepare_submission(
         england, phase, power.id, "A Cheshire H\nA Cheshire - Shropshire"

@@ -150,6 +150,7 @@ Player communication occurs outside the application using map images copied by t
 - **OW.12:** An order issue is represented only by a warning flag until selected.
 - **OW.13:** Selecting a warning flag expands the affected panel and reveals the warning.
 - **OW.14:** `Preview orders on map` saves any text awaiting validation, opens the map in Orders mode and draws the effective order arrows and markers over the current position without adjudicating or moving units.
+- **OW.15:** A compact syntax guide remains visible above the order cards with concrete hold, move, support, retreat, build, disband and waive examples, explicitly identifying its location names as replaceable examples.
 
 ### Order Interpretation (OI)
 
