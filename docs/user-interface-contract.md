@@ -81,7 +81,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
 - **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current`, `Copy map` and `Save image` actions.
-- **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors, named-coast label rotations and shared label sizes; territory names, rules, topology, powers, setup, colours and reusable-map defaults remain unchanged.
+- **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors, named-coast label rotations, shared label sizes and army/fleet hold-underline offsets; territory names, rules, topology, powers, setup, colours and reusable-map defaults remain unchanged.
 
 ### Saved Views and Image Copying (IC)
 
@@ -128,7 +128,7 @@ Player communication occurs outside the application using map images copied by t
 - **OG.3:** Support for a hold is a dotted line ending at the supported unit.
 - **OG.4:** A convoy order is a pronounced wavy line from the convoying fleet to the convoyed move arrow, normally joining the portion of the route within that fleet's territory.
 - **OG.5:** A convoyed move uses a smoothed piecewise arrow through the relevant convoy chain when a straight arrow would misleadingly cross land.
-- **OG.6:** A hold is a short solid black underline beneath the unit.
+- **OG.6:** A hold is a short, heavy solid black underline at the map-configured offset for that unit type.
 - **OG.7:** An invalid movement order is displayed as a dashed underline because holding is its effective behaviour.
 - **OG.8:** A build or disband displays the affected unit with a `+` or `−` over it.
 - **OG.9:** Order graphics remain visually subordinate to the map and units.
@@ -211,6 +211,7 @@ Player communication occurs outside the application using map images copied by t
 - **GC.30:** Placement supply-centre previews use the same star symbol and anchor treatment as normal map rendering.
 - **GC.31:** Powers & start composes its preview through the normal gameplay renderer; Placement uses the same compiled colours, stripes, labels, font sizes, centres, fixed unit symbols and presentation anchors while adding only selection and dragging affordances.
 - **GC.32:** Powers and setup provides map-wide controls for text, inaccessible-region, sea and unclaimed-land colours, previews those colours immediately, and renders inaccessible regions with single-direction stripes.
+- **GC.33:** Placement displays a hold underline with every visible army and fleet preview; stacked `Armies` and `Fleets` side panels adjust its horizontal and vertical offset from the corresponding unit anchor, update every matching preview immediately and persist the same offsets used by gameplay rendering.
 
 ## Limitations and Restrictions
 

@@ -131,6 +131,8 @@ class MapPresentation:
     inaccessible_region_colour: str
     sea_colour: str
     unclaimed_region_colour: str
+    army_hold_offset: Point
+    fleet_hold_offset: Point
 
 
 @dataclass(frozen=True, slots=True, order=True)

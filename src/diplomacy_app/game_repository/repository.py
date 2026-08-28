@@ -369,6 +369,8 @@ class FileGameRepository:
             *presentation.fleet_anchors.values(),
             *presentation.coast_label_anchors.values(),
             *presentation.supply_centre_anchors.values(),
+            presentation.army_hold_offset,
+            presentation.fleet_hold_offset,
         )
         values = (
             *(coordinate for point in points for coordinate in (point.x, point.y)),
@@ -378,6 +380,12 @@ class FileGameRepository:
         )
         if not all(math.isfinite(value) for value in values):
             raise RepositoryError("Game map placement values must be finite")
+        if not all(
+            -50 <= coordinate <= 50
+            for offset in (presentation.army_hold_offset, presentation.fleet_hold_offset)
+            for coordinate in (offset.x, offset.y)
+        ):
+            raise RepositoryError("Game map hold offsets must be between -50 and 50")
         if not all(
             5 <= size <= 24
             for size in (

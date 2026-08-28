@@ -33,6 +33,8 @@ from diplomacy_app.domain.models import (
 )
 from diplomacy_app.map_library.svg_importer import view_box
 from diplomacy_app.presentation import (
+    HOLD_UNDERLINE_HALF_WIDTH,
+    HOLD_UNDERLINE_STROKE_WIDTH,
     coast_label_text,
     darken_colour,
     embedded_unit_svg,
@@ -390,21 +392,28 @@ class MapRenderer:
                 order = projected_order.order
                 if isinstance(order, HoldOrder):
                     point = _anchor(map_definition, order.unit)
+                    hold_offset = (
+                        map_definition.presentation.army_hold_offset
+                        if order.unit.unit_type is UnitType.ARMY
+                        else map_definition.presentation.fleet_hold_offset
+                    )
+                    marker_point = Point(point.x + hold_offset.x, point.y + hold_offset.y)
                     ElementTree.SubElement(
                         orders_layer,
                         _tag("line"),
                         {
-                            "x1": str(point.x - 13),
-                            "y1": str(point.y + 13),
-                            "x2": str(point.x + 13),
-                            "y2": str(point.y + 13),
+                            "x1": str(marker_point.x - HOLD_UNDERLINE_HALF_WIDTH),
+                            "y1": str(marker_point.y),
+                            "x2": str(marker_point.x + HOLD_UNDERLINE_HALF_WIDTH),
+                            "y2": str(marker_point.y),
                             "stroke": "#22251f",
-                            "stroke-width": "2.5",
+                            "stroke-width": str(HOLD_UNDERLINE_STROKE_WIDTH),
                             "stroke-linecap": "round",
                             "stroke-dasharray": "5 4"
                             if projected_order.is_valid is False
                             else "none",
                             "class": "hold-marker",
+                            "data-unit-type": order.unit.unit_type.value,
                         },
                     )
                 elif isinstance(order, SupportOrder):

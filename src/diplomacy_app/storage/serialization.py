@@ -47,7 +47,9 @@ from diplomacy_app.domain.models import (
     WaiveOrder,
 )
 from diplomacy_app.presentation import (
+    DEFAULT_ARMY_HOLD_OFFSET,
     DEFAULT_COAST_LABEL_FONT_SIZE,
+    DEFAULT_FLEET_HOLD_OFFSET,
     DEFAULT_INACCESSIBLE_REGION_COLOUR,
     DEFAULT_LABEL_COLOUR,
     DEFAULT_SEA_COLOUR,
@@ -398,6 +400,16 @@ def map_definition_data(value: MapDefinition) -> dict[str, Any]:
             "inaccessible_region_colour": value.presentation.inaccessible_region_colour,
             "sea_colour": value.presentation.sea_colour,
             "unclaimed_region_colour": value.presentation.unclaimed_region_colour,
+            "hold_underlines": {
+                "army": [
+                    value.presentation.army_hold_offset.x,
+                    value.presentation.army_hold_offset.y,
+                ],
+                "fleet": [
+                    value.presentation.fleet_hold_offset.x,
+                    value.presentation.fleet_hold_offset.y,
+                ],
+            },
             "labels": {
                 str(key): [point.x, point.y]
                 for key, point in value.presentation.label_anchors.items()
@@ -525,6 +537,16 @@ def map_definition_from_data(value: Any, assets: MapAssets) -> MapDefinition:
             str(presentation.get("inaccessible_region_colour", DEFAULT_INACCESSIBLE_REGION_COLOUR)),
             str(presentation.get("sea_colour", DEFAULT_SEA_COLOUR)),
             str(presentation.get("unclaimed_region_colour", DEFAULT_UNCLAIMED_REGION_COLOUR)),
+            point(
+                presentation.get("hold_underlines", {}).get(
+                    "army", [DEFAULT_ARMY_HOLD_OFFSET.x, DEFAULT_ARMY_HOLD_OFFSET.y]
+                )
+            ),
+            point(
+                presentation.get("hold_underlines", {}).get(
+                    "fleet", [DEFAULT_FLEET_HOLD_OFFSET.x, DEFAULT_FLEET_HOLD_OFFSET.y]
+                )
+            ),
         ),
         frozenset(str(item) for item in value.get("inaccessible_svg_elements", [])),
         assets,

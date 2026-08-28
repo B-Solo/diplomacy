@@ -58,7 +58,7 @@ The `map/` directory is a private snapshot of the configured map at game creatio
 Changing a reusable map does not affect existing games, while a game-specific starting year, season, unit placement, supply-centre ownership or territory control is materialised only in its private snapshot before play begins.
 Powers, colours, home supply centres and topology remain those of the reusable configured map.
 During game creation, the repository writes the selected setup into the private `map/map.yaml`, recompiles that snapshot and creates the corresponding first `state.json`.
-During play, the placement-only editor may transactionally replace presentation anchors and named-coast label rotations in the private `map/map.yaml` and `_compiled-map.json` without changing map identity or rules data.
+During play, the placement-only editor may transactionally replace presentation anchors, named-coast label rotations, shared label sizes and army/fleet hold-underline offsets in the private `map/map.yaml` and `_compiled-map.json` without changing map identity or rules data.
 
 `army.svg` and `fleet.svg` are materialised copies of the application's fixed Placement symbols; stored legacy unit files are ignored when games or maps are loaded.
 `_compiled-map.json` and `_engine.map` are generated from the authored map and are never authoritative.
@@ -104,6 +104,9 @@ presentation:
   inaccessible_region_colour: "#777870"
   sea_colour: "#9ebbd2"
   unclaimed_region_colour: "#d0c9aa"
+  hold_underlines:
+    army: [0.0, 13.0]
+    fleet: [0.0, 13.0]
 
 start:
   year: 1901

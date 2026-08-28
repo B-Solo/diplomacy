@@ -408,7 +408,20 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     ]
     army_count = len(army_items)
     assert army_count == len(wizard.draft.presentation.army_anchors)
-    assert all(len(item.childItems()) == 1 for item in army_items)
+    assert wizard.hold_underlines_group.title() == "Hold underlines"
+    assert wizard.army_hold_group.title() == "Armies"
+    assert wizard.fleet_hold_group.title() == "Fleets"
+    assert all(len(item.childItems()) == 2 for item in army_items)
+    army_offset = Point(4, 16)
+    wizard.army_hold_x.setValue(army_offset.x)
+    wizard.army_hold_y.setValue(army_offset.y)
+    assert wizard.draft.presentation.army_hold_offset == army_offset
+    assert all(item.hold_offset == army_offset for item in army_items)
+    assert all(item.hold_line.pen().widthF() == 4 for item in army_items)
+    assert yaml.safe_load(wizard.draft.map_yaml)["presentation"]["hold_underlines"]["army"] == [
+        4.0,
+        16.0,
+    ]
     assert all(item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsMovable for item in army_items)
     assert all(
         not item.flags() & QGraphicsItem.GraphicsItemFlag.ItemIsSelectable for item in army_items
@@ -584,6 +597,11 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
         if isinstance(item, UnitAnchorItem) and "— fleet" in item.toolTip()
     ]
     assert len(fleet_items) == len(wizard.draft.presentation.fleet_anchors)
+    fleet_offset = Point(-3, 18)
+    wizard.fleet_hold_x.setValue(fleet_offset.x)
+    wizard.fleet_hold_y.setValue(fleet_offset.y)
+    assert wizard.draft.presentation.fleet_hold_offset == fleet_offset
+    assert all(item.hold_offset == fleet_offset for item in fleet_items)
     assert all(
         item.toolTip().startswith("Home territory: ")
         and any(name in item.toolTip() for name in territory_names)
@@ -658,6 +676,8 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert maps.load(saved[0].id).presentation.coast_label_font_size == 8.5
     assert maps.load(saved[0].id).presentation.inaccessible_region_colour == "#303030"
     assert maps.load(saved[0].id).presentation.sea_colour == "#406080"
+    assert maps.load(saved[0].id).presentation.army_hold_offset == army_offset
+    assert maps.load(saved[0].id).presentation.fleet_hold_offset == fleet_offset
     assert maps.load(saved[0].id).presentation.unclaimed_region_colour == "#d8c8a8"
     reopened_maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
     assert (
@@ -943,6 +963,8 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert not hasattr(editor, "yaml_editor")
 
     territory_id, old_point = next(iter(editor.draft.presentation.label_anchors.items()))
+    editor.army_hold_x.setValue(6)
+    editor.army_hold_y.setValue(17)
     moved_point = Point(old_point.x + 3, old_point.y + 5)
     editor._anchor_moved(territory_id, "label", None, moved_point)
     editor.save_button.click()
@@ -950,6 +972,7 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert (
         window.session.game.map_definition.presentation.label_anchors[territory_id] == moved_point
     )
+    assert window.session.game.map_definition.presentation.army_hold_offset == Point(6, 17)
 
     window._show_game_choices()
     assert window.stack.currentWidget() is window.welcome

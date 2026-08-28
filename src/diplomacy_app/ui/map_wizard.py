@@ -74,6 +74,10 @@ class MapWizard(QWidget):
         self._selected_territory_label = None
         self._selected_coast_label: Location | None = None
         self._coast_label_items: dict[Location, TextAnchorItem] = {}
+        self._unit_preview_items: dict[UnitType, list[UnitAnchorItem]] = {
+            UnitType.ARMY: [],
+            UnitType.FLEET: [],
+        }
         layout = QVBoxLayout(self)
         layout.setContentsMargins(4, 3, 4, 3)
         layout.setSpacing(3)
@@ -320,9 +324,68 @@ class MapWizard(QWidget):
         layout.addLayout(editing_row)
         self.anchor_canvas = MapCanvas()
         self.anchor_canvas.scene_pressed.connect(self._clear_label_selection)
-        layout.addWidget(self.anchor_canvas, 1)
+        canvas_row = QHBoxLayout()
+        canvas_row.setSpacing(8)
+        canvas_row.addWidget(self.anchor_canvas, 1)
+        self.hold_underlines_group = QGroupBox("Hold underlines")
+        hold_layout = QVBoxLayout(self.hold_underlines_group)
+        hold_layout.setContentsMargins(8, 8, 8, 8)
+        hold_layout.setSpacing(6)
+        explanation = QLabel("Offset from the unit centre")
+        explanation.setWordWrap(True)
+        explanation.setProperty("muted", True)
+        hold_layout.addWidget(explanation)
+        (
+            self.army_hold_group,
+            self.army_hold_x,
+            self.army_hold_y,
+        ) = self._hold_offset_controls("Armies", self.draft.presentation.army_hold_offset)
+        (
+            self.fleet_hold_group,
+            self.fleet_hold_x,
+            self.fleet_hold_y,
+        ) = self._hold_offset_controls("Fleets", self.draft.presentation.fleet_hold_offset)
+        hold_layout.addWidget(self.army_hold_group)
+        hold_layout.addWidget(self.fleet_hold_group)
+        hold_layout.addStretch()
+        self.hold_underlines_group.setFixedWidth(210)
+        canvas_row.addWidget(self.hold_underlines_group)
+        layout.addLayout(canvas_row, 1)
         self.placement_zoom = MapZoomControls(self.anchor_canvas)
         self.tabs.addTab(page, "Placement")
+
+    def _hold_offset_controls(
+        self, title: str, offset: Point
+    ) -> tuple[QGroupBox, QDoubleSpinBox, QDoubleSpinBox]:
+        """Build one compact pair of live hold-underline offset controls.
+
+        :param title: Unit category shown on the sub-panel.
+        :param offset: Initial relative underline position.
+        :return: Sub-panel and its horizontal and vertical controls.
+        """
+        group = QGroupBox(title)
+        layout = QVBoxLayout(group)
+        layout.setContentsMargins(8, 7, 8, 7)
+        layout.setSpacing(4)
+        controls = []
+        for label_text, value in (("Horizontal", offset.x), ("Vertical", offset.y)):
+            row = QHBoxLayout()
+            label = QLabel(label_text)
+            spin = QDoubleSpinBox()
+            spin.setRange(-50, 50)
+            spin.setDecimals(1)
+            spin.setSingleStep(1)
+            spin.setSuffix(" units")
+            spin.setValue(value)
+            label.setBuddy(spin)
+            row.addWidget(label)
+            row.addWidget(spin, 1)
+            layout.addLayout(row)
+            controls.append(spin)
+        horizontal, vertical = controls
+        horizontal.valueChanged.connect(self._hold_offsets_changed)
+        vertical.valueChanged.connect(self._hold_offsets_changed)
+        return group, horizontal, vertical
 
     def _commit_editor(self) -> None:
         self.draft = replace(self.draft, map_yaml=self.yaml_editor.toPlainText())
@@ -439,10 +502,20 @@ class MapWizard(QWidget):
             ),
             fit=fit,
         )
+        self._unit_preview_items = {UnitType.ARMY: [], UnitType.FLEET: []}
         self._selected_coast_label = None
         self._coast_label_items.clear()
         self.coast_rotation.setEnabled(False)
         presentation = map_definition.presentation
+        for control, value in (
+            (self.army_hold_x, presentation.army_hold_offset.x),
+            (self.army_hold_y, presentation.army_hold_offset.y),
+            (self.fleet_hold_x, presentation.fleet_hold_offset.x),
+            (self.fleet_hold_y, presentation.fleet_hold_offset.y),
+        ):
+            control.blockSignals(True)
+            control.setValue(value)
+            control.blockSignals(False)
         territories = {territory.id: territory for territory in map_definition.territories}
         label_mode = self.placement_labels.currentData()
         if not self.game_placement_only and self._selected_territory_label is not None:
@@ -580,6 +653,11 @@ class MapWizard(QWidget):
                 lambda new_point, territory=territory, anchor=anchor, coast=coast: (
                     self._anchor_moved(territory, anchor, coast, new_point)
                 ),
+                hold_offset=(
+                    definition.presentation.army_hold_offset
+                    if unit_type is UnitType.ARMY
+                    else definition.presentation.fleet_hold_offset
+                ),
             )
             if (unit_type, location) not in starting_units:
                 unit_item.setOpacity(0.68)
@@ -588,6 +666,7 @@ class MapWizard(QWidget):
                 tooltip += f", {coast_label_text(location.coast_id)}"
             unit_item.setToolTip(tooltip)
             self.anchor_canvas.scene().addItem(unit_item)
+            self._unit_preview_items[unit_type].append(unit_item)
 
     def _preview_changed(self, checked: bool) -> None:
         del checked
@@ -608,6 +687,28 @@ class MapWizard(QWidget):
             self._reload_anchor_scene()
         except Exception as exc:
             self._show_error(f"Could not change label sizes: {exc}")
+
+    def _hold_offsets_changed(self, value: float) -> None:
+        """Apply both live underline offsets and persist them in the draft.
+
+        :param value: Newly selected spin-box value; both controls are read together.
+        """
+        del value
+        army_offset = Point(self.army_hold_x.value(), self.army_hold_y.value())
+        fleet_offset = Point(self.fleet_hold_x.value(), self.fleet_hold_y.value())
+        for unit_type, offset in (
+            (UnitType.ARMY, army_offset),
+            (UnitType.FLEET, fleet_offset),
+        ):
+            for item in self._unit_preview_items[unit_type]:
+                item.set_hold_offset(offset)
+        try:
+            self.draft = self.service.update_map_hold_offsets(self.draft, army_offset, fleet_offset)
+            if not self.game_placement_only:
+                self.yaml_editor.setPlainText(self.draft.map_yaml)
+                self.setup_page.set_draft(self.draft)
+        except Exception as exc:
+            self._show_error(f"Could not change hold underlines: {exc}")
 
     def _select_territory_label(self, territory_id) -> None:
         if self.game_placement_only:

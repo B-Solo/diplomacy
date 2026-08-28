@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 
 from diplomacy_app.domain.errors import MapLibraryError
-from diplomacy_app.domain.models import CoastId, Location, MapId, SvgElementRole, TerritoryId
+from diplomacy_app.domain.models import CoastId, Location, MapId, Point, SvgElementRole, TerritoryId
 from diplomacy_app.map_library import FileMapLibrary
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.map_library.svg_importer import sanitise_svg, shape_ids, territory_geometries
@@ -29,6 +29,9 @@ def test_england_compiles_complete_valid_topology(project_root, england):
     legacy_data = map_definition_data(england)
     round_tripped = map_definition_from_data(legacy_data, england.assets)
     assert round_tripped.inaccessible_svg_element_ids == england.inaccessible_svg_element_ids
+    assert round_tripped.presentation.army_hold_offset == Point(0, 13)
+    assert round_tripped.presentation.fleet_hold_offset == Point(0, 13)
+    legacy_data["presentation"].pop("hold_underlines")
     legacy_data["presentation"].pop("coast_labels")
     legacy_data["presentation"].pop("abbreviations")
     legacy_data["presentation"].pop("territory_label_font_size")
@@ -49,6 +52,8 @@ def test_england_compiles_complete_valid_topology(project_root, england):
     assert restored.presentation.sea_colour == "#9ebbd2"
     assert restored.presentation.unclaimed_region_colour == "#d0c9aa"
     assert restored.presentation.label_colour == "#4c3b1e"
+    assert restored.presentation.army_hold_offset == Point(0, 13)
+    assert restored.presentation.fleet_hold_offset == Point(0, 13)
     assert all(item.display_name == item.name for item in restored.territories)
     assert all(
         type(edge)(edge.destination, edge.origin, edge.unit_type) in england.adjacencies

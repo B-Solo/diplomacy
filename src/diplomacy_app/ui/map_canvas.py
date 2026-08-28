@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
     QGraphicsColorizeEffect,
     QGraphicsEllipseItem,
     QGraphicsItemGroup,
+    QGraphicsLineItem,
     QGraphicsPolygonItem,
     QGraphicsScene,
     QGraphicsView,
@@ -30,7 +31,12 @@ from PySide6.QtWidgets import (
 )
 
 from diplomacy_app.domain.models import MapBounds, MapHotspot, MapScene, Point
-from diplomacy_app.presentation import supply_centre_star_points
+from diplomacy_app.presentation import (
+    DEFAULT_ARMY_HOLD_OFFSET,
+    HOLD_UNDERLINE_HALF_WIDTH,
+    HOLD_UNDERLINE_STROKE_WIDTH,
+    supply_centre_star_points,
+)
 from diplomacy_app.rendering.labels import isolated_label_svg, label_lines
 
 _SCROLLBAR_STYLE = """
@@ -318,9 +324,17 @@ class AnchorItem(QGraphicsEllipseItem):
 
 
 class UnitAnchorItem(QGraphicsItemGroup):
-    """Unit-symbol preview centred on its presentation anchor."""
+    """Unit and hold-underline preview centred on a presentation anchor."""
 
-    def __init__(self, point: Point, svg: bytes, callback=None, *, movable: bool = True) -> None:
+    def __init__(
+        self,
+        point: Point,
+        svg: bytes,
+        callback=None,
+        *,
+        movable: bool = True,
+        hold_offset: Point = DEFAULT_ARMY_HOLD_OFFSET,
+    ) -> None:
         super().__init__()
         self._renderer = QSvgRenderer(QByteArray(svg))
         if not self._renderer.isValid():
@@ -332,10 +346,29 @@ class UnitAnchorItem(QGraphicsItemGroup):
         symbol.setScale(scale)
         symbol.setPos(-bounds.center().x() * scale, -bounds.center().y() * scale)
         self.addToGroup(symbol)
+        self.hold_line = QGraphicsLineItem()
+        pen = QPen(QColor("#22251f"), HOLD_UNDERLINE_STROKE_WIDTH)
+        pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+        self.hold_line.setPen(pen)
+        self.addToGroup(self.hold_line)
+        self.set_hold_offset(hold_offset)
         self.setPos(QPointF(point.x, point.y))
         self.setFlag(QGraphicsItemGroup.GraphicsItemFlag.ItemIsMovable, movable)
         self.setZValue(50)
         self.callback = callback
+
+    def set_hold_offset(self, offset: Point) -> None:
+        """Place the preview underline relative to the unit anchor.
+
+        :param offset: Horizontal and vertical source-SVG offset from the unit centre.
+        """
+        self.hold_offset = offset
+        self.hold_line.setLine(
+            offset.x - HOLD_UNDERLINE_HALF_WIDTH,
+            offset.y,
+            offset.x + HOLD_UNDERLINE_HALF_WIDTH,
+            offset.y,
+        )
 
     def mouseReleaseEvent(self, event) -> None:
         super().mouseReleaseEvent(event)

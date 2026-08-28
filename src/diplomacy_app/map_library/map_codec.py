@@ -39,7 +39,9 @@ from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_S
 from diplomacy_app.map_library.geometry import inferred_connections
 from diplomacy_app.map_library.svg_importer import sanitise_svg, territory_geometries
 from diplomacy_app.presentation import (
+    DEFAULT_ARMY_HOLD_OFFSET,
     DEFAULT_COAST_LABEL_FONT_SIZE,
+    DEFAULT_FLEET_HOLD_OFFSET,
     DEFAULT_INACCESSIBLE_REGION_COLOUR,
     DEFAULT_LABEL_COLOUR,
     DEFAULT_SEA_COLOUR,
@@ -184,6 +186,21 @@ def _parse_presentation(
     )
     if not all(_COLOUR.fullmatch(colour) for colour in colours):
         raise MapLibraryError("Presentation colours must use #RRGGBB notation")
+    hold_underlines = _mapping(settings.get("hold_underlines", {}), "presentation.hold_underlines")
+    army_hold_offset = _point(
+        hold_underlines.get("army", [DEFAULT_ARMY_HOLD_OFFSET.x, DEFAULT_ARMY_HOLD_OFFSET.y]),
+        "presentation.hold_underlines.army",
+    )
+    fleet_hold_offset = _point(
+        hold_underlines.get("fleet", [DEFAULT_FLEET_HOLD_OFFSET.x, DEFAULT_FLEET_HOLD_OFFSET.y]),
+        "presentation.hold_underlines.fleet",
+    )
+    if not all(
+        -50 <= coordinate <= 50
+        for point in (army_hold_offset, fleet_hold_offset)
+        for coordinate in (point.x, point.y)
+    ):
+        raise MapLibraryError("Hold underline offsets must be between -50 and 50")
     return MapPresentation(
         MappingProxyType(label),
         MappingProxyType(abbreviation),
@@ -195,6 +212,8 @@ def _parse_presentation(
         territory_font_size,
         coast_font_size,
         *colours,
+        army_hold_offset,
+        fleet_hold_offset,
     )
 
 

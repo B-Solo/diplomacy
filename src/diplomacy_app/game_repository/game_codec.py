@@ -217,6 +217,16 @@ def authored_map_yaml(definition: MapDefinition) -> str:
             "inaccessible_region_colour": definition.presentation.inaccessible_region_colour,
             "sea_colour": definition.presentation.sea_colour,
             "unclaimed_region_colour": definition.presentation.unclaimed_region_colour,
+            "hold_underlines": {
+                "army": [
+                    definition.presentation.army_hold_offset.x,
+                    definition.presentation.army_hold_offset.y,
+                ],
+                "fleet": [
+                    definition.presentation.fleet_hold_offset.x,
+                    definition.presentation.fleet_hold_offset.y,
+                ],
+            },
         },
         "start": {
             "year": definition.default_starting_setup.phase_id.year,

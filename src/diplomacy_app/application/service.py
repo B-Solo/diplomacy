@@ -25,6 +25,7 @@ from diplomacy_app.domain.models import (
     PhaseId,
     PhaseSnapshot,
     PixelSize,
+    Point,
     ProjectedMapState,
     ProjectionRequest,
     RenderRequest,
@@ -355,6 +356,12 @@ class ApplicationService:
 
     def update_map_label_font_sizes(self, draft: MapDraft, territory_size, coast_size) -> MapDraft:
         return self.map_library.update_label_font_sizes(draft, territory_size, coast_size)
+
+    def update_map_hold_offsets(
+        self, draft: MapDraft, army_offset: Point, fleet_offset: Point
+    ) -> MapDraft:
+        """Update map-wide hold-underline offsets for armies and fleets."""
+        return self.map_library.update_hold_offsets(draft, army_offset, fleet_offset)
 
     def update_map_colours(
         self, draft: MapDraft, label_colour, inaccessible_colour, sea_colour, unclaimed_colour

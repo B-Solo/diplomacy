@@ -28,7 +28,11 @@ from diplomacy_app.domain.models import (
     VisibilityPolicy,
 )
 from diplomacy_app.order_processing import OrderProcessor
-from diplomacy_app.presentation import aspect_fitted_size, darken_colour
+from diplomacy_app.presentation import (
+    HOLD_UNDERLINE_STROKE_WIDTH,
+    aspect_fitted_size,
+    darken_colour,
+)
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rendering.labels import label_lines
 from diplomacy_app.rules_engine import StandardRulesEngine
@@ -188,6 +192,14 @@ def test_exported_multiline_label_paints_two_distinct_lines(qapp, england):
 
 
 def test_order_graphics(england):
+    england = replace(
+        england,
+        presentation=replace(
+            england.presentation,
+            army_hold_offset=Point(4, 16),
+            fleet_hold_offset=Point(-3, 18),
+        ),
+    )
     phase = phase_for(england)
     engine = StandardRulesEngine()
     power = england.powers[0]
@@ -268,6 +280,32 @@ def test_order_graphics(england):
     assert len(hold_markers) == len(phase.state.units) - 3
     assert {marker.attrib["stroke-dasharray"] for marker in hold_markers} == {"none"}
     assert all(marker.attrib["y1"] == marker.attrib["y2"] for marker in hold_markers)
+    assert {float(marker.attrib["stroke-width"]) for marker in hold_markers} == {
+        HOLD_UNDERLINE_STROKE_WIDTH
+    }
+    assert {marker.attrib["data-unit-type"] for marker in hold_markers} == {"army", "fleet"}
+    army_marker = next(
+        marker for marker in hold_markers if marker.attrib["data-unit-type"] == "army"
+    )
+    army_midpoint = (
+        (float(army_marker.attrib["x1"]) + float(army_marker.attrib["x2"])) / 2,
+        float(army_marker.attrib["y1"]),
+    )
+    assert any(
+        army_midpoint == pytest.approx((anchor.x + 4, anchor.y + 16))
+        for anchor in england.presentation.army_anchors.values()
+    )
+    fleet_marker = next(
+        marker for marker in hold_markers if marker.attrib["data-unit-type"] == "fleet"
+    )
+    fleet_midpoint = (
+        (float(fleet_marker.attrib["x1"]) + float(fleet_marker.attrib["x2"])) / 2,
+        float(fleet_marker.attrib["y1"]),
+    )
+    assert any(
+        fleet_midpoint == pytest.approx((anchor.x - 3, anchor.y + 18))
+        for anchor in england.presentation.fleet_anchors.values()
+    )
 
 
 def test_renderer_composes_safe_scene_and_exact_png(qapp, england):

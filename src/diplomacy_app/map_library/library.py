@@ -38,7 +38,9 @@ from diplomacy_app.map_library.svg_importer import (
 )
 from diplomacy_app.map_library.validation import validate_map_draft, validate_starting_setup
 from diplomacy_app.presentation import (
+    DEFAULT_ARMY_HOLD_OFFSET,
     DEFAULT_COAST_LABEL_FONT_SIZE,
+    DEFAULT_FLEET_HOLD_OFFSET,
     DEFAULT_INACCESSIBLE_REGION_COLOUR,
     DEFAULT_LABEL_COLOUR,
     DEFAULT_SEA_COLOUR,
@@ -187,6 +189,10 @@ class FileMapLibrary:
                 "inaccessible_region_colour": DEFAULT_INACCESSIBLE_REGION_COLOUR,
                 "sea_colour": DEFAULT_SEA_COLOUR,
                 "unclaimed_region_colour": DEFAULT_UNCLAIMED_REGION_COLOUR,
+                "hold_underlines": {
+                    "army": [DEFAULT_ARMY_HOLD_OFFSET.x, DEFAULT_ARMY_HOLD_OFFSET.y],
+                    "fleet": [DEFAULT_FLEET_HOLD_OFFSET.x, DEFAULT_FLEET_HOLD_OFFSET.y],
+                },
             },
             "start": {"year": 1901, "season": "spring"},
             "teams": {},
@@ -222,6 +228,8 @@ class FileMapLibrary:
                 DEFAULT_INACCESSIBLE_REGION_COLOUR,
                 DEFAULT_SEA_COLOUR,
                 DEFAULT_UNCLAIMED_REGION_COLOUR,
+                DEFAULT_ARMY_HOLD_OFFSET,
+                DEFAULT_FLEET_HOLD_OFFSET,
             ),
             "standard",
         )
@@ -310,6 +318,12 @@ class FileMapLibrary:
         self, draft: MapDraft, territory_size: float, coast_size: float
     ) -> MapDraft:
         return draft_editor.update_label_font_sizes(draft, territory_size, coast_size)
+
+    def update_hold_offsets(
+        self, draft: MapDraft, army_offset: Point, fleet_offset: Point
+    ) -> MapDraft:
+        """Return a draft with map-wide army and fleet hold offsets."""
+        return draft_editor.update_hold_offsets(draft, army_offset, fleet_offset)
 
     def update_map_colours(
         self,

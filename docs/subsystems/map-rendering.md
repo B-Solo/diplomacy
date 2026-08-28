@@ -31,7 +31,7 @@ Unit and order strokes use map-space sizing rules with sensible screen-space lim
 - `renderer` implements `MapRenderer` and coordinates deterministic SVG composition and projected hover hotspots.
 - `territory_layers` applies controller fills, labels and supply-centre ownership stars from projected territory values.
 - `unit_layers` places active and dislodged army or fleet symbols with power-derived fill, outline colours, retreat markers and collision offsets.
-- `order_geometry` calculates move paths and the support, convoy, underlined hold, invalid-movement, build and disband conventions that depend on them, including dashed effective holds for invalid movement orders.
+- `order_geometry` calculates move paths and the support, convoy, map-positioned heavy hold underline, invalid-movement, build and disband conventions that depend on them, including dashed effective holds for invalid movement orders.
 - `svg_scene` assembles sanitised base content and generated layers into a self-contained `MapScene`.
 - `raster_export` clips requested bounds and encodes a PNG at the requested output dimensions.
 

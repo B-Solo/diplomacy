@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import re
 from dataclasses import replace
 from types import MappingProxyType
@@ -338,6 +339,34 @@ def update_label_font_sizes(draft: MapDraft, territory_size: float, coast_size: 
         raise MapLibraryError("presentation must be a mapping")
     presentation["territory_label_font_size"] = round(territory_size, 1)
     presentation["coast_label_font_size"] = round(coast_size, 1)
+    return _updated_yaml(draft, document)
+
+
+def update_hold_offsets(draft: MapDraft, army_offset: Point, fleet_offset: Point) -> MapDraft:
+    """Update map-wide hold-underline positions relative to their unit anchors.
+
+    :param draft: Authored map draft to update.
+    :param army_offset: Army underline offset in source-SVG coordinates.
+    :param fleet_offset: Fleet underline offset in source-SVG coordinates.
+    :return: Recompiled draft containing both offsets.
+    :raises MapLibraryError: If an offset is non-finite or outside the editor range.
+    """
+    coordinates = (
+        army_offset.x,
+        army_offset.y,
+        fleet_offset.x,
+        fleet_offset.y,
+    )
+    if not all(math.isfinite(value) and -50 <= value <= 50 for value in coordinates):
+        raise MapLibraryError("Hold underline offsets must be between -50 and 50")
+    document = load_yaml(draft.map_yaml)
+    presentation = document.setdefault("presentation", {})
+    if not isinstance(presentation, dict):
+        raise MapLibraryError("presentation must be a mapping")
+    presentation["hold_underlines"] = {
+        "army": [round(army_offset.x, 1), round(army_offset.y, 1)],
+        "fleet": [round(fleet_offset.x, 1), round(fleet_offset.y, 1)],
+    }
     return _updated_yaml(draft, document)
 
 
