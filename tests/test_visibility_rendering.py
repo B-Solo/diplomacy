@@ -11,11 +11,13 @@ from PySide6.QtGui import QColor, QImage, QPainter
 from PySide6.QtWidgets import QGraphicsScene
 
 from diplomacy_app.domain.models import (
+    DislodgedUnit,
     DisplayMode,
     GameId,
     HiddenTerritory,
     LabelMode,
     MapBounds,
+    MoveOrder,
     Perspective,
     PerspectiveKind,
     PhaseSnapshot,
@@ -76,6 +78,98 @@ def test_power_projection_has_discriminated_hidden_values(england):
         for order in projection.orders
         if hasattr(order.order, "unit")
     )
+
+
+def test_retreat_projection_keeps_previous_position_and_movement_overlay(england):
+    engine = StandardRulesEngine()
+    processor = OrderProcessor(engine)
+    spring = phase_for(england)
+    power = england.powers[0]
+    submission = processor.prepare_submission(england, spring, power.id, "A Cheshire - Shropshire")
+    spring = replace(spring, submissions=MappingProxyType({power.id: submission}))
+    summer_proposal = engine.adjudicate(england, spring)
+    summer = PhaseSnapshot(
+        spring.game_id,
+        summer_proposal.next_phase,
+        summer_proposal.next_state,
+        MappingProxyType({}),
+        (),
+        spring.revision,
+        summer_proposal.next_resolution_state,
+    )
+    previous_orders = engine.effective_orders(england, spring)
+    effective_movement = next(item for item in previous_orders if isinstance(item.order, MoveOrder))
+    projection = VisibilityProjector().project(
+        england,
+        summer,
+        engine.effective_orders(england, summer),
+        VisibilityPolicy(False, 1),
+        ProjectionRequest(
+            Perspective(PerspectiveKind.GAMEMASTER),
+            LabelMode.FULL_NAME,
+            True,
+            True,
+        ),
+        previous_orders,
+        summer_proposal.results,
+    )
+
+    cheshire = next(item for item in projection.territories if item.territory_id == "cheshire")
+    shropshire = next(item for item in projection.territories if item.territory_id == "shropshire")
+    movement = next(item for item in projection.orders if isinstance(item.order, MoveOrder))
+
+    assert cheshire.unit is not None
+    assert cheshire.unit.location.territory_id == "cheshire"
+    assert shropshire.unit is None
+    assert movement.order.destination.territory_id == "shropshire"
+
+    assert summer.resolution_state is not None
+    dislodged_summer = replace(
+        summer,
+        resolution_state=replace(
+            summer.resolution_state,
+            dislodged_units=(DislodgedUnit(spring.state.units[0], ()),),
+        ),
+    )
+    dislodged_projection = VisibilityProjector().project(
+        england,
+        dislodged_summer,
+        engine.effective_orders(england, dislodged_summer),
+        VisibilityPolicy(False, 1),
+        ProjectionRequest(
+            Perspective(PerspectiveKind.GAMEMASTER),
+            LabelMode.FULL_NAME,
+            True,
+            False,
+        ),
+    )
+    projected_cheshire = next(
+        item for item in dislodged_projection.territories if item.territory_id == "cheshire"
+    )
+    assert projected_cheshire.unit is None
+    assert projected_cheshire.dislodged_unit == spring.state.units[0]
+
+    filtered = VisibilityProjector().project(
+        england,
+        summer,
+        (),
+        VisibilityPolicy(False, 1),
+        ProjectionRequest(
+            Perspective(PerspectiveKind.GAMEMASTER),
+            LabelMode.FULL_NAME,
+            True,
+            True,
+            True,
+        ),
+        (effective_movement,),
+        (
+            replace(
+                next(item for item in summer_proposal.results if isinstance(item.order, MoveOrder)),
+                outcome_codes=("BOUNCE",),
+            ),
+        ),
+    )
+    assert not any(isinstance(item.order, MoveOrder) for item in filtered.orders)
 
 
 def test_exported_multiline_label_paints_two_distinct_lines(qapp, england):

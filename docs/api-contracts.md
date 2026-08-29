@@ -220,10 +220,12 @@ class PhaseSnapshot:
     submissions: Mapping[PowerId, OrderSubmission]
     results: tuple[OrderResult, ...]
     revision: Revision
+    resolution_state: GameState | None
 ```
 
 `GameSnapshot` contains configuration and the phase index.
 `PhaseSnapshot` contains the independently loadable record for one phase.
+During Summer and Winter, `state` is the displayed position and `resolution_state` is the post-movement position used to validate and resolve retreats.
 
 ### Orders
 
@@ -378,9 +380,11 @@ class AdjudicationProposal:
     next_phase: PhaseId
     next_state: GameState
     results: tuple[OrderResult, ...]
+    next_resolution_state: GameState | None
 ```
 
 An `AdjudicationProposal` is inert until committed by the Game Repository.
+Movement adjudication keeps the displayed position in `next_state` and carries the resulting retreat position in `next_resolution_state`.
 
 ### Visibility and Rendering
 
@@ -420,6 +424,7 @@ class ProjectedOrder:
     source_line: int | None
     order: CanonicalOrder
     is_valid: bool | None
+    outcome_codes: tuple[str, ...]
 
 @dataclass(frozen=True, slots=True)
 class ProjectedMapState:
@@ -455,6 +460,7 @@ class RenderRequest:
     label_mode: LabelMode
     bounds: MapBounds
     output_size: PixelSize
+    show_only_successful_movements: bool
 
 @dataclass(frozen=True, slots=True)
 class MapHotspot:
@@ -779,6 +785,7 @@ class ProjectionRequest:
     label_mode: LabelMode
     include_orders: bool
     include_results: bool
+    only_successful_movements: bool
 
 class VisibilityProjector(Protocol):
     def project(
@@ -788,12 +795,15 @@ class VisibilityProjector(Protocol):
         effective_orders: tuple[EffectiveOrder, ...],
         policy: VisibilityPolicy,
         request: ProjectionRequest,
+        overlay_orders: tuple[EffectiveOrder, ...],
+        overlay_results: tuple[OrderResult, ...],
     ) -> ProjectedMapState: ...
 ```
 
 For a power perspective, the projector calculates visibility over the union of army and fleet territory connections, including exceptional links, and filters territories, units, supply-centre owners, orders and results before constructing the return value.
 The selected power's active and dislodged units both act as visibility origins.
 For the gamemaster perspective, it constructs the same return type with every territory visible.
+Retreat-phase projections may include the immediately preceding movement phase's orders as an overlay, and may filter movement-related overlay orders using their adjudication outcomes.
 
 ## Map Renderer Contract
 

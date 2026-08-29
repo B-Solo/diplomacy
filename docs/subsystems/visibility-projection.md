@@ -8,7 +8,7 @@ It is the sole authority for deciding which state and order information crosses 
 ## External API
 
 The subsystem provides `VisibilityProjector` from [Subsystem API Contracts](../api-contracts.md).
-`project` consumes a map, phase, effective orders, policy and projection request and returns `ProjectedMapState`.
+`project` consumes a map, phase, effective orders, policy and projection request, with optional preceding movement orders and results for a retreat overlay, and returns `ProjectedMapState`.
 
 ## Implementation Notes
 
@@ -17,6 +17,7 @@ It calculates visible territory identifiers from the selected power's active and
 It then constructs either `VisibleTerritory` or `HiddenTerritory` for every playable territory.
 
 Order and result projection is performed after territory visibility is known.
+Summer and Winter can retain the preceding movement phase's projected orders while retaining the current phase's retreat orders; an optional successful-movement filter uses the preceding adjudication results.
 Any retained order graphic is rebuilt from permitted fields, ensuring that hidden locations cannot remain embedded in support, convoy or tooltip data.
 The gamemaster path uses the same construction with every territory visible.
 

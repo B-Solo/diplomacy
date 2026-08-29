@@ -71,12 +71,12 @@ The principal contract values are:
 | `MapDefinition` | A validated map's topology, powers, starting setup, presentation anchors and safe SVG assets. |
 | `StartingSetup` | A starting phase and state, initially taken from a configured map and optionally adjusted for one game. |
 | `GameSnapshot` | A consistent read-only view of a game, its configuration and phase index. |
-| `PhaseSnapshot` | The state, submissions, finalisation flags and recorded results for one phase. |
+| `PhaseSnapshot` | The displayed state, optional retreat-resolution state, submissions, finalisation flags and recorded results for one phase. |
 | `OrderCandidate` | The parser's best interpretation of one submitted line, retaining its source text. |
 | `OrderSubmission` | A power's preserved text, canonical interpretations, validation results and effective orders. |
 | `EffectiveOrder` | A submitted, replacement or omitted-unit order ready for display or adjudication. |
 | `PhaseRequirements` | The powers and units that can issue orders in the selected phase. |
-| `AdjudicationProposal` | Recorded order results, the next phase identifier and the proposed next state. |
+| `AdjudicationProposal` | Recorded order results, the next phase identifier, the proposed displayed state and optional retreat-resolution state. |
 | `ProjectedMapState` | State and order information permitted for one rendering perspective. |
 | `RenderRequest` | Display mode, label mode, viewport and output dimensions. |
 | `MapScene` | A displayable map composition containing the permitted map layers. |
@@ -268,7 +268,7 @@ Repository revisions protect commits from stale snapshots even when work is perf
 ### `diplomacy`
 
 Only the standard Rules Engine adapter depends on the vendored `diplomacy` 1.1.2 package.
-The adapter uses strict instances for validation, uses `NO_CHECK` for adjudication, skips phases with no legal decisions and translates package behaviour and failures into the `RulesEngine` contract.
+The adapter uses strict instances for validation, uses `NO_CHECK` for adjudication, retains every phase in the five-phase yearly sequence and translates package behaviour and failures into the `RulesEngine` contract.
 
 ### GUI and Operating-System Integration
 

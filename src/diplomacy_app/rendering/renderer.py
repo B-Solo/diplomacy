@@ -330,9 +330,6 @@ class MapRenderer:
                             )
                             marker.text = "R"
 
-            result_by_line = {
-                item.source_line: item.outcome_codes for item in projected_state.results
-            }
             hotspots: list[MapHotspot] = []
             move_paths: dict[tuple[object, object], tuple[Point, Point]] = {}
             for projected_order in projected_state.orders:
@@ -385,7 +382,7 @@ class MapRenderer:
                             projected_order.source_line,
                             (start, end),
                             10.0,
-                            result_by_line.get(projected_order.source_line, ()),
+                            projected_order.outcome_codes,
                         )
                     )
             for projected_order in projected_state.orders:

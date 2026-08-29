@@ -53,6 +53,7 @@ Reusable maps live under the application data directory in `maps/<map-id>/`.
 Only phase folders reached by the game exist.
 Every reached phase has `state.json`; `orders.json` is created on the first order edit or when an empty phase is resolved.
 The chronologically latest phase containing `state.json` is the current phase, whether or not its editable `orders.json` already exists.
+Every reached Spring, Summer, Fall, Winter and Year End phase is retained, including phases with no required orders.
 
 The `map/` directory is a private snapshot of the configured map at game creation.
 Changing a reusable map does not affect existing games, while a game-specific starting year, season, unit placement, supply-centre ownership or territory control is materialised only in its private snapshot before play begins.
@@ -241,9 +242,10 @@ Home and starting supply centres are actual supply centres, starting territories
 
 ## Phase State
 
-`state.json` is machine-managed and records the complete state at the beginning of its phase.
+`state.json` is machine-managed and records the displayed state at the beginning of its phase.
 It contains `schema_version`, the phase identifier, active units, dislodged units, legal retreat destinations, territory controllers and supply-centre owners using stable map identifiers.
-Dislodged units and their retreat destinations are present only in retreat-phase state.
+Movement phases that lead to a retreat phase also contain an optional `resolution_state` object with the post-movement position used to validate and resolve retreats.
+Summer and Winter display the preceding movement position while exposing dislodged units and retreat destinations from `resolution_state`.
 
 `orders.json` is machine-managed and records each power's original text, canonical candidates, parser issues, rule validation, final flag, effective orders and adjudication results. The final flag is used only when `orders.require_finalisation` is enabled; the setting defaults to `false` when absent.
 The file preserves unrecognised lines and distinguishes submission invalidity from the later `VOID` outcome.

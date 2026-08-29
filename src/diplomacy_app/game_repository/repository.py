@@ -49,6 +49,7 @@ from diplomacy_app.storage.serialization import (
     map_definition_data,
     orders_document_data,
     orders_document_from_data,
+    phase_state_from_data,
     state_data,
     state_from_data,
 )
@@ -184,11 +185,25 @@ class FileGameRepository:
         recover(root)
         state_path = _phase_directory(root, phase_id) / "state.json"
         try:
-            loaded_phase, state = state_from_data(
+            loaded_phase, state, resolution_state = phase_state_from_data(
                 json.loads(state_path.read_text(encoding="utf-8"))
             )
             if loaded_phase != phase_id:
                 raise InvalidStoredData(f"Phase path and document disagree at {state_path}")
+            if resolution_state is None and phase_id.season in {Season.SUMMER, Season.WINTER}:
+                previous = [
+                    value
+                    for value in self._phase_ids(root)
+                    if _phase_key(value) < _phase_key(phase_id)
+                ]
+                if previous:
+                    previous_phase = max(previous, key=_phase_key)
+                    previous_path = _phase_directory(root, previous_phase) / "state.json"
+                    _, display_state = state_from_data(
+                        json.loads(previous_path.read_text(encoding="utf-8"))
+                    )
+                    resolution_state = state
+                    state = display_state
             orders_path = state_path.with_name("orders.json")
             submissions: dict[PowerId, OrderSubmission] = {}
             results: tuple[OrderResult, ...] = ()
@@ -203,6 +218,7 @@ class FileGameRepository:
                 MappingProxyType(submissions),
                 results,
                 revision_for_game(root),
+                resolution_state,
             )
         except (OSError, ValueError, KeyError, json.JSONDecodeError) as exc:
             if isinstance(exc, InvalidStoredData):
@@ -423,7 +439,9 @@ class FileGameRepository:
             raise RepositoryError("Only the current phase can be advanced")
         completed = self.load_phase(game_id, proposal.completed_phase)
         completed_orders = orders_document_data(dict(completed.submissions), proposal.results)
-        next_state = state_data(proposal.next_state, proposal.next_phase)
+        next_state = state_data(
+            proposal.next_state, proposal.next_phase, proposal.next_resolution_state
+        )
         completed_relative = (
             (_phase_directory(root, proposal.completed_phase) / "orders.json")
             .relative_to(root)

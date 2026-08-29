@@ -252,10 +252,9 @@ def unit_position_from_data(value: Any) -> UnitPosition:
     )
 
 
-def state_data(value: GameState, phase_id: PhaseId) -> dict[str, Any]:
+def _state_fields(value: GameState) -> dict[str, Any]:
+    """Serialize the state fields shared by a phase and its pending resolution."""
     return {
-        "schema_version": 1,
-        "phase": {"year": phase_id.year, "season": phase_id.season.value},
         "units": [unit_position_data(item) for item in value.units],
         "dislodged_units": [
             {
@@ -273,12 +272,11 @@ def state_data(value: GameState, phase_id: PhaseId) -> dict[str, Any]:
     }
 
 
-def state_from_data(value: Any) -> tuple[PhaseId, GameState]:
-    if not isinstance(value, dict) or value.get("schema_version") != 1:
-        raise InvalidStoredData("Unsupported state schema")
-    phase_value = value["phase"]
-    phase = PhaseId(int(phase_value["year"]), Season(str(phase_value["season"])))
-    state = GameState(
+def _state_from_fields(value: Any) -> GameState:
+    """Deserialize a state object without its phase envelope."""
+    if not isinstance(value, dict):
+        raise InvalidStoredData("State must be an object")
+    return GameState(
         tuple(unit_position_from_data(item) for item in value.get("units", [])),
         tuple(
             DislodgedUnit(
@@ -300,6 +298,57 @@ def state_from_data(value: Any) -> tuple[PhaseId, GameState]:
             }
         ),
     )
+
+
+def state_data(
+    value: GameState, phase_id: PhaseId, resolution_state: GameState | None = None
+) -> dict[str, Any]:
+    """Serialize a phase state and, when present, its pending resolution state.
+
+    :param value: State displayed for the phase.
+    :param phase_id: Identifier of the phase owning the state.
+    :param resolution_state: State used to resolve a movement phase's following retreat.
+    :return: JSON-compatible state document.
+    """
+    data = {
+        "schema_version": 1,
+        "phase": {"year": phase_id.year, "season": phase_id.season.value},
+        **_state_fields(value),
+    }
+    if resolution_state is not None:
+        data["resolution_state"] = _state_fields(resolution_state)
+    return data
+
+
+def phase_state_from_data(value: Any) -> tuple[PhaseId, GameState, GameState | None]:
+    """Deserialize a phase envelope and its optional pending resolution state.
+
+    :param value: JSON-decoded phase state document.
+    :return: Phase identifier, displayed state and optional resolution state.
+    :raises InvalidStoredData: If the document does not use the supported schema.
+    """
+    if not isinstance(value, dict) or value.get("schema_version") != 1:
+        raise InvalidStoredData("Unsupported state schema")
+    phase_value = value["phase"]
+    phase = PhaseId(int(phase_value["year"]), Season(str(phase_value["season"])))
+    return (
+        phase,
+        _state_from_fields(value),
+        (
+            _state_from_fields(value["resolution_state"])
+            if value.get("resolution_state") is not None
+            else None
+        ),
+    )
+
+
+def state_from_data(value: Any) -> tuple[PhaseId, GameState]:
+    """Deserialize the displayed state from a phase state document.
+
+    :param value: JSON-decoded phase state document.
+    :return: Phase identifier and displayed state.
+    """
+    phase, state, _ = phase_state_from_data(value)
     return phase, state
 
 

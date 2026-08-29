@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from dataclasses import replace
+from xml.etree import ElementTree
+
 import pytest
 import yaml
 
@@ -8,12 +11,23 @@ from diplomacy_app.domain.errors import RepositoryError, RevisionConflict
 from diplomacy_app.domain.models import (
     AdvancedPhase,
     CreateStoredGame,
+    DisplayMode,
     FinalisationRequired,
     GameLocation,
     GameSettings,
+    LabelMode,
+    Location,
+    MapBounds,
     NewGameRequest,
     OrderSubmission,
+    PhaseId,
+    PixelSize,
     Point,
+    RenderRequest,
+    Season,
+    StartingSetup,
+    UnitPosition,
+    UnitType,
 )
 from diplomacy_app.game_repository import FileGameRepository
 from diplomacy_app.game_repository.recent_games import RecentGameStore
@@ -58,7 +72,7 @@ def test_game_folder_round_trip_revision_conflict_and_advance(tmp_path, england)
         )
     proposal = StandardRulesEngine().adjudicate(england, updated)
     advanced = repo.commit_adjudication(game.game_id, proposal, updated.revision)
-    assert advanced.current_phase.label == "Fall 2000"
+    assert advanced.current_phase.label == "Summer 2000"
     (location.path / "map" / "army.svg").write_text(
         '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 100"><rect width="20" height="100"/></svg>',
         encoding="utf-8",
@@ -71,7 +85,8 @@ def test_game_folder_round_trip_revision_conflict_and_advance(tmp_path, england)
     assert reopened.current_phase == advanced.current_phase
     assert (location.path / "map" / "_compiled-map.json").is_file()
     assert (location.path / "2000" / "Spring" / "orders.json").is_file()
-    assert (location.path / "2000" / "Fall" / "state.json").is_file()
+    assert (location.path / "2000" / "Summer" / "state.json").is_file()
+    assert repo.load_phase(game.game_id, advanced.current_phase).resolution_state is not None
     assert reopened.map_definition.assets.army_svg == DEFAULT_ARMY_SVG
     assert reopened.map_definition.assets.fleet_svg == DEFAULT_FLEET_SVG
 
@@ -102,7 +117,7 @@ def test_coordinator_complete_default_order_workflow(tmp_path, project_root):
         service.set_orders_final(power.id, True)
     result = service.resolve_and_advance()
     assert isinstance(result, AdvancedPhase)
-    assert result.session.phase.phase_id.label == "Fall 2000"
+    assert result.session.phase.phase_id.label == "Summer 2000"
     assert service.start().game.name == "Coordinator game"
 
     untracked = service.create_game(
@@ -118,7 +133,111 @@ def test_coordinator_complete_default_order_workflow(tmp_path, project_root):
         service.set_orders_final(untracked.game.map_definition.powers[0].id, True)
     untracked_result = service.resolve_and_advance()
     assert isinstance(untracked_result, AdvancedPhase)
-    assert untracked_result.session.phase.phase_id.label == "Fall 2000"
+    assert untracked_result.session.phase.phase_id.label == "Summer 2000"
+
+
+def test_retreat_phase_map_overlays_previous_movement_over_unmoved_state(tmp_path, project_root):
+    maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
+    repo = repository(tmp_path)
+    service = ApplicationService(
+        repo,
+        maps,
+        StandardRulesEngine(),
+        VisibilityProjector(),
+        MapRenderer(),
+    )
+    draft = service.prepare_new_game(maps.list()[0].map_id)
+    session = service.create_game(
+        NewGameRequest(
+            "Retreat overlay game",
+            GameLocation((tmp_path / "retreat-overlay-game").resolve()),
+            draft.map_id,
+            draft.starting_setup,
+        )
+    )
+    power = session.game.map_definition.powers[0]
+    service.update_orders(power.id, "A Cheshire - Shropshire")
+    advanced = service.resolve_and_advance()
+    assert isinstance(advanced, AdvancedPhase)
+    summer = advanced.session
+    assert summer.phase.state == session.phase.state
+    assert summer.phase.resolution_state is not None
+    assert any(
+        unit.location.territory_id == "shropshire"
+        for unit in summer.phase.resolution_state.units
+        if unit.power_id == power.id
+    )
+
+    scene = service.compose_map(
+        RenderRequest(
+            DisplayMode.POSITION,
+            LabelMode.FULL_NAME,
+            MapBounds(0, 0, 1013, 1026),
+            PixelSize(640, 480),
+        )
+    )
+    root = ElementTree.fromstring(scene.svg)
+    orders = next(group for group in root.findall(".//{*}g") if group.attrib.get("id") == "orders")
+
+    assert orders.findall("{*}polygon")
+
+
+def test_retreat_finalisation_uses_pending_resolution_units(tmp_path, project_root, england):
+    maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
+    repo = repository(tmp_path)
+    service = ApplicationService(
+        repo,
+        maps,
+        StandardRulesEngine(),
+        VisibilityProjector(),
+        MapRenderer(),
+    )
+    merseyside, up_north = england.powers[:2]
+    state = replace(
+        england.default_starting_setup.state,
+        units=(
+            UnitPosition(merseyside.id, UnitType.ARMY, Location("cheshire")),
+            UnitPosition(merseyside.id, UnitType.ARMY, Location("staffordshire")),
+            UnitPosition(up_north.id, UnitType.ARMY, Location("derbyshire-and-nottinghamshire")),
+        ),
+    )
+    session = service.create_game(
+        NewGameRequest(
+            "Retreat finalisation game",
+            GameLocation((tmp_path / "retreat-finalisation-game").resolve()),
+            england.id,
+            StartingSetup(PhaseId(2000, Season.SPRING), state),
+            GameSettings(require_order_finalisation=True),
+        )
+    )
+    service.update_orders(
+        merseyside.id,
+        "A Cheshire - Derbyshire & Nottinghamshire\n"
+        "A Staffordshire S A Cheshire - Derbyshire & Nottinghamshire",
+    )
+    service.update_orders(up_north.id, "A Derbyshire & Nottinghamshire H")
+    for power in session.game.map_definition.powers:
+        service.set_orders_final(power.id, True)
+
+    advanced = service.resolve_and_advance()
+    assert isinstance(advanced, AdvancedPhase)
+    assert advanced.session.phase is not None
+    assert advanced.session.phase.phase_id.season is Season.SUMMER
+
+    blocked = service.resolve_and_advance()
+    assert isinstance(blocked, FinalisationRequired)
+    assert blocked.unfinalised_powers == (up_north.id,)
+
+    service.update_orders(up_north.id, "A Derbyshire & Nottinghamshire R Humberside")
+    service.set_orders_final(up_north.id, True)
+    resolved = service.resolve_and_advance()
+    assert isinstance(resolved, AdvancedPhase)
+    assert resolved.session.phase is not None
+    assert resolved.session.phase.phase_id == PhaseId(2000, Season.FALL)
+    assert any(
+        unit.location.territory_id == "humberside" for unit in resolved.session.phase.state.units
+    )
+    assert not resolved.session.phase.state.dislodged_units
 
 
 def test_coordinator_deletes_recent_and_current_games(tmp_path, project_root):

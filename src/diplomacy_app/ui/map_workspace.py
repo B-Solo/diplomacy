@@ -11,6 +11,7 @@ from PySide6.QtCore import QSettings, Qt, QTimer, Signal
 from PySide6.QtGui import QImage
 from PySide6.QtWidgets import (
     QApplication,
+    QCheckBox,
     QComboBox,
     QFileDialog,
     QHBoxLayout,
@@ -32,6 +33,7 @@ from diplomacy_app.domain.models import (
     RenderRequest,
     SavedView,
     SavedViewId,
+    Season,
     game_folder_name,
 )
 from diplomacy_app.presentation import aspect_fitted_size
@@ -72,6 +74,13 @@ class MapWorkspace(QWidget):
         self.mode.addItem("Orders", DisplayMode.ORDERS)
         self.mode.currentIndexChanged.connect(self.schedule_refresh)
         controls.addWidget(self.mode)
+        self.successful_movements = QCheckBox("Successful movements only")
+        self.successful_movements.setToolTip(
+            "During Summer and Winter, hide movement orders that did not succeed"
+        )
+        self.successful_movements.toggled.connect(self.schedule_refresh)
+        self.successful_movements.setVisible(False)
+        controls.addWidget(self.successful_movements)
         self.preview_orders = QPushButton("Preview orders on map")
         self.preview_orders.setToolTip(
             "Show order arrows and markers over the current position without resolving the phase"
@@ -169,6 +178,7 @@ class MapWorkspace(QWidget):
     def set_session(self, session) -> None:
         self.session = session
         if not session.game:
+            self.successful_movements.setVisible(False)
             return
         if session.game.location != self._loaded_game_location:
             self._loaded_game_location = session.game.location
@@ -200,6 +210,10 @@ class MapWorkspace(QWidget):
                 Qt.ItemDataRole.ToolTipRole,
             )
         self.views.blockSignals(False)
+        self.successful_movements.setVisible(
+            session.phase is not None
+            and session.phase.phase_id.season in {Season.SUMMER, Season.WINTER}
+        )
         self._update_fog()
         self.schedule_refresh()
 
@@ -255,6 +269,7 @@ class MapWorkspace(QWidget):
             LabelMode(self.labels.currentData()),
             bounds,
             size,
+            self.successful_movements.isChecked(),
         )
 
     def refresh(self) -> None:

@@ -16,7 +16,7 @@ Composition clones the sanitised base SVG and adds deterministic layers for terr
 Long territory labels wrap consistently at word and ampersand boundaries and remain centred on their configured visual anchors in both composed scenes and placement previews.
 Every named split coast renders as a map label at its independently configured anchor and rotation, with defaults derived from its fleet anchor when older map data omits those presentation fields.
 All coordinates use the source SVG view box so maps of different dimensions and aspect ratios follow the same pipeline.
-In retreat phases, a dislodged unit remains at its origin with an `R` marker and is offset when an active unit occupies the same territory.
+In retreat phases, a dislodged unit remains at its origin with an `R` marker; the projector suppresses the displayed copy of that same pre-movement unit so it is rendered once.
 When projected adjudication explanations are present, composition returns map-coordinate hit paths alongside the SVG so the UI can implement order hover without parsing rendered content.
 
 Move paths are constructed before dependent support and convoy graphics.

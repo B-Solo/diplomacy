@@ -32,7 +32,11 @@ class OrderProcessor:
     ) -> OrderSubmission:
         candidates = self.interpret(map_definition, power_id, raw_text)
         validations = self.rules_engine.validate(
-            map_definition, phase.phase_id, phase.state, power_id, candidates
+            map_definition,
+            phase.phase_id,
+            phase.resolution_state or phase.state,
+            power_id,
+            candidates,
         )
         by_line = {validation.source_line: validation for validation in validations}
         lines = tuple(

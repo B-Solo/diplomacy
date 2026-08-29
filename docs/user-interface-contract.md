@@ -78,6 +78,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.6:** `Fit` returns to the full-map view without changing the map state.
 - **MW.7:** Pan is clamped to the map bounds.
 - **MW.8:** The map display switches between `Position` and `Orders`, and an explicit `Preview orders on map` action follows the contiguous perspective, display-mode and label controls in the Map toolbar without separating them; the same action is available from the Orders workspace.
+- **MW.8a:** During Summer and Winter, the map always overlays the immediately preceding movement phase's recorded orders over the unmoved position; a `Successful movements only` toggle hides movement-related orders whose adjudication outcome was unsuccessful.
 - **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
 - **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current`, `Copy map` and `Save image` actions.
@@ -169,13 +170,15 @@ Player communication occurs outside the application using map images copied by t
 - **OI.13:** In a disband phase, the Rules Engine selects any disbands still required after valid submitted disbands have been applied.
 - **OI.14:** Multiple submitted orders for the same unit are invalid as a group and receive the applicable phase-specific default.
 - **OI.15:** Original submitted text and parsed canonical orders remain separate values; validation, order previews and adjudication consume the parsed orders without overwriting the original text.
+- **OI.16:** Movement, retreat, disband, build and waive order kinds are accepted only in their applicable phases; an invalid phase order receives the existing phase-specific default effect.
 
 ### Adjudication and Advancement (AA)
 
 - **AA.1:** The Orders workspace provides one `Resolve and advance` action.
 - **AA.2:** With order finalisation disabled, the action adjudicates immediately; with it enabled, adjudication is immediate when all relevant powers are final.
 - **AA.3:** Only when order finalisation is enabled and relevant powers are not final, the action warns the gamemaster and names those powers before allowing adjudication to continue.
-- **AA.4:** Successful adjudication records the submitted orders and results, skips retreat or adjustment seasons with no legal decisions, creates the next actionable season's state, selects it and opens the Map workspace.
+- **AA.4:** Successful adjudication records the submitted orders and results, retains the next retreat or adjustment season even when it has no legal decisions, creates its displayed state, selects it and opens the Map workspace.
+- **AA.4a:** Resolving Spring or Fall records the movement result without moving the displayed units into the next retreat season; resolving Summer or Winter applies the pending movement and every retreat before creating the next movement or Year End state.
 - **AA.5:** An adjudication or file-write failure leaves the current season unchanged and displays the error.
 
 ### Game and Map Creation (GC)

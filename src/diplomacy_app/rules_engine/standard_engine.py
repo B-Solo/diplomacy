@@ -9,6 +9,7 @@ from diplomacy_app.domain.models import (
     AdjudicationProposal,
     BuildOrder,
     CanonicalOrder,
+    ConvoyOrder,
     DisbandOrder,
     EffectiveOrder,
     GameState,
@@ -17,6 +18,7 @@ from diplomacy_app.domain.models import (
     IssueSeverity,
     Location,
     MapDefinition,
+    MoveOrder,
     OrderCandidate,
     OrderResult,
     PhaseId,
@@ -24,8 +26,10 @@ from diplomacy_app.domain.models import (
     PhaseSnapshot,
     PowerId,
     PowerPhaseRequirement,
+    RetreatOrder,
     RuleValidation,
     Season,
+    SupportOrder,
     UnitPosition,
     UnitRef,
     UnitType,
@@ -50,6 +54,11 @@ def _ref(value: UnitPosition) -> UnitRef:
 def _unit_key(order: object) -> tuple[PowerId, object] | None:
     unit = getattr(order, "unit", None)
     return (unit.power_id, unit.location) if unit else None
+
+
+def _resolution_state(phase: PhaseSnapshot) -> GameState:
+    """Return the state containing the positions needed to resolve this phase."""
+    return phase.resolution_state or phase.state
 
 
 class StandardRulesEngine:
@@ -98,6 +107,14 @@ class StandardRulesEngine:
             return WaiveOrder(power_id)
         return None
 
+    def _order_allowed(self, phase_id: PhaseId, order: CanonicalOrder) -> bool:
+        """Return whether an order kind belongs to the requested phase."""
+        if phase_id.season in {Season.SPRING, Season.FALL}:
+            return isinstance(order, (HoldOrder, MoveOrder, SupportOrder, ConvoyOrder))
+        if phase_id.season in {Season.SUMMER, Season.WINTER}:
+            return isinstance(order, (RetreatOrder, DisbandOrder))
+        return isinstance(order, (BuildOrder, DisbandOrder, WaiveOrder))
+
     def validate(
         self,
         map_definition: MapDefinition,
@@ -122,6 +139,21 @@ class StandardRulesEngine:
                 issue = Issue(
                     "order.duplicate_unit",
                     "Multiple orders were submitted for the same unit",
+                    IssueSeverity.ERROR,
+                )
+                results.append(
+                    RuleValidation(
+                        candidate.source.number,
+                        False,
+                        (issue,),
+                        self._invalid_default(phase_id, power_id, candidate),
+                    )
+                )
+                continue
+            if not self._order_allowed(phase_id, candidate.order):
+                issue = Issue(
+                    "order.wrong_phase",
+                    f"This order is not allowed during {phase_id.label}",
                     IssueSeverity.ERROR,
                 )
                 results.append(
@@ -204,7 +236,8 @@ class StandardRulesEngine:
     def effective_orders(
         self, map_definition: MapDefinition, phase: PhaseSnapshot
     ) -> tuple[EffectiveOrder, ...]:
-        requirements = self.describe_phase(map_definition, phase.phase_id, phase.state)
+        state = _resolution_state(phase)
+        requirements = self.describe_phase(map_definition, phase.phase_id, state)
         effective: list[EffectiveOrder] = []
         ordered_locations: set[tuple[PowerId, object]] = set()
         for power in map_definition.powers:
@@ -260,7 +293,7 @@ class StandardRulesEngine:
                 }
                 missing = max(0, requirement.disband_count - len(submitted))
                 for order in self._automatic_disbands(
-                    map_definition, phase.state, power.id, missing, submitted
+                    map_definition, state, power.id, missing, submitted
                 ):
                     effective.append(EffectiveOrder(power.id, None, None, order, None))
         return tuple(effective)
@@ -268,8 +301,9 @@ class StandardRulesEngine:
     def adjudicate(
         self, map_definition: MapDefinition, phase: PhaseSnapshot
     ) -> AdjudicationProposal:
-        game = make_game(map_definition, phase.phase_id, phase.state)
+        game = make_game(map_definition, phase.phase_id, _resolution_state(phase))
         game.add_rule("NO_CHECK")
+        game.add_rule("DONT_SKIP_PHASES")
         effective = self.effective_orders(map_definition, phase)
         try:
             for power in map_definition.powers:
@@ -280,6 +314,7 @@ class StandardRulesEngine:
                         to_engine_order(map_definition, line.candidate.order)
                         for line in submission.lines
                         if line.candidate.order is not None
+                        and self._order_allowed(phase.phase_id, line.candidate.order)
                     ]
                 game.set_orders(engine_power(power.id), raw_orders, replace=False)
             processed = game.process()
@@ -299,11 +334,19 @@ class StandardRulesEngine:
                 if item.is_valid is False and "VOID" not in codes:
                     codes = (*codes, "VOID")
                 results.append(OrderResult(item.power_id, item.source_line, item.order, codes))
+            next_phase = phase_from_engine(game.current_short_phase)
+            if phase.phase_id.season in {Season.SPRING, Season.FALL}:
+                next_state = phase.state
+                next_resolution_state = state_from_game(map_definition, game)
+            else:
+                next_state = state_from_game(map_definition, game)
+                next_resolution_state = None
             return AdjudicationProposal(
                 phase.phase_id,
-                phase_from_engine(game.current_short_phase),
-                state_from_game(map_definition, game),
+                next_phase,
+                next_state,
                 tuple(results),
+                next_resolution_state,
             )
         except RulesEngineError:
             raise

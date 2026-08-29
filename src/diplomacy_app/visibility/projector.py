@@ -30,6 +30,10 @@ from diplomacy_app.domain.models import (
     WaiveOrder,
 )
 
+_FAILED_MOVEMENT_OUTCOMES = frozenset(
+    {"BOUNCE", "VOID", "NO_CONVOY", "CUT", "DISRUPTED", "DISLODGED"}
+)
+
 
 def _locations(order: CanonicalOrder) -> frozenset[TerritoryId]:
     if isinstance(order, WaiveOrder):
@@ -66,7 +70,7 @@ class VisibilityProjector:
         }
         visible.update(
             unit.unit.location.territory_id
-            for unit in phase.state.dislodged_units
+            for unit in (phase.resolution_state or phase.state).dislodged_units
             if unit.unit.power_id == power_id
         )
         graph: dict[TerritoryId, set[TerritoryId]] = defaultdict(set)
@@ -87,11 +91,21 @@ class VisibilityProjector:
         effective_orders: tuple[EffectiveOrder, ...],
         policy: VisibilityPolicy,
         request: ProjectionRequest,
+        overlay_orders: tuple[EffectiveOrder, ...] = (),
+        overlay_results: tuple[OrderResult, ...] = (),
     ) -> ProjectedMapState:
         visible_ids = self._visible(map_definition, phase, policy, request)
-        units = {item.location.territory_id: item for item in phase.state.units}
+        resolution_state = phase.resolution_state or phase.state
+        dislodged_ids = {
+            item.unit.location.territory_id for item in resolution_state.dislodged_units
+        }
+        units = {
+            item.location.territory_id: item
+            for item in phase.state.units
+            if item.location.territory_id not in dislodged_ids
+        }
         dislodged = {
-            item.unit.location.territory_id: item.unit for item in phase.state.dislodged_units
+            item.unit.location.territory_id: item.unit for item in resolution_state.dislodged_units
         }
         territories: list[ProjectedTerritory] = []
         for definition in map_definition.territories:
@@ -113,12 +127,47 @@ class VisibilityProjector:
                         dislodged.get(definition.id),
                     )
                 )
+        overlay_result_by_line = {item.source_line: item for item in overlay_results}
+        phase_result_by_line = {item.source_line: item for item in phase.results}
+
+        def retain_overlay(item: EffectiveOrder) -> bool:
+            if not request.only_successful_movements or not isinstance(
+                item.order, (MoveOrder, SupportOrder, ConvoyOrder)
+            ):
+                return True
+            result = overlay_result_by_line.get(item.source_line)
+            return not result or not _FAILED_MOVEMENT_OUTCOMES.intersection(result.outcome_codes)
+
+        def outcome_codes(
+            item: EffectiveOrder, result_lookup: dict[int | None, OrderResult]
+        ) -> tuple[str, ...]:
+            if not request.include_results or item.source_line is None:
+                return ()
+            result = result_lookup.get(item.source_line)
+            return result.outcome_codes if result else ()
+
+        if request.include_orders:
+            retained_pairs = tuple(
+                (item, overlay_result_by_line) for item in overlay_orders if retain_overlay(item)
+            )
+            retained_pairs += tuple((item, phase_result_by_line) for item in effective_orders)
+        else:
+            retained_pairs = ()
         retained = tuple(
-            ProjectedOrder(item.source_line, item.order, item.is_valid)
-            for item in effective_orders
-            if request.include_orders and _locations(item.order) <= visible_ids
+            ProjectedOrder(
+                item.source_line,
+                item.order,
+                item.is_valid,
+                outcome_codes(item, result_lookup),
+            )
+            for item, result_lookup in retained_pairs
+            if _locations(item.order) <= visible_ids
         )
-        retained_lines = {item.source_line for item in retained}
+        retained_lines = (
+            {item.source_line for item in effective_orders if _locations(item.order) <= visible_ids}
+            if request.include_orders
+            else set()
+        )
         results: tuple[OrderResult, ...] = ()
         if request.include_results:
             results = tuple(

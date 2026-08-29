@@ -15,6 +15,7 @@ Its callers can discover, open, create and delete games; load phases; save submi
 Stored data is parsed into application contract values at the repository boundary and validated before being returned.
 Unknown or malformed data produces `InvalidStoredData` with file and logical-location context.
 Retreat-phase codecs preserve dislodged units and their legal destinations independently of active occupying units.
+Phase-state codecs preserve the displayed position and the optional post-movement `resolution_state` needed by Summer and Winter.
 Game creation copies the configured map, materialises the validated game-specific setup into that private copy and writes its first phase state before exposing the game folder as complete.
 Game deletion validates the complete target as a game immediately before removing its folder and application-owned recent-game references.
 

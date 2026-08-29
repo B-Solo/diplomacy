@@ -8,6 +8,7 @@ from diplomacy_app.domain.models import (
     AdvancedPhase,
     CreateStoredGame,
     DisplayMode,
+    EffectiveOrder,
     FinalisationRequired,
     GameLocation,
     GameSnapshot,
@@ -21,6 +22,7 @@ from diplomacy_app.domain.models import (
     MapValidation,
     NewGameDraft,
     NewGameRequest,
+    OrderResult,
     Perspective,
     PhaseId,
     PhaseSnapshot,
@@ -32,6 +34,7 @@ from diplomacy_app.domain.models import (
     ResolveResult,
     SavedView,
     SavedViewId,
+    Season,
     SessionView,
     VisibleTerritory,
 )
@@ -68,7 +71,9 @@ class ApplicationService:
         requirements = None
         if self._game and self._phase:
             requirements = self.rules_engine.describe_phase(
-                self._game.map_definition, self._phase.phase_id, self._phase.state
+                self._game.map_definition,
+                self._phase.phase_id,
+                self._phase.resolution_state or self._phase.state,
             )
         return SessionView(
             self._game,
@@ -198,7 +203,9 @@ class ApplicationService:
         game, phase = self._require_current()
         fresh = self.repository.load_phase(game.game_id, phase.phase_id)
         requirements = self.rules_engine.describe_phase(
-            game.map_definition, fresh.phase_id, fresh.state
+            game.map_definition,
+            fresh.phase_id,
+            fresh.resolution_state or fresh.state,
         )
         unfinalised = (
             tuple(
@@ -221,6 +228,15 @@ class ApplicationService:
     def _projection(self, request: RenderRequest):
         game, phase = self._require_game()
         effective = self.rules_engine.effective_orders(game.map_definition, phase)
+        overlay_orders: tuple[EffectiveOrder, ...] = ()
+        overlay_results: tuple[OrderResult, ...] = ()
+        retreat_phase = phase.phase_id.season in {Season.SUMMER, Season.WINTER}
+        if retreat_phase:
+            phase_index = game.phases.index(phase.phase_id)
+            if phase_index:
+                previous = self.repository.load_phase(game.game_id, game.phases[phase_index - 1])
+                overlay_orders = self.rules_engine.effective_orders(game.map_definition, previous)
+                overlay_results = previous.results
         return game, self.projector.project(
             game.map_definition,
             phase,
@@ -229,9 +245,12 @@ class ApplicationService:
             ProjectionRequest(
                 self._perspective,
                 request.label_mode,
-                request.display_mode is DisplayMode.ORDERS,
+                request.display_mode is DisplayMode.ORDERS or retreat_phase,
                 game.settings.explain_adjudication_outcomes,
+                request.show_only_successful_movements,
             ),
+            overlay_orders,
+            overlay_results,
         )
 
     def compose_map(self, request: RenderRequest) -> MapScene:

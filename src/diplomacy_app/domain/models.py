@@ -348,6 +348,7 @@ class PhaseSnapshot:
     submissions: Mapping[PowerId, OrderSubmission]
     results: tuple[OrderResult, ...]
     revision: Revision
+    resolution_state: GameState | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -374,6 +375,7 @@ class AdjudicationProposal:
     next_phase: PhaseId
     next_state: GameState
     results: tuple[OrderResult, ...]
+    next_resolution_state: GameState | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -410,6 +412,7 @@ class ProjectedOrder:
     source_line: int | None
     order: CanonicalOrder
     is_valid: bool | None
+    outcome_codes: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -441,6 +444,7 @@ class RenderRequest:
     label_mode: LabelMode
     bounds: MapBounds
     output_size: PixelSize
+    show_only_successful_movements: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -569,6 +573,7 @@ class ProjectionRequest:
     label_mode: LabelMode
     include_orders: bool
     include_results: bool
+    only_successful_movements: bool = False
 
 
 @dataclass(frozen=True, slots=True)
