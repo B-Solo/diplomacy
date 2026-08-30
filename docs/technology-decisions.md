@@ -42,7 +42,7 @@ Using one renderer avoids display-versus-clipboard differences caused by separat
 
 Windows is the primary runtime platform for the finished application.
 The application also supports testing and use on macOS, while the toolkit-independent test suite remains runnable in Linux development environments.
-Filesystem paths, application-data locations, clipboard access and high-DPI behaviour use Qt, `pathlib` and `platformdirs` abstractions instead of platform-specific assumptions.
+Filesystem paths, application-configuration locations, clipboard access and high-DPI behaviour use Qt, `pathlib` and `platformdirs` abstractions instead of platform-specific assumptions.
 Manual desktop acceptance is performed on Windows and macOS.
 
 ## SVG and Geometry
@@ -62,7 +62,8 @@ PyYAML parses YAML through `safe_load`; the application preserves authored map t
 
 Pydantic 2 storage models validate and version data at repository boundaries before conversion to immutable application dataclasses.
 Unknown fields are rejected within the current schema version so spelling errors cannot silently change game behavior.
-`platformdirs` locates application configuration and the reusable map library on each desktop operating system.
+`platformdirs` locates application configuration on each desktop operating system.
+Reusable maps are durable project assets under the source checkout's `maps/` directory.
 
 ## Filesystem Consistency
 

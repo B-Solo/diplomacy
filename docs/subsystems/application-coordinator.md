@@ -18,6 +18,8 @@ Revision conflicts are returned to the UI with a refreshed snapshot; mutations a
 The coordinator selects a Rules Engine implementation from `MapDefinition.rules_engine_id` and injects it into Order Processing.
 It performs confirmation policy, session transitions and subsystem sequencing while keeping rule decisions and file formats out of its implementation.
 For game creation, it obtains the configured map's default `StartingSetup`, submits any game-specific changes to Map Library validation and passes only validated setup to the Game Repository.
+For private-map editing, it validates the complete draft, reparses every saved order submission against the edited definition and commits the map and submissions together.
+For promotion, it restores the canonical reusable starting setup before saving the private map design under its existing or a new reusable identity.
 
 ## Modules
 

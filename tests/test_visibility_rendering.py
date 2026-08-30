@@ -458,7 +458,7 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
         "Derbyshire &",
         "Nottinghamshire",
     ]
-    assert {line.attrib["fill"] for line in derbyshire.findall("{*}text")} == {"#4c3b1e"}
+    assert {line.attrib["fill"] for line in derbyshire.findall("{*}text")} == {"#fffefa"}
     assert all("stroke" not in line.attrib for line in derbyshire.findall("{*}text"))
     assert label_lines("Short Name") == ("Short Name",)
     assert label_lines("Manual\nBreak") == ("Manual", "Break")
@@ -470,12 +470,12 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     coast_labels = [line for group in coast_groups if (line := group.find("{*}text")) is not None]
     assert len(coast_labels) == len(coast_groups)
     assert {label.text for label in coast_labels} >= {"North Coast", "South Coast"}
-    assert {label.attrib["font-size"] for label in coast_labels} == {"9"}
+    assert {label.attrib["font-size"] for label in coast_labels} == {"8"}
     assert all(
         "transform" not in group.attrib or "rotate(" in group.attrib["transform"]
         for group in coast_groups
     )
-    assert all(label.attrib["fill"] == "#4c3b1e" for label in coast_labels)
+    assert all(label.attrib["fill"] == "#fffefa" for label in coast_labels)
     assert all("stroke" not in label.attrib for label in coast_labels)
     centre_stars = root.findall(".//{*}g[@id='supply-centres']/{*}polygon")
     assert centre_stars

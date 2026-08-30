@@ -53,7 +53,7 @@ Player communication occurs outside the application using map images copied by t
 - **AN.8:** Game, season and perspective context persists when switching between the primary workspaces.
 - **AN.9:** Game creation and reusable-map management replace the main workspace temporarily and return to the preceding application context when completed or cancelled.
 - **AN.10:** Application workflows, validation messages and confirmations remain inside the main window; operating-system file and folder choosers may use native windows.
-- **AN.11:** The current game's choices provide a placement-only editor for its private map snapshot.
+- **AN.11:** The current game's choices open the complete map editor for its private map snapshot.
 - **AN.12:** All workspaces use an application-owned light palette and platform-available fonts; interactive controls and their normal, selected, hovered and disabled states maintain explicit foreground/background contrast rather than relying on the desktop theme.
 - **AN.13:** Recent games can be permanently deleted from the game choices after an in-window confirmation identifies the game folder and warns that deletion cannot be undone; deleting the current game returns to the no-game state.
 - **AN.14:** Game creation asks for a parent location, previews the destination and creates a safe top-level folder derived from the game name beneath that location.
@@ -82,7 +82,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
 - **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current`, `Copy map` and `Save image` actions.
-- **MW.12:** Saving current-game map placement changes only label, army, fleet, named-coast and supply-centre anchors, named-coast label rotations, shared label sizes and army/fleet hold-underline offsets; territory names, rules, topology, powers, setup, colours and reusable-map defaults remain unchanged.
+- **MW.12:** Saving a current-game map warns that every phase is affected, keeps the private map ID immutable, and reparses saved order submissions without re-adjudicating completed phases.
 
 ### Saved Views and Image Copying (IC)
 
@@ -217,6 +217,10 @@ Player communication occurs outside the application using map images copied by t
 - **GC.32:** Powers and setup provides map-wide controls for text, inaccessible-region, sea and unclaimed-land colours, previews those colours immediately, and renders inaccessible regions with single-direction stripes.
 - **GC.33:** Placement displays a hold underline with every visible army and fleet preview; stacked `Armies` and `Fleets` side panels adjust its horizontal and vertical offset from the corresponding unit anchor, update every matching preview immediately and persist the same offsets used by gameplay rendering.
 - **GC.34:** New game provides an opt-in order-finalisation control which writes `orders.require_finalisation`; it defaults off.
+- **GC.35:** Reusable maps are canonical files under the source checkout's `maps/<map-id>/` directory; saving changes those files without invoking Git and preserves ancillary provenance files.
+- **GC.36:** A game's complete private map can be edited with the same Definition, Powers & start and Placement controls as a reusable map; the resulting map is used to render every phase of that game.
+- **GC.37:** A private game map can replace its source reusable map after confirmation or be saved as a new reusable map with a new ID and name.
+- **GC.38:** Promoting a private game map copies its design, topology, regions, names, powers, colours and presentation while retaining the source reusable map's complete default starting setup rather than the game's setup or current state.
 
 ## Limitations and Restrictions
 
@@ -300,6 +304,12 @@ Manage configured maps
      -> Edit powers, colours and reusable starting defaults with structured fields
      -> Edit territory names and reposition label, army, fleet and supply-centre layers
   -> Validate and save the reusable map from the current tab
+
+Edit current game map
+  -> Open the private map in Definition, Powers & start, and Placement
+  -> Save the private map after the all-phases and order-validity warning
+     or update the source reusable map while retaining its default setup
+     or save the design as a newly identified reusable map
 ```
 
 ## Design Considerations

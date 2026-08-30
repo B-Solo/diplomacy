@@ -18,6 +18,7 @@ from diplomacy_app.domain.models import (
     LabelMode,
     Location,
     MapBounds,
+    MapId,
     NewGameRequest,
     OrderSubmission,
     PhaseId,
@@ -31,7 +32,6 @@ from diplomacy_app.domain.models import (
 )
 from diplomacy_app.game_repository import FileGameRepository
 from diplomacy_app.game_repository.recent_games import RecentGameStore
-from diplomacy_app.map_library import FileMapLibrary
 from diplomacy_app.map_library.defaults import DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG
 from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rules_engine import StandardRulesEngine
@@ -42,11 +42,11 @@ def repository(tmp_path):
     return FileGameRepository(RecentGameStore(tmp_path / "application.json"))
 
 
-def test_game_folder_round_trip_revision_conflict_and_advance(tmp_path, england):
+def test_game_folder_round_trip_revision_conflict_and_advance(tmp_path, england, england_draft):
     repo = repository(tmp_path)
     location = GameLocation((tmp_path / "portable-game").resolve())
     game = repo.create(
-        CreateStoredGame("Portable game", location, england, england.default_starting_setup)
+        CreateStoredGame("Portable game", location, england_draft, england.default_starting_setup)
     )
     config_path = location.path / "game.yaml"
     legacy_config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
@@ -91,8 +91,8 @@ def test_game_folder_round_trip_revision_conflict_and_advance(tmp_path, england)
     assert reopened.map_definition.assets.fleet_svg == DEFAULT_FLEET_SVG
 
 
-def test_coordinator_complete_default_order_workflow(tmp_path, project_root):
-    maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
+def test_coordinator_complete_default_order_workflow(tmp_path, configured_maps):
+    maps = configured_maps
     repo = repository(tmp_path)
     service = ApplicationService(
         repo,
@@ -136,8 +136,8 @@ def test_coordinator_complete_default_order_workflow(tmp_path, project_root):
     assert untracked_result.session.phase.phase_id.label == "Summer 2000"
 
 
-def test_retreat_phase_map_overlays_previous_movement_over_unmoved_state(tmp_path, project_root):
-    maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
+def test_retreat_phase_map_overlays_previous_movement_over_unmoved_state(tmp_path, configured_maps):
+    maps = configured_maps
     repo = repository(tmp_path)
     service = ApplicationService(
         repo,
@@ -182,8 +182,8 @@ def test_retreat_phase_map_overlays_previous_movement_over_unmoved_state(tmp_pat
     assert orders.findall("{*}polygon")
 
 
-def test_retreat_finalisation_uses_pending_resolution_units(tmp_path, project_root, england):
-    maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
+def test_retreat_finalisation_uses_pending_resolution_units(tmp_path, configured_maps, england):
+    maps = configured_maps
     repo = repository(tmp_path)
     service = ApplicationService(
         repo,
@@ -240,8 +240,8 @@ def test_retreat_finalisation_uses_pending_resolution_units(tmp_path, project_ro
     assert not resolved.session.phase.state.dislodged_units
 
 
-def test_coordinator_deletes_recent_and_current_games(tmp_path, project_root):
-    maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
+def test_coordinator_deletes_recent_and_current_games(tmp_path, configured_maps):
+    maps = configured_maps
     repo = repository(tmp_path)
     service = ApplicationService(
         repo,
@@ -284,22 +284,22 @@ def test_coordinator_deletes_recent_and_current_games(tmp_path, project_root):
     assert not second_location.path.exists()
 
 
-def test_reusable_map_edit_does_not_change_existing_game_snapshot(tmp_path, project_root):
-    maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
+def test_reusable_map_edit_does_not_change_existing_game_snapshot(tmp_path, configured_maps):
+    maps = configured_maps
     configured = maps.load(maps.list()[0].map_id)
+    draft = maps.load_draft(configured.id)
     game_location = GameLocation((tmp_path / "snapshot-game").resolve())
     repository(tmp_path).create(
         CreateStoredGame(
             "Snapshot game",
             game_location,
-            configured,
+            draft,
             configured.default_starting_setup,
         )
     )
     private_yaml = game_location.path / "map" / "map.yaml"
     before = private_yaml.read_bytes()
 
-    draft = maps.load_draft(configured.id)
     territory_id, old_point = next(iter(draft.presentation.label_anchors.items()))
     edited = maps.update_anchor(
         draft,
@@ -313,8 +313,8 @@ def test_reusable_map_edit_does_not_change_existing_game_snapshot(tmp_path, proj
     assert maps.load(configured.id).presentation.label_anchors[territory_id] != old_point
 
 
-def test_current_game_map_placement_changes_only_private_presentation(tmp_path, project_root):
-    maps = FileMapLibrary(tmp_path / "user-maps", project_root / "maps")
+def test_current_game_map_edit_changes_only_private_map(tmp_path, configured_maps):
+    maps = configured_maps
     repo = repository(tmp_path)
     service = ApplicationService(
         repo,
@@ -333,7 +333,7 @@ def test_current_game_map_placement_changes_only_private_presentation(tmp_path, 
             configured.default_starting_setup,
         )
     ).game.map_definition
-    draft = service.begin_game_map_placement()
+    draft = service.begin_game_map_edit()
     territory_id, old_point = next(iter(draft.presentation.label_anchors.items()))
     moved_point = Point(old_point.x + 11, old_point.y - 4)
     edited = service.update_map_anchor(draft, territory_id, "label", moved_point)
@@ -341,7 +341,7 @@ def test_current_game_map_placement_changes_only_private_presentation(tmp_path, 
     edited = service.update_map_anchor(edited, territory_id, "abbreviation", moved_abbreviation)
     edited = service.update_map_label_font_sizes(edited, 12.5, 8.5)
     edited = service.update_map_colours(edited, "#201810", "#303030", "#406080", "#d8c8a8")
-    updated = service.save_game_map_placement(edited)
+    updated = service.save_game_map_draft(edited)
 
     reopened = repository(tmp_path).open(location)
     assert updated.game.map_definition.presentation.label_anchors[territory_id] == moved_point
@@ -370,3 +370,90 @@ def test_current_game_map_placement_changes_only_private_presentation(tmp_path, 
     assert maps.load(configured.id).presentation.abbreviation_anchors[territory_id] == old_point
     assert maps.load(configured.id).presentation.territory_label_font_size != 12.5
     assert maps.load(configured.id).presentation.sea_colour != "#406080"
+
+
+def test_game_map_edit_reparses_saved_orders(tmp_path, configured_maps):
+    maps = configured_maps
+    repo = repository(tmp_path)
+    service = ApplicationService(
+        repo,
+        maps,
+        StandardRulesEngine(),
+        VisibilityProjector(),
+        MapRenderer(),
+    )
+    configured = maps.load(maps.list()[0].map_id)
+    session = service.create_game(
+        NewGameRequest(
+            "Order revalidation game",
+            GameLocation((tmp_path / "order-revalidation-game").resolve()),
+            configured.id,
+            configured.default_starting_setup,
+        )
+    )
+    power = configured.powers[0]
+    service.update_orders(power.id, "A Cheshire H")
+    draft = service.begin_game_map_edit()
+    cheshire = next(item for item in draft.territories if item.id == "cheshire")
+    edited = service.update_map_territory_details(
+        draft,
+        cheshire.id,
+        "Chesterton",
+        cheshire.display_name,
+        "Cht",
+    )
+    with pytest.raises(RepositoryError, match="map ID"):
+        service.save_game_map_draft(replace(edited, map_id=MapId("different-map")))
+
+    service.save_game_map_draft(edited)
+    stored = repo.load_phase(session.game.game_id, session.phase.phase_id)
+    submission = stored.submissions[power.id]
+    assert submission.raw_text == "A Cheshire H"
+    assert submission.lines[0].candidate.order is None
+    assert submission.lines[0].candidate.parser_issues[0].code == "order.unrecognised"
+
+
+def test_game_map_can_update_or_create_reusable_map(tmp_path, configured_maps):
+    maps = configured_maps
+    repo = repository(tmp_path)
+    service = ApplicationService(
+        repo,
+        maps,
+        StandardRulesEngine(),
+        VisibilityProjector(),
+        MapRenderer(),
+    )
+    configured = maps.load(maps.list()[0].map_id)
+    canonical_setup = configured.default_starting_setup
+    game_setup = replace(
+        canonical_setup,
+        state=replace(canonical_setup.state, units=canonical_setup.state.units[1:]),
+    )
+    service.create_game(
+        NewGameRequest(
+            "Promoted map game",
+            GameLocation((tmp_path / "promoted-map-game").resolve()),
+            configured.id,
+            game_setup,
+        )
+    )
+    draft = service.begin_game_map_edit()
+    territory_id, point = next(iter(draft.presentation.label_anchors.items()))
+    edited = service.update_map_anchor(
+        draft,
+        territory_id,
+        "label",
+        Point(point.x + 9, point.y - 2),
+    )
+    powers = (replace(edited.powers[0], colour="#123456"), *edited.powers[1:])
+    edited = service.update_map_setup(edited, powers, edited.default_starting_setup)
+
+    updated = service.promote_game_map(edited, configured.id, configured.name)
+    assert updated.default_starting_setup == canonical_setup
+    assert updated.presentation.label_anchors[territory_id] == Point(point.x + 9, point.y - 2)
+    assert updated.powers[0].colour == "#123456"
+
+    copied = service.promote_game_map(edited, MapId("england-session"), "England Session")
+    assert copied.id == "england-session"
+    assert copied.default_starting_setup == canonical_setup
+    assert (maps.maps_root / "england-session" / "_compiled-map.json").is_file()

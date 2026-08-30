@@ -12,11 +12,21 @@ Normal play does not rewrite YAML.
 JSON contains runtime state or materialised data maintained by the application and may be replaced during normal use.
 SVG contains the supplied map and unit artwork.
 
-## Application-Owned Storage
+## Repository and Application Storage
 
-`platformdirs` selects the operating-system locations for application configuration and reusable maps.
+Reusable maps live in the source checkout under `maps/<map-id>/` and are intended to be reviewed and committed with Git.
+`platformdirs` selects the operating-system location for application configuration.
 Machine-managed `application.json` contains recent-game locations, the last-opened game location and application-level preferences.
-Reusable maps live under the application data directory in `maps/<map-id>/`.
+
+```text
+<checkout>/maps/<map-id>/
+├── map.yaml
+├── map.svg
+├── army.svg
+├── fleet.svg
+├── _compiled-map.json
+└── <ancillary provenance files>
+```
 
 ## Game Folder Layout
 
@@ -29,8 +39,7 @@ Reusable maps live under the application data directory in `maps/<map-id>/`.
 │   ├── map.svg
 │   ├── army.svg
 │   ├── fleet.svg
-│   ├── _compiled-map.json
-│   └── _engine.map
+│   └── _compiled-map.json
 ├── 1901/
 │   ├── Spring/
 │   │   ├── state.json
@@ -57,12 +66,16 @@ Every reached Spring, Summer, Fall, Winter and Year End phase is retained, inclu
 
 The `map/` directory is a private snapshot of the configured map at game creation.
 Changing a reusable map does not affect existing games, while a game-specific starting year, season, unit placement, supply-centre ownership or territory control is materialised only in its private snapshot before play begins.
-Powers, colours, home supply centres and topology remain those of the reusable configured map.
 During game creation, the repository writes the selected setup into the private `map/map.yaml`, recompiles that snapshot and creates the corresponding first `state.json`.
-During play, the placement-only editor may transactionally replace presentation anchors, named-coast label rotations, shared label sizes and army/fleet hold-underline offsets in the private `map/map.yaml` and `_compiled-map.json` without changing map identity or rules data.
+During play, the complete private map can be edited except that its map ID remains immutable.
+Saving warns that the edited map affects every historical and current phase, then transactionally replaces the private authored and compiled map and reparses every saved order submission.
+Completed adjudication results are retained and are not recalculated.
+The private map can update its source reusable map or be saved under a new reusable identity; promotion retains the existing reusable map's complete default starting setup rather than the game's setup or current position.
 
 `army.svg` and `fleet.svg` are materialised copies of the application's fixed Placement symbols; stored legacy unit files are ignored when games or maps are loaded.
-`_compiled-map.json` and `_engine.map` are generated from the authored map and are never authoritative.
+`_compiled-map.json` is a portable generated cache and is tracked beside reusable map sources.
+Its source digest must match before loading can use it.
+The Rules Engine's text map is generated under the operating system's temporary directory and is never authoritative.
 
 ## Game Configuration
 
@@ -81,13 +94,13 @@ ui:
   explain_adjudication_outcomes: false
 ```
 
-The reusable default starting phase belongs to `map/map.yaml`, avoiding two configuration fields for the same fact.
+The reusable default starting phase belongs to its canonical `maps/<map-id>/map.yaml`, avoiding two configuration fields for the same fact.
 `views.json` is machine-managed and stores saved views because they change during normal use.
 Saved-view bounds use source-SVG view-box coordinates in `x, y, width, height` order.
 
 ## Configured Map
 
-`map/map.yaml` is the single authored description of a configured map.
+`maps/<map-id>/map.yaml` is the canonical authored description of a reusable configured map, and a game's private `map/map.yaml` uses the same schema.
 Map-wide identity and starting defaults appear first, while territory-specific rules and presentation are grouped under their territory identifiers:
 
 ```yaml
@@ -230,9 +243,9 @@ Season values are `spring`, `summer`, `fall`, `winter` and `year_end`.
 When a map starts in a retreat season, each team's optional `initial_dislodged_units` entries contain `type`, `location` and `retreat_options` fields.
 That field is omitted for other starting seasons.
 
-When map setup is saved, the Map Library materialises the complete validated `MapDefinition` in `_compiled-map.json` and records a digest of `map.yaml` and the SVG assets.
-The compiled map is the representation loaded during play and remains stable across application upgrades.
-Editing an authored source makes the compiled digest stale and requires map validation before recompilation.
+When map setup is saved, the Map Library materialises the complete validated `MapDefinition` in `_compiled-map.json` and records a digest of `map.yaml`, the SVG assets and the compiler cache contract.
+Loading uses that portable compiled representation only while its source digest and cache version match.
+Editing an authored source makes the compiled digest stale, so loading recompiles in memory until an explicit validated save refreshes the tracked cache.
 The map editor visualises the complete effective topology over the map while keeping the authored connection exceptions local to their territories.
 
 Validation covers unique identifiers and abbreviations, SVG references, required anchors, team starts and the complete effective topology.

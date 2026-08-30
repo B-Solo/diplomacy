@@ -12,7 +12,6 @@ from types import MappingProxyType
 from typing import Any
 
 import yaml
-from platformdirs import user_data_path
 
 from diplomacy_app.domain.errors import MapLibraryError
 from diplomacy_app.domain.models import (
@@ -29,7 +28,12 @@ from diplomacy_app.domain.models import (
     TerritoryId,
 )
 from diplomacy_app.map_library import draft_editor
-from diplomacy_app.map_library.map_codec import compile_map, load_map_folder, load_yaml
+from diplomacy_app.map_library.map_codec import (
+    compile_map,
+    compiled_map_data,
+    load_map_folder,
+    load_yaml,
+)
 from diplomacy_app.map_library.svg_importer import (
     element_ids,
     sanitise_svg,
@@ -47,14 +51,18 @@ from diplomacy_app.presentation import (
     DEFAULT_TERRITORY_LABEL_FONT_SIZE,
     DEFAULT_UNCLAIMED_REGION_COLOUR,
 )
-from diplomacy_app.storage.serialization import map_definition_data
 
 
 def _project_root() -> Path:
     return Path(__file__).resolve().parents[3]
 
 
-def _draft_from_folder(path: Path) -> MapDraft:
+def load_map_draft_folder(path: Path) -> MapDraft:
+    """Load an editable draft from one complete configured-map directory.
+
+    :param path: Configured map directory.
+    :return: Editable authored map draft.
+    """
     text = (path / "map.yaml").read_text(encoding="utf-8")
     document = load_yaml(text)
     assets = document.get("assets", {})
@@ -84,35 +92,23 @@ def _draft_from_folder(path: Path) -> MapDraft:
     )
 
 
-def _compiled_payload(definition: MapDefinition) -> dict[str, Any]:
-    return map_definition_data(definition)
-
-
 class FileMapLibrary:
-    """Load bundled maps and store user-authored maps in platform data."""
+    """Load and save the repository's canonical configured maps."""
 
-    def __init__(
-        self,
-        user_maps_root: Path | None = None,
-        bundled_maps_root: Path | None = None,
-    ) -> None:
-        self.user_maps_root = (
-            user_maps_root or user_data_path("DiplomacyGamemaster", "DiplomacyGamemaster") / "maps"
-        )
-        self.bundled_maps_root = bundled_maps_root or _project_root() / "maps"
+    def __init__(self, maps_root: Path | None = None) -> None:
+        self.maps_root = maps_root or _project_root() / "maps"
 
     def _folders(self) -> dict[MapId, Path]:
         result: dict[MapId, Path] = {}
-        for root in (self.bundled_maps_root, self.user_maps_root):
-            if not root.exists():
-                continue
-            for child in sorted(root.iterdir()):
-                if child.is_dir() and (child / "map.yaml").is_file():
-                    try:
-                        document = load_yaml((child / "map.yaml").read_text(encoding="utf-8"))
-                        result[MapId(str(document.get("map_id", child.name)))] = child
-                    except (OSError, MapLibraryError):
-                        continue
+        if not self.maps_root.exists():
+            return result
+        for child in sorted(self.maps_root.iterdir()):
+            if child.is_dir() and (child / "map.yaml").is_file():
+                try:
+                    document = load_yaml((child / "map.yaml").read_text(encoding="utf-8"))
+                    result[MapId(str(document.get("map_id", child.name)))] = child
+                except (OSError, MapLibraryError):
+                    continue
         return result
 
     def list(self) -> tuple[MapSummary, ...]:
@@ -141,7 +137,25 @@ class FileMapLibrary:
         folder = self._folders().get(map_id)
         if folder is None:
             raise MapLibraryError(f"Configured map not found: {map_id}")
-        return _draft_from_folder(folder)
+        return load_map_draft_folder(folder)
+
+    def prepare_copy(
+        self,
+        draft: MapDraft,
+        map_id: MapId,
+        name: str,
+        starting_setup: StartingSetup,
+    ) -> MapDraft:
+        """Prepare a private game map for canonical reusable storage.
+
+        :param draft: Private game-map draft whose map design should be copied.
+        :param map_id: Destination reusable-map identifier.
+        :param name: Destination reusable-map name.
+        :param starting_setup: Canonical setup to retain for future games.
+        :return: Recompiled reusable-map draft.
+        """
+        copied = draft_editor.update_setup(draft, draft.powers, starting_setup)
+        return draft_editor.update_identity(copied, map_id, name)
 
     def import_svg(self, name: str, svg: bytes) -> MapDraft:
         safe = sanitise_svg(svg)
@@ -347,23 +361,36 @@ class FileMapLibrary:
         return validate_starting_setup(map_definition, starting_setup)
 
     def save(self, draft: MapDraft) -> MapDefinition:
+        """Atomically replace one canonical map while preserving ancillary files.
+
+        :param draft: Complete authored map draft.
+        :return: Validated compiled map definition.
+        :raises MapLibraryError: If validation or filesystem persistence fails.
+        """
         validation = self.validate(draft)
         if not validation.is_valid:
             messages = "; ".join(item.issue.message for item in validation.issues)
             raise MapLibraryError(f"Map has validation errors: {messages}")
         definition = compile_map(draft.map_yaml, draft.svg)
-        self.user_maps_root.mkdir(parents=True, exist_ok=True)
-        stage = Path(tempfile.mkdtemp(prefix=f".{definition.id}-", dir=self.user_maps_root))
+        self.maps_root.mkdir(parents=True, exist_ok=True)
+        stage = Path(tempfile.mkdtemp(prefix=f".{definition.id}-", dir=self.maps_root))
+        target = self.maps_root / str(definition.id)
+        if target.exists():
+            shutil.copytree(target, stage, dirs_exist_ok=True)
         (stage / "map.yaml").write_text(draft.map_yaml, encoding="utf-8")
         (stage / "map.svg").write_bytes(definition.assets.map_svg)
         (stage / "army.svg").write_bytes(definition.assets.army_svg)
         (stage / "fleet.svg").write_bytes(definition.assets.fleet_svg)
         (stage / "_compiled-map.json").write_text(
-            json.dumps(_compiled_payload(definition), indent=2, sort_keys=True) + "\n",
+            json.dumps(
+                compiled_map_data(definition, draft.map_yaml, definition.assets.map_svg),
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
             encoding="utf-8",
         )
-        target = self.user_maps_root / str(definition.id)
-        backup = self.user_maps_root / f".{definition.id}.backup"
+        backup = self.maps_root / f".{definition.id}.backup"
         try:
             if backup.exists():
                 shutil.rmtree(backup)

@@ -526,7 +526,7 @@ class NewGameDraft:
 class CreateStoredGame:
     name: str
     location: GameLocation
-    map_definition: MapDefinition
+    map_draft: MapDraft
     starting_setup: StartingSetup
     settings: GameSettings = GameSettings()
 

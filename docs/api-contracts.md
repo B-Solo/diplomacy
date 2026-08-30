@@ -529,7 +529,7 @@ class NewGameDraft:
 class CreateStoredGame:
     name: str
     location: GameLocation
-    map_definition: MapDefinition
+    map_draft: MapDraft
     starting_setup: StartingSetup
 
 @dataclass(frozen=True, slots=True)
@@ -613,8 +613,14 @@ class ApplicationService(Protocol):
     def export_map(self, request: RenderRequest) -> ImageArtifact: ...
     def save_view(self, view: SavedView) -> GameSnapshot: ...
     def delete_view(self, view_id: SavedViewId) -> GameSnapshot: ...
-    def begin_game_map_placement(self) -> MapDraft: ...
-    def save_game_map_placement(self, draft: MapDraft) -> SessionView: ...
+    def begin_game_map_edit(self) -> MapDraft: ...
+    def save_game_map_draft(self, draft: MapDraft) -> SessionView: ...
+    def promote_game_map(
+        self,
+        draft: MapDraft,
+        map_id: MapId,
+        name: str,
+    ) -> MapDefinition: ...
 
     def list_maps(self) -> tuple[MapSummary, ...]: ...
     def begin_map_import(self, name: str, svg: bytes) -> MapDraft: ...
@@ -628,7 +634,9 @@ class ApplicationService(Protocol):
 `create_game` validates the supplied setup against the unchanged powers, colours, home supply centres and topology before creating files.
 `load_map_draft` opens an existing reusable map for configuration and visual anchor placement without re-importing its SVG.
 Saving that draft replaces only the reusable map; private map snapshots already stored in games remain unchanged.
-Current-game placement loads a restricted draft and persists only its presentation anchors, named-coast label rotations and shared label sizes into that game's private snapshot.
+Current-game map editing loads the complete private authored draft while keeping its map ID immutable.
+Saving replaces the complete private map for every phase and reparses every saved order submission against it without re-adjudicating completed phases.
+Promotion copies the private map design to the reusable library while retaining the source reusable map's default starting setup.
 `ResolveResult` is either an `AdvancedPhase` or a `FinalisationRequired` value naming powers whose orders are still open.
 Calling `resolve_and_advance(allow_unfinalised=True)` authorises advancement after that warning.
 
@@ -670,11 +678,15 @@ class GameRepository(Protocol):
         view_id: SavedViewId,
         expected_revision: Revision,
     ) -> GameSnapshot: ...
-    def load_map_placement_draft(self, game_id: GameId) -> MapDraft: ...
-    def save_map_presentation(
+    def load_map_draft(self, game_id: GameId) -> MapDraft: ...
+    def save_map_draft(
         self,
         game_id: GameId,
-        presentation: MapPresentation,
+        draft: MapDraft,
+        revalidated_submissions: Mapping[
+            PhaseId,
+            Mapping[PowerId, OrderSubmission],
+        ],
         expected_revision: Revision,
     ) -> GameSnapshot: ...
     def commit_adjudication(
@@ -702,6 +714,13 @@ class MapLibrary(Protocol):
         map_definition: MapDefinition,
         starting_setup: StartingSetup,
     ) -> MapValidation: ...
+    def prepare_copy(
+        self,
+        draft: MapDraft,
+        map_id: MapId,
+        name: str,
+        starting_setup: StartingSetup,
+    ) -> MapDraft: ...
     def save(self, draft: MapDraft) -> MapDefinition: ...
 ```
 

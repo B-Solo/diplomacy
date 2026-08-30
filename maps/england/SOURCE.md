@@ -38,6 +38,3 @@ Seven shared land borders between ordinary coastal provinces are marked as
 fleet removals because the provinces' coastlines do not meet: Cumbria–Durham,
 Cumbria–N.Yorkshire, Cumbria–Northumberland, Dorset–Somerset,
 Durham–N.Yorkshire, Durham–Northumberland and Lancashire–N.Yorkshire.
-
-`map-review.svg` is a non-runtime review aid generated from the same data.
-It displays the configured abbreviations, supply centres, starting ownership, starting units and the muted power palette without altering `map.svg`.

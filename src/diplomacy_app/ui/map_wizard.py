@@ -16,8 +16,10 @@ from PySide6.QtWidgets import (
     QDoubleSpinBox,
     QGroupBox,
     QHBoxLayout,
+    QInputDialog,
     QLabel,
     QLineEdit,
+    QMessageBox,
     QPlainTextEdit,
     QPushButton,
     QSpinBox,
@@ -33,6 +35,7 @@ from diplomacy_app.domain.models import (
     Location,
     MapDefinition,
     MapDraft,
+    MapId,
     Point,
     UnitType,
 )
@@ -58,14 +61,14 @@ _TERRITORY_FIELD_HEIGHT = 34
 class MapWizard(QWidget):
     cancelled = Signal()
     saved = Signal(object)
+    promoted = Signal(object)
 
-    def __init__(
-        self, service, draft: MapDraft, parent=None, *, game_placement_only: bool = False
-    ) -> None:
+    def __init__(self, service, draft: MapDraft, parent=None, *, game_map: bool = False) -> None:
         super().__init__(parent)
         self.service = service
         self.draft = draft
-        self.game_placement_only = game_placement_only
+        self.game_map = game_map
+        self.original_map_id = draft.map_id
         self.saved_definition = None
         self._topology_nodes: dict[str, Point] = {}
         self._topology_node_territories: dict[str, str] = {}
@@ -82,22 +85,19 @@ class MapWizard(QWidget):
         layout.setContentsMargins(4, 3, 4, 3)
         layout.setSpacing(3)
         self.outer_layout = layout
-        if game_placement_only:
+        if game_map:
             scope = QLabel(
-                "Adjust this game's private visual placement. Territory names, rules, "
-                "topology, powers and setup remain unchanged."
+                "This is the map snapshot used by every phase of this game. Saving changes "
+                "may invalidate existing orders; review and correct them manually afterward."
             )
             scope.setWordWrap(True)
             scope.setProperty("muted", True)
             layout.addWidget(scope)
         self.tabs = QTabWidget()
         layout.addWidget(self.tabs, 1)
-        if game_placement_only:
-            self._build_anchor_tab()
-        else:
-            self._build_yaml_tab()
-            self._build_setup_tab()
-            self._build_anchor_tab()
+        self._build_yaml_tab()
+        self._build_setup_tab()
+        self._build_anchor_tab()
         self.message = QLabel()
         self.message.setWordWrap(True)
         self.message.setVisible(False)
@@ -108,19 +108,23 @@ class MapWizard(QWidget):
         cancel.clicked.connect(self.cancelled)
         buttons.addWidget(cancel)
         buttons.addStretch()
-        self.save_button = QPushButton(
-            "Save game map placement" if game_placement_only else "Save configured map"
-        )
+        if game_map:
+            update_reusable = QPushButton("Update reusable map…")
+            update_reusable.clicked.connect(self._update_reusable_map)
+            buttons.addWidget(update_reusable)
+            save_as_reusable = QPushButton("Save as new reusable map…")
+            save_as_reusable.clicked.connect(self._save_as_reusable_map)
+            buttons.addWidget(save_as_reusable)
+        self.save_button = QPushButton("Save game map" if game_map else "Save configured map")
         self.save_button.setProperty("primary", True)
         self.save_button.clicked.connect(self._save)
         buttons.addWidget(self.save_button)
         layout.addLayout(buttons)
         self._reload_anchor_scene(fit=True)
-        if not game_placement_only:
-            self.yaml_editor.setPlainText(draft.map_yaml)
-            self.tabs.currentChanged.connect(self._tab_changed)
-            self._validate()
-            self._focus_topology_section()
+        self.yaml_editor.setPlainText(draft.map_yaml)
+        self.tabs.currentChanged.connect(self._tab_changed)
+        self._validate()
+        self._focus_topology_section()
 
     def _build_yaml_tab(self) -> None:
         page = QWidget()
@@ -245,66 +249,65 @@ class MapWizard(QWidget):
         editing_row = QHBoxLayout()
         editing_row.setSpacing(10)
 
-        if not self.game_placement_only:
-            self.territory_group = QGroupBox("Selected territory")
-            territory_layout = QHBoxLayout(self.territory_group)
-            territory_layout.setContentsMargins(10, 8, 10, 8)
-            territory_layout.setSpacing(6)
-            self.territory_selector = QComboBox()
-            self.territory_selector.setMinimumWidth(170)
-            for territory in self.draft.territories:
-                self.territory_selector.addItem(territory.name, territory.id)
-            self.territory_selector.setCurrentIndex(-1)
-            self.territory_selector.currentIndexChanged.connect(self._territory_selected)
-            self.territory_selector.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
-            selector_layout = QVBoxLayout()
-            selector_layout.setSpacing(2)
-            selector_label = QLabel("Territory")
-            selector_label.setBuddy(self.territory_selector)
-            selector_layout.addWidget(selector_label)
-            selector_layout.addWidget(self.territory_selector)
-            territory_layout.addLayout(selector_layout, 2)
-            self.canonical_name_editor = QLineEdit()
-            self.canonical_name_editor.setMinimumWidth(150)
-            self.canonical_name_editor.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
-            canonical_layout = QVBoxLayout()
-            canonical_layout.setSpacing(2)
-            canonical_label = QLabel("Canonical name")
-            canonical_label.setBuddy(self.canonical_name_editor)
-            canonical_layout.addWidget(canonical_label)
-            canonical_layout.addWidget(self.canonical_name_editor)
-            territory_layout.addLayout(canonical_layout, 2)
-            self.abbreviation_editor = QLineEdit()
-            self.abbreviation_editor.setPlaceholderText("ABC")
-            self.abbreviation_editor.setMaxLength(3)
-            self.abbreviation_editor.setMinimumWidth(95)
-            self.abbreviation_editor.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
-            abbreviation_layout = QVBoxLayout()
-            abbreviation_layout.setSpacing(2)
-            abbreviation_label = QLabel("Abbreviation")
-            abbreviation_label.setBuddy(self.abbreviation_editor)
-            abbreviation_layout.addWidget(abbreviation_label)
-            abbreviation_layout.addWidget(self.abbreviation_editor)
-            territory_layout.addLayout(abbreviation_layout)
-            self.display_name_editor = DisplayNameEdit()
-            self.display_name_editor.setToolTip(
-                "Press Enter to apply; press Shift+Enter to insert a line break."
-            )
-            self.display_name_editor.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
-            self.display_name_editor.setMinimumWidth(190)
-            self.display_name_editor.apply_requested.connect(self._apply_territory_details)
-            display_layout = QVBoxLayout()
-            display_layout.setSpacing(2)
-            display_label = QLabel("Map display name")
-            display_label.setBuddy(self.display_name_editor)
-            display_layout.addWidget(display_label)
-            display_layout.addWidget(self.display_name_editor)
-            territory_layout.addLayout(display_layout, 3)
-            apply_territory = QPushButton("Apply")
-            apply_territory.clicked.connect(self._apply_territory_details)
-            territory_layout.addWidget(apply_territory, 0, Qt.AlignmentFlag.AlignBottom)
-            self.territory_group.setEnabled(False)
-            editing_row.addWidget(self.territory_group, 1)
+        self.territory_group = QGroupBox("Selected territory")
+        territory_layout = QHBoxLayout(self.territory_group)
+        territory_layout.setContentsMargins(10, 8, 10, 8)
+        territory_layout.setSpacing(6)
+        self.territory_selector = QComboBox()
+        self.territory_selector.setMinimumWidth(170)
+        for territory in self.draft.territories:
+            self.territory_selector.addItem(territory.name, territory.id)
+        self.territory_selector.setCurrentIndex(-1)
+        self.territory_selector.currentIndexChanged.connect(self._territory_selected)
+        self.territory_selector.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
+        selector_layout = QVBoxLayout()
+        selector_layout.setSpacing(2)
+        selector_label = QLabel("Territory")
+        selector_label.setBuddy(self.territory_selector)
+        selector_layout.addWidget(selector_label)
+        selector_layout.addWidget(self.territory_selector)
+        territory_layout.addLayout(selector_layout, 2)
+        self.canonical_name_editor = QLineEdit()
+        self.canonical_name_editor.setMinimumWidth(150)
+        self.canonical_name_editor.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
+        canonical_layout = QVBoxLayout()
+        canonical_layout.setSpacing(2)
+        canonical_label = QLabel("Canonical name")
+        canonical_label.setBuddy(self.canonical_name_editor)
+        canonical_layout.addWidget(canonical_label)
+        canonical_layout.addWidget(self.canonical_name_editor)
+        territory_layout.addLayout(canonical_layout, 2)
+        self.abbreviation_editor = QLineEdit()
+        self.abbreviation_editor.setPlaceholderText("ABC")
+        self.abbreviation_editor.setMaxLength(3)
+        self.abbreviation_editor.setMinimumWidth(95)
+        self.abbreviation_editor.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
+        abbreviation_layout = QVBoxLayout()
+        abbreviation_layout.setSpacing(2)
+        abbreviation_label = QLabel("Abbreviation")
+        abbreviation_label.setBuddy(self.abbreviation_editor)
+        abbreviation_layout.addWidget(abbreviation_label)
+        abbreviation_layout.addWidget(self.abbreviation_editor)
+        territory_layout.addLayout(abbreviation_layout)
+        self.display_name_editor = DisplayNameEdit()
+        self.display_name_editor.setToolTip(
+            "Press Enter to apply; press Shift+Enter to insert a line break."
+        )
+        self.display_name_editor.setFixedHeight(_TERRITORY_FIELD_HEIGHT)
+        self.display_name_editor.setMinimumWidth(190)
+        self.display_name_editor.apply_requested.connect(self._apply_territory_details)
+        display_layout = QVBoxLayout()
+        display_layout.setSpacing(2)
+        display_label = QLabel("Map display name")
+        display_label.setBuddy(self.display_name_editor)
+        display_layout.addWidget(display_label)
+        display_layout.addWidget(self.display_name_editor)
+        territory_layout.addLayout(display_layout, 3)
+        apply_territory = QPushButton("Apply")
+        apply_territory.clicked.connect(self._apply_territory_details)
+        territory_layout.addWidget(apply_territory, 0, Qt.AlignmentFlag.AlignBottom)
+        self.territory_group.setEnabled(False)
+        editing_row.addWidget(self.territory_group, 1)
 
         self.coast_label_group = QGroupBox("Selected coast label")
         coast_layout = QHBoxLayout(self.coast_label_group)
@@ -412,6 +415,10 @@ class MapWizard(QWidget):
             return False
         try:
             self.draft = self.service.refresh_map_draft(self.draft)
+            if self.game_map and self.draft.map_id != self.original_map_id:
+                self.validation_label.setText("A game's private map ID cannot be changed")
+                self.validation_label.setStyleSheet("color: #8a302b")
+                return False
             definition = self.service.preview_map_definition(self.draft)
             self.topology_canvas.set_svg(self._topology_svg(definition), fit=True)
             self.validation_label.setText(
@@ -518,7 +525,7 @@ class MapWizard(QWidget):
             control.blockSignals(False)
         territories = {territory.id: territory for territory in map_definition.territories}
         label_mode = self.placement_labels.currentData()
-        if not self.game_placement_only and self._selected_territory_label is not None:
+        if self._selected_territory_label is not None:
             self._show_territory_details(territories[self._selected_territory_label])
         if label_mode:
             anchor_type = "label" if label_mode == "full" else "abbreviation"
@@ -545,9 +552,7 @@ class MapWizard(QWidget):
                     size=presentation.territory_label_font_size,
                     bold=True,
                     selection_callback=(
-                        (lambda territory=territory: self._select_territory_label(territory))
-                        if not self.game_placement_only
-                        else None
+                        lambda territory=territory: self._select_territory_label(territory)
                     ),
                 )
                 item.setToolTip(f"{definition.name}: {label_mode} label")
@@ -680,10 +685,9 @@ class MapWizard(QWidget):
                 self.territory_font_size.value(),
                 self.coast_font_size.value(),
             )
-            if not self.game_placement_only:
-                self.yaml_editor.setPlainText(self.draft.map_yaml)
-                self.setup_page.set_draft(self.draft)
-                self.setup_page.reload_preview(fit=False)
+            self.yaml_editor.setPlainText(self.draft.map_yaml)
+            self.setup_page.set_draft(self.draft)
+            self.setup_page.reload_preview(fit=False)
             self._reload_anchor_scene()
         except Exception as exc:
             self._show_error(f"Could not change label sizes: {exc}")
@@ -704,15 +708,12 @@ class MapWizard(QWidget):
                 item.set_hold_offset(offset)
         try:
             self.draft = self.service.update_map_hold_offsets(self.draft, army_offset, fleet_offset)
-            if not self.game_placement_only:
-                self.yaml_editor.setPlainText(self.draft.map_yaml)
-                self.setup_page.set_draft(self.draft)
+            self.yaml_editor.setPlainText(self.draft.map_yaml)
+            self.setup_page.set_draft(self.draft)
         except Exception as exc:
             self._show_error(f"Could not change hold underlines: {exc}")
 
     def _select_territory_label(self, territory_id) -> None:
-        if self.game_placement_only:
-            return
         territory = next(item for item in self.draft.territories if item.id == territory_id)
         self._selected_territory_label = territory_id
         self._show_territory_details(territory)
@@ -722,7 +723,7 @@ class MapWizard(QWidget):
 
         :param index: Selected combo-box row, or a negative value for no selection.
         """
-        if index < 0 or self.game_placement_only:
+        if index < 0:
             return
         territory_id = self.territory_selector.itemData(index)
         self._select_territory_label(territory_id)
@@ -744,7 +745,7 @@ class MapWizard(QWidget):
     def _apply_territory_details(self) -> None:
         """Validate and apply the selected territory's user-facing names."""
         territory_id = self._selected_territory_label
-        if territory_id is None or self.game_placement_only:
+        if territory_id is None:
             return
         try:
             self.draft = self.service.update_map_territory_details(
@@ -777,14 +778,13 @@ class MapWizard(QWidget):
         self._selected_coast_label = None
         self.coast_rotation.setEnabled(False)
         self._selected_territory_label = None
-        if not self.game_placement_only:
-            self.territory_selector.blockSignals(True)
-            self.territory_selector.setCurrentIndex(-1)
-            self.territory_selector.blockSignals(False)
-            self.canonical_name_editor.clear()
-            self.abbreviation_editor.clear()
-            self.display_name_editor.clear()
-            self.territory_group.setEnabled(False)
+        self.territory_selector.blockSignals(True)
+        self.territory_selector.setCurrentIndex(-1)
+        self.territory_selector.blockSignals(False)
+        self.canonical_name_editor.clear()
+        self.abbreviation_editor.clear()
+        self.display_name_editor.clear()
+        self.territory_group.setEnabled(False)
 
     def _coast_rotation_changed(self, rotation: int) -> None:
         location = self._selected_coast_label
@@ -797,10 +797,9 @@ class MapWizard(QWidget):
                 str(location.coast_id),
                 rotation,
             )
-            if not self.game_placement_only:
-                self.yaml_editor.setPlainText(self.draft.map_yaml)
-                self.setup_page.set_draft(self.draft)
-                self.setup_page.reload_preview(fit=False)
+            self.yaml_editor.setPlainText(self.draft.map_yaml)
+            self.setup_page.set_draft(self.draft)
+            self.setup_page.reload_preview(fit=False)
             item = self._coast_label_items.get(location)
             if item is not None:
                 item.setRotation(rotation)
@@ -810,10 +809,9 @@ class MapWizard(QWidget):
     def _anchor_moved(self, territory, anchor, coast, point) -> None:
         try:
             self.draft = self.service.update_map_anchor(self.draft, territory, anchor, point, coast)
-            if not self.game_placement_only:
-                self.yaml_editor.setPlainText(self.draft.map_yaml)
-                self.setup_page.set_draft(self.draft)
-                self.setup_page.reload_preview(fit=False)
+            self.yaml_editor.setPlainText(self.draft.map_yaml)
+            self.setup_page.set_draft(self.draft)
+            self.setup_page.reload_preview(fit=False)
         except Exception as exc:
             self._show_error(f"Could not move anchor: {exc}")
 
@@ -860,22 +858,99 @@ class MapWizard(QWidget):
         self.message.setStyleSheet("color: #8a302b")
         self.message.setVisible(True)
 
-    def _save(self) -> None:
-        if self.game_placement_only:
-            try:
-                self.saved_definition = self.service.save_game_map_placement(self.draft)
-                self.saved.emit(self.saved_definition)
-            except Exception as exc:
-                self._show_error(f"Could not save game map placement: {exc}")
-            return
+    def _ready_to_save(self) -> bool:
+        """Apply structured edits and validate the complete current draft."""
         if self.setup_page.is_dirty and not self.setup_page.apply_changes():
             self.tabs.setCurrentIndex(1)
-            return
+            return False
         if not self._validate():
             self.tabs.setCurrentIndex(0)
+            return False
+        return True
+
+    def _save(self) -> None:
+        if not self._ready_to_save():
+            return
+        if self.game_map:
+            answer = QMessageBox.warning(
+                self,
+                "Save edited game map?",
+                "This changes the map used by every phase of the game. Existing orders will be "
+                "reparsed and revalidated, and may require manual correction.",
+                QMessageBox.StandardButton.Save | QMessageBox.StandardButton.Cancel,
+                QMessageBox.StandardButton.Cancel,
+            )
+            if answer != QMessageBox.StandardButton.Save:
+                return
+            try:
+                self.saved_definition = self.service.save_game_map_draft(self.draft)
+                self.saved.emit(self.saved_definition)
+            except Exception as exc:
+                self._show_error(f"Could not save game map: {exc}")
             return
         try:
             self.saved_definition = self.service.save_map_draft(self.draft)
             self.saved.emit(self.saved_definition)
         except Exception as exc:
             self._show_error(f"Could not save map: {exc}")
+
+    def _update_reusable_map(self) -> None:
+        """Replace this game's source reusable map after explicit confirmation."""
+        if not self._ready_to_save():
+            return
+        answer = QMessageBox.warning(
+            self,
+            "Update reusable map?",
+            f'This replaces the canonical reusable map "{self.draft.name}". Its existing '
+            "starting setup will be retained.",
+            QMessageBox.StandardButton.Save | QMessageBox.StandardButton.Cancel,
+            QMessageBox.StandardButton.Cancel,
+        )
+        if answer != QMessageBox.StandardButton.Save:
+            return
+        try:
+            definition = self.service.promote_game_map(
+                self.draft,
+                self.original_map_id,
+                self.draft.name,
+            )
+            self.promoted.emit(definition)
+            self.message.setText(f"Updated reusable map {definition.name}")
+            self.message.setStyleSheet("color: #2f6843")
+            self.message.setVisible(True)
+        except Exception as exc:
+            self._show_error(f"Could not update reusable map: {exc}")
+
+    def _save_as_reusable_map(self) -> None:
+        """Copy this private map to a newly identified reusable map."""
+        if not self._ready_to_save():
+            return
+        name, accepted = QInputDialog.getText(
+            self,
+            "New reusable map",
+            "Map name",
+            text=f"{self.draft.name} Copy",
+        )
+        if not accepted or not name.strip():
+            return
+        suggested_id = re.sub(r"[^a-z0-9]+", "-", name.casefold()).strip("-")
+        map_id, accepted = QInputDialog.getText(
+            self,
+            "New reusable map",
+            "Stable map ID",
+            text=suggested_id,
+        )
+        if not accepted:
+            return
+        try:
+            definition = self.service.promote_game_map(
+                self.draft,
+                MapId(map_id.strip()),
+                name.strip(),
+            )
+            self.promoted.emit(definition)
+            self.message.setText(f"Saved new reusable map {definition.name}")
+            self.message.setStyleSheet("color: #2f6843")
+            self.message.setVisible(True)
+        except Exception as exc:
+            self._show_error(f"Could not save reusable map: {exc}")

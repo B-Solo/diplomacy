@@ -74,7 +74,8 @@ Uncommon region-classification corrections remain available through the complete
 
 SVG identifiers provide the initial region classification, and geometry supplies ordinary adjacency suggestions.
 The authored YAML records additions, removals, split coasts, canals, and off-map links.
-Saving a correction creates a user-owned configured-map copy and does not silently alter an existing game's private map snapshot.
+Saving a correction updates the canonical map under `maps/<map-id>/` in the source checkout so Git can review and carry the correction to another machine.
+Existing games keep independent private snapshots and are not changed by reusable-map saves.
 
 The supplied England map is reconstructed from the Anarchy in the UK variant.
 Its source and licence information are recorded in [maps/england/SOURCE.md](maps/england/SOURCE.md).
@@ -83,7 +84,9 @@ Its source and licence information are recorded in [maps/england/SOURCE.md](maps
 
 Each game folder is portable and self-contained.
 It includes static game settings, saved map views, a private map snapshot, every reached phase state, original order text, canonical orders, validation, and adjudication results.
-The private map's visual anchors may be adjusted during play without changing its territory names, topology, powers or setup.
+The complete private map can be reopened in the map editor during play.
+Saving warns that the change affects every phase and reparses saved orders against the edited map without re-adjudicating completed phases.
+The private map can update its source reusable map or create a new reusable map while retaining the canonical reusable starting setup.
 
 Phase advancement uses recoverable redo transactions.
 Opening a game automatically completes an interrupted prepared transaction before exposing any phase snapshot.

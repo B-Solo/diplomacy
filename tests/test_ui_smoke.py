@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
     QGraphicsItem,
     QGraphicsView,
     QLabel,
+    QMessageBox,
     QPushButton,
 )
 
@@ -50,10 +51,10 @@ from diplomacy_app.ui.style import STYLE, light_palette
 from diplomacy_app.visibility import VisibilityProjector
 
 
-def test_new_game_uses_a_named_folder_below_the_selected_location(qtbot, tmp_path, project_root):
+def test_new_game_uses_a_named_folder_below_the_selected_location(qtbot, tmp_path, configured_maps):
     games_location = tmp_path / "games"
     games_location.mkdir()
-    maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
+    maps = configured_maps
     service = ApplicationService(
         FileGameRepository(RecentGameStore(tmp_path / "app.json")),
         maps,
@@ -84,7 +85,7 @@ def test_new_game_uses_a_named_folder_below_the_selected_location(qtbot, tmp_pat
     assert expected.is_dir()
 
 
-def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_root):
+def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, configured_maps):
     app = QApplication.instance()
     app.setStyle("Fusion")
     app.setPalette(light_palette())
@@ -97,7 +98,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert "border-top: 6px solid #39372f" in STYLE
     assert "QScrollBar::handle" in STYLE
     assert "Segoe UI" not in STYLE
-    maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
+    maps = configured_maps
     service = ApplicationService(
         FileGameRepository(RecentGameStore(tmp_path / "app.json")),
         maps,
@@ -299,7 +300,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     }
     assert {
         label.attrib["font-size"] for label in topology_coast_labels.findall("{*}g/{*}text")
-    } == {"9"}
+    } == {"8"}
     assert {label.attrib["fill"] for label in topology_coast_labels.findall("{*}g/{*}text")} == {
         definition.presentation.label_colour
     }
@@ -472,7 +473,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     selectable_territory_labels = [item for item in selectable_labels if not item.italic]
     assert len(selectable_coast_labels) == len(wizard.draft.presentation.coast_label_anchors)
     assert len(selectable_territory_labels) == len(wizard.draft.presentation.label_anchors)
-    assert {label.font_size for label in selectable_coast_labels} == {9.0}
+    assert {label.font_size for label in selectable_coast_labels} == {8.0}
     display_territory = wizard.draft.territories[0]
     canonical_name = display_territory.name
     wizard._select_territory_label(display_territory.id)
@@ -689,7 +690,7 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, project_
     assert maps.load(saved[0].id).presentation.army_hold_offset == army_offset
     assert maps.load(saved[0].id).presentation.fleet_hold_offset == fleet_offset
     assert maps.load(saved[0].id).presentation.unclaimed_region_colour == "#d8c8a8"
-    reopened_maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
+    reopened_maps = FileMapLibrary(tmp_path / "maps")
     assert (
         next(
             territory.name
@@ -742,8 +743,8 @@ def test_terminal_interrupt_requests_normal_application_quit():
     assert app.quit_requested
 
 
-def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root, monkeypatch):
-    maps = FileMapLibrary(tmp_path / "maps", project_root / "maps")
+def test_current_game_opens_full_map_editor(qtbot, tmp_path, configured_maps, monkeypatch):
+    maps = configured_maps
     service = ApplicationService(
         FileGameRepository(RecentGameStore(tmp_path / "app.json")),
         maps,
@@ -776,7 +777,7 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert not window.next.isEnabled()
     assert window.previous.property("seasonNavigation")
     assert window.next.property("seasonNavigation")
-    assert not window.game_map_placement_button.isHidden()
+    assert not window.game_map_edit_button.isHidden()
     assert window.tabs.currentIndex() == 0
     assert window.stack.currentWidget() is window.map_workspace
     window.tabs.setCurrentIndex(1)
@@ -966,20 +967,28 @@ def test_current_game_opens_placement_only_editor(qtbot, tmp_path, project_root,
     assert Path(dialog_initial_paths[1]).parent == tmp_path
     assert settings.value("imageSharing/lastDirectory") == str(second_image.parent.resolve())
 
-    window.game_map_placement_button.click()
+    window.game_map_edit_button.click()
     editor = window.stack.currentWidget()
     assert isinstance(editor, MapWizard)
-    assert editor.game_placement_only
-    assert editor.tabs.count() == 1
-    assert editor.tabs.tabText(0) == "Placement"
-    assert editor.save_button.text() == "Save game map placement"
-    assert not hasattr(editor, "yaml_editor")
+    assert editor.game_map
+    assert [editor.tabs.tabText(index) for index in range(editor.tabs.count())] == [
+        "Definition",
+        "Powers & start",
+        "Placement",
+    ]
+    assert editor.save_button.text() == "Save game map"
+    assert editor.yaml_editor.toPlainText()
 
     territory_id, old_point = next(iter(editor.draft.presentation.label_anchors.items()))
     editor.army_hold_x.setValue(6)
     editor.army_hold_y.setValue(17)
     moved_point = Point(old_point.x + 3, old_point.y + 5)
     editor._anchor_moved(territory_id, "label", None, moved_point)
+    monkeypatch.setattr(
+        QMessageBox,
+        "warning",
+        lambda *args: QMessageBox.StandardButton.Save,
+    )
     editor.save_button.click()
     assert window.stack.currentWidget() is window.map_workspace
     assert (

@@ -20,12 +20,15 @@ Geometry infers army movement across a shared land border and fleet movement acr
 Extracted SVG geometry is cached by the immutable sanitised SVG content and selected element identifiers so repeated draft compilation after presentation-only edits does not reparse detailed map paths.
 Declaring `split_coasts` suppresses ordinary inferred fleet connections for that province, after which its local additions assign neighbouring fleet locations to named coasts explicitly.
 The saved effective topology is materialised as JSON so later geometry-library changes cannot alter an existing configured map implicitly.
+The compiled document records a digest of the authored YAML, sanitised SVG, fixed unit assets and compiler contract.
+Loading uses the compiled document only when that digest matches; otherwise it compiles the authored source in memory without rewriting the checkout.
 
 Validation covers identifier uniqueness, canonical and display names, abbreviation uniqueness, topology symmetry, unit-specific reachability, power starts, supply centres, label sizes, presentation colours, anchor coverage and SVG references.
 Issues use stable codes and point to the relevant map YAML field or source line.
 The same validation components check a game-specific starting year, season, units, supply-centre ownership and territory control while treating configured powers, colours, home supply centres and topology as immutable.
 
-Saving writes a complete reusable map folder atomically.
+Reusable maps are canonical source-controlled files under the checkout's `maps/<map-id>/` directory.
+Saving writes a complete reusable map folder atomically while retaining provenance and other ancillary files not owned by the editor.
 Saving a reopened draft replaces the reusable map but cannot access or modify map snapshots owned by existing games.
 The fixed army and fleet assets shown in Placement are materialised in every saved map.
 
@@ -37,7 +40,6 @@ The fixed army and fleet assets shown in Placement are materialised in every sav
 - `geometry` calculates shared-boundary adjacency candidates and initial interior anchors without claiming rule validity.
 - `map_codec` parses the single authored map YAML, combines inferred geometry with local connection additions and removals, and emits the complete machine-managed map JSON.
 - `validation` performs semantic and asset-reference checks and reports located issues with stable codes.
-- `storage` reads and atomically writes complete reusable-map folders.
 - `defaults` supplies the standard army and fleet assets when custom assets are absent.
 
 The importer retains generated values in the draft so manual corrections survive repeated validation.
@@ -47,4 +49,4 @@ The map codec preserves user YAML text and gives generated JSON a stable orderin
 
 - `defusedxml.ElementTree`, `svgelements` and Shapely.
 - PyYAML and Pydantic storage models.
-- Local reusable-map storage.
+- A writable source checkout containing the canonical reusable-map library.

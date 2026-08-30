@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from diplomacy_app.domain.errors import ApplicationError, RepositoryError
+from diplomacy_app.domain.errors import ApplicationError, MapLibraryError, RepositoryError
 from diplomacy_app.domain.models import (
     GAMEMASTER,
     AdvancedPhase,
@@ -23,11 +23,13 @@ from diplomacy_app.domain.models import (
     NewGameDraft,
     NewGameRequest,
     OrderResult,
+    OrderSubmission,
     Perspective,
     PhaseId,
     PhaseSnapshot,
     PixelSize,
     Point,
+    PowerId,
     ProjectedMapState,
     ProjectionRequest,
     RenderRequest,
@@ -119,7 +121,8 @@ class ApplicationService:
         return NewGameDraft(definition.id, definition.name, definition.default_starting_setup)
 
     def create_game(self, request: NewGameRequest) -> SessionView:
-        definition = self.map_library.load(request.map_id)
+        map_draft = self.map_library.load_draft(request.map_id)
+        definition = self.map_library.preview_definition(map_draft)
         validation = self.map_library.validate_starting_setup(definition, request.starting_setup)
         if not validation.is_valid:
             raise RepositoryError(
@@ -130,7 +133,7 @@ class ApplicationService:
             CreateStoredGame(
                 request.name,
                 request.location,
-                definition,
+                map_draft,
                 request.starting_setup,
                 request.settings,
             )
@@ -275,18 +278,83 @@ class ApplicationService:
         self._game = updated
         return updated
 
-    def begin_game_map_placement(self) -> MapDraft:
-        game, _ = self._require_game()
-        return self.repository.load_map_placement_draft(game.game_id)
+    def begin_game_map_edit(self) -> MapDraft:
+        """Open the current game's complete private map source for editing.
 
-    def save_game_map_placement(self, draft: MapDraft) -> SessionView:
+        :return: Complete private map draft.
+        :raises RepositoryError: If no game is open.
+        """
+        game, _ = self._require_game()
+        return self.repository.load_map_draft(game.game_id)
+
+    def save_game_map_draft(self, draft: MapDraft) -> SessionView:
+        """Save a complete private game map and revalidate every saved submission.
+
+        :param draft: Edited private map draft.
+        :return: Refreshed game session.
+        :raises RepositoryError: If the map ID changes or validation fails.
+        """
         game, phase = self._require_game()
-        updated = self.repository.save_map_presentation(
-            game.game_id, draft.presentation, game.revision
+        if draft.map_id != game.map_definition.id:
+            raise RepositoryError("A game's private map ID cannot be changed")
+        validation = self.map_library.validate(draft)
+        if not validation.is_valid:
+            raise RepositoryError(
+                "Game map has validation errors: "
+                + "; ".join(item.issue.message for item in validation.issues)
+            )
+        definition = self.map_library.preview_definition(draft)
+        revalidated: dict[PhaseId, dict[PowerId, OrderSubmission]] = {}
+        for phase_id in game.phases:
+            stored_phase = self.repository.load_phase(game.game_id, phase_id)
+            if stored_phase.submissions:
+                revalidated[phase_id] = {
+                    power_id: self.order_processor.revalidate_submission(
+                        definition,
+                        stored_phase,
+                        submission,
+                    )
+                    for power_id, submission in stored_phase.submissions.items()
+                }
+        updated = self.repository.save_map_draft(
+            game.game_id,
+            draft,
+            revalidated,
+            game.revision,
         )
         self._game = updated
         self._phase = self.repository.load_phase(updated.game_id, phase.phase_id)
         return self._session()
+
+    def promote_game_map(
+        self,
+        draft: MapDraft,
+        map_id: MapId,
+        name: str,
+    ) -> MapDefinition:
+        """Copy a private game map into the canonical reusable library.
+
+        :param draft: Private game-map draft whose design should be copied.
+        :param map_id: Destination reusable-map identifier.
+        :param name: Destination reusable-map name.
+        :return: Saved canonical map definition.
+        :raises RepositoryError: If the private map identity no longer matches the game.
+        :raises MapLibraryError: If a requested new map ID already exists.
+        """
+        game, _ = self._require_game()
+        if draft.map_id != game.map_definition.id:
+            raise RepositoryError("A game's private map ID cannot be changed")
+        existing = {summary.map_id for summary in self.map_library.list()}
+        if map_id != draft.map_id and map_id in existing:
+            raise MapLibraryError(f"Configured map already exists: {map_id}")
+        canonical = self.map_library.load(draft.map_id)
+        reusable = self.map_library.prepare_copy(
+            draft,
+            map_id,
+            name,
+            canonical.default_starting_setup,
+        )
+        return self.map_library.save(reusable)
 
     def list_maps(self) -> tuple[MapSummary, ...]:
         return self.map_library.list()

@@ -134,7 +134,8 @@ The `GameRepository` contract provides these capabilities:
 - Open and validate a game folder, returning a `GameSnapshot` and `Revision`.
 - Load a selected `PhaseSnapshot`.
 - Persist an `OrderSubmission`, finalisation change or saved view against an expected revision.
-- Create a game from a `MapDefinition` and validated game-specific `StartingSetup`.
+- Create a game from a complete configured-map draft and validated game-specific `StartingSetup`.
+- Load and replace a game's complete private map draft while keeping its map ID immutable.
 - Commit an `AdjudicationProposal`, including the completed phase records and next phase state, as one logical transaction.
 
 Mutation results return the new revision and updated snapshot.
@@ -156,8 +157,8 @@ The `MapLibrary` contract provides these capabilities:
 - Validate a game-specific starting setup without changing the configured map's powers, colours, home supply centres or topology.
 - Save a validated reusable map.
 
-Creating a game passes a `MapDefinition` from the Map Library to the Game Repository.
-The repository copies the definition and required assets into the game folder, after which that game uses its private copy.
+Creating a game passes a complete authored draft from the Map Library to the Game Repository.
+The repository materialises the selected starting setup into that draft and copies its source, compiled definition and required assets into the game folder, after which that game uses its private copy.
 
 ### Order Processing
 

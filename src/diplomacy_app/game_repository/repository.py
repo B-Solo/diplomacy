@@ -3,11 +3,10 @@
 from __future__ import annotations
 
 import json
-import math
 import os
-import re
 import shutil
 import tempfile
+from collections.abc import Mapping
 from dataclasses import replace
 from pathlib import Path
 from types import MappingProxyType
@@ -21,7 +20,6 @@ from diplomacy_app.domain.models import (
     GameSnapshot,
     GameSummary,
     MapDraft,
-    MapPresentation,
     OrderResult,
     OrderSubmission,
     PhaseId,
@@ -31,11 +29,9 @@ from diplomacy_app.domain.models import (
     SavedView,
     SavedViewId,
     Season,
-    SvgElementRole,
     game_folder_name,
 )
 from diplomacy_app.game_repository.game_codec import (
-    authored_map_yaml,
     game_config_data,
     load_game_config,
     load_private_map,
@@ -45,8 +41,10 @@ from diplomacy_app.game_repository.game_codec import (
 from diplomacy_app.game_repository.recent_games import RecentGameStore
 from diplomacy_app.game_repository.revision import revision_for_game
 from diplomacy_app.game_repository.transaction import atomic_json, commit_files, recover
+from diplomacy_app.map_library import draft_editor
+from diplomacy_app.map_library.library import load_map_draft_folder
+from diplomacy_app.map_library.map_codec import compile_map, compiled_map_data
 from diplomacy_app.storage.serialization import (
-    map_definition_data,
     orders_document_data,
     orders_document_from_data,
     phase_state_from_data,
@@ -225,36 +223,33 @@ class FileGameRepository:
                 raise
             raise InvalidStoredData(f"Could not load phase {phase_id.label}: {exc}") from exc
 
-    def load_map_placement_draft(self, game_id: GameId) -> MapDraft:
-        self._root_for(game_id)
-        game = self._read_game(self._locations[game_id], record=False)
-        definition = game.map_definition
-        return MapDraft(
-            definition.id,
-            definition.name,
-            definition.assets.map_svg,
-            MappingProxyType(
-                {
-                    territory.svg_element_id: SvgElementRole.TERRITORY
-                    for territory in definition.territories
-                }
-            ),
-            definition.territories,
-            authored_map_yaml(definition),
-            definition.powers,
-            definition.default_starting_setup,
-            definition.presentation,
-            definition.rules_engine_id,
-        )
+    def load_map_draft(self, game_id: GameId) -> MapDraft:
+        """Load the complete editable map source owned by one game.
+
+        :param game_id: Open game whose private map should be edited.
+        :return: Complete private map draft.
+        """
+        return load_map_draft_folder(self._root_for(game_id) / "map")
 
     def create(self, request: CreateStoredGame) -> GameSnapshot:
+        """Create a portable game with a complete private authored map.
+
+        :param request: Validated game identity, map draft, setup, and settings.
+        :return: Newly opened game snapshot.
+        :raises RepositoryError: If the destination cannot be created safely.
+        """
         target = request.location.path
         if target.exists() and any(target.iterdir()):
             raise RepositoryError(f"Game folder is not empty: {target}")
         parent = target.parent
         parent.mkdir(parents=True, exist_ok=True)
         game_id = GameId(game_folder_name(request.name))
-        private_map = replace(request.map_definition, default_starting_setup=request.starting_setup)
+        private_draft = draft_editor.update_setup(
+            request.map_draft,
+            request.map_draft.powers,
+            request.starting_setup,
+        )
+        private_map = compile_map(private_draft.map_yaml, private_draft.svg)
         stage = Path(tempfile.mkdtemp(prefix=f".{target.name}-", dir=parent))
         try:
             (stage / "map").mkdir()
@@ -263,13 +258,14 @@ class FileGameRepository:
                 game_config_data(game_id, request.name, settings), encoding="utf-8"
             )
             atomic_json(stage / "views.json", views_data(()))
-            (stage / "map" / "map.yaml").write_text(
-                authored_map_yaml(private_map), encoding="utf-8"
-            )
+            (stage / "map" / "map.yaml").write_text(private_draft.map_yaml, encoding="utf-8")
             (stage / "map" / "map.svg").write_bytes(private_map.assets.map_svg)
             (stage / "map" / "army.svg").write_bytes(private_map.assets.army_svg)
             (stage / "map" / "fleet.svg").write_bytes(private_map.assets.fleet_svg)
-            atomic_json(stage / "map" / "_compiled-map.json", map_definition_data(private_map))
+            atomic_json(
+                stage / "map" / "_compiled-map.json",
+                compiled_map_data(private_map, private_draft.map_yaml, private_map.assets.map_svg),
+            )
             first = _phase_directory(stage, request.starting_setup.phase_id)
             first.mkdir(parents=True)
             atomic_json(
@@ -354,79 +350,50 @@ class FileGameRepository:
         atomic_json(root / "views.json", views_data(views))
         return self._read_game(location, record=False)
 
-    def save_map_presentation(
+    def save_map_draft(
         self,
         game_id: GameId,
-        presentation: MapPresentation,
+        draft: MapDraft,
+        revalidated_submissions: Mapping[PhaseId, Mapping[PowerId, OrderSubmission]],
         expected_revision: Revision,
     ) -> GameSnapshot:
+        """Save a complete private game map and reparsed order submissions.
+
+        :param game_id: Open game whose private map is changing.
+        :param draft: Complete validated private map draft.
+        :param revalidated_submissions: Saved submissions reparsed against the edited map.
+        :param expected_revision: Revision observed before editing began.
+        :return: Updated game snapshot.
+        :raises RepositoryError: If the map identity changes or the game changed concurrently.
+        """
         root = self._root_for(game_id)
         self._check_revision(root, expected_revision)
         location = self._locations[game_id]
         game = self._read_game(location, record=False)
-        current = game.map_definition.presentation
-        fields = (
-            "label_anchors",
-            "abbreviation_anchors",
-            "army_anchors",
-            "fleet_anchors",
-            "coast_label_anchors",
-            "coast_label_rotations",
-            "supply_centre_anchors",
-        )
-        if any(
-            set(getattr(current, field)) != set(getattr(presentation, field)) for field in fields
-        ):
-            raise RepositoryError("Game map placement cannot add or remove visual anchors")
-        points = (
-            *presentation.label_anchors.values(),
-            *presentation.abbreviation_anchors.values(),
-            *presentation.army_anchors.values(),
-            *presentation.fleet_anchors.values(),
-            *presentation.coast_label_anchors.values(),
-            *presentation.supply_centre_anchors.values(),
-            presentation.army_hold_offset,
-            presentation.fleet_hold_offset,
-        )
-        values = (
-            *(coordinate for point in points for coordinate in (point.x, point.y)),
-            *presentation.coast_label_rotations.values(),
-            presentation.territory_label_font_size,
-            presentation.coast_label_font_size,
-        )
-        if not all(math.isfinite(value) for value in values):
-            raise RepositoryError("Game map placement values must be finite")
-        if not all(
-            -50 <= coordinate <= 50
-            for offset in (presentation.army_hold_offset, presentation.fleet_hold_offset)
-            for coordinate in (offset.x, offset.y)
-        ):
-            raise RepositoryError("Game map hold offsets must be between -50 and 50")
-        if not all(
-            5 <= size <= 24
-            for size in (
-                presentation.territory_label_font_size,
-                presentation.coast_label_font_size,
+        definition = compile_map(draft.map_yaml, draft.svg)
+        if draft.map_id != game.map_definition.id or definition.id != game.map_definition.id:
+            raise RepositoryError("A game's private map ID cannot be changed")
+        files = [
+            ("map/map.yaml", draft.map_yaml.encode()),
+            ("map/map.svg", definition.assets.map_svg),
+            ("map/army.svg", definition.assets.army_svg),
+            ("map/fleet.svg", definition.assets.fleet_svg),
+            (
+                "map/_compiled-map.json",
+                _json_bytes(
+                    compiled_map_data(definition, draft.map_yaml, definition.assets.map_svg)
+                ),
+            ),
+        ]
+        for phase_id, submissions in revalidated_submissions.items():
+            phase = self.load_phase(game_id, phase_id)
+            relative = (
+                (_phase_directory(root, phase_id) / "orders.json").relative_to(root).as_posix()
             )
-        ):
-            raise RepositoryError("Game map label sizes must be between 5 and 24")
-        colours = (
-            presentation.label_colour,
-            presentation.inaccessible_region_colour,
-            presentation.sea_colour,
-            presentation.unclaimed_region_colour,
-        )
-        if not all(re.fullmatch(r"#[0-9a-fA-F]{6}", colour) for colour in colours):
-            raise RepositoryError("Game map colours must use #RRGGBB notation")
-        updated = replace(game.map_definition, presentation=presentation)
-        commit_files(
-            root,
-            [
-                ("map/map.yaml", authored_map_yaml(updated).encode("utf-8")),
-                ("map/_compiled-map.json", _json_bytes(map_definition_data(updated))),
-            ],
-            "map/_compiled-map.json",
-        )
+            files.append(
+                (relative, _json_bytes(orders_document_data(dict(submissions), phase.results)))
+            )
+        commit_files(root, files, "map/_compiled-map.json")
         return self._read_game(location, record=False)
 
     def commit_adjudication(

@@ -1,0 +1,7946 @@
+{
+  "adjacencies": [
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "anglesey"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "anglesey"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "anglesey"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "north",
+        "territory": "devon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "beds"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "beds"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hertfs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "beds"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "beds"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "berkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "berkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "berkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "berkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "berkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "beds"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "berkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hertfs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "london"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "beds"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hertfs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "leicestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "north",
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "greater-manchester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "shropshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cleveland"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cleveland"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cleveland"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cleveland"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cleveland"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "shropshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "devon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "north",
+        "territory": "devon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "south",
+        "territory": "devon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "english-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "greater-manchester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "leicestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "devon"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "devon"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "devon"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "origin": {
+        "coast": "north",
+        "territory": "devon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "origin": {
+        "coast": "north",
+        "territory": "devon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "origin": {
+        "coast": "north",
+        "territory": "devon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "origin": {
+        "coast": "south",
+        "territory": "devon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "origin": {
+        "coast": "south",
+        "territory": "devon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "origin": {
+        "coast": "south",
+        "territory": "devon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "devon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "south",
+        "territory": "devon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "isle-of-man"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "niarbyl-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cleveland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cleveland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "straights-of-dover"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "thames-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "origin": {
+        "coast": "north",
+        "territory": "dyfed"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "origin": {
+        "coast": "north",
+        "territory": "dyfed"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "origin": {
+        "coast": "north",
+        "territory": "dyfed"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "origin": {
+        "coast": "south",
+        "territory": "dyfed"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "origin": {
+        "coast": "south",
+        "territory": "dyfed"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "origin": {
+        "coast": "south",
+        "territory": "dyfed"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "english-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "english-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "english-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "english-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "straights-of-dover"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "english-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hertfs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "london"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "thames-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "south",
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "greater-manchester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "greater-manchester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "greater-manchester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "greater-manchester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "greater-manchester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "anglesey"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "anglesey"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "north",
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "berkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "isle-of-wight"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "isle-of-wight"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "shropshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-midlands"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "beds"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hertfs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hertfs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hertfs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hertfs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "london"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "hertfs"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "thames-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "english-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "north-atlantic"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "isle-of-man"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "niarbyl-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "isle-of-man"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "isle-of-wight"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "isle-of-wight"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "isle-of-wight"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "london"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "thames-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "greater-manchester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "leicestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "leicestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "leicestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "leicestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "leicestershire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "london"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "london"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hertfs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "london"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "london"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "london"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "anglesey"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "niarbyl-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "north-atlantic"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "greater-manchester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "mersey-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "south",
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwynedd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "shropshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cleveland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cleveland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "douglas-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "niarbyl-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "isle-of-man"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "niarbyl-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "niarbyl-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "north-atlantic"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "niarbyl-bay"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "north-atlantic"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "menai-straits"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "north-atlantic"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "niarbyl-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "north-atlantic"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "north-atlantic"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "north-atlantic"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "beds"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "leicestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cleveland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cumbria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "berkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cardigan-bay"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "north",
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "south",
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "north",
+        "territory": "devon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "english-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "irish-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-bristol-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-bristol-channel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "leicestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gwent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-powys"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humberside"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "s-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "shropshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "clwyd"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "shropshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "shropshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-powys"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "shropshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "shropshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "devon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cornwall"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "south",
+        "territory": "devon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "english-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "isle-of-wight"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "straights-of-dover"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "shropshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-midlands"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "straights-of-dover"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "english-channel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "straights-of-dover"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "straights-of-dover"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "cambs"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "thames-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "berkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "bucks"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "london"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dutch-crossing"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "thames-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "essex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "thames-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "humber-estuary"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "thames-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "thames-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "suffolk"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "thames-estuary"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northeast-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-midlands"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-midlands"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-midlands"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "e-sussex"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "south-coast"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-sussex"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "greater-manchester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "lancashire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "n-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "s-yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "w-yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "derbyshire-and-nottinghamshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hereford-and-worcester"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "leicestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "northants"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "staffordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "w-midlands"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "warwickshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "berkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "dorset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "hampshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "oxfordshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "unit": "army"
+    }
+  ],
+  "inaccessible_svg_elements": [
+    "impassable-scotland"
+  ],
+  "map_id": "england",
+  "name": "England",
+  "powers": [
+    {
+      "colour": "#777788",
+      "home_supply_centres": [
+        "anglesey",
+        "cheshire",
+        "isle-of-man",
+        "merseyside"
+      ],
+      "id": "merseyside",
+      "name": "Merseyside"
+    },
+    {
+      "colour": "#cccccc",
+      "home_supply_centres": [
+        "durham",
+        "northumberland",
+        "tyne-and-wear"
+      ],
+      "id": "up-north",
+      "name": "Up North"
+    },
+    {
+      "colour": "#9b4fa6",
+      "home_supply_centres": [
+        "kent",
+        "london",
+        "surrey"
+      ],
+      "id": "london",
+      "name": "London"
+    },
+    {
+      "colour": "#a98538",
+      "home_supply_centres": [
+        "avon",
+        "gloucestershire",
+        "wiltshire"
+      ],
+      "id": "bristol",
+      "name": "Bristol"
+    },
+    {
+      "colour": "#507666",
+      "home_supply_centres": [
+        "dyfed",
+        "glamorgan",
+        "pembrokeshire"
+      ],
+      "id": "wales",
+      "name": "Wales"
+    },
+    {
+      "colour": "#bb5555",
+      "home_supply_centres": [
+        "n-lincolnshire",
+        "norfolk",
+        "s-lincolnshire"
+      ],
+      "id": "east-anglia",
+      "name": "East-Anglia"
+    }
+  ],
+  "presentation": {
+    "abbreviations": {
+      "anglesey": [
+        265.27,
+        377.25
+      ],
+      "avon": [
+        475.62,
+        724.85
+      ],
+      "avon-estuary": [
+        370.38,
+        731.96
+      ],
+      "beds": [
+        705.0,
+        598.0
+      ],
+      "berkshire": [
+        616.78,
+        713.86
+      ],
+      "bucks": [
+        667.08,
+        648.7
+      ],
+      "cambs": [
+        745.0,
+        550.0
+      ],
+      "cardigan-bay": [
+        217.0,
+        532.0
+      ],
+      "cheshire": [
+        487.31,
+        409.13
+      ],
+      "cleveland": [
+        644.14,
+        167.64
+      ],
+      "clwyd": [
+        405.0,
+        430.0
+      ],
+      "cornwall": [
+        258.03,
+        857.99
+      ],
+      "cumbria": [
+        446.28,
+        177.46
+      ],
+      "derbyshire-and-nottinghamshire": [
+        614.17,
+        421.26
+      ],
+      "devon": [
+        350.0,
+        830.0
+      ],
+      "dorset": [
+        500.7,
+        808.28
+      ],
+      "douglas-bay": [
+        335.0,
+        176.0
+      ],
+      "durham": [
+        568.0,
+        157.0
+      ],
+      "dutch-crossing": [
+        964.6,
+        737.03
+      ],
+      "dyfed": [
+        300.0,
+        620.0
+      ],
+      "e-sussex": [
+        779.43,
+        786.41
+      ],
+      "english-channel": [
+        380.0,
+        995.0
+      ],
+      "essex": [
+        805.0,
+        628.0
+      ],
+      "glamorgan": [
+        372.62,
+        670.0
+      ],
+      "gloucestershire": [
+        529.07,
+        647.1
+      ],
+      "greater-manchester": [
+        511.26,
+        350.92
+      ],
+      "gwent": [
+        442.52,
+        660.0
+      ],
+      "gwynedd": [
+        330.0,
+        440.0
+      ],
+      "hampshire": [
+        620.0,
+        765.0
+      ],
+      "hereford-and-worcester": [
+        487.33,
+        585.37
+      ],
+      "hertfs": [
+        721.34,
+        653.4
+      ],
+      "humber-estuary": [
+        880.0,
+        380.0
+      ],
+      "humberside": [
+        685.75,
+        289.91
+      ],
+      "irish-sea": [
+        45.0,
+        470.0
+      ],
+      "isle-of-man": [
+        260.5,
+        220.17
+      ],
+      "isle-of-wight": [
+        619.01,
+        863.13
+      ],
+      "kent": [
+        795.16,
+        737.25
+      ],
+      "lancashire": [
+        485.15,
+        311.76
+      ],
+      "leicestershire": [
+        634.16,
+        502.92
+      ],
+      "london": [
+        745.8,
+        692.19
+      ],
+      "menai-straits": [
+        205.0,
+        385.0
+      ],
+      "mersey-estuary": [
+        368.91,
+        317.61
+      ],
+      "merseyside": [
+        413.48,
+        346.89
+      ],
+      "n-bristol-channel": [
+        225.0,
+        710.0
+      ],
+      "n-lincolnshire": [
+        709.95,
+        386.31
+      ],
+      "n-powys": [
+        396.27,
+        503.2
+      ],
+      "n-yorkshire": [
+        600.0,
+        245.0
+      ],
+      "niarbyl-bay": [
+        218.44,
+        280.66
+      ],
+      "norfolk": [
+        825.0,
+        470.0
+      ],
+      "north-atlantic": [
+        110.0,
+        145.0
+      ],
+      "north-sea": [
+        940.0,
+        145.0
+      ],
+      "northants": [
+        657.49,
+        549.58
+      ],
+      "northeast-coast": [
+        775.0,
+        165.0
+      ],
+      "northumberland": [
+        522.92,
+        75.89
+      ],
+      "oxfordshire": [
+        610.0,
+        665.0
+      ],
+      "pembrokeshire": [
+        240.04,
+        627.47
+      ],
+      "s-bristol-channel": [
+        205.0,
+        785.0
+      ],
+      "s-lincolnshire": [
+        717.89,
+        437.72
+      ],
+      "s-powys": [
+        391.58,
+        594.16
+      ],
+      "s-yorkshire": [
+        610.5,
+        357.09
+      ],
+      "shropshire": [
+        470.0,
+        505.0
+      ],
+      "somerset": [
+        449.22,
+        769.46
+      ],
+      "south-coast": [
+        490.0,
+        900.0
+      ],
+      "staffordshire": [
+        535.05,
+        477.35
+      ],
+      "straights-of-dover": [
+        900.0,
+        950.0
+      ],
+      "suffolk": [
+        840.0,
+        560.0
+      ],
+      "surrey": [
+        721.81,
+        739.42
+      ],
+      "thames-estuary": [
+        897.91,
+        655.6
+      ],
+      "tyne-and-wear": [
+        607.79,
+        104.22
+      ],
+      "w-midlands": [
+        550.1,
+        534.05
+      ],
+      "w-sussex": [
+        695.09,
+        791.86
+      ],
+      "w-yorkshire": [
+        569.59,
+        325.82
+      ],
+      "warwickshire": [
+        582.09,
+        572.51
+      ],
+      "wiltshire": [
+        544.16,
+        704.16
+      ]
+    },
+    "armies": {
+      "anglesey": [
+        301.13,
+        399.62
+      ],
+      "avon": [
+        487.0,
+        688.0
+      ],
+      "beds": [
+        698.98,
+        609.54
+      ],
+      "berkshire": [
+        661.14,
+        708.86
+      ],
+      "bucks": [
+        673.64,
+        665.14
+      ],
+      "cambs": [
+        750.0,
+        563.0
+      ],
+      "cheshire": [
+        483.0,
+        390.0
+      ],
+      "cleveland": [
+        638.17,
+        179.6
+      ],
+      "clwyd": [
+        410.72,
+        444.79
+      ],
+      "cornwall": [
+        245.93,
+        871.7
+      ],
+      "cumbria": [
+        457.56,
+        200.28
+      ],
+      "derbyshire-and-nottinghamshire": [
+        609.83,
+        446.0
+      ],
+      "devon": [
+        391.07,
+        816.32
+      ],
+      "dorset": [
+        531.08,
+        823.56
+      ],
+      "durham": [
+        544.0,
+        173.0
+      ],
+      "dyfed": [
+        330.08,
+        626.89
+      ],
+      "e-sussex": [
+        804.59,
+        792.45
+      ],
+      "essex": [
+        796.0,
+        653.0
+      ],
+      "glamorgan": [
+        394.0,
+        693.0
+      ],
+      "gloucestershire": [
+        539.71,
+        622.16
+      ],
+      "greater-manchester": [
+        507.6,
+        365.23
+      ],
+      "gwent": [
+        443.16,
+        672.04
+      ],
+      "gwynedd": [
+        349.0,
+        470.0
+      ],
+      "hampshire": [
+        618.0,
+        785.0
+      ],
+      "hereford-and-worcester": [
+        458.36,
+        609.31
+      ],
+      "hertfs": [
+        737.0,
+        628.0
+      ],
+      "humberside": [
+        676.0,
+        333.0
+      ],
+      "isle-of-man": [
+        280.71,
+        235.0
+      ],
+      "isle-of-wight": [
+        613.95,
+        830.84
+      ],
+      "kent": [
+        834.0,
+        750.0
+      ],
+      "lancashire": [
+        473.0,
+        289.0
+      ],
+      "leicestershire": [
+        630.26,
+        522.38
+      ],
+      "london": [
+        742.16,
+        711.21
+      ],
+      "merseyside": [
+        454.84,
+        366.07
+      ],
+      "n-lincolnshire": [
+        693.69,
+        399.49
+      ],
+      "n-powys": [
+        385.0,
+        539.0
+      ],
+      "n-yorkshire": [
+        552.77,
+        222.06
+      ],
+      "norfolk": [
+        843.0,
+        500.0
+      ],
+      "northants": [
+        639.0,
+        584.0
+      ],
+      "northumberland": [
+        540.0,
+        49.0
+      ],
+      "oxfordshire": [
+        607.0,
+        641.0
+      ],
+      "pembrokeshire": [
+        235.51,
+        632.62
+      ],
+      "s-lincolnshire": [
+        715.0,
+        480.49
+      ],
+      "s-powys": [
+        390.58,
+        631.89
+      ],
+      "s-yorkshire": [
+        602.08,
+        372.75
+      ],
+      "shropshire": [
+        466.0,
+        490.0
+      ],
+      "somerset": [
+        455.59,
+        791.07
+      ],
+      "staffordshire": [
+        532.67,
+        447.59
+      ],
+      "suffolk": [
+        854.0,
+        586.0
+      ],
+      "surrey": [
+        685.4,
+        751.0
+      ],
+      "tyne-and-wear": [
+        588.44,
+        120.52
+      ],
+      "w-midlands": [
+        571.15,
+        541.87
+      ],
+      "w-sussex": [
+        702.0,
+        777.0
+      ],
+      "w-yorkshire": [
+        568.0,
+        308.0
+      ],
+      "warwickshire": [
+        584.85,
+        587.14
+      ],
+      "wiltshire": [
+        542.0,
+        745.0
+      ]
+    },
+    "coast_label_font_size": 8.0,
+    "coast_labels": [
+      {
+        "location": {
+          "coast": "north",
+          "territory": "devon"
+        },
+        "point": [
+          304.05,
+          780.83
+        ],
+        "rotation": -50.0
+      },
+      {
+        "location": {
+          "coast": "south",
+          "territory": "devon"
+        },
+        "point": [
+          342.0,
+          891.91
+        ],
+        "rotation": 0.0
+      },
+      {
+        "location": {
+          "coast": "north",
+          "territory": "dyfed"
+        },
+        "point": [
+          315.05,
+          573.79
+        ],
+        "rotation": -40.0
+      },
+      {
+        "location": {
+          "coast": "south",
+          "territory": "dyfed"
+        },
+        "point": [
+          314.45,
+          649.79
+        ],
+        "rotation": 0.0
+      }
+    ],
+    "fleets": [
+      {
+        "location": {
+          "coast": null,
+          "territory": "north-atlantic"
+        },
+        "point": [
+          91.0,
+          198.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "niarbyl-bay"
+        },
+        "point": [
+          220.0,
+          226.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "douglas-bay"
+        },
+        "point": [
+          349.0,
+          230.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "irish-sea"
+        },
+        "point": [
+          41.0,
+          619.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "menai-straits"
+        },
+        "point": [
+          214.0,
+          353.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "mersey-estuary"
+        },
+        "point": [
+          376.77,
+          360.98
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "cardigan-bay"
+        },
+        "point": [
+          178.0,
+          561.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "n-bristol-channel"
+        },
+        "point": [
+          198.31,
+          728.9
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "s-bristol-channel"
+        },
+        "point": [
+          192.0,
+          819.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "avon-estuary"
+        },
+        "point": [
+          406.36,
+          737.58
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "english-channel"
+        },
+        "point": [
+          377.0,
+          971.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "south-coast"
+        },
+        "point": [
+          564.0,
+          891.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "straights-of-dover"
+        },
+        "point": [
+          925.0,
+          922.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "dutch-crossing"
+        },
+        "point": [
+          989.36,
+          704.48
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "thames-estuary"
+        },
+        "point": [
+          927.0,
+          619.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "humber-estuary"
+        },
+        "point": [
+          919.0,
+          422.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "north-sea"
+        },
+        "point": [
+          974.44,
+          117.56
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "northeast-coast"
+        },
+        "point": [
+          758.0,
+          125.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "cumbria"
+        },
+        "point": [
+          394.84,
+          188.54
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "northumberland"
+        },
+        "point": [
+          560.07,
+          43.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "tyne-and-wear"
+        },
+        "point": [
+          587.0,
+          117.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "durham"
+        },
+        "point": [
+          594.94,
+          146.76
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "cleveland"
+        },
+        "point": [
+          641.52,
+          181.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "lancashire"
+        },
+        "point": [
+          473.0,
+          289.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "n-yorkshire"
+        },
+        "point": [
+          682.13,
+          217.02
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "merseyside"
+        },
+        "point": [
+          453.0,
+          367.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "humberside"
+        },
+        "point": [
+          714.77,
+          302.56
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "n-lincolnshire"
+        },
+        "point": [
+          757.32,
+          393.83
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "cheshire"
+        },
+        "point": [
+          449.04,
+          399.26
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "s-lincolnshire"
+        },
+        "point": [
+          744.33,
+          468.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "gloucestershire"
+        },
+        "point": [
+          491.01,
+          661.1
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "norfolk"
+        },
+        "point": [
+          892.39,
+          478.39
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "suffolk"
+        },
+        "point": [
+          894.13,
+          582.14
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "essex"
+        },
+        "point": [
+          825.33,
+          675.38
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "kent"
+        },
+        "point": [
+          880.3,
+          746.14
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "e-sussex"
+        },
+        "point": [
+          752.16,
+          811.5
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "w-sussex"
+        },
+        "point": [
+          680.46,
+          806.39
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "hampshire"
+        },
+        "point": [
+          627.26,
+          805.07
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "dorset"
+        },
+        "point": [
+          520.14,
+          842.35
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "somerset"
+        },
+        "point": [
+          411.61,
+          757.42
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "avon"
+        },
+        "point": [
+          487.0,
+          688.0
+        ]
+      },
+      {
+        "location": {
+          "coast": "north",
+          "territory": "devon"
+        },
+        "point": [
+          334.63,
+          750.75
+        ]
+      },
+      {
+        "location": {
+          "coast": "south",
+          "territory": "devon"
+        },
+        "point": [
+          363.61,
+          865.23
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "cornwall"
+        },
+        "point": [
+          182.77,
+          917.39
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "isle-of-wight"
+        },
+        "point": [
+          615.0,
+          834.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "gwent"
+        },
+        "point": [
+          442.0,
+          680.35
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "glamorgan"
+        },
+        "point": [
+          395.7,
+          703.19
+        ]
+      },
+      {
+        "location": {
+          "coast": "north",
+          "territory": "dyfed"
+        },
+        "point": [
+          334.26,
+          541.2
+        ]
+      },
+      {
+        "location": {
+          "coast": "south",
+          "territory": "dyfed"
+        },
+        "point": [
+          308.32,
+          657.12
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "pembrokeshire"
+        },
+        "point": [
+          235.9,
+          663.19
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "gwynedd"
+        },
+        "point": [
+          305.63,
+          447.24
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "clwyd"
+        },
+        "point": [
+          390.25,
+          392.92
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "anglesey"
+        },
+        "point": [
+          300.0,
+          397.51
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "isle-of-man"
+        },
+        "point": [
+          278.78,
+          236.93
+        ]
+      }
+    ],
+    "hold_underlines": {
+      "army": [
+        -2.0,
+        11.0
+      ],
+      "fleet": [
+        0.0,
+        8.0
+      ]
+    },
+    "inaccessible_region_colour": "#363634",
+    "label_colour": "#fffefa",
+    "labels": {
+      "anglesey": [
+        281.29,
+        364.17
+      ],
+      "avon": [
+        475.62,
+        724.85
+      ],
+      "avon-estuary": [
+        392.47,
+        730.49
+      ],
+      "beds": [
+        705.0,
+        598.0
+      ],
+      "berkshire": [
+        616.78,
+        713.86
+      ],
+      "bucks": [
+        667.08,
+        648.7
+      ],
+      "cambs": [
+        745.0,
+        550.0
+      ],
+      "cardigan-bay": [
+        217.0,
+        532.0
+      ],
+      "cheshire": [
+        487.31,
+        409.13
+      ],
+      "cleveland": [
+        655.19,
+        166.17
+      ],
+      "clwyd": [
+        405.0,
+        430.0
+      ],
+      "cornwall": [
+        258.03,
+        857.99
+      ],
+      "cumbria": [
+        446.28,
+        177.46
+      ],
+      "derbyshire-and-nottinghamshire": [
+        614.17,
+        421.26
+      ],
+      "devon": [
+        350.0,
+        830.0
+      ],
+      "dorset": [
+        500.7,
+        808.28
+      ],
+      "douglas-bay": [
+        335.0,
+        176.0
+      ],
+      "durham": [
+        568.0,
+        157.0
+      ],
+      "dutch-crossing": [
+        964.6,
+        737.03
+      ],
+      "dyfed": [
+        300.0,
+        620.0
+      ],
+      "e-sussex": [
+        779.43,
+        786.41
+      ],
+      "english-channel": [
+        380.0,
+        995.0
+      ],
+      "essex": [
+        805.0,
+        628.0
+      ],
+      "glamorgan": [
+        372.62,
+        670.0
+      ],
+      "gloucestershire": [
+        529.07,
+        647.1
+      ],
+      "greater-manchester": [
+        511.26,
+        350.92
+      ],
+      "gwent": [
+        442.52,
+        660.0
+      ],
+      "gwynedd": [
+        330.0,
+        440.0
+      ],
+      "hampshire": [
+        620.0,
+        765.0
+      ],
+      "hereford-and-worcester": [
+        487.33,
+        585.37
+      ],
+      "hertfs": [
+        721.34,
+        653.4
+      ],
+      "humber-estuary": [
+        880.0,
+        380.0
+      ],
+      "humberside": [
+        685.75,
+        289.91
+      ],
+      "irish-sea": [
+        45.0,
+        470.0
+      ],
+      "isle-of-man": [
+        253.03,
+        213.94
+      ],
+      "isle-of-wight": [
+        619.01,
+        863.13
+      ],
+      "kent": [
+        792.46,
+        744.41
+      ],
+      "lancashire": [
+        485.15,
+        311.76
+      ],
+      "leicestershire": [
+        634.16,
+        502.92
+      ],
+      "london": [
+        745.8,
+        692.19
+      ],
+      "menai-straits": [
+        205.0,
+        385.0
+      ],
+      "mersey-estuary": [
+        368.91,
+        317.61
+      ],
+      "merseyside": [
+        398.59,
+        340.2
+      ],
+      "n-bristol-channel": [
+        225.0,
+        710.0
+      ],
+      "n-lincolnshire": [
+        709.95,
+        386.31
+      ],
+      "n-powys": [
+        396.27,
+        503.2
+      ],
+      "n-yorkshire": [
+        600.0,
+        245.0
+      ],
+      "niarbyl-bay": [
+        218.44,
+        280.66
+      ],
+      "norfolk": [
+        825.0,
+        470.0
+      ],
+      "north-atlantic": [
+        110.0,
+        145.0
+      ],
+      "north-sea": [
+        940.0,
+        145.0
+      ],
+      "northants": [
+        657.49,
+        549.58
+      ],
+      "northeast-coast": [
+        775.0,
+        165.0
+      ],
+      "northumberland": [
+        522.92,
+        75.89
+      ],
+      "oxfordshire": [
+        610.0,
+        665.0
+      ],
+      "pembrokeshire": [
+        240.04,
+        627.47
+      ],
+      "s-bristol-channel": [
+        205.0,
+        785.0
+      ],
+      "s-lincolnshire": [
+        717.89,
+        437.72
+      ],
+      "s-powys": [
+        391.58,
+        594.16
+      ],
+      "s-yorkshire": [
+        610.5,
+        357.09
+      ],
+      "shropshire": [
+        470.0,
+        505.0
+      ],
+      "somerset": [
+        449.22,
+        769.46
+      ],
+      "south-coast": [
+        490.0,
+        900.0
+      ],
+      "staffordshire": [
+        535.05,
+        477.35
+      ],
+      "straights-of-dover": [
+        900.0,
+        950.0
+      ],
+      "suffolk": [
+        840.0,
+        560.0
+      ],
+      "surrey": [
+        721.81,
+        739.42
+      ],
+      "thames-estuary": [
+        897.91,
+        655.6
+      ],
+      "tyne-and-wear": [
+        626.94,
+        102.01
+      ],
+      "w-midlands": [
+        550.1,
+        534.05
+      ],
+      "w-sussex": [
+        695.09,
+        791.86
+      ],
+      "w-yorkshire": [
+        569.59,
+        325.82
+      ],
+      "warwickshire": [
+        582.09,
+        572.51
+      ],
+      "wiltshire": [
+        544.16,
+        704.16
+      ]
+    },
+    "sea_colour": "#8f99a2",
+    "supply_centres": {
+      "anglesey": [
+        289.74,
+        381.76
+      ],
+      "avon": [
+        475.0,
+        709.0
+      ],
+      "cheshire": [
+        486.63,
+        422.64
+      ],
+      "cleveland": [
+        610.17,
+        177.08
+      ],
+      "cornwall": [
+        212.84,
+        902.74
+      ],
+      "cumbria": [
+        445.0,
+        155.0
+      ],
+      "dorset": [
+        500.0,
+        824.0
+      ],
+      "durham": [
+        536.81,
+        153.22
+      ],
+      "dyfed": [
+        307.83,
+        601.07
+      ],
+      "e-sussex": [
+        775.0,
+        804.0
+      ],
+      "glamorgan": [
+        368.0,
+        684.0
+      ],
+      "gloucestershire": [
+        521.0,
+        664.0
+      ],
+      "greater-manchester": [
+        528.01,
+        369.56
+      ],
+      "humberside": [
+        685.0,
+        314.0
+      ],
+      "isle-of-man": [
+        294.22,
+        219.51
+      ],
+      "isle-of-wight": [
+        616.05,
+        844.95
+      ],
+      "kent": [
+        818.0,
+        728.0
+      ],
+      "leicestershire": [
+        656.0,
+        483.41
+      ],
+      "london": [
+        719.56,
+        700.44
+      ],
+      "merseyside": [
+        434.25,
+        337.83
+      ],
+      "n-lincolnshire": [
+        705.14,
+        366.49
+      ],
+      "n-powys": [
+        379.02,
+        520.72
+      ],
+      "norfolk": [
+        864.0,
+        467.0
+      ],
+      "northants": [
+        659.0,
+        568.0
+      ],
+      "northumberland": [
+        524.0,
+        92.77
+      ],
+      "pembrokeshire": [
+        263.98,
+        643.95
+      ],
+      "s-lincolnshire": [
+        711.2,
+        456.86
+      ],
+      "s-powys": [
+        390.0,
+        609.0
+      ],
+      "somerset": [
+        410.0,
+        780.0
+      ],
+      "surrey": [
+        689.81,
+        726.53
+      ],
+      "tyne-and-wear": [
+        578.0,
+        105.0
+      ],
+      "w-midlands": [
+        544.04,
+        518.11
+      ],
+      "w-yorkshire": [
+        560.0,
+        341.0
+      ],
+      "wiltshire": [
+        541.0,
+        721.0
+      ]
+    },
+    "territory_label_font_size": 9.0,
+    "unclaimed_region_colour": "#ccaa94"
+  },
+  "rules_engine": "standard",
+  "schema_version": 1,
+  "source": {
+    "cache_version": 1,
+    "digest": "48f181e1fd67c4a11d607dad827f373159c8624db75b0c72d79a5afc98c6cc7e"
+  },
+  "start": {
+    "dislodged_units": [],
+    "phase": {
+      "season": "spring",
+      "year": 2000
+    },
+    "schema_version": 1,
+    "supply_centre_owners": {
+      "anglesey": "merseyside",
+      "avon": "bristol",
+      "cheshire": "merseyside",
+      "cleveland": null,
+      "cornwall": null,
+      "cumbria": null,
+      "dorset": null,
+      "durham": "up-north",
+      "dyfed": "wales",
+      "e-sussex": null,
+      "glamorgan": "wales",
+      "gloucestershire": "bristol",
+      "greater-manchester": null,
+      "humberside": null,
+      "isle-of-man": "merseyside",
+      "isle-of-wight": null,
+      "kent": "london",
+      "leicestershire": null,
+      "london": "london",
+      "merseyside": "merseyside",
+      "n-lincolnshire": "east-anglia",
+      "n-powys": null,
+      "norfolk": "east-anglia",
+      "northants": null,
+      "northumberland": "up-north",
+      "pembrokeshire": "wales",
+      "s-lincolnshire": "east-anglia",
+      "s-powys": null,
+      "somerset": null,
+      "surrey": "london",
+      "tyne-and-wear": "up-north",
+      "w-midlands": null,
+      "w-yorkshire": null,
+      "wiltshire": "bristol"
+    },
+    "territory_controllers": {
+      "anglesey": "merseyside",
+      "avon": "bristol",
+      "avon-estuary": null,
+      "beds": null,
+      "berkshire": null,
+      "bucks": null,
+      "cambs": null,
+      "cardigan-bay": null,
+      "cheshire": "merseyside",
+      "cleveland": null,
+      "clwyd": null,
+      "cornwall": null,
+      "cumbria": null,
+      "derbyshire-and-nottinghamshire": null,
+      "devon": null,
+      "dorset": null,
+      "douglas-bay": null,
+      "durham": "up-north",
+      "dutch-crossing": null,
+      "dyfed": "wales",
+      "e-sussex": null,
+      "english-channel": null,
+      "essex": null,
+      "glamorgan": "wales",
+      "gloucestershire": "bristol",
+      "greater-manchester": null,
+      "gwent": null,
+      "gwynedd": null,
+      "hampshire": null,
+      "hereford-and-worcester": null,
+      "hertfs": null,
+      "humber-estuary": null,
+      "humberside": null,
+      "irish-sea": null,
+      "isle-of-man": "merseyside",
+      "isle-of-wight": null,
+      "kent": "london",
+      "lancashire": null,
+      "leicestershire": null,
+      "london": "london",
+      "menai-straits": null,
+      "mersey-estuary": null,
+      "merseyside": "merseyside",
+      "n-bristol-channel": null,
+      "n-lincolnshire": "east-anglia",
+      "n-powys": null,
+      "n-yorkshire": null,
+      "niarbyl-bay": null,
+      "norfolk": "east-anglia",
+      "north-atlantic": null,
+      "north-sea": null,
+      "northants": null,
+      "northeast-coast": null,
+      "northumberland": "up-north",
+      "oxfordshire": null,
+      "pembrokeshire": "wales",
+      "s-bristol-channel": null,
+      "s-lincolnshire": "east-anglia",
+      "s-powys": null,
+      "s-yorkshire": null,
+      "shropshire": null,
+      "somerset": null,
+      "south-coast": null,
+      "staffordshire": null,
+      "straights-of-dover": null,
+      "suffolk": null,
+      "surrey": "london",
+      "thames-estuary": null,
+      "tyne-and-wear": "up-north",
+      "w-midlands": null,
+      "w-sussex": null,
+      "w-yorkshire": null,
+      "warwickshire": null,
+      "wiltshire": "bristol"
+    },
+    "units": [
+      {
+        "location": {
+          "coast": null,
+          "territory": "cheshire"
+        },
+        "power": "merseyside",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "merseyside"
+        },
+        "power": "merseyside",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "isle-of-man"
+        },
+        "power": "merseyside",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "anglesey"
+        },
+        "power": "merseyside",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "northumberland"
+        },
+        "power": "up-north",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "tyne-and-wear"
+        },
+        "power": "up-north",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "durham"
+        },
+        "power": "up-north",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "london"
+        },
+        "power": "london",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "surrey"
+        },
+        "power": "london",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "kent"
+        },
+        "power": "london",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "avon"
+        },
+        "power": "bristol",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "gloucestershire"
+        },
+        "power": "bristol",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "wiltshire"
+        },
+        "power": "bristol",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "dyfed"
+        },
+        "power": "wales",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "pembrokeshire"
+        },
+        "power": "wales",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "glamorgan"
+        },
+        "power": "wales",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "n-lincolnshire"
+        },
+        "power": "east-anglia",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "s-lincolnshire"
+        },
+        "power": "east-anglia",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "norfolk"
+        },
+        "power": "east-anglia",
+        "type": "fleet"
+      }
+    ]
+  },
+  "territories": [
+    {
+      "abbreviation": "NAT",
+      "display_name": "North Atlantic",
+      "id": "north-atlantic",
+      "kind": "sea",
+      "name": "North Atlantic",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-north-atlantic"
+    },
+    {
+      "abbreviation": "NBY",
+      "display_name": "Niarbyl Bay",
+      "id": "niarbyl-bay",
+      "kind": "sea",
+      "name": "Niarbyl Bay",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-niarbyl-bay"
+    },
+    {
+      "abbreviation": "DBY",
+      "display_name": "Douglas Bay",
+      "id": "douglas-bay",
+      "kind": "sea",
+      "name": "Douglas Bay",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-douglas-bay"
+    },
+    {
+      "abbreviation": "IRS",
+      "display_name": "Irish Sea",
+      "id": "irish-sea",
+      "kind": "sea",
+      "name": "Irish Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-irish-sea"
+    },
+    {
+      "abbreviation": "MEN",
+      "display_name": "Menai Straits",
+      "id": "menai-straits",
+      "kind": "sea",
+      "name": "Menai Straits",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-menai-straits"
+    },
+    {
+      "abbreviation": "MSE",
+      "display_name": "Mersey Estuary",
+      "id": "mersey-estuary",
+      "kind": "sea",
+      "name": "Mersey Estuary",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-mersey-estuary"
+    },
+    {
+      "abbreviation": "CDB",
+      "display_name": "Cardigan Bay",
+      "id": "cardigan-bay",
+      "kind": "sea",
+      "name": "Cardigan Bay",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-cardigan-bay"
+    },
+    {
+      "abbreviation": "NBC",
+      "display_name": "N.Bristol Channel",
+      "id": "n-bristol-channel",
+      "kind": "sea",
+      "name": "N.Bristol Channel",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-n-bristol-channel"
+    },
+    {
+      "abbreviation": "SBC",
+      "display_name": "S.Bristol Channel",
+      "id": "s-bristol-channel",
+      "kind": "sea",
+      "name": "S.Bristol Channel",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-s-bristol-channel"
+    },
+    {
+      "abbreviation": "AVE",
+      "display_name": "Avon Estuary",
+      "id": "avon-estuary",
+      "kind": "sea",
+      "name": "Avon Estuary",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-avon-estuary"
+    },
+    {
+      "abbreviation": "ENG",
+      "display_name": "English Channel",
+      "id": "english-channel",
+      "kind": "sea",
+      "name": "English Channel",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-english-channel"
+    },
+    {
+      "abbreviation": "SOC",
+      "display_name": "South Coast",
+      "id": "south-coast",
+      "kind": "sea",
+      "name": "South Coast",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-south-coast"
+    },
+    {
+      "abbreviation": "SOD",
+      "display_name": "Straights of Dover",
+      "id": "straights-of-dover",
+      "kind": "sea",
+      "name": "Straights of Dover",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-straights-of-dover"
+    },
+    {
+      "abbreviation": "DCR",
+      "display_name": "Dutch Crossing",
+      "id": "dutch-crossing",
+      "kind": "sea",
+      "name": "Dutch Crossing",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-dutch-crossing"
+    },
+    {
+      "abbreviation": "THE",
+      "display_name": "Thames Estuary",
+      "id": "thames-estuary",
+      "kind": "sea",
+      "name": "Thames Estuary",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-thames-estuary"
+    },
+    {
+      "abbreviation": "HUE",
+      "display_name": "Humber Estuary",
+      "id": "humber-estuary",
+      "kind": "sea",
+      "name": "Humber Estuary",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-humber-estuary"
+    },
+    {
+      "abbreviation": "NTH",
+      "display_name": "North Sea",
+      "id": "north-sea",
+      "kind": "sea",
+      "name": "North Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-north-sea"
+    },
+    {
+      "abbreviation": "NEC",
+      "display_name": "Northeast Coast",
+      "id": "northeast-coast",
+      "kind": "sea",
+      "name": "Northeast Coast",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-northeast-coast"
+    },
+    {
+      "abbreviation": "Cum",
+      "display_name": "Cumbria",
+      "id": "cumbria",
+      "kind": "land",
+      "name": "Cumbria",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-cumbria"
+    },
+    {
+      "abbreviation": "Nbl",
+      "display_name": "Northumberland",
+      "id": "northumberland",
+      "kind": "land",
+      "name": "Northumberland",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-northumberland"
+    },
+    {
+      "abbreviation": "Tyn",
+      "display_name": "Tyne & Wear",
+      "id": "tyne-and-wear",
+      "kind": "land",
+      "name": "Tyne & Wear",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-tyne-and-wear"
+    },
+    {
+      "abbreviation": "Dur",
+      "display_name": "Durham",
+      "id": "durham",
+      "kind": "land",
+      "name": "Durham",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-durham"
+    },
+    {
+      "abbreviation": "Cle",
+      "display_name": "Cleveland",
+      "id": "cleveland",
+      "kind": "land",
+      "name": "Cleveland",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-cleveland"
+    },
+    {
+      "abbreviation": "Lan",
+      "display_name": "Lancashire",
+      "id": "lancashire",
+      "kind": "land",
+      "name": "Lancashire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-lancashire"
+    },
+    {
+      "abbreviation": "Nyo",
+      "display_name": "N.Yorkshire",
+      "id": "n-yorkshire",
+      "kind": "land",
+      "name": "N.Yorkshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-n-yorkshire"
+    },
+    {
+      "abbreviation": "Mer",
+      "display_name": "Merseyside",
+      "id": "merseyside",
+      "kind": "land",
+      "name": "Merseyside",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-merseyside"
+    },
+    {
+      "abbreviation": "Wyo",
+      "display_name": "W.Yorkshire",
+      "id": "w-yorkshire",
+      "kind": "land",
+      "name": "W.Yorkshire",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-w-yorkshire"
+    },
+    {
+      "abbreviation": "Hum",
+      "display_name": "Humberside",
+      "id": "humberside",
+      "kind": "land",
+      "name": "Humberside",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-humberside"
+    },
+    {
+      "abbreviation": "Nli",
+      "display_name": "N.Lincolnshire",
+      "id": "n-lincolnshire",
+      "kind": "land",
+      "name": "N.Lincolnshire",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-n-lincolnshire"
+    },
+    {
+      "abbreviation": "Dno",
+      "display_name": "Derbyshire & Nottinghamshire",
+      "id": "derbyshire-and-nottinghamshire",
+      "kind": "land",
+      "name": "Derbyshire & Nottinghamshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-derbyshire-and-nottinghamshire"
+    },
+    {
+      "abbreviation": "Syo",
+      "display_name": "S.Yorkshire",
+      "id": "s-yorkshire",
+      "kind": "land",
+      "name": "S.Yorkshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-s-yorkshire"
+    },
+    {
+      "abbreviation": "Che",
+      "display_name": "Cheshire",
+      "id": "cheshire",
+      "kind": "land",
+      "name": "Cheshire",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-cheshire"
+    },
+    {
+      "abbreviation": "Gma",
+      "display_name": "Greater Manchester",
+      "id": "greater-manchester",
+      "kind": "land",
+      "name": "Greater Manchester",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-greater-manchester"
+    },
+    {
+      "abbreviation": "Sta",
+      "display_name": "Staffordshire",
+      "id": "staffordshire",
+      "kind": "land",
+      "name": "Staffordshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-staffordshire"
+    },
+    {
+      "abbreviation": "Shr",
+      "display_name": "Shropshire",
+      "id": "shropshire",
+      "kind": "land",
+      "name": "Shropshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-shropshire"
+    },
+    {
+      "abbreviation": "Sli",
+      "display_name": "S.Lincolnshire",
+      "id": "s-lincolnshire",
+      "kind": "land",
+      "name": "S.Lincolnshire",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-s-lincolnshire"
+    },
+    {
+      "abbreviation": "Lei",
+      "display_name": "Leicestershire",
+      "id": "leicestershire",
+      "kind": "land",
+      "name": "Leicestershire",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-leicestershire"
+    },
+    {
+      "abbreviation": "Wmi",
+      "display_name": "W.Midlands",
+      "id": "w-midlands",
+      "kind": "land",
+      "name": "W.Midlands",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-w-midlands"
+    },
+    {
+      "abbreviation": "War",
+      "display_name": "Warwickshire",
+      "id": "warwickshire",
+      "kind": "land",
+      "name": "Warwickshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-warwickshire"
+    },
+    {
+      "abbreviation": "Hwo",
+      "display_name": "Hereford & Worcester",
+      "id": "hereford-and-worcester",
+      "kind": "land",
+      "name": "Hereford & Worcester",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-hereford-and-worcester"
+    },
+    {
+      "abbreviation": "Glo",
+      "display_name": "Gloucestershire",
+      "id": "gloucestershire",
+      "kind": "land",
+      "name": "Gloucestershire",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-gloucestershire"
+    },
+    {
+      "abbreviation": "Oxf",
+      "display_name": "Oxfordshire",
+      "id": "oxfordshire",
+      "kind": "land",
+      "name": "Oxfordshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-oxfordshire"
+    },
+    {
+      "abbreviation": "Nha",
+      "display_name": "Northamps",
+      "id": "northants",
+      "kind": "land",
+      "name": "Northants.",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-northants"
+    },
+    {
+      "abbreviation": "Cam",
+      "display_name": "Cambridgeshire",
+      "id": "cambs",
+      "kind": "land",
+      "name": "Cambs.",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-cambs"
+    },
+    {
+      "abbreviation": "Nfk",
+      "display_name": "Norfolk",
+      "id": "norfolk",
+      "kind": "land",
+      "name": "Norfolk",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-norfolk"
+    },
+    {
+      "abbreviation": "Sfk",
+      "display_name": "Suffolk",
+      "id": "suffolk",
+      "kind": "land",
+      "name": "Suffolk",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-suffolk"
+    },
+    {
+      "abbreviation": "Esx",
+      "display_name": "Essex",
+      "id": "essex",
+      "kind": "land",
+      "name": "Essex",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-essex"
+    },
+    {
+      "abbreviation": "Htf",
+      "display_name": "Herts",
+      "id": "hertfs",
+      "kind": "land",
+      "name": "Hertfs.",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-hertfs"
+    },
+    {
+      "abbreviation": "Bed",
+      "display_name": "Beds",
+      "id": "beds",
+      "kind": "land",
+      "name": "Beds.",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-beds"
+    },
+    {
+      "abbreviation": "Buc",
+      "display_name": "Bucks",
+      "id": "bucks",
+      "kind": "land",
+      "name": "Bucks.",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-bucks"
+    },
+    {
+      "abbreviation": "Lon",
+      "display_name": "London",
+      "id": "london",
+      "kind": "land",
+      "name": "London",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-london"
+    },
+    {
+      "abbreviation": "Ken",
+      "display_name": "Kent",
+      "id": "kent",
+      "kind": "land",
+      "name": "Kent",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-kent"
+    },
+    {
+      "abbreviation": "Esu",
+      "display_name": "E.Sussex",
+      "id": "e-sussex",
+      "kind": "land",
+      "name": "E.Sussex",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-e-sussex"
+    },
+    {
+      "abbreviation": "Sur",
+      "display_name": "Surrey",
+      "id": "surrey",
+      "kind": "land",
+      "name": "Surrey",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-surrey"
+    },
+    {
+      "abbreviation": "Wsu",
+      "display_name": "W.Sussex",
+      "id": "w-sussex",
+      "kind": "land",
+      "name": "W.Sussex",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-w-sussex"
+    },
+    {
+      "abbreviation": "Ham",
+      "display_name": "Hampshire",
+      "id": "hampshire",
+      "kind": "land",
+      "name": "Hampshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-hampshire"
+    },
+    {
+      "abbreviation": "Ber",
+      "display_name": "Berkshire",
+      "id": "berkshire",
+      "kind": "land",
+      "name": "Berkshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-berkshire"
+    },
+    {
+      "abbreviation": "Wil",
+      "display_name": "Wiltshire",
+      "id": "wiltshire",
+      "kind": "land",
+      "name": "Wiltshire",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-wiltshire"
+    },
+    {
+      "abbreviation": "Dor",
+      "display_name": "Dorset",
+      "id": "dorset",
+      "kind": "land",
+      "name": "Dorset",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-dorset"
+    },
+    {
+      "abbreviation": "Som",
+      "display_name": "Somerset",
+      "id": "somerset",
+      "kind": "land",
+      "name": "Somerset",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-somerset"
+    },
+    {
+      "abbreviation": "Avo",
+      "display_name": "Avon",
+      "id": "avon",
+      "kind": "land",
+      "name": "Avon",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-avon"
+    },
+    {
+      "abbreviation": "Dev",
+      "display_name": "Devon",
+      "id": "devon",
+      "kind": "land",
+      "name": "Devon",
+      "split_coasts": [
+        "north",
+        "south"
+      ],
+      "supply_centre": false,
+      "svg_element": "territory-devon"
+    },
+    {
+      "abbreviation": "Cor",
+      "display_name": "Cornwall",
+      "id": "cornwall",
+      "kind": "land",
+      "name": "Cornwall",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-cornwall"
+    },
+    {
+      "abbreviation": "Iow",
+      "display_name": "Isle of Wight",
+      "id": "isle-of-wight",
+      "kind": "land",
+      "name": "Isle of Wight",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-isle-of-wight"
+    },
+    {
+      "abbreviation": "Gwe",
+      "display_name": "Gwent",
+      "id": "gwent",
+      "kind": "land",
+      "name": "Gwent",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-gwent"
+    },
+    {
+      "abbreviation": "Gla",
+      "display_name": "Glamorgan",
+      "id": "glamorgan",
+      "kind": "land",
+      "name": "Glamorgan",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-glamorgan"
+    },
+    {
+      "abbreviation": "Spo",
+      "display_name": "S.Powys",
+      "id": "s-powys",
+      "kind": "land",
+      "name": "S.Powys",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-s-powys"
+    },
+    {
+      "abbreviation": "Dyf",
+      "display_name": "Dyfed",
+      "id": "dyfed",
+      "kind": "land",
+      "name": "Dyfed",
+      "split_coasts": [
+        "north",
+        "south"
+      ],
+      "supply_centre": true,
+      "svg_element": "territory-dyfed"
+    },
+    {
+      "abbreviation": "Pem",
+      "display_name": "Pembrokeshire",
+      "id": "pembrokeshire",
+      "kind": "land",
+      "name": "Pembrokeshire",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-pembrokeshire"
+    },
+    {
+      "abbreviation": "Npo",
+      "display_name": "N.Powys",
+      "id": "n-powys",
+      "kind": "land",
+      "name": "N.Powys",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-n-powys"
+    },
+    {
+      "abbreviation": "Gwy",
+      "display_name": "Gwynedd",
+      "id": "gwynedd",
+      "kind": "land",
+      "name": "Gwynedd",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-gwynedd"
+    },
+    {
+      "abbreviation": "Clw",
+      "display_name": "Clwyd",
+      "id": "clwyd",
+      "kind": "land",
+      "name": "Clwyd",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-clwyd"
+    },
+    {
+      "abbreviation": "Ang",
+      "display_name": "Anglesey",
+      "id": "anglesey",
+      "kind": "land",
+      "name": "Anglesey",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-anglesey"
+    },
+    {
+      "abbreviation": "Iom",
+      "display_name": "Isle of Man",
+      "id": "isle-of-man",
+      "kind": "land",
+      "name": "Isle of Man",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-isle-of-man"
+    }
+  ]
+}

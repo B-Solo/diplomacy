@@ -13,6 +13,7 @@ import yaml
 from diplomacy_app.domain.errors import MapLibraryError
 from diplomacy_app.domain.models import (
     MapDraft,
+    MapId,
     Point,
     PowerDefinition,
     StartingSetup,
@@ -40,6 +41,27 @@ def refresh_draft(draft: MapDraft) -> MapDraft:
         presentation=definition.presentation,
         rules_engine_id=definition.rules_engine_id,
     )
+
+
+def update_identity(draft: MapDraft, map_id: MapId, name: str) -> MapDraft:
+    """Give a copied reusable map a new stable identity.
+
+    :param draft: Authored map draft to copy.
+    :param map_id: New lowercase stable map identifier.
+    :param name: New user-facing map name.
+    :return: Recompiled draft containing the new identity.
+    :raises MapLibraryError: If either identity field is empty.
+    """
+    cleaned_id = str(map_id).strip()
+    cleaned_name = name.strip()
+    if not cleaned_id:
+        raise MapLibraryError("Map ID cannot be empty")
+    if not cleaned_name:
+        raise MapLibraryError("Map name cannot be empty")
+    document = load_yaml(draft.map_yaml)
+    document["map_id"] = cleaned_id
+    document["name"] = cleaned_name
+    return _updated_yaml(draft, document)
 
 
 def _updated_yaml(draft: MapDraft, document: dict[str, Any]) -> MapDraft:

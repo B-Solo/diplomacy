@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
 import math
 import re
 from collections.abc import Mapping
@@ -11,7 +13,7 @@ from typing import Any
 
 import yaml
 
-from diplomacy_app.domain.errors import MapLibraryError
+from diplomacy_app.domain.errors import InvalidStoredData, MapLibraryError
 from diplomacy_app.domain.models import (
     Adjacency,
     CoastId,
@@ -49,8 +51,10 @@ from diplomacy_app.presentation import (
     DEFAULT_UNCLAIMED_REGION_COLOUR,
     default_coast_label_anchor,
 )
+from diplomacy_app.storage.serialization import map_definition_data, map_definition_from_data
 
 _COLOUR = re.compile(r"^#[0-9a-fA-F]{6}$")
+_COMPILED_CACHE_VERSION = 1
 
 
 def load_yaml(text: str) -> dict[str, Any]:
@@ -371,9 +375,73 @@ def compile_map(
     )
 
 
-def load_map_folder(path: Path) -> MapDefinition:
+def _source_files(path: Path) -> tuple[str, bytes]:
+    """Read one configured map's authored sources.
+
+    :param path: Configured map directory.
+    :return: Authored YAML text and raw map SVG bytes.
+    """
     text = (path / "map.yaml").read_text(encoding="utf-8")
     document = load_yaml(text)
     assets = _mapping(document.get("assets", {}), "assets")
     map_path = path / str(assets.get("map", "map.svg"))
-    return compile_map(text, map_path.read_bytes())
+    return text, map_path.read_bytes()
+
+
+def map_source_digest(text: str, svg: bytes) -> str:
+    """Identify the authored inputs and compiler contract for a compiled map.
+
+    :param text: Complete authored map YAML.
+    :param svg: Raw map SVG bytes.
+    :return: Stable hexadecimal source digest.
+    """
+    digest = hashlib.sha256()
+    for value in (
+        str(_COMPILED_CACHE_VERSION).encode(),
+        text.encode(),
+        svg,
+        DEFAULT_ARMY_SVG,
+        DEFAULT_FLEET_SVG,
+    ):
+        digest.update(len(value).to_bytes(8, "big"))
+        digest.update(value)
+    return digest.hexdigest()
+
+
+def compiled_map_data(definition: MapDefinition, text: str, svg: bytes) -> dict[str, Any]:
+    """Serialise a portable compiled map with source-cache metadata.
+
+    :param definition: Validated compiled map definition.
+    :param text: Complete authored map YAML.
+    :param svg: Raw map SVG bytes.
+    :return: JSON-compatible compiled map document.
+    """
+    value = map_definition_data(definition)
+    value["source"] = {
+        "cache_version": _COMPILED_CACHE_VERSION,
+        "digest": map_source_digest(text, svg),
+    }
+    return value
+
+
+def load_map_folder(path: Path) -> MapDefinition:
+    """Load a configured map, using its compiled cache when current.
+
+    :param path: Configured map directory.
+    :return: Portable map definition with runtime assets attached.
+    """
+    text, svg = _source_files(path)
+    safe_svg = sanitise_svg(svg)
+    assets = MapAssets(safe_svg, DEFAULT_ARMY_SVG, DEFAULT_FLEET_SVG)
+    compiled_path = path / "_compiled-map.json"
+    if compiled_path.is_file():
+        try:
+            value = json.loads(compiled_path.read_text(encoding="utf-8"))
+            source = _mapping(value.get("source", {}), "source")
+            if source.get("cache_version") == _COMPILED_CACHE_VERSION and source.get(
+                "digest"
+            ) == map_source_digest(text, svg):
+                return map_definition_from_data(value, assets)
+        except (OSError, ValueError, KeyError, TypeError, InvalidStoredData, MapLibraryError):
+            pass
+    return compile_map(text, safe_svg)

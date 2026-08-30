@@ -143,10 +143,10 @@ class ApplicationWindow(QMainWindow):
         maps_button = QPushButton("Configure maps…")
         maps_button.clicked.connect(self._configure_maps)
         buttons.addWidget(maps_button)
-        self.game_map_placement_button = QPushButton("Adjust current map placement…")
-        self.game_map_placement_button.clicked.connect(self._edit_game_map_placement)
-        self.game_map_placement_button.setVisible(False)
-        buttons.addWidget(self.game_map_placement_button)
+        self.game_map_edit_button = QPushButton("Edit current game map…")
+        self.game_map_edit_button.clicked.connect(self._edit_game_map)
+        self.game_map_edit_button.setVisible(False)
+        buttons.addWidget(self.game_map_edit_button)
         layout.addLayout(buttons)
         self.return_button = QPushButton("Return to current game")
         self.return_button.clicked.connect(self._return_to_context)
@@ -224,13 +224,13 @@ class ApplicationWindow(QMainWindow):
             self.stack.setCurrentWidget(self.welcome)
             self.game_button.setText("No game open")
             self.return_button.setVisible(False)
-            self.game_map_placement_button.setVisible(False)
+            self.game_map_edit_button.setVisible(False)
             self._populate_recent(session)
             return
         self.game_button.setText(game.name + "  ▾")
         self.return_button.setText(f"Return to {game.name}")
         self.return_button.setVisible(True)
-        self.game_map_placement_button.setVisible(True)
+        self.game_map_edit_button.setVisible(True)
         self.phase_selector.blockSignals(True)
         self.phase_selector.clear()
         for phase in game.phases:
@@ -335,15 +335,20 @@ class ApplicationWindow(QMainWindow):
         workspace.edit_requested.connect(lambda draft: self._open_map_wizard(draft, workspace))
         self._open_setup_workspace(workspace)
 
-    def _edit_game_map_placement(self) -> None:
+    def _edit_game_map(self) -> None:
         try:
-            draft = self.service.begin_game_map_placement()
-            wizard = MapWizard(self.service, draft, game_placement_only=True)
+            draft = self.service.begin_game_map_edit()
+            wizard = MapWizard(self.service, draft, game_map=True)
             wizard.cancelled.connect(lambda: self._close_setup_workspace(wizard))
-            wizard.saved.connect(lambda session: self._game_map_placement_saved(wizard, session))
+            wizard.saved.connect(lambda session: self._game_map_saved(wizard, session))
+            wizard.promoted.connect(
+                lambda definition: self.statusBar().showMessage(
+                    f"Saved reusable map {definition.name}", 3000
+                )
+            )
             self._open_setup_workspace(wizard)
         except Exception as exc:
-            self._show_error(f"Could not edit game map placement: {exc}")
+            self._show_error(f"Could not edit game map: {exc}")
 
     def _open_setup_workspace(self, workspace: QWidget) -> None:
         self.stack.addWidget(workspace)
@@ -375,11 +380,11 @@ class ApplicationWindow(QMainWindow):
         self._close_wizard(wizard, origin)
         self.statusBar().showMessage(f"Saved reusable map {definition.name}", 3000)
 
-    def _game_map_placement_saved(self, wizard: QWidget, session) -> None:
+    def _game_map_saved(self, wizard: QWidget, session) -> None:
         self.stack.removeWidget(wizard)
         wizard.deleteLater()
         self.set_session(session, open_map=True)
-        self.statusBar().showMessage("Saved this game's map placement", 3000)
+        self.statusBar().showMessage("Saved this game's map", 3000)
 
     def _game_created(self, session) -> None:
         workspace = self.stack.currentWidget()

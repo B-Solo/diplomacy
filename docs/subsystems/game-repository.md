@@ -8,7 +8,7 @@ It also maintains the small application-owned record of recent and last-opened g
 ## External API
 
 The subsystem provides `GameRepository` from [Subsystem API Contracts](../api-contracts.md).
-Its callers can discover, open, create and delete games; load phases; save submissions, views and private-map presentation; change enabled finalisation state; and commit adjudication proposals.
+Its callers can discover, open, create and delete games; load phases; save submissions, views and complete private maps; change enabled finalisation state; and commit adjudication proposals.
 
 ## Implementation Notes
 
@@ -20,7 +20,7 @@ Game creation copies the configured map, materialises the validated game-specifi
 Game deletion validates the complete target as a game immediately before removing its folder and application-owned recent-game references.
 
 Every write is staged beside its destination, flushed and then installed using recoverable renames.
-Multi-file adjudication and private-map presentation changes use the redo manifest and recovery marker defined in [Storage Schema](../storage-schema.md), so reopening a game completes an interrupted commit deterministically.
+Multi-file adjudication and private-map changes use the redo manifest and recovery marker defined in [Storage Schema](../storage-schema.md), so reopening a game completes an interrupted commit deterministically.
 
 The repository derives a `Revision` from authoritative file paths and content and checks it immediately before mutation.
 This detects stale UI work and external file edits without exposing filesystem metadata to other subsystems.
