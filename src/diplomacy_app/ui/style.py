@@ -20,6 +20,7 @@ QComboBox QAbstractItemView::item:hover { background: #f0e5ca; color: #292820; }
 QComboBox QAbstractItemView::item:selected { background: #42584b; color: #fffdf5; }
 QPushButton:hover, QToolButton:hover { background: #f0e5ca; border-color: #756a52; }
 QPushButton:pressed, QToolButton:pressed { background: #dfd1af; }
+QPushButton#previewOrdersToggle:checked { background: #42584b; color: #fffdf5; border-color: #2f4237; font-weight: 600; }
 QPushButton[primary="true"] { background: #42584b; color: #fffdf5; border-color: #2f4237; font-weight: 600; }
 QPushButton[primary="true"]:disabled { background: #94a198; color: #f8f5ea; border-color: #7d8b82; }
 QPushButton[danger="true"] { background: #8a403a; color: white; border-color: #6c2d29; }

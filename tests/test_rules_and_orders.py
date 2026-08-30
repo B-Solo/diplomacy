@@ -65,6 +65,8 @@ def test_parser_accepts_names_abbreviations_and_reports_duplicates(england):
         "F Tyn - NTH",
         "F Tyn - NTH",
     ]
+    to_move = processor.interpret(england, up_north.id, "F Tyne & Wear to North Sea")
+    assert [candidate.canonical_text for candidate in to_move] == ["F Tyn - NTH"]
     support = processor.interpret(england, up_north.id, "F TYN S A DUR - CLE")
     assert [candidate.canonical_text for candidate in support] == ["F Tyn S A Dur - Cle"]
     phase_examples = processor.interpret(

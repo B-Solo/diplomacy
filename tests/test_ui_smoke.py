@@ -148,11 +148,18 @@ def test_main_window_and_existing_map_wizard_construct(qtbot, tmp_path, configur
     window.map_workspace.mode.setCurrentIndex(
         window.map_workspace.mode.findData(DisplayMode.POSITION)
     )
+    assert window.map_workspace.preview_orders.isCheckable()
+    assert not window.map_workspace.preview_orders.isChecked()
     window.map_workspace.preview_orders.click()
+    assert window.map_workspace.preview_orders.isChecked()
+    assert window.map_workspace.preview_orders.text() == "Hide orders on map"
     window.map_workspace.labels.setCurrentIndex(1)
     render_request = window.map_workspace._request()
     assert render_request.display_mode is DisplayMode.ORDERS
     assert render_request.label_mode is LabelMode.ABBREVIATION
+    window.map_workspace.preview_orders.click()
+    assert not window.map_workspace.preview_orders.isChecked()
+    assert window.map_workspace.preview_orders.text() == "Preview orders on map"
     window.show()
     QApplication.processEvents()
     control_palette = window.map_workspace.views.palette()
@@ -780,6 +787,7 @@ def test_current_game_opens_full_map_editor(qtbot, tmp_path, configured_maps, mo
     assert not window.game_map_edit_button.isHidden()
     assert window.tabs.currentIndex() == 0
     assert window.stack.currentWidget() is window.map_workspace
+    assert window.phase_selector.currentData() == session.phase.phase_id
     window.tabs.setCurrentIndex(1)
     assert window.stack.currentWidget() is window.orders_workspace
     assert window.orders_workspace.unfinalised.isHidden()
@@ -787,6 +795,7 @@ def test_current_game_opens_full_map_editor(qtbot, tmp_path, configured_maps, mo
     assert all(panel.final is None for panel in window.orders_workspace.panels)
     window.show()
     QApplication.processEvents()
+    season_bar_top = window.season_bar.geometry().top()
     preview_unit = session.phase.state.units[0]
     preview_territory = next(
         territory
@@ -815,6 +824,7 @@ def test_current_game_opens_full_map_editor(qtbot, tmp_path, configured_maps, mo
     assert preview_panel.sizeHint().height() == canonical_height
     preview_panel.editor.setPlainText("A Not Yet Complete -")
     qtbot.wait(550)
+    assert window.order_feedback.text() == ""
     assert preview_panel in window.orders_workspace.panels
     assert preview_panel.stack.currentIndex() == 1
     assert preview_panel.sizeHint().height() == canonical_height
@@ -824,6 +834,8 @@ def test_current_game_opens_full_map_editor(qtbot, tmp_path, configured_maps, mo
     other_power_id = other_panel.power.id
     qtbot.mouseClick(other_panel.canonical, Qt.MouseButton.LeftButton)
     qtbot.waitUntil(lambda: preview_panel not in window.orders_workspace.panels)
+    assert window.order_feedback.text() == "Orders saved and validated"
+    assert window.season_bar.geometry().top() == season_bar_top
     preview_panel = next(
         panel for panel in window.orders_workspace.panels if panel.power.id == preview_unit.power_id
     )
@@ -832,6 +844,21 @@ def test_current_game_opens_full_map_editor(qtbot, tmp_path, configured_maps, mo
     )
     assert other_panel.stack.currentIndex() == 1
     assert other_panel.editor is not None and other_panel.editor.hasFocus()
+    tab_target_power = next(
+        panel.power.id
+        for panel in window.orders_workspace.panels
+        if panel.editor is not None
+        and panel.power.id not in {other_power_id, preview_unit.power_id}
+    )
+    qtbot.keyClick(other_panel.editor, Qt.Key.Key_Tab)
+    qtbot.waitUntil(
+        lambda: any(
+            panel.power.id == tab_target_power
+            and panel.editor is not None
+            and panel.editor.hasFocus()
+            for panel in window.orders_workspace.panels
+        )
+    )
     unparseable_summary = preview_panel.canonical.text()
     assert "#a32620" in unparseable_summary
     assert "A&nbsp;Not&nbsp;Yet&nbsp;Complete&nbsp;- (??)" in unparseable_summary
@@ -885,6 +912,21 @@ def test_current_game_opens_full_map_editor(qtbot, tmp_path, configured_maps, mo
         group for group in preview_svg.findall(".//{*}g") if group.attrib.get("id") == "orders"
     )
     assert preview_orders.find(".//{*}line[@class='hold-marker']") is not None
+    advanced = service.resolve_and_advance()
+    window.set_session(advanced.session, open_map=True)
+    spring_index = window.phase_selector.findData(session.phase.phase_id)
+    window.phase_selector.setCurrentIndex(spring_index)
+    qtbot.waitUntil(lambda: window.session.phase.phase_id == session.phase.phase_id)
+    assert window.map_workspace.preview_orders.isChecked()
+    window.map_workspace.preview_orders.click()
+    assert not window.map_workspace.preview_orders.isChecked()
+    window.map_workspace.refresh_timer.stop()
+    window.map_workspace.refresh()
+    position_orders = ElementTree.fromstring(window.map_workspace.scene.svg)
+    position_order_layer = next(
+        group for group in position_orders.findall(".//{*}g") if group.attrib.get("id") == "orders"
+    )
+    assert not list(position_order_layer)
     window.tabs.setCurrentIndex(0)
     assert window.stack.currentWidget() is window.map_workspace
     window.map_workspace.refresh()

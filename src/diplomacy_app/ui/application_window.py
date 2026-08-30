@@ -26,7 +26,6 @@ from PySide6.QtWidgets import (
 from diplomacy_app.application import build_application
 from diplomacy_app.domain.models import (
     AdvancedPhase,
-    DisplayMode,
     FinalisationRequired,
     GameLocation,
 )
@@ -74,6 +73,20 @@ class ApplicationWindow(QMainWindow):
         self.stack.addWidget(self.map_workspace)
         self.stack.addWidget(self.orders_workspace)
         layout.addWidget(self.stack, 1)
+        self.order_feedback = QLabel()
+        self.order_feedback.setObjectName("orderFeedback")
+        self.order_feedback.setAlignment(
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+        )
+        self.order_feedback.setFixedHeight(25)
+        self.order_feedback.setStyleSheet(
+            "background: #f6f1e3; color: #536257; padding: 0 8px; font-size: 9pt"
+        )
+        self.order_feedback.setVisible(False)
+        self._order_feedback_timer = QTimer(self)
+        self._order_feedback_timer.setSingleShot(True)
+        self._order_feedback_timer.timeout.connect(self.order_feedback.clear)
+        layout.addWidget(self.order_feedback)
         layout.addWidget(self._season_bar())
         self.setCentralWidget(root)
         self.statusBar().setSizeGripEnabled(False)
@@ -221,6 +234,7 @@ class ApplicationWindow(QMainWindow):
         self.tabs.setVisible(game is not None)
         self.season_bar.setVisible(game is not None)
         if game is None:
+            self.order_feedback.setVisible(False)
             self.stack.setCurrentWidget(self.welcome)
             self.game_button.setText("No game open")
             self.return_button.setVisible(False)
@@ -228,6 +242,7 @@ class ApplicationWindow(QMainWindow):
             self._populate_recent(session)
             return
         self.game_button.setText(game.name + "  ▾")
+        self.order_feedback.setVisible(True)
         self.return_button.setText(f"Return to {game.name}")
         self.return_button.setVisible(True)
         self.game_map_edit_button.setVisible(True)
@@ -235,7 +250,11 @@ class ApplicationWindow(QMainWindow):
         self.phase_selector.clear()
         for phase in game.phases:
             self.phase_selector.addItem(phase.label, phase)
-        self.phase_selector.setCurrentIndex(self.phase_selector.findData(session.phase.phase_id))
+        selected_phase = session.phase.phase_id if session.phase else game.current_phase
+        selected_index = self.phase_selector.findData(selected_phase)
+        if selected_index < 0 and self.phase_selector.count():
+            selected_index = 0
+        self.phase_selector.setCurrentIndex(selected_index)
         self.phase_selector.blockSignals(False)
         self._update_phase_navigation()
         self.map_workspace.set_session(session)
@@ -307,6 +326,7 @@ class ApplicationWindow(QMainWindow):
     def _show_game_choices(self) -> None:
         self.tabs.setVisible(False)
         self.season_bar.setVisible(False)
+        self.order_feedback.setVisible(False)
         self.stack.setCurrentWidget(self.welcome)
         if self.session:
             self._populate_recent(self.session)
@@ -355,6 +375,7 @@ class ApplicationWindow(QMainWindow):
         self.stack.setCurrentWidget(workspace)
         self.tabs.setVisible(False)
         self.season_bar.setVisible(False)
+        self.order_feedback.setVisible(False)
 
     def _close_setup_workspace(self, workspace: QWidget) -> None:
         self.stack.removeWidget(workspace)
@@ -414,6 +435,9 @@ class ApplicationWindow(QMainWindow):
         """Match the season arrows to the selector's available history."""
         index = self.phase_selector.currentIndex()
         count = self.phase_selector.count()
+        if count and index < 0:
+            self.phase_selector.setCurrentIndex(0)
+            index = 0
         self.previous.setEnabled(0 < index < count)
         self.next.setEnabled(0 <= index < count - 1)
 
@@ -429,9 +453,21 @@ class ApplicationWindow(QMainWindow):
     def _save_orders(self, power_id, raw_text: str) -> None:
         try:
             self.service.update_orders(power_id, raw_text)
-            self.statusBar().showMessage("Orders saved and validated", 2000)
+            self._show_order_feedback("Orders saved and validated")
         except Exception as exc:
             self._show_error(f"Could not save orders: {exc}")
+
+    def _show_order_feedback(self, text: str, timeout: int = 2000) -> None:
+        """Show order feedback in the reserved row above the season bar.
+
+        :param text: Feedback text to display.
+        :param timeout: Milliseconds before the text is cleared.
+        """
+        if not self.session or not self.session.game:
+            return
+        self.order_feedback.setText(text)
+        self.order_feedback.setVisible(True)
+        self._order_feedback_timer.start(timeout)
 
     def _order_editing_finished(self) -> None:
         """Refresh canonical orders after an editor has genuinely lost focus."""
@@ -456,11 +492,9 @@ class ApplicationWindow(QMainWindow):
             for power_id, raw_text in self.orders_workspace.pending_order_texts():
                 self.service.update_orders(power_id, raw_text)
             session = self.service.select_phase(phase_id)
-            self.map_workspace.mode.setCurrentIndex(
-                self.map_workspace.mode.findData(DisplayMode.ORDERS)
-            )
+            self.map_workspace.preview_orders.setChecked(True)
             self.set_session(session, open_map=True)
-            self.statusBar().showMessage("Previewing orders on the current position", 3000)
+            self._show_order_feedback("Previewing orders on the current position", 3000)
         except Exception as exc:
             self._refresh_current_session()
             self._show_error(f"Could not preview orders: {exc}")

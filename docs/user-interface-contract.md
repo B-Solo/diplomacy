@@ -77,7 +77,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.5:** Compact `−`, read-only current-percentage, `+` and `Fit` controls overlay the map; wheel and button zoom use the same discrete levels.
 - **MW.6:** `Fit` returns to the full-map view without changing the map state.
 - **MW.7:** Pan is clamped to the map bounds.
-- **MW.8:** The map display switches between `Position` and `Orders`, and an explicit `Preview orders on map` action follows the contiguous perspective, display-mode and label controls in the Map toolbar without separating them; the same action is available from the Orders workspace.
+- **MW.8:** The map display switches between `Position` and `Orders`, and `Preview orders on map` is a checkable toggle in the Map toolbar that follows the contiguous perspective, display-mode and label controls without separating them; the same action is available from the Orders workspace and enables the Map toggle.
 - **MW.8a:** During Summer and Winter, the map always overlays the immediately preceding movement phase's recorded orders over the unmoved position; a `Successful movements only` toggle hides movement-related orders whose adjudication outcome was unsuccessful.
 - **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
@@ -141,16 +141,16 @@ Player communication occurs outside the application using map images copied by t
 - **OW.2:** Power panels use a two-column layout on wide windows and a single column on narrow windows; each non-stretching card has a compact power header and an edge-to-edge order surface that occupies most of its height.
 - **OW.3:** A power panel shows the power and its orders in canonical compact notation using configured territory abbreviations; games with order finalisation enabled also show its final state.
 - **OW.4:** Selecting the canonical order text reveals a same-height plain-text editor containing the player's exact original submission, including its names, abbreviations, whitespace, punctuation and line breaks, without resizing its power panel or grid row.
-- **OW.5:** The editor accepts one order per line using territory names or abbreviations, including `A|F <unit territory> - <destination>` for moves and `A|F <supporting territory> S A|F <supported territory> - <destination>` for support moves, with multi-word locations and `->` accepted in place of `-`; Enter inserts a line break, and parsing tolerates reasonable differences in case, whitespace and punctuation.
+- **OW.5:** The editor accepts one order per line using territory names or abbreviations, including `A|F <unit territory> - <destination>` for moves and `A|F <supporting territory> S A|F <supported territory> - <destination>` for support moves, with multi-word locations and `->` or `to` accepted in place of `-`; Enter inserts a line break, and parsing tolerates reasonable differences in case, whitespace and punctuation.
 - **OW.6:** Leaving an editor, including by selecting another power's order editor, reparses the complete original submission and returns the previous panel to canonical presentation; the newly selected editor remains open and focused, and selecting any canonical presentation restores its exact original text rather than the canonical text.
-- **OW.7:** Changes are saved and validated as they are entered without replacing or closing the active editor.
+- **OW.7:** Edited text remains in the active editor while it is being entered; it is saved and validated when that editor loses focus, without replacing or closing the newly focused editor.
 - **OW.8:** When order finalisation is enabled, editing any text clears that power's `Final` state.
 - **OW.9:** When order finalisation is enabled, each editable power panel provides an explicit `Orders final` action.
 - **OW.10:** When order finalisation is enabled, the workspace provides an `Unfinalised only` filter and final count; neither is present otherwise.
 - **OW.11:** During reached retreat and build seasons, powers with no legal decisions have inert `No orders required` panels and count as final when finalisation is enabled.
 - **OW.12:** An order issue is represented only by a warning flag until selected.
 - **OW.13:** Selecting a warning flag expands the affected panel and reveals the warning.
-- **OW.14:** `Preview orders on map` saves any text awaiting validation, opens the map in Orders mode and draws the effective order arrows and markers over the current position without adjudicating or moving units.
+- **OW.14:** `Preview orders on map` saves any text awaiting validation, opens the Map workspace, enables its order-preview toggle and draws the effective order arrows and markers over the current position without adjudicating or moving units.
 - **OW.15:** A compact syntax guide remains visible above the order cards with concrete hold, move, support, retreat, build, disband and waive examples, explicitly identifying its location names as replaceable examples.
 
 ### Order Interpretation (OI)

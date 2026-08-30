@@ -72,7 +72,7 @@ class MapWorkspace(QWidget):
         self.mode = QComboBox()
         self.mode.addItem("Position", DisplayMode.POSITION)
         self.mode.addItem("Orders", DisplayMode.ORDERS)
-        self.mode.currentIndexChanged.connect(self.schedule_refresh)
+        self.mode.currentIndexChanged.connect(self._mode_changed)
         controls.addWidget(self.mode)
         self.successful_movements = QCheckBox("Successful movements only")
         self.successful_movements.setToolTip(
@@ -81,11 +81,14 @@ class MapWorkspace(QWidget):
         self.successful_movements.toggled.connect(self.schedule_refresh)
         self.successful_movements.setVisible(False)
         controls.addWidget(self.successful_movements)
-        self.preview_orders = QPushButton("Preview orders on map")
+        self.preview_orders = QPushButton()
+        self.preview_orders.setObjectName("previewOrdersToggle")
+        self.preview_orders.setCheckable(True)
         self.preview_orders.setToolTip(
             "Show order arrows and markers over the current position without resolving the phase"
         )
-        self.preview_orders.clicked.connect(self._preview_orders)
+        self.preview_orders.toggled.connect(self._preview_toggled)
+        self._update_preview_button(False)
         self.labels = QComboBox()
         self.labels.addItem("Display names", LabelMode.FULL_NAME)
         self.labels.addItem("Three-letter codes", LabelMode.ABBREVIATION)
@@ -152,9 +155,35 @@ class MapWorkspace(QWidget):
         self.refresh_timer.setInterval(60)
         self.refresh_timer.timeout.connect(self.refresh)
 
-    def _preview_orders(self) -> None:
-        """Switch the map to its non-adjudicating order-overlay display."""
-        index = self.mode.findData(DisplayMode.ORDERS)
+    def _update_preview_button(self, checked: bool) -> None:
+        """Update the order-preview toggle's label and accessible hint.
+
+        :param checked: Whether order graphics are currently shown on the map.
+        """
+        self.preview_orders.setText("Hide orders on map" if checked else "Preview orders on map")
+        self.preview_orders.setToolTip(
+            "Hide order arrows and markers from the current position"
+            if checked
+            else "Show order arrows and markers over the current position without resolving the phase"
+        )
+
+    def _mode_changed(self) -> None:
+        """Keep the order-preview toggle aligned with the selected map mode."""
+        show_orders = DisplayMode(self.mode.currentData()) == DisplayMode.ORDERS
+        if self.preview_orders.isChecked() != show_orders:
+            self.preview_orders.blockSignals(True)
+            self.preview_orders.setChecked(show_orders)
+            self.preview_orders.blockSignals(False)
+            self._update_preview_button(show_orders)
+        self.schedule_refresh()
+
+    def _preview_toggled(self, checked: bool) -> None:
+        """Show or hide current-phase order graphics without changing game state.
+
+        :param checked: Whether the order graphics should be included in the map scene.
+        """
+        self._update_preview_button(checked)
+        index = self.mode.findData(DisplayMode.ORDERS if checked else DisplayMode.POSITION)
         if self.mode.currentIndex() == index:
             self.schedule_refresh()
         else:

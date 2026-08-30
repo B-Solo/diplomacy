@@ -341,6 +341,12 @@ def test_order_graphics(england):
     assert move_line.attrib["stroke-linecap"] == "butt"
     tip_x, tip_y = arrowhead.attrib["points"].split()[0].split(",")
     assert (move_line.attrib["x2"], move_line.attrib["y2"]) != (tip_x, tip_y)
+    destination = england.presentation.army_anchors[
+        next(item for item in england.territories if item.name == "Greater Manchester").id
+    ]
+    assert math.hypot(float(tip_x) - destination.x, float(tip_y) - destination.y) == pytest.approx(
+        4.0
+    )
     support_move = orders.find("{*}path[@class='support-move']")
     assert support_move is not None
     assert support_move.attrib["stroke-width"] == move_line.attrib["stroke-width"] == "3"

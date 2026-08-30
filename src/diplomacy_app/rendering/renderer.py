@@ -43,6 +43,7 @@ from diplomacy_app.presentation import (
 from diplomacy_app.rendering.labels import add_label_element
 
 _SVG = "http://www.w3.org/2000/svg"
+_MOVE_ARROW_TIP_INSET = 4.0
 ElementTree.register_namespace("", _SVG)
 
 
@@ -346,9 +347,15 @@ class MapRenderer:
                         )
                     move_paths[(order.unit.location, order.destination)] = (start, end)
                     angle = math.atan2(end.y - start.y, end.x - start.x)
+                    move_length = math.hypot(end.x - start.x, end.y - start.y)
+                    tip_inset = min(_MOVE_ARROW_TIP_INSET, max(0.0, move_length - 1.0))
+                    arrow_tip = Point(
+                        end.x - tip_inset * math.cos(angle),
+                        end.y - tip_inset * math.sin(angle),
+                    )
                     shaft_end = Point(
-                        end.x - 8.8 * math.cos(angle),
-                        end.y - 8.8 * math.sin(angle),
+                        arrow_tip.x - 8.8 * math.cos(angle),
+                        arrow_tip.y - 8.8 * math.sin(angle),
                     )
                     ElementTree.SubElement(
                         orders_layer,
@@ -364,12 +371,14 @@ class MapRenderer:
                         },
                     )
                     points = [
-                        end,
+                        arrow_tip,
                         Point(
-                            end.x - 10 * math.cos(angle - 0.5), end.y - 10 * math.sin(angle - 0.5)
+                            arrow_tip.x - 10 * math.cos(angle - 0.5),
+                            arrow_tip.y - 10 * math.sin(angle - 0.5),
                         ),
                         Point(
-                            end.x - 10 * math.cos(angle + 0.5), end.y - 10 * math.sin(angle + 0.5)
+                            arrow_tip.x - 10 * math.cos(angle + 0.5),
+                            arrow_tip.y - 10 * math.sin(angle + 0.5),
                         ),
                     ]
                     ElementTree.SubElement(
@@ -380,7 +389,7 @@ class MapRenderer:
                     hotspots.append(
                         MapHotspot(
                             projected_order.source_line,
-                            (start, end),
+                            (start, arrow_tip),
                             10.0,
                             projected_order.outcome_codes,
                         )

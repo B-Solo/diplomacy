@@ -72,6 +72,7 @@ class PowerPanel(QFrame):
     save_requested = Signal(object, str)
     final_requested = Signal(object, bool)
     editing_finished = Signal()
+    tab_requested = Signal(object, bool)
 
     def __init__(
         self,
@@ -167,10 +168,6 @@ class PowerPanel(QFrame):
         )
         self.issue_box.setVisible(False)
         layout.addWidget(self.issue_box)
-        self.timer = QTimer(self)
-        self.timer.setSingleShot(True)
-        self.timer.setInterval(500)
-        self.timer.timeout.connect(self._save)
         self.editor.textChanged.connect(self._edited)
 
     def begin_editing(self) -> None:
@@ -215,11 +212,11 @@ class PowerPanel(QFrame):
             self.issue_box.setVisible(not self.issue_box.isVisible())
 
     def _edited(self) -> None:
+        """Mark the power's orders open until the edited text is validated."""
         if self.final is not None:
             self.final.blockSignals(True)
             self.final.setChecked(False)
             self.final.blockSignals(False)
-        self.timer.start()
 
     def _save(self) -> None:
         if self.editor is not None:
@@ -230,9 +227,19 @@ class PowerPanel(QFrame):
             self.final_requested.emit(self.power.id, value)
 
     def eventFilter(self, watched, event) -> bool:
+        if (
+            watched is self.editor
+            and event.type() == QEvent.Type.KeyPress
+            and event.key() in (Qt.Key.Key_Tab, Qt.Key.Key_Backtab)
+        ):
+            reverse = event.key() == Qt.Key.Key_Backtab or bool(
+                event.modifiers() & Qt.KeyboardModifier.ShiftModifier
+            )
+            self.tab_requested.emit(self.power.id, reverse)
+            return True
         if watched is self.editor and event.type() == QEvent.Type.FocusOut:
-            if self.timer.isActive():
-                self.timer.stop()
+            saved_text = self.submission.raw_text if self.submission else ""
+            if self.editor.toPlainText() != saved_text:
                 self._save()
             self.stack.setCurrentIndex(0)
             self.editing_finished.emit()
@@ -273,7 +280,7 @@ class OrdersWorkspace(QWidget):
         outer.addLayout(controls)
         self.syntax_examples = QLabel(
             "Examples — replace the locations:  "
-            "A London H   ·   A London - Wales   ·   "
+            "A London H   ·   A London - Wales   ·   A London to Wales   ·   "
             "F North Sea S A Yorkshire - London\n"
             "Retreat: A London R Wales   ·   Build: A London B   ·   "
             "Disband: A London D   ·   Waive"
@@ -315,9 +322,6 @@ class OrdersWorkspace(QWidget):
     def pending_order_texts(self) -> tuple[tuple[PowerId, str], ...]:
         """Take order text that has changed since the displayed session was loaded.
 
-        Active debounce timers are stopped because the caller assumes responsibility
-        for saving every returned value before changing workspace.
-
         :return: Power identifiers and their currently entered raw order text.
         """
         pending: list[tuple[PowerId, str]] = []
@@ -328,7 +332,6 @@ class OrdersWorkspace(QWidget):
             saved_text = panel.submission.raw_text if panel.submission else ""
             if raw_text == saved_text:
                 continue
-            panel.timer.stop()
             pending.append((panel.power.id, raw_text))
         return tuple(pending)
 
@@ -393,6 +396,7 @@ class OrdersWorkspace(QWidget):
             panel.save_requested.connect(self.save_requested)
             panel.final_requested.connect(self.final_requested)
             panel.editing_finished.connect(self._panel_editing_finished)
+            panel.tab_requested.connect(self._tab_requested)
             self.panels.append(panel)
             self.grid.addWidget(panel, index // 2, index % 2)
             if not requirement.requires_submission or (submission and submission.is_final):
@@ -400,6 +404,24 @@ class OrdersWorkspace(QWidget):
         if self.finalisation_enabled:
             self.final_count.setText(f"{complete} of {len(self.panels)} final")
         self._apply_filter()
+
+    def _tab_requested(self, power_id: PowerId, reverse: bool) -> None:
+        """Move focus to the adjacent editable power order editor.
+
+        :param power_id: Power whose editor currently owns keyboard focus.
+        :param reverse: Whether focus should move toward the preceding editor.
+        """
+        editable = [panel for panel in self.panels if panel.editor is not None and panel.editable]
+        if len(editable) < 2:
+            return
+        current = next(
+            (index for index, panel in enumerate(editable) if panel.power.id == power_id),
+            None,
+        )
+        if current is None:
+            return
+        step = -1 if reverse else 1
+        editable[(current + step) % len(editable)].begin_editing()
 
     def _apply_filter(self) -> None:
         for panel in self.panels:
