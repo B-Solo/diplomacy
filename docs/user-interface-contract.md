@@ -78,7 +78,7 @@ Player communication occurs outside the application using map images copied by t
 - **MW.6:** `Fit` returns to the full-map view without changing the map state.
 - **MW.7:** Pan is clamped to the map bounds.
 - **MW.8:** The map display switches between `Position` and `Orders`, and `Preview orders on map` is a checkable toggle in the Map toolbar that follows the contiguous perspective, display-mode and label controls without separating them; the same action is available from the Orders workspace and enables the Map toggle.
-- **MW.8a:** During Summer and Winter, the map always overlays the immediately preceding movement phase's recorded orders over the unmoved position; a `Successful movements only` toggle hides movement-related orders whose adjudication outcome was unsuccessful.
+- **MW.8a:** During Summer and Winter, the map always overlays the immediately preceding movement phase's recorded orders over the unmoved position; when enabled, `Successful movements only` displays only successful move orders and hides holds, supports, convoys and other order graphics.
 - **MW.9:** Territory labels switch between display names and three-letter codes, never displaying both modes together; display names support centred explicit line breaks and otherwise wrap long text at spaces or ampersands.
 - **MW.10:** Land abbreviations have only their initial letter capitalised, while sea abbreviations are uppercase.
 - **MW.11:** The Map toolbar contains a readable named-view selector with a visible dropdown indicator and full-name tooltips, plus `Save current`, `Copy map` and `Save image` actions.

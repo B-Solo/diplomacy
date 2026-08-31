@@ -130,12 +130,14 @@ class VisibilityProjector:
         overlay_result_by_line = {item.source_line: item for item in overlay_results}
         phase_result_by_line = {item.source_line: item for item in phase.results}
 
-        def retain_overlay(item: EffectiveOrder) -> bool:
-            if not request.only_successful_movements or not isinstance(
-                item.order, (MoveOrder, SupportOrder, ConvoyOrder)
-            ):
+        def retain_order(
+            item: EffectiveOrder, result_lookup: dict[int | None, OrderResult]
+        ) -> bool:
+            if not request.only_successful_movements:
                 return True
-            result = overlay_result_by_line.get(item.source_line)
+            if not isinstance(item.order, MoveOrder):
+                return False
+            result = result_lookup.get(item.source_line)
             return not result or not _FAILED_MOVEMENT_OUTCOMES.intersection(result.outcome_codes)
 
         def outcome_codes(
@@ -148,9 +150,15 @@ class VisibilityProjector:
 
         if request.include_orders:
             retained_pairs = tuple(
-                (item, overlay_result_by_line) for item in overlay_orders if retain_overlay(item)
+                (item, overlay_result_by_line)
+                for item in overlay_orders
+                if retain_order(item, overlay_result_by_line)
             )
-            retained_pairs += tuple((item, phase_result_by_line) for item in effective_orders)
+            retained_pairs += tuple(
+                (item, phase_result_by_line)
+                for item in effective_orders
+                if retain_order(item, phase_result_by_line)
+            )
         else:
             retained_pairs = ()
         retained = tuple(
@@ -164,7 +172,12 @@ class VisibilityProjector:
             if _locations(item.order) <= visible_ids
         )
         retained_lines = (
-            {item.source_line for item in effective_orders if _locations(item.order) <= visible_ids}
+            {
+                item.source_line
+                for item in effective_orders
+                if retain_order(item, phase_result_by_line)
+                and _locations(item.order) <= visible_ids
+            }
             if request.include_orders
             else set()
         )

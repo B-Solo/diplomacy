@@ -149,10 +149,13 @@ def test_retreat_projection_keeps_previous_position_and_movement_overlay(england
     assert projected_cheshire.unit is None
     assert projected_cheshire.dislodged_unit == spring.state.units[0]
 
-    filtered = VisibilityProjector().project(
+    successful_result = next(
+        item for item in summer_proposal.results if isinstance(item.order, MoveOrder)
+    )
+    successful_only = VisibilityProjector().project(
         england,
         summer,
-        (),
+        engine.effective_orders(england, summer),
         VisibilityPolicy(False, 1),
         ProjectionRequest(
             Perspective(PerspectiveKind.GAMEMASTER),
@@ -161,15 +164,27 @@ def test_retreat_projection_keeps_previous_position_and_movement_overlay(england
             True,
             True,
         ),
-        (effective_movement,),
-        (
-            replace(
-                next(item for item in summer_proposal.results if isinstance(item.order, MoveOrder)),
-                outcome_codes=("BOUNCE",),
-            ),
-        ),
+        previous_orders,
+        (successful_result,),
     )
-    assert not any(isinstance(item.order, MoveOrder) for item in filtered.orders)
+    assert [item.order for item in successful_only.orders] == [effective_movement.order]
+
+    failed_only = VisibilityProjector().project(
+        england,
+        summer,
+        engine.effective_orders(england, summer),
+        VisibilityPolicy(False, 1),
+        ProjectionRequest(
+            Perspective(PerspectiveKind.GAMEMASTER),
+            LabelMode.FULL_NAME,
+            True,
+            True,
+            True,
+        ),
+        previous_orders,
+        (replace(successful_result, outcome_codes=("BOUNCE",)),),
+    )
+    assert not failed_only.orders
 
 
 def test_exported_multiline_label_paints_two_distinct_lines(qapp, england):
