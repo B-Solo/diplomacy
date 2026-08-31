@@ -167,14 +167,22 @@ class FileMapLibrary:
         label: dict[TerritoryId, Point] = {}
         army: dict[TerritoryId, Point] = {}
         fleet: dict[Any, Point] = {}
+        used_abbreviations: set[str] = set()
         for svg_id in playable_ids:
             territory_id = svg_id.removeprefix("territory-")
             shape = geometries.get(svg_id)
             if shape is None:
                 continue
             centre = shape.representative_point()
-            abbreviation = "".join(part[:1] for part in territory_id.split("-")[:3]).title()
-            abbreviation = (abbreviation + "xxx")[:3]
+            base_abbreviation = (
+                "".join(part[:1] for part in territory_id.split("-")[:3]).upper() + "XXX"
+            )[:3]
+            abbreviation = base_abbreviation
+            suffix = 0
+            while abbreviation.casefold() in used_abbreviations:
+                abbreviation = f"{base_abbreviation[:2]}{chr(ord('A') + suffix % 26)}"
+                suffix += 1
+            used_abbreviations.add(abbreviation.casefold())
             territories[territory_id] = {
                 "name": territory_id.replace("-", " ").title(),
                 "abbreviation": abbreviation,

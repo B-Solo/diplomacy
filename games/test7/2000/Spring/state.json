@@ -1,0 +1,204 @@
+{
+  "dislodged_units": [],
+  "phase": {
+    "season": "spring",
+    "year": 2000
+  },
+  "schema_version": 1,
+  "supply_centre_owners": {
+    "anglesey": "merseyside",
+    "avon": "bristol",
+    "cheshire": "merseyside",
+    "durham": "up-north",
+    "dyfed": "wales",
+    "glamorgan": "wales",
+    "gloucestershire": "bristol",
+    "isle-of-man": "merseyside",
+    "kent": "london",
+    "london": "london",
+    "merseyside": "merseyside",
+    "n-lincolnshire": "east-anglia",
+    "norfolk": "east-anglia",
+    "northumberland": "up-north",
+    "pembrokeshire": "wales",
+    "s-lincolnshire": "east-anglia",
+    "surrey": "london",
+    "tyne-and-wear": "up-north",
+    "wiltshire": "bristol"
+  },
+  "territory_controllers": {
+    "anglesey": "merseyside",
+    "avon": "bristol",
+    "cheshire": "merseyside",
+    "durham": "up-north",
+    "dyfed": "wales",
+    "glamorgan": "wales",
+    "gloucestershire": "bristol",
+    "isle-of-man": "merseyside",
+    "kent": "london",
+    "london": "london",
+    "merseyside": "merseyside",
+    "n-lincolnshire": "east-anglia",
+    "norfolk": "east-anglia",
+    "northumberland": "up-north",
+    "pembrokeshire": "wales",
+    "s-lincolnshire": "east-anglia",
+    "surrey": "london",
+    "tyne-and-wear": "up-north",
+    "wiltshire": "bristol"
+  },
+  "units": [
+    {
+      "location": {
+        "coast": null,
+        "territory": "cheshire"
+      },
+      "power": "merseyside",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "merseyside"
+      },
+      "power": "merseyside",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "isle-of-man"
+      },
+      "power": "merseyside",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "anglesey"
+      },
+      "power": "merseyside",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "northumberland"
+      },
+      "power": "up-north",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "tyne-and-wear"
+      },
+      "power": "up-north",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "durham"
+      },
+      "power": "up-north",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "london"
+      },
+      "power": "london",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "surrey"
+      },
+      "power": "london",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "kent"
+      },
+      "power": "london",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "avon"
+      },
+      "power": "bristol",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "gloucestershire"
+      },
+      "power": "bristol",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "wiltshire"
+      },
+      "power": "bristol",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "dyfed"
+      },
+      "power": "wales",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "pembrokeshire"
+      },
+      "power": "wales",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "glamorgan"
+      },
+      "power": "wales",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "n-lincolnshire"
+      },
+      "power": "east-anglia",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "s-lincolnshire"
+      },
+      "power": "east-anglia",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "norfolk"
+      },
+      "power": "east-anglia",
+      "type": "fleet"
+    }
+  ]
+}

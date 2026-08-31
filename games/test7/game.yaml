@@ -1,0 +1,10 @@
+schema_version: 1
+game_id: test7
+name: test7
+fog_of_war:
+  enabled: false
+  adjacency_depth: 1
+orders:
+  require_finalisation: false
+ui:
+  explain_adjudication_outcomes: false

@@ -92,6 +92,20 @@ def test_import_classifies_and_can_promote_structured_shapes(tmp_path, project_r
     assert len(promoted.territories) == 2
 
 
+def test_import_assigns_unique_abbreviations_to_similarly_named_territories(tmp_path):
+    svg = b"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50">
+      <path id="territory-alpha" d="M0 0 L50 0 L50 50 L0 50 Z"/>
+      <path id="territory-alps" d="M50 0 L100 0 L100 50 L50 50 Z"/>
+    </svg>"""
+    library = FileMapLibrary(tmp_path / "maps")
+
+    draft = library.import_svg("Tiny map", svg)
+
+    assert library.validate(draft).is_valid
+    abbreviations = {territory.abbreviation.casefold() for territory in draft.territories}
+    assert len(abbreviations) == len(draft.territories)
+
+
 def test_svg_group_can_be_used_as_one_territory():
     svg = b"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50">
       <g id="territory-islands">
