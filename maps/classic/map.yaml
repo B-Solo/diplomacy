@@ -1,0 +1,1689 @@
+# Best-effort standard 1901 setup; review anchors and colours in the map editor.
+schema_version: 1
+map_id: classic
+name: Classic Diplomacy
+rules_engine: standard
+assets:
+  map: map.svg
+start:
+  year: 1901
+  season: spring
+teams:
+  austria:
+    name: Austria
+    colour: '#b36b35'
+    home_supply_centres:
+    - budapest
+    - trieste
+    - vienna
+    starting_supply_centres:
+    - budapest
+    - trieste
+    - vienna
+    starting_territories:
+    - budapest
+    - trieste
+    - vienna
+    initial_units:
+    - type: army
+      location: budapest
+    - type: army
+      location: vienna
+    - type: fleet
+      location: trieste
+  england:
+    name: England
+    colour: '#4d76a8'
+    home_supply_centres:
+    - edinburgh
+    - london
+    - liverpool
+    starting_supply_centres:
+    - edinburgh
+    - london
+    - liverpool
+    starting_territories:
+    - edinburgh
+    - london
+    - liverpool
+    initial_units:
+    - type: fleet
+      location: edinburgh
+    - type: fleet
+      location: london
+    - type: army
+      location: liverpool
+  france:
+    name: France
+    colour: '#5c8d5a'
+    home_supply_centres:
+    - brest
+    - marseilles
+    - paris
+    starting_supply_centres:
+    - brest
+    - marseilles
+    - paris
+    starting_territories:
+    - brest
+    - marseilles
+    - paris
+    initial_units:
+    - type: fleet
+      location: brest
+    - type: army
+      location: marseilles
+    - type: army
+      location: paris
+  germany:
+    name: Germany
+    colour: '#777777'
+    home_supply_centres:
+    - berlin
+    - kiel
+    - munich
+    starting_supply_centres:
+    - berlin
+    - kiel
+    - munich
+    starting_territories:
+    - berlin
+    - kiel
+    - munich
+    initial_units:
+    - type: army
+      location: berlin
+    - type: fleet
+      location: kiel
+    - type: army
+      location: munich
+  italy:
+    name: Italy
+    colour: '#b05a50'
+    home_supply_centres:
+    - naples
+    - rome
+    - venice
+    starting_supply_centres:
+    - naples
+    - rome
+    - venice
+    starting_territories:
+    - naples
+    - rome
+    - venice
+    initial_units:
+    - type: fleet
+      location: naples
+    - type: army
+      location: rome
+    - type: army
+      location: venice
+  russia:
+    name: Russia
+    colour: '#6e6eaa'
+    home_supply_centres:
+    - moscow
+    - sevastopol
+    - st-petersburg
+    - warsaw
+    starting_supply_centres:
+    - moscow
+    - sevastopol
+    - st-petersburg
+    - warsaw
+    starting_territories:
+    - moscow
+    - sevastopol
+    - st-petersburg
+    - warsaw
+    initial_units:
+    - type: army
+      location: moscow
+    - type: fleet
+      location: sevastopol
+    - type: fleet
+      location: st-petersburg/sc
+    - type: army
+      location: warsaw
+  turkey:
+    name: Turkey
+    colour: '#c28b3c'
+    home_supply_centres:
+    - ankara
+    - constantinople
+    - smyrna
+    starting_supply_centres:
+    - ankara
+    - constantinople
+    - smyrna
+    starting_territories:
+    - ankara
+    - constantinople
+    - smyrna
+    initial_units:
+    - type: fleet
+      location: ankara
+    - type: army
+      location: constantinople
+    - type: army
+      location: smyrna
+territories:
+  adriatic-sea:
+    name: Adriatic Sea
+    abbreviation: ADR
+    kind: sea
+    svg_element: territory-adriatic-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 763.4
+      - 1062.8
+      abbreviation:
+      - 763.4
+      - 1062.8
+      fleet:
+      - 763.4
+      - 1071.8
+  aegean-sea:
+    name: Aegean Sea
+    abbreviation: AEG
+    kind: sea
+    svg_element: territory-aegean-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 1045.5
+      - 1222.1
+      abbreviation:
+      - 1045.5
+      - 1222.1
+      fleet:
+      - 1045.5
+      - 1231.1
+  albania:
+    name: Albania
+    abbreviation: ALB
+    kind: land
+    svg_element: territory-albania
+    supply_centre: false
+    anchors:
+      label:
+      - 878.5
+      - 1125.8
+      abbreviation:
+      - 878.5
+      - 1125.8
+      army:
+      - 878.5
+      - 1136.8
+      fleet:
+      - 878.5
+      - 1134.8
+  ankara:
+    name: Ankara
+    abbreviation: ANK
+    kind: land
+    svg_element: territory-ankara
+    supply_centre: true
+    anchors:
+      label:
+      - 1266.8
+      - 1099.6
+      abbreviation:
+      - 1266.8
+      - 1099.6
+      army:
+      - 1266.8
+      - 1110.6
+      fleet:
+      - 1266.8
+      - 1108.6
+      supply_centre:
+      - 1266.8
+      - 1099.6
+  apulia:
+    name: Apulia
+    abbreviation: APU
+    kind: land
+    svg_element: territory-apulia
+    supply_centre: false
+    anchors:
+      label:
+      - 758.3
+      - 1123.9
+      abbreviation:
+      - 758.3
+      - 1123.9
+      army:
+      - 758.3
+      - 1134.9
+      fleet:
+      - 758.3
+      - 1132.9
+  armenia:
+    name: Armenia
+    abbreviation: ARM
+    kind: land
+    svg_element: territory-armenia
+    supply_centre: false
+    anchors:
+      label:
+      - 1436.6
+      - 1094.3
+      abbreviation:
+      - 1436.6
+      - 1094.3
+      army:
+      - 1436.6
+      - 1105.3
+      fleet:
+      - 1436.6
+      - 1103.3
+  baltic-sea:
+    name: Baltic Sea
+    abbreviation: BAL
+    kind: sea
+    svg_element: territory-baltic-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 818.2
+      - 589.8
+      abbreviation:
+      - 818.2
+      - 589.8
+      fleet:
+      - 818.2
+      - 598.8
+  barents-sea:
+    name: Barents Sea
+    abbreviation: BAR
+    kind: sea
+    svg_element: territory-barents-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 1132.0
+      - 139.6
+      abbreviation:
+      - 1132.0
+      - 139.6
+      fleet:
+      - 1132.0
+      - 148.6
+  belgium:
+    name: Belgium
+    abbreviation: BEL
+    kind: land
+    svg_element: territory-belgium
+    supply_centre: true
+    anchors:
+      label:
+      - 520.1
+      - 779.6
+      abbreviation:
+      - 520.1
+      - 779.6
+      army:
+      - 520.1
+      - 790.6
+      fleet:
+      - 520.1
+      - 788.6
+      supply_centre:
+      - 520.1
+      - 779.6
+  berlin:
+    name: Berlin
+    abbreviation: BER
+    kind: land
+    svg_element: territory-berlin
+    supply_centre: true
+    anchors:
+      label:
+      - 701.1
+      - 720.6
+      abbreviation:
+      - 701.1
+      - 720.6
+      army:
+      - 701.1
+      - 731.6
+      fleet:
+      - 701.1
+      - 729.6
+      supply_centre:
+      - 701.1
+      - 720.6
+  black-sea:
+    name: Black Sea
+    abbreviation: BLA
+    kind: sea
+    svg_element: territory-black-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 1316.3
+      - 961.8
+      abbreviation:
+      - 1316.3
+      - 961.8
+      fleet:
+      - 1316.3
+      - 970.8
+  bohemia:
+    name: Bohemia
+    abbreviation: BOH
+    kind: land
+    svg_element: territory-bohemia
+    supply_centre: false
+    anchors:
+      label:
+      - 749.0
+      - 835.9
+      abbreviation:
+      - 749.0
+      - 835.9
+      army:
+      - 749.0
+      - 846.9
+  gulf-of-bothnia:
+    name: Gulf of Bothnia
+    abbreviation: BOT
+    kind: sea
+    svg_element: territory-gulf-of-bothnia
+    supply_centre: false
+    anchors:
+      label:
+      - 828.1
+      - 406.0
+      abbreviation:
+      - 828.1
+      - 406.0
+      fleet:
+      - 828.1
+      - 415.0
+  brest:
+    name: Brest
+    abbreviation: BRE
+    kind: land
+    svg_element: territory-brest
+    supply_centre: true
+    anchors:
+      label:
+      - 344.6
+      - 836.2
+      abbreviation:
+      - 344.6
+      - 836.2
+      army:
+      - 344.6
+      - 847.2
+      fleet:
+      - 344.6
+      - 845.2
+      supply_centre:
+      - 344.6
+      - 836.2
+  budapest:
+    name: Budapest
+    abbreviation: BUD
+    kind: land
+    svg_element: territory-budapest
+    supply_centre: true
+    anchors:
+      label:
+      - 926.1
+      - 918.3
+      abbreviation:
+      - 926.1
+      - 918.3
+      army:
+      - 926.1
+      - 929.3
+      supply_centre:
+      - 926.1
+      - 918.3
+  bulgaria:
+    name: Bulgaria
+    abbreviation: BUL
+    kind: land
+    svg_element: territory-bulgaria
+    supply_centre: true
+    anchors:
+      label:
+      - 1009.3
+      - 1068.7
+      abbreviation:
+      - 1009.3
+      - 1068.7
+      army:
+      - 1009.3
+      - 1079.7
+      fleet:
+      - 1009.3
+      - 1077.7
+      supply_centre:
+      - 1009.3
+      - 1068.7
+    split_coasts:
+      ec:
+        fleet_anchor:
+        - 1030.0
+        - 1050.0
+        label_anchor:
+        - 1035.0
+        - 1037.0
+        label_rotation: 0
+        add_connections:
+        - black-sea
+        - constantinople
+      sc:
+        fleet_anchor:
+        - 1004.0
+        - 1110.0
+        label_anchor:
+        - 1004.0
+        - 1124.0
+        label_rotation: 0
+        add_connections:
+        - aegean-sea
+        - constantinople
+  burgundy:
+    name: Burgundy
+    abbreviation: BUR
+    kind: land
+    svg_element: territory-burgundy
+    supply_centre: false
+    anchors:
+      label:
+      - 511.4
+      - 888.4
+      abbreviation:
+      - 511.4
+      - 888.4
+      army:
+      - 511.4
+      - 899.4
+  clyde:
+    name: Clyde
+    abbreviation: CLY
+    kind: land
+    svg_element: territory-clyde
+    supply_centre: false
+    anchors:
+      label:
+      - 363.7
+      - 522.4
+      abbreviation:
+      - 363.7
+      - 522.4
+      army:
+      - 363.7
+      - 533.4
+      fleet:
+      - 363.7
+      - 531.4
+  constantinople:
+    name: Constantinople
+    abbreviation: CON
+    kind: land
+    svg_element: territory-constantinople
+    supply_centre: true
+    anchors:
+      label:
+      - 1121.6
+      - 1138.1
+      abbreviation:
+      - 1121.6
+      - 1138.1
+      army:
+      - 1121.6
+      - 1149.1
+      fleet:
+      - 1121.6
+      - 1147.1
+      supply_centre:
+      - 1121.6
+      - 1138.1
+  denmark:
+    name: Denmark
+    abbreviation: DEN
+    kind: land
+    svg_element: territory-denmark
+    supply_centre: true
+    anchors:
+      label:
+      - 637.2
+      - 579.6
+      abbreviation:
+      - 637.2
+      - 579.6
+      army:
+      - 637.2
+      - 590.6
+      fleet:
+      - 637.2
+      - 588.6
+      supply_centre:
+      - 637.2
+      - 579.6
+  eastern-mediterranean:
+    name: Eastern Mediterranean
+    abbreviation: EAS
+    kind: sea
+    svg_element: territory-eastern-mediterranean
+    supply_centre: false
+    anchors:
+      label:
+      - 1192.9
+      - 1280.8
+      abbreviation:
+      - 1192.9
+      - 1280.8
+      fleet:
+      - 1192.9
+      - 1289.8
+  edinburgh:
+    name: Edinburgh
+    abbreviation: EDI
+    kind: land
+    svg_element: territory-edinburgh
+    supply_centre: true
+    anchors:
+      label:
+      - 389.9
+      - 545.7
+      abbreviation:
+      - 389.9
+      - 545.7
+      army:
+      - 389.9
+      - 556.7
+      fleet:
+      - 389.9
+      - 554.7
+      supply_centre:
+      - 389.9
+      - 545.7
+  english-channel:
+    name: English Channel
+    abbreviation: ENG
+    kind: sea
+    svg_element: territory-english-channel
+    supply_centre: false
+    anchors:
+      label:
+      - 291.2
+      - 776.6
+      abbreviation:
+      - 291.2
+      - 776.6
+      fleet:
+      - 291.2
+      - 785.6
+  finland:
+    name: Finland
+    abbreviation: FIN
+    kind: land
+    svg_element: territory-finland
+    supply_centre: false
+    anchors:
+      label:
+      - 946.2
+      - 277.8
+      abbreviation:
+      - 946.2
+      - 277.8
+      army:
+      - 946.2
+      - 288.8
+      fleet:
+      - 946.2
+      - 286.8
+  galicia:
+    name: Galicia
+    abbreviation: GAL
+    kind: land
+    svg_element: territory-galicia
+    supply_centre: false
+    anchors:
+      label:
+      - 957.9
+      - 838.8
+      abbreviation:
+      - 957.9
+      - 838.8
+      army:
+      - 957.9
+      - 849.8
+  gascony:
+    name: Gascony
+    abbreviation: GAS
+    kind: land
+    svg_element: territory-gascony
+    supply_centre: false
+    anchors:
+      label:
+      - 383.6
+      - 959.6
+      abbreviation:
+      - 383.6
+      - 959.6
+      army:
+      - 383.6
+      - 970.6
+      fleet:
+      - 383.6
+      - 968.6
+  gulf-of-lyon:
+    name: Gulf of Lyon
+    abbreviation: GOL
+    kind: sea
+    svg_element: territory-gulf-of-lyon
+    supply_centre: false
+    anchors:
+      label:
+      - 488.1
+      - 1087.5
+      abbreviation:
+      - 488.1
+      - 1087.5
+      fleet:
+      - 488.1
+      - 1096.5
+  greece:
+    name: Greece
+    abbreviation: GRE
+    kind: land
+    svg_element: territory-greece
+    supply_centre: true
+    anchors:
+      label:
+      - 933.3
+      - 1200.8
+      abbreviation:
+      - 933.3
+      - 1200.8
+      army:
+      - 933.3
+      - 1211.8
+      fleet:
+      - 933.3
+      - 1209.8
+      supply_centre:
+      - 933.3
+      - 1200.8
+  helgoland-bight:
+    name: Helgoland Bight
+    abbreviation: HEL
+    kind: sea
+    svg_element: territory-helgoland-bight
+    supply_centre: false
+    anchors:
+      label:
+      - 577.3
+      - 644.2
+      abbreviation:
+      - 577.3
+      - 644.2
+      fleet:
+      - 577.3
+      - 653.2
+  holland:
+    name: Holland
+    abbreviation: HOL
+    kind: land
+    svg_element: territory-holland
+    supply_centre: true
+    anchors:
+      label:
+      - 542.5
+      - 719.8
+      abbreviation:
+      - 542.5
+      - 719.8
+      army:
+      - 542.5
+      - 730.8
+      fleet:
+      - 542.5
+      - 728.8
+      supply_centre:
+      - 542.5
+      - 719.8
+  ionian-sea:
+    name: Ionian Sea
+    abbreviation: ION
+    kind: sea
+    svg_element: territory-ionian-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 840.0
+      - 1255.2
+      abbreviation:
+      - 840.0
+      - 1255.2
+      fleet:
+      - 840.0
+      - 1264.2
+  irish-sea:
+    name: Irish Sea
+    abbreviation: IRI
+    kind: sea
+    svg_element: territory-irish-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 254.9
+      - 681.4
+      abbreviation:
+      - 254.9
+      - 681.4
+      fleet:
+      - 254.9
+      - 690.4
+  kiel:
+    name: Kiel
+    abbreviation: KIE
+    kind: land
+    svg_element: territory-kiel
+    supply_centre: true
+    anchors:
+      label:
+      - 624.1
+      - 726.0
+      abbreviation:
+      - 624.1
+      - 726.0
+      army:
+      - 624.1
+      - 737.0
+      fleet:
+      - 624.1
+      - 735.0
+      supply_centre:
+      - 624.1
+      - 726.0
+  london:
+    name: London
+    abbreviation: LON
+    kind: land
+    svg_element: territory-london
+    supply_centre: true
+    anchors:
+      label:
+      - 409.1
+      - 713.2
+      abbreviation:
+      - 409.1
+      - 713.2
+      army:
+      - 409.1
+      - 724.2
+      fleet:
+      - 409.1
+      - 722.2
+      supply_centre:
+      - 409.1
+      - 713.2
+  livonia:
+    name: Livonia
+    abbreviation: LVN
+    kind: land
+    svg_element: territory-livonia
+    supply_centre: false
+    anchors:
+      label:
+      - 976.5
+      - 553.1
+      abbreviation:
+      - 976.5
+      - 553.1
+      army:
+      - 976.5
+      - 564.1
+      fleet:
+      - 976.5
+      - 562.1
+  liverpool:
+    name: Liverpool
+    abbreviation: LVP
+    kind: land
+    svg_element: territory-liverpool
+    supply_centre: true
+    anchors:
+      label:
+      - 392.2
+      - 625.8
+      abbreviation:
+      - 392.2
+      - 625.8
+      army:
+      - 392.2
+      - 636.8
+      fleet:
+      - 392.2
+      - 634.8
+      supply_centre:
+      - 392.2
+      - 625.8
+  marseilles:
+    name: Marseilles
+    abbreviation: MAR
+    kind: land
+    svg_element: territory-marseilles
+    supply_centre: true
+    anchors:
+      label:
+      - 474.5
+      - 989.0
+      abbreviation:
+      - 474.5
+      - 989.0
+      army:
+      - 474.5
+      - 1000.0
+      fleet:
+      - 474.5
+      - 998.0
+      supply_centre:
+      - 474.5
+      - 989.0
+  mid-atlantic-ocean:
+    name: Mid-Atlantic Ocean
+    abbreviation: MID
+    kind: sea
+    svg_element: territory-mid-atlantic-ocean
+    supply_centre: false
+    anchors:
+      label:
+      - 56.9
+      - 1022.1
+      abbreviation:
+      - 56.9
+      - 1022.1
+      fleet:
+      - 56.9
+      - 1031.1
+  moscow:
+    name: Moscow
+    abbreviation: MOS
+    kind: land
+    svg_element: territory-moscow
+    supply_centre: true
+    anchors:
+      label:
+      - 1386.3
+      - 365.3
+      abbreviation:
+      - 1386.3
+      - 365.3
+      army:
+      - 1386.3
+      - 376.3
+      supply_centre:
+      - 1386.3
+      - 365.3
+  munich:
+    name: Munich
+    abbreviation: MUN
+    kind: land
+    svg_element: territory-munich
+    supply_centre: true
+    anchors:
+      label:
+      - 642.8
+      - 834.7
+      abbreviation:
+      - 642.8
+      - 834.7
+      army:
+      - 642.8
+      - 845.7
+      supply_centre:
+      - 642.8
+      - 834.7
+  north-africa:
+    name: North Africa
+    abbreviation: NAF
+    kind: land
+    svg_element: territory-north-africa
+    supply_centre: false
+    anchors:
+      label:
+      - 290.1
+      - 1293.5
+      abbreviation:
+      - 290.1
+      - 1293.5
+      army:
+      - 290.1
+      - 1304.5
+      fleet:
+      - 290.1
+      - 1302.5
+  naples:
+    name: Naples
+    abbreviation: NAP
+    kind: land
+    svg_element: territory-naples
+    supply_centre: true
+    anchors:
+      label:
+      - 720.8
+      - 1261.8
+      abbreviation:
+      - 720.8
+      - 1261.8
+      army:
+      - 720.8
+      - 1272.8
+      fleet:
+      - 720.8
+      - 1270.8
+      supply_centre:
+      - 720.8
+      - 1261.8
+  north-atlantic-ocean:
+    name: North Atlantic Ocean
+    abbreviation: NAT
+    kind: sea
+    svg_element: territory-north-atlantic-ocean
+    supply_centre: false
+    anchors:
+      label:
+      - 185.6
+      - 359.1
+      abbreviation:
+      - 185.6
+      - 359.1
+      fleet:
+      - 185.6
+      - 368.1
+  norwegian-sea:
+    name: Norwegian Sea
+    abbreviation: NRG
+    kind: sea
+    svg_element: territory-norwegian-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 536.7
+      - 249.9
+      abbreviation:
+      - 536.7
+      - 249.9
+      fleet:
+      - 536.7
+      - 258.9
+  north-sea:
+    name: North Sea
+    abbreviation: NTH
+    kind: sea
+    svg_element: territory-north-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 514.5
+      - 589.1
+      abbreviation:
+      - 514.5
+      - 589.1
+      fleet:
+      - 514.5
+      - 598.1
+  norway:
+    name: Norway
+    abbreviation: NWY
+    kind: land
+    svg_element: territory-norway
+    supply_centre: true
+    anchors:
+      label:
+      - 724.3
+      - 291.8
+      abbreviation:
+      - 724.3
+      - 291.8
+      army:
+      - 724.3
+      - 302.8
+      fleet:
+      - 724.3
+      - 300.8
+      supply_centre:
+      - 724.3
+      - 291.8
+  paris:
+    name: Paris
+    abbreviation: PAR
+    kind: land
+    svg_element: territory-paris
+    supply_centre: true
+    anchors:
+      label:
+      - 427.7
+      - 878.3
+      abbreviation:
+      - 427.7
+      - 878.3
+      army:
+      - 427.7
+      - 889.3
+      supply_centre:
+      - 427.7
+      - 878.3
+  picardy:
+    name: Picardy
+    abbreviation: PIC
+    kind: land
+    svg_element: territory-picardy
+    supply_centre: false
+    anchors:
+      label:
+      - 461.7
+      - 793.6
+      abbreviation:
+      - 461.7
+      - 793.6
+      army:
+      - 461.7
+      - 804.6
+      fleet:
+      - 461.7
+      - 802.6
+  piedmont:
+    name: Piedmont
+    abbreviation: PIE
+    kind: land
+    svg_element: territory-piedmont
+    supply_centre: false
+    anchors:
+      label:
+      - 583.1
+      - 978.6
+      abbreviation:
+      - 583.1
+      - 978.6
+      army:
+      - 583.1
+      - 989.6
+      fleet:
+      - 583.1
+      - 987.6
+  portugal:
+    name: Portugal
+    abbreviation: POR
+    kind: land
+    svg_element: territory-portugal
+    supply_centre: true
+    anchors:
+      label:
+      - 111.9
+      - 1076.0
+      abbreviation:
+      - 111.9
+      - 1076.0
+      army:
+      - 111.9
+      - 1087.0
+      fleet:
+      - 111.9
+      - 1085.0
+      supply_centre:
+      - 111.9
+      - 1076.0
+  prussia:
+    name: Prussia
+    abbreviation: PRU
+    kind: land
+    svg_element: territory-prussia
+    supply_centre: false
+    anchors:
+      label:
+      - 827.1
+      - 677.2
+      abbreviation:
+      - 827.1
+      - 677.2
+      army:
+      - 827.1
+      - 688.2
+      fleet:
+      - 827.1
+      - 686.2
+  rome:
+    name: Rome
+    abbreviation: ROM
+    kind: land
+    svg_element: territory-rome
+    supply_centre: true
+    anchors:
+      label:
+      - 686.9
+      - 1092.5
+      abbreviation:
+      - 686.9
+      - 1092.5
+      army:
+      - 686.9
+      - 1103.5
+      fleet:
+      - 686.9
+      - 1101.5
+      supply_centre:
+      - 686.9
+      - 1092.5
+  ruhr:
+    name: Ruhr
+    abbreviation: RUH
+    kind: land
+    svg_element: territory-ruhr
+    supply_centre: false
+    anchors:
+      label:
+      - 579.0
+      - 792.7
+      abbreviation:
+      - 579.0
+      - 792.7
+      army:
+      - 579.0
+      - 803.7
+  rumania:
+    name: Rumania
+    abbreviation: RUM
+    kind: land
+    svg_element: territory-rumania
+    supply_centre: true
+    anchors:
+      label:
+      - 1048.8
+      - 947.0
+      abbreviation:
+      - 1048.8
+      - 947.0
+      army:
+      - 1048.8
+      - 958.0
+      fleet:
+      - 1048.8
+      - 956.0
+      supply_centre:
+      - 1048.8
+      - 947.0
+  serbia:
+    name: Serbia
+    abbreviation: SER
+    kind: land
+    svg_element: territory-serbia
+    supply_centre: true
+    anchors:
+      label:
+      - 907.8
+      - 1063.2
+      abbreviation:
+      - 907.8
+      - 1063.2
+      army:
+      - 907.8
+      - 1074.2
+      supply_centre:
+      - 907.8
+      - 1063.2
+  sevastopol:
+    name: Sevastopol
+    abbreviation: SEV
+    kind: land
+    svg_element: territory-sevastopol
+    supply_centre: true
+    anchors:
+      label:
+      - 1403.0
+      - 789.1
+      abbreviation:
+      - 1403.0
+      - 789.1
+      army:
+      - 1403.0
+      - 800.1
+      fleet:
+      - 1403.0
+      - 798.1
+      supply_centre:
+      - 1403.0
+      - 789.1
+  silesia:
+    name: Silesia
+    abbreviation: SIL
+    kind: land
+    svg_element: territory-silesia
+    supply_centre: false
+    anchors:
+      label:
+      - 746.7
+      - 774.4
+      abbreviation:
+      - 746.7
+      - 774.4
+      army:
+      - 746.7
+      - 785.4
+  skagerrak:
+    name: Skagerrak
+    abbreviation: SKA
+    kind: sea
+    svg_element: territory-skagerrak
+    supply_centre: false
+    anchors:
+      label:
+      - 636.0
+      - 528.2
+      abbreviation:
+      - 636.0
+      - 528.2
+      fleet:
+      - 636.0
+      - 537.2
+  smyrna:
+    name: Smyrna
+    abbreviation: SMY
+    kind: land
+    svg_element: territory-smyrna
+    supply_centre: true
+    anchors:
+      label:
+      - 1212.8
+      - 1200.5
+      abbreviation:
+      - 1212.8
+      - 1200.5
+      army:
+      - 1212.8
+      - 1211.5
+      fleet:
+      - 1212.8
+      - 1209.5
+      supply_centre:
+      - 1212.8
+      - 1200.5
+  spain:
+    name: Spain
+    abbreviation: SPA
+    kind: land
+    svg_element: territory-spain
+    supply_centre: true
+    anchors:
+      label:
+      - 284.7
+      - 1079.3
+      abbreviation:
+      - 284.7
+      - 1079.3
+      army:
+      - 284.7
+      - 1090.3
+      fleet:
+      - 284.7
+      - 1088.3
+      supply_centre:
+      - 284.7
+      - 1079.3
+    split_coasts:
+      nc:
+        fleet_anchor:
+        - 285.0
+        - 1027.0
+        label_anchor:
+        - 285.0
+        - 1014.0
+        label_rotation: 0
+        add_connections:
+        - gascony
+        - mid-atlantic-ocean
+        - portugal
+      sc:
+        fleet_anchor:
+        - 300.0
+        - 1134.0
+        label_anchor:
+        - 300.0
+        - 1150.0
+        label_rotation: 0
+        add_connections:
+        - gulf-of-lyon
+        - mid-atlantic-ocean
+        - marseilles
+        - portugal
+        - western-mediterranean
+  st-petersburg:
+    name: St Petersburg
+    abbreviation: STP
+    kind: land
+    svg_element: territory-st-petersburg
+    supply_centre: true
+    anchors:
+      label:
+      - 1122.9
+      - 301.6
+      abbreviation:
+      - 1122.9
+      - 301.6
+      army:
+      - 1122.9
+      - 312.6
+      fleet:
+      - 1122.9
+      - 310.6
+      supply_centre:
+      - 1122.9
+      - 301.6
+    split_coasts:
+      nc:
+        fleet_anchor:
+        - 1110.0
+        - 210.0
+        label_anchor:
+        - 1110.0
+        - 195.0
+        label_rotation: 0
+        add_connections:
+        - barents-sea
+        - norway
+      sc:
+        fleet_anchor:
+        - 1080.0
+        - 390.0
+        label_anchor:
+        - 1080.0
+        - 405.0
+        label_rotation: 0
+        add_connections:
+        - gulf-of-bothnia
+        - finland
+        - livonia
+  sweden:
+    name: Sweden
+    abbreviation: SWE
+    kind: land
+    svg_element: territory-sweden
+    supply_centre: true
+    anchors:
+      label:
+      - 750.7
+      - 383.5
+      abbreviation:
+      - 750.7
+      - 383.5
+      army:
+      - 750.7
+      - 394.5
+      fleet:
+      - 750.7
+      - 392.5
+      supply_centre:
+      - 750.7
+      - 383.5
+  syria:
+    name: Syria
+    abbreviation: SYR
+    kind: land
+    svg_element: territory-syria
+    supply_centre: false
+    anchors:
+      label:
+      - 1436.3
+      - 1263.6
+      abbreviation:
+      - 1436.3
+      - 1263.6
+      army:
+      - 1436.3
+      - 1274.6
+      fleet:
+      - 1436.3
+      - 1272.6
+  trieste:
+    name: Trieste
+    abbreviation: TRI
+    kind: land
+    svg_element: territory-trieste
+    supply_centre: true
+    anchors:
+      label:
+      - 810.0
+      - 1019.2
+      abbreviation:
+      - 810.0
+      - 1019.2
+      army:
+      - 810.0
+      - 1030.2
+      fleet:
+      - 810.0
+      - 1028.2
+      supply_centre:
+      - 810.0
+      - 1019.2
+  tunis:
+    name: Tunis
+    abbreviation: TUN
+    kind: land
+    svg_element: territory-tunis
+    supply_centre: true
+    anchors:
+      label:
+      - 582.3
+      - 1307.2
+      abbreviation:
+      - 582.3
+      - 1307.2
+      army:
+      - 582.3
+      - 1318.2
+      supply_centre:
+      - 582.3
+      - 1307.2
+  tuscany:
+    name: Tuscany
+    abbreviation: TUS
+    kind: land
+    svg_element: territory-tuscany
+    supply_centre: false
+    anchors:
+      label:
+      - 650.6
+      - 1044.9
+      abbreviation:
+      - 650.6
+      - 1044.9
+      army:
+      - 650.6
+      - 1055.9
+      fleet:
+      - 650.6
+      - 1053.9
+  tyrrhenian-sea:
+    name: Tyrrhenian Sea
+    abbreviation: TYN
+    kind: sea
+    svg_element: territory-tyrrhenian-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 669.4
+      - 1159.4
+      abbreviation:
+      - 669.4
+      - 1159.4
+      fleet:
+      - 669.4
+      - 1168.4
+  tyrolia:
+    name: Tyrolia
+    abbreviation: TYR
+    kind: land
+    svg_element: territory-tyrolia
+    supply_centre: false
+    anchors:
+      label:
+      - 695.9
+      - 918.6
+      abbreviation:
+      - 695.9
+      - 918.6
+      army:
+      - 695.9
+      - 929.6
+  ukraine:
+    name: Ukraine
+    abbreviation: UKR
+    kind: land
+    svg_element: territory-ukraine
+    supply_centre: false
+    anchors:
+      label:
+      - 1134.8
+      - 784.6
+      abbreviation:
+      - 1134.8
+      - 784.6
+      army:
+      - 1134.8
+      - 795.6
+  venice:
+    name: Venice
+    abbreviation: VEN
+    kind: land
+    svg_element: territory-venice
+    supply_centre: true
+    anchors:
+      label:
+      - 651.0
+      - 1004.9
+      abbreviation:
+      - 651.0
+      - 1004.9
+      army:
+      - 651.0
+      - 1015.9
+      fleet:
+      - 651.0
+      - 1013.9
+      supply_centre:
+      - 651.0
+      - 1004.9
+  vienna:
+    name: Vienna
+    abbreviation: VIE
+    kind: land
+    svg_element: territory-vienna
+    supply_centre: true
+    anchors:
+      label:
+      - 794.6
+      - 912.8
+      abbreviation:
+      - 794.6
+      - 912.8
+      army:
+      - 794.6
+      - 923.8
+      supply_centre:
+      - 794.6
+      - 912.8
+  wales:
+    name: Wales
+    abbreviation: WAL
+    kind: land
+    svg_element: territory-wales
+    supply_centre: false
+    anchors:
+      label:
+      - 349.5
+      - 693.4
+      abbreviation:
+      - 349.5
+      - 693.4
+      army:
+      - 349.5
+      - 704.4
+      fleet:
+      - 349.5
+      - 702.4
+  warsaw:
+    name: Warsaw
+    abbreviation: WAR
+    kind: land
+    svg_element: territory-warsaw
+    supply_centre: true
+    anchors:
+      label:
+      - 924.5
+      - 715.0
+      abbreviation:
+      - 924.5
+      - 715.0
+      army:
+      - 924.5
+      - 726.0
+      supply_centre:
+      - 924.5
+      - 715.0
+  western-mediterranean:
+    name: Western Mediterranean
+    abbreviation: WES
+    kind: sea
+    svg_element: territory-western-mediterranean
+    supply_centre: false
+    anchors:
+      label:
+      - 417.9
+      - 1212.9
+      abbreviation:
+      - 417.9
+      - 1212.9
+      fleet:
+      - 417.9
+      - 1221.9
+  yorkshire:
+    name: Yorkshire
+    abbreviation: YOR
+    kind: land
+    svg_element: territory-yorkshire
+    supply_centre: false
+    anchors:
+      label:
+      - 417.7
+      - 651.7
+      abbreviation:
+      - 417.7
+      - 651.7
+      army:
+      - 417.7
+      - 662.7
+      fleet:
+      - 417.7
+      - 660.7
+non_playable_elements:
+  detail-switzerland: impassable
+  detail-impassable-islands: impassable
+  detail-kiel-canal: decoration
+  detail-constantinople-canal: decoration
+presentation:
+  territory_label_font_size: 9.0
+  coast_label_font_size: 8.0
+  inaccessible_region_colour: '#777870'
+  sea_colour: '#9ebbd2'
+  unclaimed_region_colour: '#d0c9aa'
+  label_colour: '#343a3a'
+  hold_underlines:
+    army:
+    - -2.0
+    - 11.0
+    fleet:
+    - 0.0
+    - 8.0
