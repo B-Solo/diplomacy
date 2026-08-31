@@ -627,3 +627,48 @@ def test_renderer_composes_safe_scene_and_exact_png(qapp, england):
     assert inaccessible.attrib["style"].endswith("fill:url(#gamemaster-inaccessible-stripes)")
     assert sea_node.attrib["style"].endswith("fill:#406080")
     assert unclaimed_node.attrib["style"].endswith("fill:#d8c8a8")
+
+
+def test_base_map_preserves_semantic_detail_terrain_colours(england):
+    root = ElementTree.fromstring(england.assets.map_svg)
+    territory = next(item for item in england.territories if item.kind.value == "land")
+    province = next(
+        node for node in root.iter() if node.attrib.get("id") == territory.svg_element_id
+    )
+    province.append(
+        ElementTree.Element(
+            "{http://www.w3.org/2000/svg}rect",
+            {"id": "detail-canal", "data-map-fill": "sea", "width": "3", "height": "3"},
+        )
+    )
+    province.append(
+        ElementTree.Element(
+            "{http://www.w3.org/2000/svg}rect",
+            {
+                "id": "detail-island",
+                "data-map-fill": "inaccessible",
+                "width": "3",
+                "height": "3",
+            },
+        )
+    )
+    detailed_map = replace(
+        england,
+        assets=replace(
+            england.assets,
+            map_svg=ElementTree.tostring(root, encoding="utf-8", xml_declaration=True),
+        ),
+        presentation=replace(
+            england.presentation,
+            inaccessible_region_colour="#303030",
+            sea_colour="#406080",
+            unclaimed_region_colour="#d8c8a8",
+        ),
+    )
+
+    rendered = ElementTree.fromstring(MapRenderer().base_map_svg(detailed_map))
+    canal = next(node for node in rendered.iter() if node.attrib.get("id") == "detail-canal")
+    island = next(node for node in rendered.iter() if node.attrib.get("id") == "detail-island")
+
+    assert canal.attrib["style"].endswith("fill:#406080")
+    assert island.attrib["style"].endswith("fill:url(#gamemaster-inaccessible-stripes)")

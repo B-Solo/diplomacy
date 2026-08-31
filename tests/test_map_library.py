@@ -119,6 +119,33 @@ def test_svg_group_can_be_used_as_one_territory():
     assert len(geometry.geoms) == 2
 
 
+def test_group_geometry_ignores_semantic_detail_shapes():
+    svg = b"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+      <g id="territory-islands">
+        <rect id="island-main" width="10" height="10"/>
+        <rect id="island-detail" data-map-fill="sea" x="30" width="10" height="10"/>
+      </g>
+    </svg>"""
+
+    geometry = territory_geometries(svg, ["territory-islands"])["territory-islands"]
+
+    assert geometry.area == 100.0
+
+
+def test_classic_svg_imports_with_declared_terrain_kinds(tmp_path, project_root):
+    svg = (project_root / "maps/classic/map.svg").read_bytes()
+    library = FileMapLibrary(tmp_path / "maps")
+
+    draft = library.import_svg("Classic", svg)
+
+    assert len(draft.territories) == 75
+    assert sum(territory.kind.value == "sea" for territory in draft.territories) == 19
+    assert len(draft.presentation.fleet_anchors) == 19
+    assert draft.element_roles["detail-kiel-canal"] is SvgElementRole.DECORATION
+    assert draft.element_roles["detail-switzerland"] is SvgElementRole.DECORATION
+    assert draft.element_roles["detail-impassable-islands"] is SvgElementRole.DECORATION
+
+
 def test_save_preserves_ancillary_files_and_loads_current_cache(configured_maps, monkeypatch):
     library = configured_maps
     map_id = library.list()[0].map_id

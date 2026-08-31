@@ -104,6 +104,21 @@ def shape_ids(svg: bytes) -> tuple[str, ...]:
     )
 
 
+def territory_kinds(svg: bytes) -> dict[str, str]:
+    """Return explicit initial terrain kinds declared by identified SVG elements.
+
+    :param svg: Sanitised SVG document bytes.
+    :return: Element identifiers mapped to declared ``land`` or ``sea`` kinds.
+    """
+    root = SafeElementTree.fromstring(svg)
+    return {
+        element_id: kind
+        for node in root.iter()
+        if (element_id := node.attrib.get("id")) is not None
+        if (kind := node.attrib.get("data-territory-kind", "").casefold()) in {"land", "sea"}
+    }
+
+
 def view_box(svg: bytes) -> tuple[float, float, float, float]:
     root = SafeElementTree.fromstring(svg)
     value = root.attrib.get("viewBox")
@@ -170,6 +185,7 @@ def _territory_geometries(
                 child_id
                 for child in node.iter()
                 if _local_name(child.tag) in shape_tags
+                if "data-map-fill" not in child.attrib
                 if (child_id := child.attrib.get("id")) is not None
             }
             for node in root.iter()

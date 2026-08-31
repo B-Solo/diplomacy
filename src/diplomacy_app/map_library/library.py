@@ -15,6 +15,7 @@ import yaml
 
 from diplomacy_app.domain.errors import MapLibraryError
 from diplomacy_app.domain.models import (
+    Location,
     MapDefinition,
     MapDraft,
     MapId,
@@ -39,6 +40,7 @@ from diplomacy_app.map_library.svg_importer import (
     sanitise_svg,
     shape_ids,
     territory_geometries,
+    territory_kinds,
 )
 from diplomacy_app.map_library.validation import validate_map_draft, validate_starting_setup
 from diplomacy_app.presentation import (
@@ -162,6 +164,7 @@ class FileMapLibrary:
         map_id = re.sub(r"[^a-z0-9]+", "-", name.casefold()).strip("-") or "new-map"
         geometry_ids = shape_ids(safe)
         playable_ids = tuple(value for value in geometry_ids if value.startswith("territory-"))
+        initial_kinds = territory_kinds(safe)
         geometries = territory_geometries(safe, playable_ids)
         territories: dict[str, Any] = {}
         label: dict[TerritoryId, Point] = {}
@@ -183,20 +186,26 @@ class FileMapLibrary:
                 abbreviation = f"{base_abbreviation[:2]}{chr(ord('A') + suffix % 26)}"
                 suffix += 1
             used_abbreviations.add(abbreviation.casefold())
+            kind = initial_kinds.get(svg_id, "land")
+            anchors = {"label": [round(centre.x, 2), round(centre.y, 2)]}
+            anchors["fleet" if kind == "sea" else "army"] = [
+                round(centre.x, 2),
+                round(centre.y, 2),
+            ]
             territories[territory_id] = {
                 "name": territory_id.replace("-", " ").title(),
                 "abbreviation": abbreviation,
-                "kind": "land",
+                "kind": kind,
                 "svg_element": svg_id,
                 "supply_centre": False,
-                "anchors": {
-                    "label": [round(centre.x, 2), round(centre.y, 2)],
-                    "army": [round(centre.x, 2), round(centre.y, 2)],
-                },
+                "anchors": anchors,
             }
             point = Point(float(centre.x), float(centre.y))
             label[TerritoryId(territory_id)] = point
-            army[TerritoryId(territory_id)] = point
+            if kind == "sea":
+                fleet[Location(TerritoryId(territory_id))] = point
+            else:
+                army[TerritoryId(territory_id)] = point
         non_playable = {value: "decoration" for value in geometry_ids if value not in playable_ids}
         document = {
             "schema_version": 1,

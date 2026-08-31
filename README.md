@@ -3,7 +3,7 @@
 Diplomacy Gamemaster is a local desktop application for running custom-map Diplomacy games.
 It records player orders, resolves phases simultaneously, preserves complete game history, produces map images, and supports optional per-power Fog of War views.
 
-The application includes the configured six-player England map and a map wizard for importing or correcting structured SVG maps.
+The application includes configured England and seven-player Classic Diplomacy maps, plus a map wizard for importing or correcting structured SVG maps.
 Player communication and player-facing accounts remain outside the application.
 
 ## Windows setup
@@ -73,12 +73,22 @@ The map wizard provides three independently usable tabs:
 Uncommon region-classification corrections remain available through the complete YAML definition.
 
 SVG identifiers provide the initial region classification, and geometry supplies ordinary adjacency suggestions.
+Playable groups may declare `data-territory-kind="sea"` or
+`data-territory-kind="land"` to seed their province and placement-anchor type
+during import; land remains the default when the attribute is absent.
 The authored YAML records additions, removals, split coasts, canals, and off-map links.
+Interior SVG shapes can use `data-map-fill="sea"`, `data-map-fill="land"`, or
+`data-map-fill="inaccessible"` to retain terrain-coloured canal, island, and
+similar detail inside a containing playable territory. These shapes remain
+decorative and do not contribute to inferred province adjacency.
 Saving a correction updates the canonical map under `maps/<map-id>/` in the source checkout so Git can review and carry the correction to another machine.
 Existing games keep independent private snapshots and are not changed by reusable-map saves.
 
 The supplied England map is reconstructed from the Anarchy in the UK variant.
 Its source and licence information are recorded in [maps/england/SOURCE.md](maps/england/SOURCE.md).
+The supplied Classic map uses the standard seven-power board; its geometry,
+licences, and generated starter setup are documented in
+[maps/classic/SOURCE.md](maps/classic/SOURCE.md).
 
 ## Game folders
 

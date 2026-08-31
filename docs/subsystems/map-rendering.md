@@ -13,6 +13,10 @@ The subsystem provides `MapRenderer` from [Subsystem API Contracts](../api-contr
 ## Implementation Notes
 
 Composition clones the sanitised base SVG and adds deterministic layers for territory fills, labels, supply-centre stars, units and orders.
+Decorative geometry marked with `data-map-fill="sea"`, `land`, or
+`inaccessible` receives the corresponding presentation colour after its
+containing territory is recoloured. This supports canals, islands and other
+interior terrain without creating additional playable locations.
 Long territory labels wrap consistently at word and ampersand boundaries and remain centred on their configured visual anchors in both composed scenes and placement previews.
 Every named split coast renders as a map label at its independently configured anchor and rotation, with defaults derived from its fleet anchor when older map data omits those presentation fields.
 All coordinates use the source SVG view box so maps of different dimensions and aspect ratios follow the same pipeline.

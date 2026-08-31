@@ -44,6 +44,7 @@ from diplomacy_app.rendering.labels import add_label_element
 
 _SVG = "http://www.w3.org/2000/svg"
 _MOVE_ARROW_TIP_INSET = 4.0
+_SEMANTIC_FILL_ATTRIBUTE = "data-map-fill"
 ElementTree.register_namespace("", _SVG)
 
 
@@ -187,6 +188,33 @@ def _add_inaccessible_pattern(root: ElementTree.Element, colour: str) -> str:
     return pattern_id
 
 
+def _apply_semantic_detail_fills(
+    root: ElementTree.Element,
+    map_definition: MapDefinition,
+    inaccessible_pattern: str,
+) -> None:
+    """Colour non-playable map details by their declared terrain role.
+
+    Detail geometry may sit inside a playable territory group, such as water
+    through a canal or an impassable island inside a sea. Applying these fills
+    after territory ownership keeps the detail independent of its containing
+    province without making it a separate rules-engine location.
+
+    :param root: SVG document or subtree containing semantic detail geometry.
+    :param map_definition: Map whose presentation palette supplies the colours.
+    :param inaccessible_pattern: Generated pattern identifier for inaccessible land.
+    """
+    colours = {
+        "land": map_definition.presentation.unclaimed_region_colour,
+        "sea": map_definition.presentation.sea_colour,
+        "inaccessible": f"url(#{inaccessible_pattern})",
+    }
+    for node in root.iter():
+        colour = colours.get(node.attrib.get(_SEMANTIC_FILL_ATTRIBUTE, "").casefold())
+        if colour is not None:
+            _set_fill(node, colour)
+
+
 class MapRenderer:
     def base_map_svg(self, map_definition: MapDefinition) -> bytes:
         """Apply map-wide neutral presentation colours without game-state overlays."""
@@ -209,6 +237,7 @@ class MapRenderer:
                 else map_definition.presentation.unclaimed_region_colour
             )
             _set_fill(node, colour)
+        _apply_semantic_detail_fills(root, map_definition, inaccessible_pattern)
         return ElementTree.tostring(root, encoding="utf-8", xml_declaration=True)
 
     def compose(
@@ -242,6 +271,11 @@ class MapRenderer:
                 else:
                     fill = map_definition.presentation.unclaimed_region_colour
                 _set_fill(node, fill)
+            _apply_semantic_detail_fills(
+                root,
+                map_definition,
+                "gamemaster-inaccessible-stripes",
+            )
 
             generated = ElementTree.SubElement(root, _tag("g"), {"id": "gamemaster-layers"})
             labels = ElementTree.SubElement(generated, _tag("g"), {"id": "territory-labels"})
