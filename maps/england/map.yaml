@@ -12,22 +12,22 @@ start:
 teams:
   merseyside:
     name: Merseyside
-    colour: '#777788'
+    colour: '#727283'
     home_supply_centres:
-    - merseyside
-    - cheshire
     - anglesey
+    - cheshire
     - isle-of-man
+    - merseyside
     starting_supply_centres:
-    - merseyside
-    - cheshire
     - anglesey
+    - cheshire
     - isle-of-man
+    - merseyside
     starting_territories:
-    - merseyside
-    - cheshire
     - anglesey
+    - cheshire
     - isle-of-man
+    - merseyside
     initial_units:
     - type: army
       location: cheshire
@@ -39,19 +39,19 @@ teams:
       location: anglesey
   up-north:
     name: Up North
-    colour: '#cccccc'
+    colour: '#dddddd'
     home_supply_centres:
+    - durham
     - northumberland
     - tyne-and-wear
-    - durham
     starting_supply_centres:
+    - durham
     - northumberland
     - tyne-and-wear
-    - durham
     starting_territories:
+    - durham
     - northumberland
     - tyne-and-wear
-    - durham
     initial_units:
     - type: army
       location: northumberland
@@ -63,16 +63,16 @@ teams:
     name: London
     colour: '#9b4fa6'
     home_supply_centres:
-    - london
     - kent
+    - london
     - surrey
     starting_supply_centres:
-    - london
     - kent
+    - london
     - surrey
     starting_territories:
-    - london
     - kent
+    - london
     - surrey
     initial_units:
     - type: army
@@ -85,17 +85,17 @@ teams:
     name: Bristol
     colour: '#a98538'
     home_supply_centres:
+    - avon
     - gloucestershire
     - wiltshire
-    - avon
     starting_supply_centres:
+    - avon
     - gloucestershire
     - wiltshire
-    - avon
     starting_territories:
+    - avon
     - gloucestershire
     - wiltshire
-    - avon
     initial_units:
     - type: fleet
       location: avon
@@ -107,16 +107,16 @@ teams:
     name: Wales
     colour: '#507666'
     home_supply_centres:
-    - glamorgan
     - dyfed
+    - glamorgan
     - pembrokeshire
     starting_supply_centres:
-    - glamorgan
     - dyfed
+    - glamorgan
     - pembrokeshire
     starting_territories:
-    - glamorgan
     - dyfed
+    - glamorgan
     - pembrokeshire
     initial_units:
     - type: army
@@ -130,16 +130,16 @@ teams:
     colour: '#bb5555'
     home_supply_centres:
     - n-lincolnshire
-    - s-lincolnshire
     - norfolk
+    - s-lincolnshire
     starting_supply_centres:
     - n-lincolnshire
-    - s-lincolnshire
     - norfolk
+    - s-lincolnshire
     starting_territories:
     - n-lincolnshire
-    - s-lincolnshire
     - norfolk
+    - s-lincolnshire
     initial_units:
     - type: army
       location: n-lincolnshire
@@ -456,8 +456,8 @@ territories:
       - 587.0
       - 117.0
       supply_centre:
-      - 578.0
-      - 105.0
+      - 579.25
+      - 106.25
       abbreviation:
       - 607.79
       - 104.22
@@ -660,8 +660,8 @@ territories:
       - 487.31
       - 409.13
       army:
-      - 483.0
-      - 390.0
+      - 483.83
+      - 385.84
       fleet:
       - 449.04
       - 399.26

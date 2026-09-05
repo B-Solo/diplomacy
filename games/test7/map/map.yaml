@@ -12,22 +12,22 @@ start:
 teams:
   merseyside:
     name: Merseyside
-    colour: '#777788'
+    colour: '#727283'
     home_supply_centres:
     - anglesey
     - cheshire
     - isle-of-man
     - merseyside
     starting_supply_centres:
-    - anglesey
-    - cheshire
-    - isle-of-man
     - merseyside
+    - cheshire
+    - anglesey
+    - isle-of-man
     starting_territories:
-    - anglesey
-    - cheshire
-    - isle-of-man
     - merseyside
+    - cheshire
+    - anglesey
+    - isle-of-man
     initial_units:
     - type: army
       location: cheshire
@@ -39,19 +39,19 @@ teams:
       location: anglesey
   up-north:
     name: Up North
-    colour: '#cccccc'
+    colour: '#dddddd'
     home_supply_centres:
     - durham
     - northumberland
     - tyne-and-wear
     starting_supply_centres:
-    - durham
     - northumberland
     - tyne-and-wear
+    - durham
     starting_territories:
-    - durham
     - northumberland
     - tyne-and-wear
+    - durham
     initial_units:
     - type: army
       location: northumberland
@@ -67,12 +67,12 @@ teams:
     - london
     - surrey
     starting_supply_centres:
-    - kent
     - london
+    - kent
     - surrey
     starting_territories:
-    - kent
     - london
+    - kent
     - surrey
     initial_units:
     - type: army
@@ -89,13 +89,13 @@ teams:
     - gloucestershire
     - wiltshire
     starting_supply_centres:
-    - avon
     - gloucestershire
     - wiltshire
+    - avon
     starting_territories:
-    - avon
     - gloucestershire
     - wiltshire
+    - avon
     initial_units:
     - type: fleet
       location: avon
@@ -111,12 +111,12 @@ teams:
     - glamorgan
     - pembrokeshire
     starting_supply_centres:
-    - dyfed
     - glamorgan
+    - dyfed
     - pembrokeshire
     starting_territories:
-    - dyfed
     - glamorgan
+    - dyfed
     - pembrokeshire
     initial_units:
     - type: army
@@ -134,12 +134,12 @@ teams:
     - s-lincolnshire
     starting_supply_centres:
     - n-lincolnshire
-    - norfolk
     - s-lincolnshire
+    - norfolk
     starting_territories:
     - n-lincolnshire
-    - norfolk
     - s-lincolnshire
+    - norfolk
     initial_units:
     - type: army
       location: n-lincolnshire
@@ -456,8 +456,8 @@ territories:
       - 587.0
       - 117.0
       supply_centre:
-      - 578.0
-      - 105.0
+      - 579.25
+      - 106.25
       abbreviation:
       - 607.79
       - 104.22
@@ -660,8 +660,8 @@ territories:
       - 487.31
       - 409.13
       army:
-      - 483.0
-      - 390.0
+      - 483.83
+      - 385.84
       fleet:
       - 449.04
       - 399.26

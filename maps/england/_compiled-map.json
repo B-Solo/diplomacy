@@ -5288,7 +5288,7 @@
   "name": "England",
   "powers": [
     {
-      "colour": "#777788",
+      "colour": "#727283",
       "home_supply_centres": [
         "anglesey",
         "cheshire",
@@ -5299,7 +5299,7 @@
       "name": "Merseyside"
     },
     {
-      "colour": "#cccccc",
+      "colour": "#dddddd",
       "home_supply_centres": [
         "durham",
         "northumberland",
@@ -5674,8 +5674,8 @@
         563.0
       ],
       "cheshire": [
-        483.0,
-        390.0
+        483.83,
+        385.84
       ],
       "cleveland": [
         638.17,
@@ -6896,8 +6896,8 @@
         726.53
       ],
       "tyne-and-wear": [
-        578.0,
-        105.0
+        579.25,
+        106.25
       ],
       "w-midlands": [
         544.04,
@@ -6919,7 +6919,7 @@
   "schema_version": 1,
   "source": {
     "cache_version": 1,
-    "digest": "48f181e1fd67c4a11d607dad827f373159c8624db75b0c72d79a5afc98c6cc7e"
+    "digest": "ef2480566a0c2a10b2497618d01bf6044d1e40dd8d0b425c080b7ee2ae5c8780"
   },
   "start": {
     "dislodged_units": [],

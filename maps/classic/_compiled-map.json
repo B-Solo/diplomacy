@@ -1,0 +1,4185 @@
+{
+  "adjacencies": [
+    {
+      "destination": {
+        "coast": "sc",
+        "territory": "bulgaria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "aegean-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "constantinople"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "aegean-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "greece"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "aegean-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "serbia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "albania"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "trieste"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "albania"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "rome"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "apulia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "apulia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "livonia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "baltic-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "nc",
+        "territory": "st-petersburg"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "barents-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "belgium"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "holland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "belgium"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "picardy"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "belgium"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "ruhr"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "belgium"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "munich"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "berlin"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "ec",
+        "territory": "bulgaria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "black-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "silesia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "bohemia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "galicia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "budapest"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "rumania"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "bulgaria"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "serbia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "bulgaria"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "black-sea"
+      },
+      "origin": {
+        "coast": "ec",
+        "territory": "bulgaria"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "constantinople"
+      },
+      "origin": {
+        "coast": "ec",
+        "territory": "bulgaria"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "aegean-sea"
+      },
+      "origin": {
+        "coast": "sc",
+        "territory": "bulgaria"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "constantinople"
+      },
+      "origin": {
+        "coast": "sc",
+        "territory": "bulgaria"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "belgium"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gascony"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "munich"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "paris"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "picardy"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "ruhr"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "aegean-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "constantinople"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "ec",
+        "territory": "bulgaria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "constantinople"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "sc",
+        "territory": "bulgaria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "constantinople"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "syria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "eastern-mediterranean"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "st-petersburg"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "finland"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "sc",
+        "territory": "st-petersburg"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "finland"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "budapest"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "galicia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gascony"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "paris"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gascony"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "spain"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gascony"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "nc",
+        "territory": "spain"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gascony"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "aegean-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "greece"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "livonia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gulf-of-bothnia"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "sc",
+        "territory": "st-petersburg"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gulf-of-bothnia"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "sc",
+        "territory": "spain"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "gulf-of-lyon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "kiel"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "helgoland-bight"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "belgium"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "holland"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "ruhr"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "holland"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "helgoland-bight"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "kiel"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "liverpool"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "baltic-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "livonia"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gulf-of-bothnia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "livonia"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "prussia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "livonia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "sc",
+        "territory": "st-petersburg"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "livonia"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "yorkshire"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "london"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "sc",
+        "territory": "spain"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "marseilles"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "nc",
+        "territory": "spain"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "mid-atlantic-ocean"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "sc",
+        "territory": "spain"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "mid-atlantic-ocean"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "berlin"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "munich"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "munich"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "ruhr"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "munich"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "norwegian-sea"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "norway"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "nc",
+        "territory": "st-petersburg"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "norway"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "norway"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "norwegian-sea"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "paris"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gascony"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "paris"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "picardy"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "paris"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "belgium"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "picardy"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "picardy"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "paris"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "picardy"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "tuscany"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "piedmont"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "piedmont"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "nc",
+        "territory": "spain"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "portugal"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": "sc",
+        "territory": "spain"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "portugal"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "livonia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "prussia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "apulia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "rome"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "tuscany"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "rome"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "rome"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "belgium"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "ruhr"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "burgundy"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "ruhr"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "holland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "ruhr"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "munich"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "ruhr"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "bulgaria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "rumania"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "serbia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "rumania"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "albania"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "serbia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "bulgaria"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "serbia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "rumania"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "serbia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "trieste"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "serbia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "bohemia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "silesia"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gascony"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "spain"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gascony"
+      },
+      "origin": {
+        "coast": "nc",
+        "territory": "spain"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "mid-atlantic-ocean"
+      },
+      "origin": {
+        "coast": "nc",
+        "territory": "spain"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "portugal"
+      },
+      "origin": {
+        "coast": "nc",
+        "territory": "spain"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gulf-of-lyon"
+      },
+      "origin": {
+        "coast": "sc",
+        "territory": "spain"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "marseilles"
+      },
+      "origin": {
+        "coast": "sc",
+        "territory": "spain"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "mid-atlantic-ocean"
+      },
+      "origin": {
+        "coast": "sc",
+        "territory": "spain"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "portugal"
+      },
+      "origin": {
+        "coast": "sc",
+        "territory": "spain"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "western-mediterranean"
+      },
+      "origin": {
+        "coast": "sc",
+        "territory": "spain"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "finland"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "st-petersburg"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "barents-sea"
+      },
+      "origin": {
+        "coast": "nc",
+        "territory": "st-petersburg"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "norway"
+      },
+      "origin": {
+        "coast": "nc",
+        "territory": "st-petersburg"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "finland"
+      },
+      "origin": {
+        "coast": "sc",
+        "territory": "st-petersburg"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "gulf-of-bothnia"
+      },
+      "origin": {
+        "coast": "sc",
+        "territory": "st-petersburg"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "livonia"
+      },
+      "origin": {
+        "coast": "sc",
+        "territory": "st-petersburg"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "eastern-mediterranean"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "syria"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "albania"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "trieste"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "serbia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "trieste"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "trieste"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "vienna"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "trieste"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "piedmont"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "tuscany"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "rome"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "tuscany"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "tuscany"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "apulia"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "piedmont"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "rome"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "trieste"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "tuscany"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "trieste"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "vienna"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "sc",
+        "territory": "spain"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "western-mediterranean"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "liverpool"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "yorkshire"
+      },
+      "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": null,
+        "territory": "london"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "yorkshire"
+      },
+      "unit": "army"
+    }
+  ],
+  "inaccessible_svg_elements": [
+    "detail-impassable-islands",
+    "detail-switzerland"
+  ],
+  "map_id": "classic",
+  "name": "Classic Diplomacy",
+  "powers": [
+    {
+      "colour": "#9f4c56",
+      "home_supply_centres": [
+        "budapest",
+        "trieste",
+        "vienna"
+      ],
+      "id": "austria",
+      "name": "Austria"
+    },
+    {
+      "colour": "#3d6698",
+      "home_supply_centres": [
+        "edinburgh",
+        "liverpool",
+        "london"
+      ],
+      "id": "england",
+      "name": "England"
+    },
+    {
+      "colour": "#6dbfb8",
+      "home_supply_centres": [
+        "brest",
+        "marseilles",
+        "paris"
+      ],
+      "id": "france",
+      "name": "France"
+    },
+    {
+      "colour": "#777777",
+      "home_supply_centres": [
+        "berlin",
+        "kiel",
+        "munich"
+      ],
+      "id": "germany",
+      "name": "Germany"
+    },
+    {
+      "colour": "#55915d",
+      "home_supply_centres": [
+        "apulia",
+        "naples",
+        "rome"
+      ],
+      "id": "italy",
+      "name": "Italy"
+    },
+    {
+      "colour": "#dddddd",
+      "home_supply_centres": [
+        "moscow",
+        "sevastopol",
+        "st-petersburg",
+        "warsaw"
+      ],
+      "id": "russia",
+      "name": "Russia"
+    },
+    {
+      "colour": "#ba9a6d",
+      "home_supply_centres": [
+        "ankara",
+        "constantinople",
+        "smyrna"
+      ],
+      "id": "turkey",
+      "name": "Turkey"
+    }
+  ],
+  "presentation": {
+    "abbreviations": {
+      "adriatic-sea": [
+        763.4,
+        1062.8
+      ],
+      "aegean-sea": [
+        1045.5,
+        1222.1
+      ],
+      "albania": [
+        878.5,
+        1125.8
+      ],
+      "ankara": [
+        1266.8,
+        1099.6
+      ],
+      "apulia": [
+        758.3,
+        1123.9
+      ],
+      "armenia": [
+        1436.6,
+        1094.3
+      ],
+      "baltic-sea": [
+        818.2,
+        589.8
+      ],
+      "barents-sea": [
+        1132.0,
+        139.6
+      ],
+      "belgium": [
+        520.1,
+        779.6
+      ],
+      "berlin": [
+        701.1,
+        720.6
+      ],
+      "black-sea": [
+        1316.3,
+        961.8
+      ],
+      "bohemia": [
+        749.0,
+        835.9
+      ],
+      "brest": [
+        344.6,
+        836.2
+      ],
+      "budapest": [
+        926.1,
+        918.3
+      ],
+      "bulgaria": [
+        1009.3,
+        1068.7
+      ],
+      "burgundy": [
+        511.4,
+        888.4
+      ],
+      "clyde": [
+        363.7,
+        522.4
+      ],
+      "constantinople": [
+        1121.6,
+        1138.1
+      ],
+      "denmark": [
+        637.2,
+        579.6
+      ],
+      "eastern-mediterranean": [
+        1192.9,
+        1280.8
+      ],
+      "edinburgh": [
+        389.9,
+        545.7
+      ],
+      "english-channel": [
+        291.2,
+        776.6
+      ],
+      "finland": [
+        946.2,
+        277.8
+      ],
+      "galicia": [
+        957.9,
+        838.8
+      ],
+      "gascony": [
+        383.6,
+        959.6
+      ],
+      "greece": [
+        933.3,
+        1200.8
+      ],
+      "gulf-of-bothnia": [
+        828.1,
+        406.0
+      ],
+      "gulf-of-lyon": [
+        488.1,
+        1087.5
+      ],
+      "helgoland-bight": [
+        577.3,
+        644.2
+      ],
+      "holland": [
+        542.5,
+        719.8
+      ],
+      "ionian-sea": [
+        840.0,
+        1255.2
+      ],
+      "irish-sea": [
+        254.9,
+        681.4
+      ],
+      "kiel": [
+        624.1,
+        726.0
+      ],
+      "liverpool": [
+        392.2,
+        625.8
+      ],
+      "livonia": [
+        976.5,
+        553.1
+      ],
+      "london": [
+        409.1,
+        713.2
+      ],
+      "marseilles": [
+        474.5,
+        989.0
+      ],
+      "mid-atlantic-ocean": [
+        56.9,
+        1022.1
+      ],
+      "moscow": [
+        1386.3,
+        365.3
+      ],
+      "munich": [
+        642.8,
+        834.7
+      ],
+      "naples": [
+        720.8,
+        1261.8
+      ],
+      "north-africa": [
+        290.1,
+        1293.5
+      ],
+      "north-atlantic-ocean": [
+        185.6,
+        359.1
+      ],
+      "north-sea": [
+        514.5,
+        589.1
+      ],
+      "norway": [
+        724.3,
+        291.8
+      ],
+      "norwegian-sea": [
+        536.7,
+        249.9
+      ],
+      "paris": [
+        427.7,
+        878.3
+      ],
+      "picardy": [
+        461.7,
+        793.6
+      ],
+      "piedmont": [
+        583.1,
+        978.6
+      ],
+      "portugal": [
+        111.9,
+        1076.0
+      ],
+      "prussia": [
+        827.1,
+        677.2
+      ],
+      "rome": [
+        686.9,
+        1092.5
+      ],
+      "ruhr": [
+        579.0,
+        792.7
+      ],
+      "rumania": [
+        1048.8,
+        947.0
+      ],
+      "serbia": [
+        907.8,
+        1063.2
+      ],
+      "sevastopol": [
+        1403.0,
+        789.1
+      ],
+      "silesia": [
+        746.7,
+        774.4
+      ],
+      "skagerrak": [
+        636.0,
+        528.2
+      ],
+      "smyrna": [
+        1212.8,
+        1200.5
+      ],
+      "spain": [
+        284.7,
+        1079.3
+      ],
+      "st-petersburg": [
+        1122.9,
+        301.6
+      ],
+      "sweden": [
+        750.7,
+        383.5
+      ],
+      "syria": [
+        1436.3,
+        1263.6
+      ],
+      "trieste": [
+        810.0,
+        1019.2
+      ],
+      "tunis": [
+        582.3,
+        1307.2
+      ],
+      "tuscany": [
+        650.6,
+        1044.9
+      ],
+      "tyrolia": [
+        695.9,
+        918.6
+      ],
+      "tyrrhenian-sea": [
+        669.4,
+        1159.4
+      ],
+      "ukraine": [
+        1134.8,
+        784.6
+      ],
+      "venice": [
+        651.0,
+        1004.9
+      ],
+      "vienna": [
+        794.6,
+        912.8
+      ],
+      "wales": [
+        349.5,
+        693.4
+      ],
+      "warsaw": [
+        924.5,
+        715.0
+      ],
+      "western-mediterranean": [
+        417.9,
+        1212.9
+      ],
+      "yorkshire": [
+        417.7,
+        651.7
+      ]
+    },
+    "armies": {
+      "albania": [
+        878.5,
+        1136.8
+      ],
+      "ankara": [
+        1266.8,
+        1110.6
+      ],
+      "apulia": [
+        758.3,
+        1134.9
+      ],
+      "armenia": [
+        1436.6,
+        1105.3
+      ],
+      "belgium": [
+        520.1,
+        790.6
+      ],
+      "berlin": [
+        701.1,
+        731.6
+      ],
+      "bohemia": [
+        749.0,
+        846.9
+      ],
+      "brest": [
+        344.6,
+        847.2
+      ],
+      "budapest": [
+        908.48,
+        939.45
+      ],
+      "bulgaria": [
+        1011.81,
+        1085.79
+      ],
+      "burgundy": [
+        511.4,
+        899.4
+      ],
+      "clyde": [
+        365.08,
+        567.27
+      ],
+      "constantinople": [
+        1121.6,
+        1149.1
+      ],
+      "denmark": [
+        637.2,
+        590.6
+      ],
+      "edinburgh": [
+        398.19,
+        520.93
+      ],
+      "finland": [
+        946.2,
+        288.8
+      ],
+      "galicia": [
+        931.69,
+        814.66
+      ],
+      "gascony": [
+        383.6,
+        970.6
+      ],
+      "greece": [
+        933.3,
+        1211.8
+      ],
+      "holland": [
+        542.5,
+        730.8
+      ],
+      "kiel": [
+        624.1,
+        737.0
+      ],
+      "liverpool": [
+        385.98,
+        644.58
+      ],
+      "livonia": [
+        976.5,
+        564.1
+      ],
+      "london": [
+        384.91,
+        724.89
+      ],
+      "marseilles": [
+        474.5,
+        1000.0
+      ],
+      "moscow": [
+        1386.3,
+        376.3
+      ],
+      "munich": [
+        642.8,
+        845.7
+      ],
+      "naples": [
+        720.8,
+        1272.8
+      ],
+      "north-africa": [
+        290.1,
+        1304.5
+      ],
+      "norway": [
+        724.3,
+        302.8
+      ],
+      "paris": [
+        427.7,
+        889.3
+      ],
+      "picardy": [
+        461.7,
+        804.6
+      ],
+      "piedmont": [
+        583.1,
+        989.6
+      ],
+      "portugal": [
+        111.9,
+        1087.0
+      ],
+      "prussia": [
+        827.1,
+        688.2
+      ],
+      "rome": [
+        686.9,
+        1103.5
+      ],
+      "ruhr": [
+        579.0,
+        803.7
+      ],
+      "rumania": [
+        1014.82,
+        973.7
+      ],
+      "serbia": [
+        919.8,
+        1092.41
+      ],
+      "sevastopol": [
+        1403.0,
+        800.1
+      ],
+      "silesia": [
+        759.48,
+        763.24
+      ],
+      "smyrna": [
+        1212.8,
+        1211.5
+      ],
+      "spain": [
+        284.7,
+        1090.3
+      ],
+      "st-petersburg": [
+        1122.9,
+        312.6
+      ],
+      "sweden": [
+        750.7,
+        394.5
+      ],
+      "syria": [
+        1436.3,
+        1274.6
+      ],
+      "trieste": [
+        810.0,
+        1030.2
+      ],
+      "tunis": [
+        582.3,
+        1318.2
+      ],
+      "tuscany": [
+        650.6,
+        1055.9
+      ],
+      "tyrolia": [
+        729.58,
+        915.63
+      ],
+      "ukraine": [
+        1134.8,
+        795.6
+      ],
+      "venice": [
+        651.0,
+        1015.9
+      ],
+      "vienna": [
+        801.77,
+        923.8
+      ],
+      "wales": [
+        348.81,
+        680.73
+      ],
+      "warsaw": [
+        932.74,
+        753.23
+      ],
+      "yorkshire": [
+        407.33,
+        667.37
+      ]
+    },
+    "coast_label_font_size": 8.0,
+    "coast_labels": [
+      {
+        "location": {
+          "coast": "ec",
+          "territory": "bulgaria"
+        },
+        "point": [
+          1066.17,
+          1042.37
+        ],
+        "rotation": -90.0
+      },
+      {
+        "location": {
+          "coast": "sc",
+          "territory": "bulgaria"
+        },
+        "point": [
+          1005.79,
+          1116.48
+        ],
+        "rotation": 0.0
+      },
+      {
+        "location": {
+          "coast": "nc",
+          "territory": "spain"
+        },
+        "point": [
+          285.0,
+          1014.0
+        ],
+        "rotation": 0.0
+      },
+      {
+        "location": {
+          "coast": "sc",
+          "territory": "spain"
+        },
+        "point": [
+          300.0,
+          1150.0
+        ],
+        "rotation": 0.0
+      },
+      {
+        "location": {
+          "coast": "nc",
+          "territory": "st-petersburg"
+        },
+        "point": [
+          1110.0,
+          195.0
+        ],
+        "rotation": 0.0
+      },
+      {
+        "location": {
+          "coast": "sc",
+          "territory": "st-petersburg"
+        },
+        "point": [
+          1080.0,
+          405.0
+        ],
+        "rotation": 0.0
+      }
+    ],
+    "fleets": [
+      {
+        "location": {
+          "coast": null,
+          "territory": "adriatic-sea"
+        },
+        "point": [
+          763.4,
+          1071.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "aegean-sea"
+        },
+        "point": [
+          1045.5,
+          1231.1
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "albania"
+        },
+        "point": [
+          878.5,
+          1134.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "ankara"
+        },
+        "point": [
+          1266.8,
+          1108.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "apulia"
+        },
+        "point": [
+          758.3,
+          1132.9
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "armenia"
+        },
+        "point": [
+          1436.6,
+          1103.3
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "baltic-sea"
+        },
+        "point": [
+          818.2,
+          598.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "barents-sea"
+        },
+        "point": [
+          1132.0,
+          148.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "belgium"
+        },
+        "point": [
+          520.1,
+          788.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "berlin"
+        },
+        "point": [
+          701.1,
+          729.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "black-sea"
+        },
+        "point": [
+          1316.3,
+          970.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "gulf-of-bothnia"
+        },
+        "point": [
+          828.1,
+          415.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "brest"
+        },
+        "point": [
+          344.6,
+          845.2
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "bulgaria"
+        },
+        "point": [
+          1009.3,
+          1077.7
+        ]
+      },
+      {
+        "location": {
+          "coast": "ec",
+          "territory": "bulgaria"
+        },
+        "point": [
+          1030.0,
+          1050.0
+        ]
+      },
+      {
+        "location": {
+          "coast": "sc",
+          "territory": "bulgaria"
+        },
+        "point": [
+          1004.0,
+          1110.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "clyde"
+        },
+        "point": [
+          363.7,
+          531.4
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "constantinople"
+        },
+        "point": [
+          1121.6,
+          1147.1
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "denmark"
+        },
+        "point": [
+          637.2,
+          588.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "eastern-mediterranean"
+        },
+        "point": [
+          1192.9,
+          1289.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "edinburgh"
+        },
+        "point": [
+          389.9,
+          554.7
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "english-channel"
+        },
+        "point": [
+          291.2,
+          785.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "finland"
+        },
+        "point": [
+          946.2,
+          286.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "gascony"
+        },
+        "point": [
+          383.6,
+          968.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "gulf-of-lyon"
+        },
+        "point": [
+          488.1,
+          1096.5
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "greece"
+        },
+        "point": [
+          933.3,
+          1209.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "helgoland-bight"
+        },
+        "point": [
+          577.3,
+          653.2
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "holland"
+        },
+        "point": [
+          542.5,
+          728.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "ionian-sea"
+        },
+        "point": [
+          840.0,
+          1264.2
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "irish-sea"
+        },
+        "point": [
+          254.9,
+          690.4
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "kiel"
+        },
+        "point": [
+          624.1,
+          735.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "london"
+        },
+        "point": [
+          409.1,
+          722.2
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "livonia"
+        },
+        "point": [
+          976.5,
+          562.1
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "liverpool"
+        },
+        "point": [
+          392.2,
+          634.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "marseilles"
+        },
+        "point": [
+          474.5,
+          998.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "mid-atlantic-ocean"
+        },
+        "point": [
+          56.9,
+          1031.1
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "north-africa"
+        },
+        "point": [
+          290.1,
+          1302.5
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "naples"
+        },
+        "point": [
+          720.8,
+          1270.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "north-atlantic-ocean"
+        },
+        "point": [
+          185.6,
+          368.1
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "norwegian-sea"
+        },
+        "point": [
+          536.7,
+          258.9
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "north-sea"
+        },
+        "point": [
+          514.5,
+          598.1
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "norway"
+        },
+        "point": [
+          724.3,
+          300.8
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "picardy"
+        },
+        "point": [
+          461.7,
+          802.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "piedmont"
+        },
+        "point": [
+          583.1,
+          987.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "portugal"
+        },
+        "point": [
+          111.9,
+          1085.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "prussia"
+        },
+        "point": [
+          827.1,
+          686.2
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "rome"
+        },
+        "point": [
+          686.9,
+          1101.5
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "rumania"
+        },
+        "point": [
+          1048.8,
+          956.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "sevastopol"
+        },
+        "point": [
+          1403.0,
+          798.1
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "skagerrak"
+        },
+        "point": [
+          636.0,
+          537.2
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "smyrna"
+        },
+        "point": [
+          1212.8,
+          1209.5
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "spain"
+        },
+        "point": [
+          284.7,
+          1088.3
+        ]
+      },
+      {
+        "location": {
+          "coast": "nc",
+          "territory": "spain"
+        },
+        "point": [
+          285.0,
+          1027.0
+        ]
+      },
+      {
+        "location": {
+          "coast": "sc",
+          "territory": "spain"
+        },
+        "point": [
+          300.0,
+          1134.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "st-petersburg"
+        },
+        "point": [
+          1122.9,
+          310.6
+        ]
+      },
+      {
+        "location": {
+          "coast": "nc",
+          "territory": "st-petersburg"
+        },
+        "point": [
+          1110.0,
+          210.0
+        ]
+      },
+      {
+        "location": {
+          "coast": "sc",
+          "territory": "st-petersburg"
+        },
+        "point": [
+          1080.0,
+          390.0
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "sweden"
+        },
+        "point": [
+          750.7,
+          392.5
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "syria"
+        },
+        "point": [
+          1436.3,
+          1272.6
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "trieste"
+        },
+        "point": [
+          810.0,
+          1028.2
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "tuscany"
+        },
+        "point": [
+          650.6,
+          1053.9
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "tyrrhenian-sea"
+        },
+        "point": [
+          669.4,
+          1168.4
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "venice"
+        },
+        "point": [
+          651.0,
+          1013.9
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "wales"
+        },
+        "point": [
+          349.5,
+          702.4
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "western-mediterranean"
+        },
+        "point": [
+          417.9,
+          1221.9
+        ]
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "yorkshire"
+        },
+        "point": [
+          417.7,
+          660.7
+        ]
+      }
+    ],
+    "hold_underlines": {
+      "army": [
+        -2.0,
+        11.0
+      ],
+      "fleet": [
+        0.0,
+        8.0
+      ]
+    },
+    "inaccessible_region_colour": "#777870",
+    "label_colour": "#343a3a",
+    "labels": {
+      "adriatic-sea": [
+        763.4,
+        1062.8
+      ],
+      "aegean-sea": [
+        1045.5,
+        1222.1
+      ],
+      "albania": [
+        878.5,
+        1125.8
+      ],
+      "ankara": [
+        1266.8,
+        1099.6
+      ],
+      "apulia": [
+        758.3,
+        1123.9
+      ],
+      "armenia": [
+        1436.6,
+        1094.3
+      ],
+      "baltic-sea": [
+        818.2,
+        589.8
+      ],
+      "barents-sea": [
+        1132.0,
+        139.6
+      ],
+      "belgium": [
+        520.1,
+        779.6
+      ],
+      "berlin": [
+        701.1,
+        720.6
+      ],
+      "black-sea": [
+        1316.3,
+        961.8
+      ],
+      "bohemia": [
+        749.0,
+        835.9
+      ],
+      "brest": [
+        344.6,
+        836.2
+      ],
+      "budapest": [
+        925.8,
+        903.97
+      ],
+      "bulgaria": [
+        1009.66,
+        1055.8
+      ],
+      "burgundy": [
+        511.4,
+        888.4
+      ],
+      "clyde": [
+        363.7,
+        522.4
+      ],
+      "constantinople": [
+        1121.6,
+        1138.1
+      ],
+      "denmark": [
+        637.2,
+        579.6
+      ],
+      "eastern-mediterranean": [
+        1192.9,
+        1280.8
+      ],
+      "edinburgh": [
+        406.32,
+        511.14
+      ],
+      "english-channel": [
+        291.2,
+        776.6
+      ],
+      "finland": [
+        946.2,
+        277.8
+      ],
+      "galicia": [
+        957.9,
+        838.8
+      ],
+      "gascony": [
+        383.6,
+        959.6
+      ],
+      "greece": [
+        933.3,
+        1200.8
+      ],
+      "gulf-of-bothnia": [
+        828.1,
+        406.0
+      ],
+      "gulf-of-lyon": [
+        488.1,
+        1087.5
+      ],
+      "helgoland-bight": [
+        577.3,
+        644.2
+      ],
+      "holland": [
+        542.5,
+        719.8
+      ],
+      "ionian-sea": [
+        840.0,
+        1255.2
+      ],
+      "irish-sea": [
+        254.9,
+        681.4
+      ],
+      "kiel": [
+        624.1,
+        726.0
+      ],
+      "liverpool": [
+        376.65,
+        621.31
+      ],
+      "livonia": [
+        976.5,
+        553.1
+      ],
+      "london": [
+        409.1,
+        713.2
+      ],
+      "marseilles": [
+        474.5,
+        989.0
+      ],
+      "mid-atlantic-ocean": [
+        56.9,
+        1022.1
+      ],
+      "moscow": [
+        1386.3,
+        365.3
+      ],
+      "munich": [
+        642.8,
+        834.7
+      ],
+      "naples": [
+        720.8,
+        1261.8
+      ],
+      "north-africa": [
+        290.1,
+        1293.5
+      ],
+      "north-atlantic-ocean": [
+        185.6,
+        359.1
+      ],
+      "north-sea": [
+        514.5,
+        589.1
+      ],
+      "norway": [
+        724.3,
+        291.8
+      ],
+      "norwegian-sea": [
+        531.85,
+        254.75
+      ],
+      "paris": [
+        427.7,
+        878.3
+      ],
+      "picardy": [
+        461.7,
+        793.6
+      ],
+      "piedmont": [
+        583.1,
+        978.6
+      ],
+      "portugal": [
+        111.9,
+        1076.0
+      ],
+      "prussia": [
+        827.1,
+        677.2
+      ],
+      "rome": [
+        686.9,
+        1092.5
+      ],
+      "ruhr": [
+        579.0,
+        792.7
+      ],
+      "rumania": [
+        1012.06,
+        1003.48
+      ],
+      "serbia": [
+        907.8,
+        1063.2
+      ],
+      "sevastopol": [
+        1403.0,
+        789.1
+      ],
+      "silesia": [
+        765.21,
+        746.63
+      ],
+      "skagerrak": [
+        636.0,
+        528.2
+      ],
+      "smyrna": [
+        1212.8,
+        1200.5
+      ],
+      "spain": [
+        284.7,
+        1079.3
+      ],
+      "st-petersburg": [
+        1122.9,
+        301.6
+      ],
+      "sweden": [
+        750.7,
+        383.5
+      ],
+      "syria": [
+        1436.3,
+        1263.6
+      ],
+      "trieste": [
+        810.0,
+        1019.2
+      ],
+      "tunis": [
+        582.3,
+        1307.2
+      ],
+      "tuscany": [
+        650.6,
+        1044.9
+      ],
+      "tyrolia": [
+        693.03,
+        914.3
+      ],
+      "tyrrhenian-sea": [
+        669.4,
+        1159.4
+      ],
+      "ukraine": [
+        1134.8,
+        784.6
+      ],
+      "venice": [
+        651.0,
+        1004.9
+      ],
+      "vienna": [
+        807.14,
+        881.15
+      ],
+      "wales": [
+        342.76,
+        731.07
+      ],
+      "warsaw": [
+        924.5,
+        715.0
+      ],
+      "western-mediterranean": [
+        417.9,
+        1212.9
+      ],
+      "yorkshire": [
+        400.77,
+        693.86
+      ]
+    },
+    "sea_colour": "#9ebbd2",
+    "supply_centres": {
+      "ankara": [
+        1266.8,
+        1099.6
+      ],
+      "belgium": [
+        520.1,
+        779.6
+      ],
+      "berlin": [
+        701.1,
+        720.6
+      ],
+      "brest": [
+        344.6,
+        836.2
+      ],
+      "budapest": [
+        926.1,
+        918.3
+      ],
+      "bulgaria": [
+        1009.3,
+        1068.7
+      ],
+      "constantinople": [
+        1121.6,
+        1138.1
+      ],
+      "denmark": [
+        637.2,
+        579.6
+      ],
+      "edinburgh": [
+        404.93,
+        583.37
+      ],
+      "greece": [
+        933.3,
+        1200.8
+      ],
+      "holland": [
+        542.5,
+        719.8
+      ],
+      "kiel": [
+        624.1,
+        726.0
+      ],
+      "liverpool": [
+        388.92,
+        602.13
+      ],
+      "london": [
+        412.56,
+        729.44
+      ],
+      "marseilles": [
+        474.5,
+        989.0
+      ],
+      "moscow": [
+        1386.3,
+        365.3
+      ],
+      "munich": [
+        642.8,
+        834.7
+      ],
+      "naples": [
+        720.8,
+        1261.8
+      ],
+      "norway": [
+        724.3,
+        291.8
+      ],
+      "paris": [
+        427.7,
+        878.3
+      ],
+      "portugal": [
+        111.9,
+        1076.0
+      ],
+      "rome": [
+        686.9,
+        1092.5
+      ],
+      "rumania": [
+        1046.24,
+        981.99
+      ],
+      "serbia": [
+        907.2,
+        1075.74
+      ],
+      "sevastopol": [
+        1403.0,
+        789.1
+      ],
+      "smyrna": [
+        1212.8,
+        1200.5
+      ],
+      "spain": [
+        284.7,
+        1079.3
+      ],
+      "st-petersburg": [
+        1122.9,
+        301.6
+      ],
+      "sweden": [
+        750.7,
+        383.5
+      ],
+      "trieste": [
+        810.0,
+        1019.2
+      ],
+      "tunis": [
+        582.3,
+        1307.2
+      ],
+      "venice": [
+        651.0,
+        1004.9
+      ],
+      "vienna": [
+        806.25,
+        893.69
+      ],
+      "warsaw": [
+        930.95,
+        727.54
+      ]
+    },
+    "territory_label_font_size": 9.0,
+    "unclaimed_region_colour": "#d0c9aa"
+  },
+  "rules_engine": "standard",
+  "schema_version": 1,
+  "source": {
+    "cache_version": 1,
+    "digest": "370b9fab20b678ce8ee0a7ed5fe3f90d89b276911c52fa7a799456230f275a5e"
+  },
+  "start": {
+    "dislodged_units": [],
+    "phase": {
+      "season": "spring",
+      "year": 1901
+    },
+    "schema_version": 1,
+    "supply_centre_owners": {
+      "ankara": "turkey",
+      "belgium": null,
+      "berlin": "germany",
+      "brest": "france",
+      "budapest": "austria",
+      "bulgaria": null,
+      "constantinople": "turkey",
+      "denmark": null,
+      "edinburgh": "england",
+      "greece": null,
+      "holland": null,
+      "kiel": "germany",
+      "liverpool": "england",
+      "london": "england",
+      "marseilles": "france",
+      "moscow": "russia",
+      "munich": "germany",
+      "naples": "italy",
+      "norway": null,
+      "paris": "france",
+      "portugal": null,
+      "rome": "italy",
+      "rumania": null,
+      "serbia": null,
+      "sevastopol": "russia",
+      "smyrna": "turkey",
+      "spain": null,
+      "st-petersburg": "russia",
+      "sweden": null,
+      "trieste": "austria",
+      "tunis": null,
+      "venice": "italy",
+      "vienna": "austria",
+      "warsaw": "russia"
+    },
+    "territory_controllers": {
+      "adriatic-sea": null,
+      "aegean-sea": null,
+      "albania": null,
+      "ankara": "turkey",
+      "apulia": "italy",
+      "armenia": "turkey",
+      "baltic-sea": null,
+      "barents-sea": null,
+      "belgium": null,
+      "berlin": "germany",
+      "black-sea": null,
+      "bohemia": "austria",
+      "brest": "france",
+      "budapest": "austria",
+      "bulgaria": null,
+      "burgundy": "france",
+      "clyde": "england",
+      "constantinople": "turkey",
+      "denmark": null,
+      "eastern-mediterranean": null,
+      "edinburgh": "england",
+      "english-channel": null,
+      "finland": null,
+      "galicia": "austria",
+      "gascony": "france",
+      "greece": null,
+      "gulf-of-bothnia": null,
+      "gulf-of-lyon": null,
+      "helgoland-bight": null,
+      "holland": null,
+      "ionian-sea": null,
+      "irish-sea": null,
+      "kiel": "germany",
+      "liverpool": "england",
+      "livonia": "russia",
+      "london": "england",
+      "marseilles": "france",
+      "mid-atlantic-ocean": null,
+      "moscow": "russia",
+      "munich": "germany",
+      "naples": "italy",
+      "north-africa": null,
+      "north-atlantic-ocean": null,
+      "north-sea": null,
+      "norway": null,
+      "norwegian-sea": null,
+      "paris": "france",
+      "picardy": "france",
+      "piedmont": "italy",
+      "portugal": null,
+      "prussia": "germany",
+      "rome": "italy",
+      "ruhr": "germany",
+      "rumania": null,
+      "serbia": null,
+      "sevastopol": "russia",
+      "silesia": "germany",
+      "skagerrak": null,
+      "smyrna": "turkey",
+      "spain": null,
+      "st-petersburg": "russia",
+      "sweden": null,
+      "syria": "turkey",
+      "trieste": "austria",
+      "tunis": null,
+      "tuscany": "italy",
+      "tyrolia": "austria",
+      "tyrrhenian-sea": null,
+      "ukraine": "russia",
+      "venice": "italy",
+      "vienna": "austria",
+      "wales": "england",
+      "warsaw": "russia",
+      "western-mediterranean": null,
+      "yorkshire": "england"
+    },
+    "units": [
+      {
+        "location": {
+          "coast": null,
+          "territory": "budapest"
+        },
+        "power": "austria",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "vienna"
+        },
+        "power": "austria",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "trieste"
+        },
+        "power": "austria",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "edinburgh"
+        },
+        "power": "england",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "london"
+        },
+        "power": "england",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "liverpool"
+        },
+        "power": "england",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "brest"
+        },
+        "power": "france",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "marseilles"
+        },
+        "power": "france",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "paris"
+        },
+        "power": "france",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "berlin"
+        },
+        "power": "germany",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "kiel"
+        },
+        "power": "germany",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "munich"
+        },
+        "power": "germany",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "naples"
+        },
+        "power": "italy",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "rome"
+        },
+        "power": "italy",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "venice"
+        },
+        "power": "italy",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "moscow"
+        },
+        "power": "russia",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "sevastopol"
+        },
+        "power": "russia",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": "sc",
+          "territory": "st-petersburg"
+        },
+        "power": "russia",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "warsaw"
+        },
+        "power": "russia",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "ankara"
+        },
+        "power": "turkey",
+        "type": "fleet"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "constantinople"
+        },
+        "power": "turkey",
+        "type": "army"
+      },
+      {
+        "location": {
+          "coast": null,
+          "territory": "smyrna"
+        },
+        "power": "turkey",
+        "type": "army"
+      }
+    ]
+  },
+  "territories": [
+    {
+      "abbreviation": "ADR",
+      "display_name": "Adriatic Sea",
+      "id": "adriatic-sea",
+      "kind": "sea",
+      "name": "Adriatic Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-adriatic-sea"
+    },
+    {
+      "abbreviation": "AEG",
+      "display_name": "Aegean Sea",
+      "id": "aegean-sea",
+      "kind": "sea",
+      "name": "Aegean Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-aegean-sea"
+    },
+    {
+      "abbreviation": "ALB",
+      "display_name": "Albania",
+      "id": "albania",
+      "kind": "land",
+      "name": "Albania",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-albania"
+    },
+    {
+      "abbreviation": "ANK",
+      "display_name": "Ankara",
+      "id": "ankara",
+      "kind": "land",
+      "name": "Ankara",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-ankara"
+    },
+    {
+      "abbreviation": "APU",
+      "display_name": "Apulia",
+      "id": "apulia",
+      "kind": "land",
+      "name": "Apulia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-apulia"
+    },
+    {
+      "abbreviation": "ARM",
+      "display_name": "Armenia",
+      "id": "armenia",
+      "kind": "land",
+      "name": "Armenia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-armenia"
+    },
+    {
+      "abbreviation": "BAL",
+      "display_name": "Baltic Sea",
+      "id": "baltic-sea",
+      "kind": "sea",
+      "name": "Baltic Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-baltic-sea"
+    },
+    {
+      "abbreviation": "BAR",
+      "display_name": "Barents Sea",
+      "id": "barents-sea",
+      "kind": "sea",
+      "name": "Barents Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-barents-sea"
+    },
+    {
+      "abbreviation": "BEL",
+      "display_name": "Belgium",
+      "id": "belgium",
+      "kind": "land",
+      "name": "Belgium",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-belgium"
+    },
+    {
+      "abbreviation": "BER",
+      "display_name": "Berlin",
+      "id": "berlin",
+      "kind": "land",
+      "name": "Berlin",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-berlin"
+    },
+    {
+      "abbreviation": "BLA",
+      "display_name": "Black Sea",
+      "id": "black-sea",
+      "kind": "sea",
+      "name": "Black Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-black-sea"
+    },
+    {
+      "abbreviation": "BOH",
+      "display_name": "Bohemia",
+      "id": "bohemia",
+      "kind": "land",
+      "name": "Bohemia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-bohemia"
+    },
+    {
+      "abbreviation": "BOT",
+      "display_name": "Gulf of Bothnia",
+      "id": "gulf-of-bothnia",
+      "kind": "sea",
+      "name": "Gulf of Bothnia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-gulf-of-bothnia"
+    },
+    {
+      "abbreviation": "BRE",
+      "display_name": "Brest",
+      "id": "brest",
+      "kind": "land",
+      "name": "Brest",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-brest"
+    },
+    {
+      "abbreviation": "BUD",
+      "display_name": "Budapest",
+      "id": "budapest",
+      "kind": "land",
+      "name": "Budapest",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-budapest"
+    },
+    {
+      "abbreviation": "BUL",
+      "display_name": "Bulgaria",
+      "id": "bulgaria",
+      "kind": "land",
+      "name": "Bulgaria",
+      "split_coasts": [
+        "ec",
+        "sc"
+      ],
+      "supply_centre": true,
+      "svg_element": "territory-bulgaria"
+    },
+    {
+      "abbreviation": "BUR",
+      "display_name": "Burgundy",
+      "id": "burgundy",
+      "kind": "land",
+      "name": "Burgundy",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-burgundy"
+    },
+    {
+      "abbreviation": "CLY",
+      "display_name": "Clyde",
+      "id": "clyde",
+      "kind": "land",
+      "name": "Clyde",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-clyde"
+    },
+    {
+      "abbreviation": "CON",
+      "display_name": "Constantinople",
+      "id": "constantinople",
+      "kind": "land",
+      "name": "Constantinople",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-constantinople"
+    },
+    {
+      "abbreviation": "DEN",
+      "display_name": "Denmark",
+      "id": "denmark",
+      "kind": "land",
+      "name": "Denmark",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-denmark"
+    },
+    {
+      "abbreviation": "EAS",
+      "display_name": "Eastern Mediterranean",
+      "id": "eastern-mediterranean",
+      "kind": "sea",
+      "name": "Eastern Mediterranean",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-eastern-mediterranean"
+    },
+    {
+      "abbreviation": "EDI",
+      "display_name": "Edinburgh",
+      "id": "edinburgh",
+      "kind": "land",
+      "name": "Edinburgh",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-edinburgh"
+    },
+    {
+      "abbreviation": "ENG",
+      "display_name": "English Channel",
+      "id": "english-channel",
+      "kind": "sea",
+      "name": "English Channel",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-english-channel"
+    },
+    {
+      "abbreviation": "FIN",
+      "display_name": "Finland",
+      "id": "finland",
+      "kind": "land",
+      "name": "Finland",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-finland"
+    },
+    {
+      "abbreviation": "GAL",
+      "display_name": "Galicia",
+      "id": "galicia",
+      "kind": "land",
+      "name": "Galicia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-galicia"
+    },
+    {
+      "abbreviation": "GAS",
+      "display_name": "Gascony",
+      "id": "gascony",
+      "kind": "land",
+      "name": "Gascony",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-gascony"
+    },
+    {
+      "abbreviation": "GOL",
+      "display_name": "Gulf of Lyon",
+      "id": "gulf-of-lyon",
+      "kind": "sea",
+      "name": "Gulf of Lyon",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-gulf-of-lyon"
+    },
+    {
+      "abbreviation": "GRE",
+      "display_name": "Greece",
+      "id": "greece",
+      "kind": "land",
+      "name": "Greece",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-greece"
+    },
+    {
+      "abbreviation": "HEL",
+      "display_name": "Helgoland Bight",
+      "id": "helgoland-bight",
+      "kind": "sea",
+      "name": "Helgoland Bight",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-helgoland-bight"
+    },
+    {
+      "abbreviation": "HOL",
+      "display_name": "Holland",
+      "id": "holland",
+      "kind": "land",
+      "name": "Holland",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-holland"
+    },
+    {
+      "abbreviation": "ION",
+      "display_name": "Ionian Sea",
+      "id": "ionian-sea",
+      "kind": "sea",
+      "name": "Ionian Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-ionian-sea"
+    },
+    {
+      "abbreviation": "IRI",
+      "display_name": "Irish Sea",
+      "id": "irish-sea",
+      "kind": "sea",
+      "name": "Irish Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-irish-sea"
+    },
+    {
+      "abbreviation": "KIE",
+      "display_name": "Kiel",
+      "id": "kiel",
+      "kind": "land",
+      "name": "Kiel",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-kiel"
+    },
+    {
+      "abbreviation": "LON",
+      "display_name": "London",
+      "id": "london",
+      "kind": "land",
+      "name": "London",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-london"
+    },
+    {
+      "abbreviation": "LVN",
+      "display_name": "Livonia",
+      "id": "livonia",
+      "kind": "land",
+      "name": "Livonia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-livonia"
+    },
+    {
+      "abbreviation": "LVP",
+      "display_name": "Liverpool",
+      "id": "liverpool",
+      "kind": "land",
+      "name": "Liverpool",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-liverpool"
+    },
+    {
+      "abbreviation": "MAR",
+      "display_name": "Marseilles",
+      "id": "marseilles",
+      "kind": "land",
+      "name": "Marseilles",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-marseilles"
+    },
+    {
+      "abbreviation": "MID",
+      "display_name": "Mid-Atlantic Ocean",
+      "id": "mid-atlantic-ocean",
+      "kind": "sea",
+      "name": "Mid-Atlantic Ocean",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-mid-atlantic-ocean"
+    },
+    {
+      "abbreviation": "MOS",
+      "display_name": "Moscow",
+      "id": "moscow",
+      "kind": "land",
+      "name": "Moscow",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-moscow"
+    },
+    {
+      "abbreviation": "MUN",
+      "display_name": "Munich",
+      "id": "munich",
+      "kind": "land",
+      "name": "Munich",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-munich"
+    },
+    {
+      "abbreviation": "NAF",
+      "display_name": "North Africa",
+      "id": "north-africa",
+      "kind": "land",
+      "name": "North Africa",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-north-africa"
+    },
+    {
+      "abbreviation": "NAP",
+      "display_name": "Naples",
+      "id": "naples",
+      "kind": "land",
+      "name": "Naples",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-naples"
+    },
+    {
+      "abbreviation": "NAT",
+      "display_name": "North Atlantic Ocean",
+      "id": "north-atlantic-ocean",
+      "kind": "sea",
+      "name": "North Atlantic Ocean",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-north-atlantic-ocean"
+    },
+    {
+      "abbreviation": "NRG",
+      "display_name": "Norwegian Sea",
+      "id": "norwegian-sea",
+      "kind": "sea",
+      "name": "Norwegian Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-norwegian-sea"
+    },
+    {
+      "abbreviation": "NTH",
+      "display_name": "North Sea",
+      "id": "north-sea",
+      "kind": "sea",
+      "name": "North Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-north-sea"
+    },
+    {
+      "abbreviation": "NWY",
+      "display_name": "Norway",
+      "id": "norway",
+      "kind": "land",
+      "name": "Norway",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-norway"
+    },
+    {
+      "abbreviation": "PAR",
+      "display_name": "Paris",
+      "id": "paris",
+      "kind": "land",
+      "name": "Paris",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-paris"
+    },
+    {
+      "abbreviation": "PIC",
+      "display_name": "Picardy",
+      "id": "picardy",
+      "kind": "land",
+      "name": "Picardy",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-picardy"
+    },
+    {
+      "abbreviation": "PIE",
+      "display_name": "Piedmont",
+      "id": "piedmont",
+      "kind": "land",
+      "name": "Piedmont",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-piedmont"
+    },
+    {
+      "abbreviation": "POR",
+      "display_name": "Portugal",
+      "id": "portugal",
+      "kind": "land",
+      "name": "Portugal",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-portugal"
+    },
+    {
+      "abbreviation": "PRU",
+      "display_name": "Prussia",
+      "id": "prussia",
+      "kind": "land",
+      "name": "Prussia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-prussia"
+    },
+    {
+      "abbreviation": "ROM",
+      "display_name": "Rome",
+      "id": "rome",
+      "kind": "land",
+      "name": "Rome",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-rome"
+    },
+    {
+      "abbreviation": "RUH",
+      "display_name": "Ruhr",
+      "id": "ruhr",
+      "kind": "land",
+      "name": "Ruhr",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-ruhr"
+    },
+    {
+      "abbreviation": "RUM",
+      "display_name": "Rumania",
+      "id": "rumania",
+      "kind": "land",
+      "name": "Rumania",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-rumania"
+    },
+    {
+      "abbreviation": "SER",
+      "display_name": "Serbia",
+      "id": "serbia",
+      "kind": "land",
+      "name": "Serbia",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-serbia"
+    },
+    {
+      "abbreviation": "SEV",
+      "display_name": "Sevastopol",
+      "id": "sevastopol",
+      "kind": "land",
+      "name": "Sevastopol",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-sevastopol"
+    },
+    {
+      "abbreviation": "SIL",
+      "display_name": "Silesia",
+      "id": "silesia",
+      "kind": "land",
+      "name": "Silesia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-silesia"
+    },
+    {
+      "abbreviation": "SKA",
+      "display_name": "Skagerrak",
+      "id": "skagerrak",
+      "kind": "sea",
+      "name": "Skagerrak",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-skagerrak"
+    },
+    {
+      "abbreviation": "SMY",
+      "display_name": "Smyrna",
+      "id": "smyrna",
+      "kind": "land",
+      "name": "Smyrna",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-smyrna"
+    },
+    {
+      "abbreviation": "SPA",
+      "display_name": "Spain",
+      "id": "spain",
+      "kind": "land",
+      "name": "Spain",
+      "split_coasts": [
+        "nc",
+        "sc"
+      ],
+      "supply_centre": true,
+      "svg_element": "territory-spain"
+    },
+    {
+      "abbreviation": "STP",
+      "display_name": "St Petersburg",
+      "id": "st-petersburg",
+      "kind": "land",
+      "name": "St Petersburg",
+      "split_coasts": [
+        "nc",
+        "sc"
+      ],
+      "supply_centre": true,
+      "svg_element": "territory-st-petersburg"
+    },
+    {
+      "abbreviation": "SWE",
+      "display_name": "Sweden",
+      "id": "sweden",
+      "kind": "land",
+      "name": "Sweden",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-sweden"
+    },
+    {
+      "abbreviation": "SYR",
+      "display_name": "Syria",
+      "id": "syria",
+      "kind": "land",
+      "name": "Syria",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-syria"
+    },
+    {
+      "abbreviation": "TRI",
+      "display_name": "Trieste",
+      "id": "trieste",
+      "kind": "land",
+      "name": "Trieste",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-trieste"
+    },
+    {
+      "abbreviation": "TUN",
+      "display_name": "Tunis",
+      "id": "tunis",
+      "kind": "land",
+      "name": "Tunis",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-tunis"
+    },
+    {
+      "abbreviation": "TUS",
+      "display_name": "Tuscany",
+      "id": "tuscany",
+      "kind": "land",
+      "name": "Tuscany",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-tuscany"
+    },
+    {
+      "abbreviation": "TYN",
+      "display_name": "Tyrrhenian Sea",
+      "id": "tyrrhenian-sea",
+      "kind": "sea",
+      "name": "Tyrrhenian Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-tyrrhenian-sea"
+    },
+    {
+      "abbreviation": "TYR",
+      "display_name": "Tyrolia",
+      "id": "tyrolia",
+      "kind": "land",
+      "name": "Tyrolia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-tyrolia"
+    },
+    {
+      "abbreviation": "UKR",
+      "display_name": "Ukraine",
+      "id": "ukraine",
+      "kind": "land",
+      "name": "Ukraine",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-ukraine"
+    },
+    {
+      "abbreviation": "VEN",
+      "display_name": "Venice",
+      "id": "venice",
+      "kind": "land",
+      "name": "Venice",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-venice"
+    },
+    {
+      "abbreviation": "VIE",
+      "display_name": "Vienna",
+      "id": "vienna",
+      "kind": "land",
+      "name": "Vienna",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-vienna"
+    },
+    {
+      "abbreviation": "WAL",
+      "display_name": "Wales",
+      "id": "wales",
+      "kind": "land",
+      "name": "Wales",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-wales"
+    },
+    {
+      "abbreviation": "WAR",
+      "display_name": "Warsaw",
+      "id": "warsaw",
+      "kind": "land",
+      "name": "Warsaw",
+      "split_coasts": [],
+      "supply_centre": true,
+      "svg_element": "territory-warsaw"
+    },
+    {
+      "abbreviation": "WES",
+      "display_name": "Western Mediterranean",
+      "id": "western-mediterranean",
+      "kind": "sea",
+      "name": "Western Mediterranean",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-western-mediterranean"
+    },
+    {
+      "abbreviation": "YOR",
+      "display_name": "Yorkshire",
+      "id": "yorkshire",
+      "kind": "land",
+      "name": "Yorkshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-yorkshire"
+    }
+  ]
+}

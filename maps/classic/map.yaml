@@ -1,4 +1,3 @@
-# Best-effort standard 1901 setup; review anchors and colours in the map editor.
 schema_version: 1
 map_id: classic
 name: Classic Diplomacy
@@ -11,7 +10,7 @@ start:
 teams:
   austria:
     name: Austria
-    colour: '#b36b35'
+    colour: '#9f4c56'
     home_supply_centres:
     - budapest
     - trieste
@@ -21,8 +20,11 @@ teams:
     - trieste
     - vienna
     starting_territories:
+    - bohemia
     - budapest
+    - galicia
     - trieste
+    - tyrolia
     - vienna
     initial_units:
     - type: army
@@ -33,19 +35,22 @@ teams:
       location: trieste
   england:
     name: England
-    colour: '#4d76a8'
+    colour: '#3d6698'
     home_supply_centres:
     - edinburgh
-    - london
     - liverpool
+    - london
     starting_supply_centres:
     - edinburgh
     - london
     - liverpool
     starting_territories:
+    - clyde
     - edinburgh
     - london
     - liverpool
+    - wales
+    - yorkshire
     initial_units:
     - type: fleet
       location: edinburgh
@@ -55,7 +60,7 @@ teams:
       location: liverpool
   france:
     name: France
-    colour: '#5c8d5a'
+    colour: '#6dbfb8'
     home_supply_centres:
     - brest
     - marseilles
@@ -66,8 +71,11 @@ teams:
     - paris
     starting_territories:
     - brest
+    - burgundy
+    - gascony
     - marseilles
     - paris
+    - picardy
     initial_units:
     - type: fleet
       location: brest
@@ -90,6 +98,9 @@ teams:
     - berlin
     - kiel
     - munich
+    - prussia
+    - ruhr
+    - silesia
     initial_units:
     - type: army
       location: berlin
@@ -99,18 +110,21 @@ teams:
       location: munich
   italy:
     name: Italy
-    colour: '#b05a50'
+    colour: '#55915d'
     home_supply_centres:
+    - apulia
     - naples
     - rome
-    - venice
     starting_supply_centres:
     - naples
     - rome
     - venice
     starting_territories:
+    - apulia
     - naples
+    - piedmont
     - rome
+    - tuscany
     - venice
     initial_units:
     - type: fleet
@@ -121,7 +135,7 @@ teams:
       location: venice
   russia:
     name: Russia
-    colour: '#6e6eaa'
+    colour: '#dddddd'
     home_supply_centres:
     - moscow
     - sevastopol
@@ -133,9 +147,11 @@ teams:
     - st-petersburg
     - warsaw
     starting_territories:
+    - livonia
     - moscow
     - sevastopol
     - st-petersburg
+    - ukraine
     - warsaw
     initial_units:
     - type: army
@@ -148,7 +164,7 @@ teams:
       location: warsaw
   turkey:
     name: Turkey
-    colour: '#c28b3c'
+    colour: '#ba9a6d'
     home_supply_centres:
     - ankara
     - constantinople
@@ -159,8 +175,10 @@ teams:
     - smyrna
     starting_territories:
     - ankara
+    - armenia
     - constantinople
     - smyrna
+    - syria
     initial_units:
     - type: fleet
       location: ankara
@@ -434,14 +452,14 @@ territories:
     supply_centre: true
     anchors:
       label:
-      - 926.1
-      - 918.3
+      - 925.8
+      - 903.97
       abbreviation:
       - 926.1
       - 918.3
       army:
-      - 926.1
-      - 929.3
+      - 908.48
+      - 939.45
       supply_centre:
       - 926.1
       - 918.3
@@ -453,14 +471,14 @@ territories:
     supply_centre: true
     anchors:
       label:
-      - 1009.3
-      - 1068.7
+      - 1009.66
+      - 1055.8
       abbreviation:
       - 1009.3
       - 1068.7
       army:
-      - 1009.3
-      - 1079.7
+      - 1011.81
+      - 1085.79
       fleet:
       - 1009.3
       - 1077.7
@@ -473,9 +491,9 @@ territories:
         - 1030.0
         - 1050.0
         label_anchor:
-        - 1035.0
-        - 1037.0
-        label_rotation: 0
+        - 1066.17
+        - 1042.37
+        label_rotation: -90
         add_connections:
         - black-sea
         - constantinople
@@ -484,8 +502,8 @@ territories:
         - 1004.0
         - 1110.0
         label_anchor:
-        - 1004.0
-        - 1124.0
+        - 1005.79
+        - 1116.48
         label_rotation: 0
         add_connections:
         - aegean-sea
@@ -520,8 +538,8 @@ territories:
       - 363.7
       - 522.4
       army:
-      - 363.7
-      - 533.4
+      - 365.08
+      - 567.27
       fleet:
       - 363.7
       - 531.4
@@ -593,20 +611,20 @@ territories:
     supply_centre: true
     anchors:
       label:
-      - 389.9
-      - 545.7
+      - 406.32
+      - 511.14
       abbreviation:
       - 389.9
       - 545.7
       army:
-      - 389.9
-      - 556.7
+      - 398.19
+      - 520.93
       fleet:
       - 389.9
       - 554.7
       supply_centre:
-      - 389.9
-      - 545.7
+      - 404.93
+      - 583.37
   english-channel:
     name: English Channel
     abbreviation: ENG
@@ -656,8 +674,8 @@ territories:
       - 957.9
       - 838.8
       army:
-      - 957.9
-      - 849.8
+      - 931.69
+      - 814.66
   gascony:
     name: Gascony
     abbreviation: GAS
@@ -821,14 +839,14 @@ territories:
       - 409.1
       - 713.2
       army:
-      - 409.1
-      - 724.2
+      - 384.91
+      - 724.89
       fleet:
       - 409.1
       - 722.2
       supply_centre:
-      - 409.1
-      - 713.2
+      - 412.56
+      - 729.44
   livonia:
     name: Livonia
     abbreviation: LVN
@@ -856,20 +874,20 @@ territories:
     supply_centre: true
     anchors:
       label:
-      - 392.2
-      - 625.8
+      - 376.65
+      - 621.31
       abbreviation:
       - 392.2
       - 625.8
       army:
-      - 392.2
-      - 636.8
+      - 385.98
+      - 644.58
       fleet:
       - 392.2
       - 634.8
       supply_centre:
-      - 392.2
-      - 625.8
+      - 388.92
+      - 602.13
   marseilles:
     name: Marseilles
     abbreviation: MAR
@@ -1011,8 +1029,8 @@ territories:
     supply_centre: false
     anchors:
       label:
-      - 536.7
-      - 249.9
+      - 531.85
+      - 254.75
       abbreviation:
       - 536.7
       - 249.9
@@ -1201,20 +1219,20 @@ territories:
     supply_centre: true
     anchors:
       label:
-      - 1048.8
-      - 947.0
+      - 1012.06
+      - 1003.48
       abbreviation:
       - 1048.8
       - 947.0
       army:
-      - 1048.8
-      - 958.0
+      - 1014.82
+      - 973.7
       fleet:
       - 1048.8
       - 956.0
       supply_centre:
-      - 1048.8
-      - 947.0
+      - 1046.24
+      - 981.99
   serbia:
     name: Serbia
     abbreviation: SER
@@ -1229,11 +1247,11 @@ territories:
       - 907.8
       - 1063.2
       army:
-      - 907.8
-      - 1074.2
+      - 919.8
+      - 1092.41
       supply_centre:
-      - 907.8
-      - 1063.2
+      - 907.2
+      - 1075.74
   sevastopol:
     name: Sevastopol
     abbreviation: SEV
@@ -1264,14 +1282,14 @@ territories:
     supply_centre: false
     anchors:
       label:
-      - 746.7
-      - 774.4
+      - 765.21
+      - 746.63
       abbreviation:
       - 746.7
       - 774.4
       army:
-      - 746.7
-      - 785.4
+      - 759.48
+      - 763.24
   skagerrak:
     name: Skagerrak
     abbreviation: SKA
@@ -1530,14 +1548,14 @@ territories:
     supply_centre: false
     anchors:
       label:
-      - 695.9
-      - 918.6
+      - 693.03
+      - 914.3
       abbreviation:
       - 695.9
       - 918.6
       army:
-      - 695.9
-      - 929.6
+      - 729.58
+      - 915.63
   ukraine:
     name: Ukraine
     abbreviation: UKR
@@ -1584,17 +1602,17 @@ territories:
     supply_centre: true
     anchors:
       label:
-      - 794.6
-      - 912.8
+      - 807.14
+      - 881.15
       abbreviation:
       - 794.6
       - 912.8
       army:
-      - 794.6
+      - 801.77
       - 923.8
       supply_centre:
-      - 794.6
-      - 912.8
+      - 806.25
+      - 893.69
   wales:
     name: Wales
     abbreviation: WAL
@@ -1603,14 +1621,14 @@ territories:
     supply_centre: false
     anchors:
       label:
-      - 349.5
-      - 693.4
+      - 342.76
+      - 731.07
       abbreviation:
       - 349.5
       - 693.4
       army:
-      - 349.5
-      - 704.4
+      - 348.81
+      - 680.73
       fleet:
       - 349.5
       - 702.4
@@ -1628,11 +1646,11 @@ territories:
       - 924.5
       - 715.0
       army:
-      - 924.5
-      - 726.0
+      - 932.74
+      - 753.23
       supply_centre:
-      - 924.5
-      - 715.0
+      - 930.95
+      - 727.54
   western-mediterranean:
     name: Western Mediterranean
     abbreviation: WES
@@ -1657,14 +1675,14 @@ territories:
     supply_centre: false
     anchors:
       label:
-      - 417.7
-      - 651.7
+      - 400.77
+      - 693.86
       abbreviation:
       - 417.7
       - 651.7
       army:
-      - 417.7
-      - 662.7
+      - 407.33
+      - 667.37
       fleet:
       - 417.7
       - 660.7
