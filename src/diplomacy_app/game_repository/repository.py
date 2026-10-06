@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import shutil
 import tempfile
@@ -10,6 +11,7 @@ from collections.abc import Mapping
 from dataclasses import replace
 from pathlib import Path
 from types import MappingProxyType
+from venv import logger
 
 from diplomacy_app.domain.errors import InvalidStoredData, RepositoryError, RevisionConflict
 from diplomacy_app.domain.models import (
@@ -60,6 +62,8 @@ _SEASON_DIRECTORIES = {
     Season.YEAR_END: "YearEnd",
 }
 _SEASON_ORDER = {season: index for index, season in enumerate(Season)}
+
+logger = logging.getLogger(__name__)
 
 
 def _phase_key(value: PhaseId) -> tuple[int, int]:
@@ -402,18 +406,18 @@ class FileGameRepository:
         root = self._root_for(game_id)
         self._check_revision(root, expected_revision)
         game = self._read_game(self._locations[game_id], record=False)
-        if game.current_phase != proposal.completed_phase:
-            raise RepositoryError("Only the current phase can be advanced")
         completed = self.load_phase(game_id, proposal.completed_phase)
         completed_orders = orders_document_data(dict(completed.submissions), proposal.results)
         next_state = state_data(
             proposal.next_state, proposal.next_phase, proposal.next_resolution_state
         )
+        # relative path to completed orders
         completed_relative = (
             (_phase_directory(root, proposal.completed_phase) / "orders.json")
             .relative_to(root)
             .as_posix()
         )
+        # relative path to next state
         next_relative = (
             (_phase_directory(root, proposal.next_phase) / "state.json")
             .relative_to(root)
@@ -427,4 +431,5 @@ class FileGameRepository:
             ],
             next_relative,
         )
+        logger.info(f"Committed adjudication for game {game_id} phase {proposal.completed_phase.label}")
         return self._read_game(self._locations[game_id], record=False)

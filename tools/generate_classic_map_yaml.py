@@ -128,6 +128,71 @@ SPLIT_COASTS = {
     },
 }
 
+STANDARD_CODE_ALIASES = {
+    "lyo": "gol",
+    "tys": "tyn",
+    "nwg": "nrg",
+    "mao": "mid",
+    "nao": "nat",
+}
+
+
+def _standard_code(value: str) -> str:
+    return STANDARD_CODE_ALIASES.get(value.casefold(), value.casefold())
+
+
+def _standard_topology(project_root: Path) -> tuple[dict[str, dict[str, list[str]]], dict[str, dict[str, list[str]]]]:
+    """Read canonical unit adjacencies instead of guessing them from SVG borders."""
+    path = project_root / "vendor/diplomacy/diplomacy/maps/standard.map"
+    overrides: dict[str, dict[str, list[str]]] = {}
+    split_connections: dict[str, dict[str, list[str]]] = {}
+    started = False
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        if raw_line.startswith("WATER") or raw_line.startswith("COAST") or raw_line.startswith("LAND"):
+            started = True
+        if not started or "ABUTS" not in raw_line:
+            continue
+        terrain, origin_value, _, *destinations = raw_line.split()
+        origin_base, separator, origin_coast = origin_value.partition("/")
+        origin_coast = origin_coast.casefold()
+        origin_code = _standard_code(origin_base)
+        if origin_code not in PROVINCES:
+            continue
+        origin = PROVINCES[origin_code]
+        for destination_value in destinations:
+            destination_base, separator, destination_coast = destination_value.partition("/")
+            destination_coast = destination_coast.casefold()
+            destination_code = _standard_code(destination_base)
+            if destination_code not in PROVINCES:
+                continue
+            destination = PROVINCES[destination_code]
+            destination_location = (
+                f"{destination}/{destination_coast}" if separator else destination
+            )
+            if separator or origin_coast:
+                coast_id = origin_coast or destination_coast
+                coast_owner = origin if origin_coast else destination
+                coast_destination = destination if origin_coast else origin
+                split_connections.setdefault(coast_owner, {}).setdefault(coast_id, [])
+                if coast_destination not in split_connections[coast_owner][coast_id]:
+                    split_connections[coast_owner][coast_id].append(coast_destination)
+                continue
+            if terrain == "WATER" or (
+                terrain == "COAST" and destination_code in SEA_PROVINCES
+            ):
+                units = ["fleet"]
+            else:
+                units = ["army"]
+                if (
+                    terrain == "COAST"
+                    and destination_value.isupper()
+                    and destination_code in COASTAL
+                ):
+                    units.append("fleet")
+            overrides.setdefault(origin, {}).setdefault("add", [])
+            overrides[origin]["add"].append({"to": destination_location, "units": units})
+    return overrides, split_connections
+
 
 def _offset(point: list[float], dy: float) -> list[float]:
     return [round(point[0], 1), round(point[1] + dy, 1)]
@@ -202,6 +267,16 @@ def build_yaml(project_root: Path) -> str:
                 "add_connections": destinations,
             }
         document["territories"][PROVINCES[abbreviation]]["split_coasts"] = split
+
+    topology, split_connections = _standard_topology(project_root)
+    for territory_id, connections in topology.items():
+        document["territories"].setdefault(territory_id, {})["connection_overrides"] = connections
+    for territory_id, coast_data in split_connections.items():
+        split = document["territories"].setdefault(territory_id, {}).setdefault("split_coasts", {})
+        for coast_id, destinations in coast_data.items():
+            split.setdefault(coast_id, {"fleet_anchor": [0, 0], "label_anchor": [0, 0]})[
+                "add_connections"
+            ] = sorted(set(destinations))
 
     document["non_playable_elements"] = {
         "detail-switzerland": "impassable",

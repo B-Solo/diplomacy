@@ -1,0 +1,55 @@
+2026-09-20 09:52:45,259 [INFO] __main__: Starting application...
+2026-09-20 16:24:21,789 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1901, season=<Season.SPRING: 'spring'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1901, season=<Season.SPRING: 'spring'>)
+2026-09-20 16:24:21,961 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Spring 1901
+2026-09-20 16:24:26,395 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1901, season=<Season.SUMMER: 'summer'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1901, season=<Season.SUMMER: 'summer'>)
+2026-09-20 16:24:26,544 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Summer 1901
+2026-09-20 16:24:32,407 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1901, season=<Season.FALL: 'fall'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1901, season=<Season.FALL: 'fall'>)
+2026-09-20 16:24:32,598 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Fall 1901
+2026-09-20 16:24:36,964 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1901, season=<Season.WINTER: 'winter'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1901, season=<Season.WINTER: 'winter'>)
+2026-09-20 16:24:37,114 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Winter 1901
+2026-09-20 16:24:39,093 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1901, season=<Season.YEAR_END: 'year_end'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1901, season=<Season.YEAR_END: 'year_end'>)
+2026-09-20 16:24:39,249 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Year End 1901
+2026-09-20 16:24:45,805 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1902, season=<Season.SPRING: 'spring'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1902, season=<Season.SPRING: 'spring'>)
+2026-09-20 16:24:45,986 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Spring 1902
+2026-09-20 16:24:50,966 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1902, season=<Season.SUMMER: 'summer'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1902, season=<Season.SUMMER: 'summer'>)
+2026-09-20 16:24:51,141 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Summer 1902
+2026-09-20 16:25:26,069 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1902, season=<Season.FALL: 'fall'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1902, season=<Season.FALL: 'fall'>)
+2026-09-20 16:25:26,270 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Fall 1902
+2026-09-20 16:26:13,972 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1902, season=<Season.WINTER: 'winter'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1902, season=<Season.WINTER: 'winter'>)
+2026-09-20 16:26:14,141 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Winter 1902
+2026-09-20 16:26:34,519 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1902, season=<Season.YEAR_END: 'year_end'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1902, season=<Season.YEAR_END: 'year_end'>)
+2026-09-20 16:26:34,691 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Year End 1902
+2026-09-20 16:26:42,864 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1903, season=<Season.SPRING: 'spring'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1903, season=<Season.SPRING: 'spring'>)
+2026-09-20 16:26:43,066 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Spring 1903
+2026-09-20 16:27:04,977 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1903, season=<Season.SPRING: 'spring'>), make_new_phase=False, phases_processed=0, final phase num is PhaseId(year=1903, season=<Season.SUMMER: 'summer'>)
+2026-09-20 16:27:05,177 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Spring 1903
+2026-09-20 16:27:35,870 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1903, season=<Season.SUMMER: 'summer'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1903, season=<Season.SUMMER: 'summer'>)
+2026-09-20 16:27:36,051 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Summer 1903
+2026-09-20 16:28:13,366 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1903, season=<Season.FALL: 'fall'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1903, season=<Season.FALL: 'fall'>)
+2026-09-20 16:28:13,575 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Fall 1903
+2026-09-20 16:28:45,424 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1903, season=<Season.WINTER: 'winter'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1903, season=<Season.WINTER: 'winter'>)
+2026-09-20 16:28:45,610 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Winter 1903
+2026-09-20 16:29:03,729 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1903, season=<Season.YEAR_END: 'year_end'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1903, season=<Season.YEAR_END: 'year_end'>)
+2026-09-20 16:29:03,916 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Year End 1903
+2026-09-20 16:31:23,263 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1904, season=<Season.SPRING: 'spring'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1904, season=<Season.SPRING: 'spring'>)
+2026-09-20 16:31:23,503 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Spring 1904
+2026-09-20 16:31:28,405 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1904, season=<Season.SUMMER: 'summer'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1904, season=<Season.SUMMER: 'summer'>)
+2026-09-20 16:31:28,613 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Summer 1904
+2026-09-20 16:36:19,802 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1903, season=<Season.FALL: 'fall'>), make_new_phase=False, phases_processed=0, final phase num is PhaseId(year=1904, season=<Season.FALL: 'fall'>)
+2026-09-20 16:36:20,024 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Fall 1903
+2026-09-20 16:36:20,176 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1903, season=<Season.WINTER: 'winter'>), make_new_phase=False, phases_processed=1, final phase num is PhaseId(year=1904, season=<Season.FALL: 'fall'>)
+2026-09-20 16:36:20,376 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Winter 1903
+2026-09-20 16:36:20,512 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1903, season=<Season.YEAR_END: 'year_end'>), make_new_phase=False, phases_processed=2, final phase num is PhaseId(year=1904, season=<Season.FALL: 'fall'>)
+2026-09-20 16:36:20,714 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Year End 1903
+2026-09-20 16:36:20,847 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1904, season=<Season.SPRING: 'spring'>), make_new_phase=False, phases_processed=3, final phase num is PhaseId(year=1904, season=<Season.FALL: 'fall'>)
+2026-09-20 16:36:21,056 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Spring 1904
+2026-09-20 16:36:21,202 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1904, season=<Season.SUMMER: 'summer'>), make_new_phase=False, phases_processed=4, final phase num is PhaseId(year=1904, season=<Season.FALL: 'fall'>)
+2026-09-20 16:36:21,401 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Summer 1904
+2026-09-20 16:38:21,751 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1904, season=<Season.SPRING: 'spring'>), make_new_phase=False, phases_processed=0, final phase num is PhaseId(year=1904, season=<Season.FALL: 'fall'>)
+2026-09-20 16:38:21,959 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Spring 1904
+2026-09-20 16:38:22,086 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1904, season=<Season.SUMMER: 'summer'>), make_new_phase=False, phases_processed=1, final phase num is PhaseId(year=1904, season=<Season.FALL: 'fall'>)
+2026-09-20 16:38:22,282 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Summer 1904
+2026-09-20 17:04:07,204 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1904, season=<Season.FALL: 'fall'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1904, season=<Season.FALL: 'fall'>)
+2026-09-20 17:04:07,420 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Fall 1904
+2026-09-20 17:04:11,046 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=1904, season=<Season.WINTER: 'winter'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=1904, season=<Season.WINTER: 'winter'>)
+2026-09-20 17:04:11,260 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game tmp8 phase Winter 1904

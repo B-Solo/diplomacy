@@ -1,6 +1,8 @@
 """Coordinator for complete user-initiated use cases."""
 
 from __future__ import annotations
+import logging
+from venv import logger
 
 from diplomacy_app.domain.errors import ApplicationError, MapLibraryError, RepositoryError
 from diplomacy_app.domain.models import (
@@ -47,6 +49,7 @@ from diplomacy_app.rendering import MapRenderer
 from diplomacy_app.rules_engine import StandardRulesEngine
 from diplomacy_app.visibility import VisibilityProjector
 
+logger = logging.getLogger(__name__)
 
 class ApplicationService:
     """The sole application API consumed by desktop widgets."""
@@ -159,14 +162,8 @@ class ApplicationService:
         self._perspective = perspective
         return self._session()
 
-    def _require_current(self) -> tuple[GameSnapshot, PhaseSnapshot]:
-        game, phase = self._require_game()
-        if phase.phase_id != game.current_phase:
-            raise RepositoryError("Historical phases are read-only")
-        return game, phase
-
     def update_orders(self, power_id, raw_text: str) -> PhaseSnapshot:
-        game, phase = self._require_current()
+        game, phase = self._require_game()
         fresh = self.repository.load_phase(game.game_id, phase.phase_id)
         submission = self.order_processor.prepare_submission(
             game.map_definition, fresh, power_id, raw_text
@@ -186,7 +183,7 @@ class ApplicationService:
         :return: Updated current-phase snapshot.
         :raises RepositoryError: If finalisation is disabled or the phase is historical.
         """
-        game, phase = self._require_current()
+        game, phase = self._require_game()
         if not game.settings.require_order_finalisation:
             raise RepositoryError("Order finalisation is not enabled for this game")
         fresh = self.repository.load_phase(game.game_id, phase.phase_id)
@@ -203,29 +200,50 @@ class ApplicationService:
         :param allow_unfinalised: Whether to proceed past an enabled finalisation warning.
         :return: Either the advanced session or powers still awaiting finalisation.
         """
-        game, phase = self._require_current()
-        fresh = self.repository.load_phase(game.game_id, phase.phase_id)
-        requirements = self.rules_engine.describe_phase(
-            game.map_definition,
-            fresh.phase_id,
-            fresh.resolution_state or fresh.state,
-        )
-        unfinalised = (
-            tuple(
-                power.id
-                for power in game.map_definition.powers
-                if requirements.by_power[power.id].requires_submission
-                and not (fresh.submissions.get(power.id) and fresh.submissions[power.id].is_final)
+        game, phase = self._require_game()
+        phase_num = game.phases.index(phase.phase_id)
+
+        # If the phase being resolved is the final phase, we need to add a new phase.
+        # If it isn't, we need to stop at that final phase.
+        make_new_phase = phase_num == len(game.phases) - 1
+        phases_processed = 0
+        while phase.phase_id != game.phases[-1] or make_new_phase:
+            logger.debug(f"Resolving phase {phase.phase_id}, make_new_phase={make_new_phase}, phases_processed={phases_processed}, final phase num is {game.phases[-1]}")
+            fresh = self.repository.load_phase(game.game_id, phase.phase_id)
+
+            # Check that we're not trying to progress a phase that doesn't have everyone's final orders
+            # if finalisation is required.
+            requirements = self.rules_engine.describe_phase(
+                game.map_definition,
+                fresh.phase_id,
+                fresh.resolution_state or fresh.state,
             )
-            if game.settings.require_order_finalisation
-            else ()
-        )
-        if unfinalised and not allow_unfinalised:
-            return FinalisationRequired(unfinalised)
-        proposal = self.rules_engine.adjudicate(game.map_definition, fresh)
-        committed = self.repository.commit_adjudication(game.game_id, proposal, fresh.revision)
-        self._game = committed
-        self._phase = self.repository.load_phase(committed.game_id, committed.current_phase)
+            unfinalised = (
+                tuple(
+                    power.id
+                    for power in game.map_definition.powers
+                    if requirements.by_power[power.id].requires_submission
+                    and not (fresh.submissions.get(power.id) and fresh.submissions[power.id].is_final)
+                )
+                if game.settings.require_order_finalisation
+                else ()
+            )
+            if unfinalised and not allow_unfinalised:
+                return FinalisationRequired(unfinalised)
+
+            # Adjudicate the current phase and commit the results
+            proposal = self.rules_engine.adjudicate(game.map_definition, fresh)
+            game = self.repository.commit_adjudication(game.game_id, proposal, fresh.revision)
+
+            # If we've come in here and make_new_phase was True, then we've made a new phase,
+            # so safely set it to False.
+            make_new_phase = False
+            phases_processed += 1
+            phase = self.repository.load_phase(game.game_id, game.phases[phase_num + phases_processed])
+
+        # Update the game in its final state, load the phase 1 after the one that was resolved.
+        self._game = game
+        self._phase = self.repository.load_phase(game.game_id, game.phases[phase_num + 1])
         return AdvancedPhase(self._session())
 
     def _projection(self, request: RenderRequest):

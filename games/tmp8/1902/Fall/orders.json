@@ -1,0 +1,473 @@
+{
+  "results": [
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "budapest"
+          },
+          "power": "austria",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "austria",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "vienna"
+          },
+          "power": "austria",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "austria",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "trieste"
+          },
+          "power": "austria",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "austria",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "edinburgh"
+          },
+          "power": "england",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "england",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "london"
+          },
+          "power": "england",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "england",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "liverpool"
+          },
+          "power": "england",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "england",
+      "source_line": null
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "portugal"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "mid-atlantic-ocean"
+          },
+          "power": "france",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "france",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "marseilles"
+          },
+          "power": "france",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "france",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "paris"
+          },
+          "power": "france",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "france",
+      "source_line": null
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "denmark"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "kiel"
+          },
+          "power": "germany",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "berlin"
+          },
+          "power": "germany",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "munich"
+          },
+          "power": "germany",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "naples"
+          },
+          "power": "italy",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "italy",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "rome"
+          },
+          "power": "italy",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "italy",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "venice"
+          },
+          "power": "italy",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "italy",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "moscow"
+          },
+          "power": "russia",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "sevastopol"
+          },
+          "power": "russia",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": "sc",
+            "territory": "st-petersburg"
+          },
+          "power": "russia",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "warsaw"
+          },
+          "power": "russia",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "ankara"
+          },
+          "power": "turkey",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "turkey",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "constantinople"
+          },
+          "power": "turkey",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "turkey",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "smyrna"
+          },
+          "power": "turkey",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "turkey",
+      "source_line": null
+    }
+  ],
+  "schema_version": 1,
+  "submissions": {
+    "france": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "F MID - Por",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "portugal"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "mid-atlantic-ocean"
+              },
+              "power": "france",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "F Mid - Por"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "portugal"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "mid-atlantic-ocean"
+                },
+                "power": "france",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "france",
+      "raw_text": "F Mid - Por"
+    },
+    "germany": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "F Kie - DEN",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "denmark"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "kiel"
+              },
+              "power": "germany",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "F Kie - Den"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "denmark"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "kiel"
+                },
+                "power": "germany",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "germany",
+      "raw_text": "F Kie - Den"
+    }
+  }
+}

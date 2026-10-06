@@ -28,6 +28,7 @@ from diplomacy_app.domain.models import (
     TerritoryKind,
     UnitRef,
     UnitType,
+    UnparseableOrder,
     VisibleTerritory,
     WaiveOrder,
 )
@@ -60,61 +61,129 @@ def _anchor(map_definition: MapDefinition, unit: UnitRef) -> Point:
     return map_definition.presentation.fleet_anchors[Location(unit.location.territory_id)]
 
 
-def _support_move_curve(
-    start: Point, move_start: Point, move_end: Point
+def _move_points(
+    map_definition: MapDefinition,
+    order: MoveOrder,
+    label_anchors: dict[object, Point],
+) -> tuple[Point, Point]:
+    start = _anchor(map_definition, order.unit)
+    destination_definition = next(
+        territory
+        for territory in map_definition.territories
+        if territory.id == order.destination.territory_id
+    )
+    if order.unit.unit_type is UnitType.ARMY:
+        end = map_definition.presentation.army_anchors[destination_definition.id]
+    else:
+        end = map_definition.presentation.fleet_anchors.get(
+            order.destination,
+            label_anchors[destination_definition.id],
+        )
+    return start, end
+
+
+def _support_move_curve_2(
+    support_start: Point, move_start: Point, move_end: Point
 ) -> tuple[Point, Point, Point]:
     """Calculate a support curve that merges into the supported move.
-
-    :param start: Anchor of the unit providing support.
-    :param move_start: Start of the supported move.
-    :param move_end: Destination of the supported move.
-    :return: Cubic control points and join point on the supported move.
+    Plan is:
+    1) Pick a point on the support line to start curving.
+    2) Pick a point of the move line that the support line would be aiming for if it was straight
+    3) Pick a point on the move line that the support line must have met by.
+    4) The desired result is then: Start Point->Point 1, QuadraticBezier(Point 1, Point 2, Point 3), Point 3->End Point
+    
     """
-    move_dx = move_end.x - move_start.x
-    move_dy = move_end.y - move_start.y
-    move_length = math.hypot(move_dx, move_dy)
-    if move_length == 0:
-        target = move_start
-        control = Point((start.x + target.x) / 2, (start.y + target.y) / 2)
-        return control, control, target
-    unit_x = move_dx / move_length
-    unit_y = move_dy / move_length
-    normal_x = -unit_y
-    normal_y = unit_x
-    relative_x = start.x - move_start.x
-    relative_y = start.y - move_start.y
-    projected_distance = relative_x * unit_x + relative_y * unit_y
-    side_distance = relative_x * normal_x + relative_y * normal_y
-    lead_distance = min(30, max(14, move_length * 0.12))
-    end_margin = min(22, move_length * 0.25)
-    join_distance = max(
-        move_length * 0.35,
-        min(
-            projected_distance + lead_distance,
-            move_length * 0.8,
-            move_length - end_margin,
+
+    # Aim for a point early down on the arrow (to give plenty of time to curve)
+    support_end = move_start + (move_end - move_start) * 0.1
+    curve_start = support_start + (support_end - support_start) * 0.4
+    curve_end = move_start + (move_end - move_start) * 0.75
+
+    # # @@@
+    # if move_start.x == move_end.x or support_start.x == support_end.x:
+    #     raise NotImplementedError("Support move curve not implemented for perfectly horizontal or vertical moves")
+
+    # # Find the theoretical meeting point. Solve the simultaneous equations!
+    # m_move = (move_start.y - move_end.y) / (move_start.x - move_end.x)
+    # m_support = (support_start.y - support_end.y) / (support_start.x - support_end.x)
+    # if m_move == m_support:
+    #     raise NotImplementedError("Support move curve not implemented for colinear support and move.")
+
+    # # This is a 'trust me bro I did the maths on my whiteboard'
+    # x_meet = (support_start.y - move_start.y + m_move * move_start.x - m_support * support_start.x) / (m_move - m_support)
+    # y_meet = m_move * (x_meet - move_start.x) + move_start.y
+
+    # curve_start = support_start + (support_end - support_start) * 0.3
+    # curve_end = move_start + (move_end - move_start) * 0.7
+
+    # return curve_start, Point(x_meet, y_meet), curve_end
+    return curve_start, support_end, curve_end
+
+def _move_line_and_arrow(start: Point, end: Point) -> tuple[tuple[Point, Point], tuple[Point, Point, Point]]:
+    """
+    Given a start and end of a move, give the start and end points of its line,
+    and the three points of its arrowhead.
+
+    The arrow tip must be the first point in its tuple.
+    """
+    angle = math.atan2(end.y - start.y, end.x - start.x)
+    move_length = math.hypot(end.x - start.x, end.y - start.y)
+    tip_inset = min(_MOVE_ARROW_TIP_INSET, max(0.0, move_length - 1.0))
+    arrow_tip = Point(
+        end.x - tip_inset * math.cos(angle),
+        end.y - tip_inset * math.sin(angle),
+    )
+    shaft_end = Point(
+        arrow_tip.x - 8.8 * math.cos(angle),
+        arrow_tip.y - 8.8 * math.sin(angle),
+    )
+
+    points = (
+        arrow_tip,
+        Point(
+            arrow_tip.x - 10 * math.cos(angle - 0.5),
+            arrow_tip.y - 10 * math.sin(angle - 0.5),
+        ),
+        Point(
+            arrow_tip.x - 10 * math.cos(angle + 0.5),
+            arrow_tip.y - 10 * math.sin(angle + 0.5),
         ),
     )
-    target = Point(
-        move_start.x + unit_x * join_distance,
-        move_start.y + unit_y * join_distance,
-    )
-    forward_distance = join_distance - projected_distance
-    curve_side = side_distance if abs(side_distance) >= 18 else (18 if side_distance >= 0 else -18)
-    first_control = Point(
-        start.x + unit_x * forward_distance * 0.35 - normal_x * curve_side * 0.25,
-        start.y + unit_y * forward_distance * 0.35 - normal_y * curve_side * 0.25,
-    )
-    final_handle = min(
-        48,
-        move_length * 0.32,
-        max(24, abs(side_distance) * 0.45),
-    )
-    second_control = Point(
-        target.x - unit_x * final_handle,
-        target.y - unit_y * final_handle,
-    )
-    return first_control, second_control, target
+
+    return ((start, shaft_end), points)
+
+def _convoy(convoy_start: Point, move_start: Point, move_end: Point) -> tuple[Point, list[Point]]:
+    """
+    The convoy curve moves a little off the fleet, and then just oscillates until
+    it hits the move line.
+
+    Returns the initial start point again (for consistency), then the list of
+    points that make up the curve, including the end point on the move line.
+    """
+
+    # Aim for the midpoint of the move arrow. Start just after the unit.
+    convoy_end = move_start + (move_end - move_start) * 0.6
+    curve_start = convoy_start + (convoy_end - convoy_start) * 0.1
+
+    # How much would you have to rotate a regular sine wave by to get it at
+    # the angle of the convoy line?
+    theta = math.atan2(convoy_end.y - curve_start.y, convoy_end.x - curve_start.x)
+
+    points = []
+    for index in range(41):
+        t = index / 40
+        p = curve_start + (convoy_end - curve_start) * t
+        # Oscillate up and down by a sine wave.
+        # Sine wave is just x = t, y = sin(t * freq) * amp
+        # Rotation sends x -> x cos(theta) - y sin(theta)
+        # y -> x sin(theta) + y cos(theta)
+        amp = 5
+        freq = 23
+        x = p.x + (t * math.cos(theta) - math.sin(t * freq) * amp) * math.sin(theta)
+        y = p.y + (t * math.sin(theta) + math.sin(t * freq) * amp) * math.cos(theta)
+        points.append(Point(x, y))
+
+    return convoy_start, points
 
 
 def _add_unit_symbol(
@@ -366,31 +435,13 @@ class MapRenderer:
                             marker.text = "R"
 
             hotspots: list[MapHotspot] = []
-            move_paths: dict[tuple[object, object], tuple[Point, Point]] = {}
             for projected_order in projected_state.orders:
                 order = projected_order.order
                 if isinstance(order, MoveOrder):
-                    start = _anchor(map_definition, order.unit)
-                    destination_definition = definitions[order.destination.territory_id]
-                    if order.unit.unit_type is UnitType.ARMY:
-                        end = map_definition.presentation.army_anchors[destination_definition.id]
-                    else:
-                        end = map_definition.presentation.fleet_anchors.get(
-                            order.destination,
-                            label_anchors[destination_definition.id],
-                        )
-                    move_paths[(order.unit.location, order.destination)] = (start, end)
-                    angle = math.atan2(end.y - start.y, end.x - start.x)
-                    move_length = math.hypot(end.x - start.x, end.y - start.y)
-                    tip_inset = min(_MOVE_ARROW_TIP_INSET, max(0.0, move_length - 1.0))
-                    arrow_tip = Point(
-                        end.x - tip_inset * math.cos(angle),
-                        end.y - tip_inset * math.sin(angle),
-                    )
-                    shaft_end = Point(
-                        arrow_tip.x - 8.8 * math.cos(angle),
-                        arrow_tip.y - 8.8 * math.sin(angle),
-                    )
+                    start, end = _move_points(map_definition, order, label_anchors)
+                    ((start, shaft_end), points) = _move_line_and_arrow(start, end)
+                    arrow_tip, _, _ = points
+
                     ElementTree.SubElement(
                         orders_layer,
                         _tag("line"),
@@ -404,17 +455,7 @@ class MapRenderer:
                             "stroke-linecap": "butt",
                         },
                     )
-                    points = [
-                        arrow_tip,
-                        Point(
-                            arrow_tip.x - 10 * math.cos(angle - 0.5),
-                            arrow_tip.y - 10 * math.sin(angle - 0.5),
-                        ),
-                        Point(
-                            arrow_tip.x - 10 * math.cos(angle + 0.5),
-                            arrow_tip.y - 10 * math.sin(angle + 0.5),
-                        ),
-                    ]
+
                     ElementTree.SubElement(
                         orders_layer,
                         _tag("polygon"),
@@ -430,7 +471,7 @@ class MapRenderer:
                     )
             for projected_order in projected_state.orders:
                 order = projected_order.order
-                if isinstance(order, HoldOrder):
+                if isinstance(order, HoldOrder) or isinstance(order, UnparseableOrder):
                     point = _anchor(map_definition, order.unit)
                     hold_offset = (
                         map_definition.presentation.army_hold_offset
@@ -449,7 +490,8 @@ class MapRenderer:
                             "stroke": "#22251f",
                             "stroke-width": str(HOLD_UNDERLINE_STROKE_WIDTH),
                             "stroke-linecap": "round",
-                            "stroke-dasharray": "5 4"
+                            # For invalid orders, they're a dashed hold
+                            "stroke-dasharray": "4 7"
                             if projected_order.is_valid is False
                             else "none",
                             "class": "hold-marker",
@@ -460,21 +502,24 @@ class MapRenderer:
                     start = _anchor(map_definition, order.unit)
                     target = _anchor(map_definition, order.supported_unit)
                     support_class = "support-hold"
-                    if (
-                        order.destination
-                        and (order.supported_unit.location, order.destination) in move_paths
-                    ):
-                        move_start, move_end = move_paths[
-                            (order.supported_unit.location, order.destination)
-                        ]
-                        first_control, second_control, target = _support_move_curve(
+
+                    # Destination is set for Supporting a Move.
+                    if order.destination:
+                        ## Work out where the move line would be.
+                        move_start, move_end = _move_points(map_definition, MoveOrder(order.supported_unit, order.destination), label_anchors)
+                        ((move_start, move_end), arrow_points) = _move_line_and_arrow(move_start, move_end)
+                        ## Work out where the support line goes.
+                        support_end, control, support_join = _support_move_curve_2(
                             start, move_start, move_end
                         )
                         path = (
-                            f"M {start.x} {start.y} C {first_control.x} {first_control.y} "
-                            f"{second_control.x} {second_control.y} {target.x} {target.y}"
+                            f"M {start.x} {start.y} L {support_end.x} {support_end.y} "
+                            f"Q {control.x} {control.y} {support_join.x} {support_join.y} "
+                            f"L {move_end.x} {move_end.y}"
                         )
                         support_class = "support-move"
+
+                    # Else support a hold.
                     else:
                         control = Point(
                             (start.x + target.x) / 2,
@@ -498,16 +543,17 @@ class MapRenderer:
                     )
                 elif isinstance(order, ConvoyOrder):
                     start = _anchor(map_definition, order.unit)
-                    target = _anchor(map_definition, order.convoyed_army)
+                    move_start, move_end = _move_points(map_definition, MoveOrder(order.convoyed_army, order.destination), label_anchors)
+                    start, points = _convoy(start, move_start, move_end)
                     ElementTree.SubElement(
                         orders_layer,
                         _tag("path"),
                         {
-                            "d": f"M {start.x} {start.y} Q {(start.x + target.x) / 2} {start.y - 18} {target.x} {target.y}",
+                            "d": f"M {start.x} {start.y} {' '.join(f'L {p.x} {p.y}' for p in points)}",
                             "fill": "none",
                             "stroke": "#263b4a",
                             "stroke-width": "2.5",
-                            "stroke-dasharray": "8 4 2 4",
+                            "stroke-dasharray": "2 2",
                         },
                     )
                 elif isinstance(order, (BuildOrder, DisbandOrder)):

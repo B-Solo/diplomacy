@@ -1,0 +1,5 @@
+2026-10-04 07:12:10,358 [INFO] __main__: Starting application...
+2026-10-04 07:18:02,430 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=2002, season=<Season.FALL: 'fall'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=2002, season=<Season.FALL: 'fall'>)
+2026-10-04 07:18:02,587 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game test7 phase Fall 2002
+2026-10-04 07:18:41,403 [DEBUG] diplomacy_app.application.service: Resolving phase PhaseId(year=2002, season=<Season.WINTER: 'winter'>), make_new_phase=True, phases_processed=0, final phase num is PhaseId(year=2002, season=<Season.WINTER: 'winter'>)
+2026-10-04 07:18:41,566 [INFO] diplomacy_app.game_repository.repository: Committed adjudication for game test7 phase Winter 2002

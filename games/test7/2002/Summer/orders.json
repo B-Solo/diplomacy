@@ -1,0 +1,77 @@
+{
+  "results": [
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "somerset"
+        },
+        "kind": "retreat",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "dorset"
+          },
+          "power": "bristol",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "bristol",
+      "source_line": 1
+    }
+  ],
+  "schema_version": 1,
+  "submissions": {
+    "bristol": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Dor R Som",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "somerset"
+            },
+            "kind": "retreat",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "dorset"
+              },
+              "power": "bristol",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Dor R Som"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "somerset"
+              },
+              "kind": "retreat",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "dorset"
+                },
+                "power": "bristol",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "bristol",
+      "raw_text": "A Dor R Som"
+    }
+  }
+}

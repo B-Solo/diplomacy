@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from PySide6.QtCore import QSettings, Qt, QTimer, Signal
-from PySide6.QtGui import QImage
+from PySide6.QtGui import QImage, QFont
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -44,6 +44,32 @@ _DEFAULT_IMAGE_EXPORT_SCALE = 2
 _LAST_IMAGE_DIRECTORY_KEY = "imageSharing/lastDirectory"
 
 
+class ToggleButton(QPushButton):
+    def __init__(self, obj_name: str,off_text: str, on_text: str, off_tooltip: str, on_tooltip: str, initially_on: bool = False, refresh_callback=None) -> None:
+        super().__init__()
+        self.setObjectName(obj_name)
+        self.setCheckable(True)
+        self._off_text = off_text
+        self._on_text = on_text
+        self._off_tooltip = off_tooltip
+        self._on_tooltip = on_tooltip
+        self._initially_on = initially_on
+        self._refresh_callback = refresh_callback
+
+        self.toggled.connect(self.toggle)
+
+        # Initialise
+        self.toggle(self._initially_on)
+
+
+    def toggle(self, checked: bool) -> None:
+        self.setText(self._on_text if checked else self._off_text)
+        self.setToolTip(self._on_tooltip if checked else self._off_tooltip)
+        font = self.font()
+        font.setWeight(QFont.Weight.DemiBold if checked else QFont.Weight.Normal)
+        self.setFont(font)
+        self._refresh_callback()
+
 class MapWorkspace(QWidget):
     perspective_requested = Signal(object)
     view_saved = Signal(object)
@@ -58,6 +84,12 @@ class MapWorkspace(QWidget):
         self._first_scene = True
         self._loaded_game_location = None
         self._applying_viewport = False
+        self.refresh_timer = QTimer(self)
+        self.refresh_timer.setSingleShot(True)
+        self.refresh_timer.setInterval(60)
+        self.refresh_timer.timeout.connect(self.refresh)
+
+
         outer = QVBoxLayout(self)
         outer.setContentsMargins(4, 3, 4, 3)
         outer.setSpacing(3)
@@ -69,33 +101,45 @@ class MapWorkspace(QWidget):
         self.perspective.currentIndexChanged.connect(self._perspective_changed)
         controls.addWidget(self.perspective_label)
         controls.addWidget(self.perspective)
-        self.mode = QComboBox()
-        self.mode.addItem("Position", DisplayMode.POSITION)
-        self.mode.addItem("Orders", DisplayMode.ORDERS)
-        self.mode.currentIndexChanged.connect(self._mode_changed)
-        controls.addWidget(self.mode)
-        self.successful_movements = QCheckBox("Successful movements only")
-        self.successful_movements.setToolTip(
-            "During Summer and Winter, hide movement orders that did not succeed"
+
+        self.preview_orders = ToggleButton(
+            obj_name="previewOrdersToggle",
+            off_text="Preview orders on map",
+            on_text="Show current state only",
+            off_tooltip="Show order arrows and markers over the current position without resolving the phase",
+            on_tooltip="Show only the current position, not any orders",
+            initially_on=False,
+            refresh_callback=self.schedule_refresh
         )
-        self.successful_movements.toggled.connect(self.schedule_refresh)
-        self.successful_movements.setVisible(False)
-        controls.addWidget(self.successful_movements)
-        self.preview_orders = QPushButton()
-        self.preview_orders.setObjectName("previewOrdersToggle")
-        self.preview_orders.setCheckable(True)
-        self.preview_orders.setToolTip(
-            "Show order arrows and markers over the current position without resolving the phase"
-        )
-        self.preview_orders.toggled.connect(self._preview_toggled)
-        self._update_preview_button(False)
-        self.labels = QComboBox()
-        self.labels.addItem("Display names", LabelMode.FULL_NAME)
-        self.labels.addItem("Three-letter codes", LabelMode.ABBREVIATION)
-        self.labels.currentIndexChanged.connect(self.schedule_refresh)
-        controls.addWidget(self.labels)
         controls.addWidget(self.preview_orders)
+
+        self.three_letter_codes = ToggleButton(
+            obj_name="threeLetterCodesToggle",
+            off_text="3 letter codes",
+            on_text="Full names",
+            off_tooltip="Show three-letter codes for territories",
+            on_tooltip="Display full territory names",
+            initially_on=False,
+            refresh_callback=self.schedule_refresh
+        )
+        controls.addWidget(self.three_letter_codes)
+
+        self.successful_movements = ToggleButton(
+            obj_name="successfulMovementsToggle",
+            off_text="All orders",
+            on_text="Successful moves",
+            off_tooltip="Show all orders, including non moves/those that failed",
+            on_tooltip="Hide any orders that aren't successful moves",
+            initially_on=False,
+            refresh_callback=self.schedule_refresh
+        )
+        controls.addWidget(self.successful_movements)
+
+
+
         controls.addStretch()
+
+        ## View panel on RHS
         controls.addWidget(QLabel("View"))
         self.views = QComboBox()
         self.views.setObjectName("savedViewSelector")
@@ -150,44 +194,6 @@ class MapWorkspace(QWidget):
         self.canvas.outcome_hovered.connect(self._outcome_hovered)
         self.canvas.resized.connect(self._position_overlays)
         self.canvas.viewport_changed.connect(self._viewport_changed)
-        self.refresh_timer = QTimer(self)
-        self.refresh_timer.setSingleShot(True)
-        self.refresh_timer.setInterval(60)
-        self.refresh_timer.timeout.connect(self.refresh)
-
-    def _update_preview_button(self, checked: bool) -> None:
-        """Update the order-preview toggle's label and accessible hint.
-
-        :param checked: Whether order graphics are currently shown on the map.
-        """
-        self.preview_orders.setText("Hide orders on map" if checked else "Preview orders on map")
-        self.preview_orders.setToolTip(
-            "Hide order arrows and markers from the current position"
-            if checked
-            else "Show order arrows and markers over the current position without resolving the phase"
-        )
-
-    def _mode_changed(self) -> None:
-        """Keep the order-preview toggle aligned with the selected map mode."""
-        show_orders = DisplayMode(self.mode.currentData()) == DisplayMode.ORDERS
-        if self.preview_orders.isChecked() != show_orders:
-            self.preview_orders.blockSignals(True)
-            self.preview_orders.setChecked(show_orders)
-            self.preview_orders.blockSignals(False)
-            self._update_preview_button(show_orders)
-        self.schedule_refresh()
-
-    def _preview_toggled(self, checked: bool) -> None:
-        """Show or hide current-phase order graphics without changing game state.
-
-        :param checked: Whether the order graphics should be included in the map scene.
-        """
-        self._update_preview_button(checked)
-        index = self.mode.findData(DisplayMode.ORDERS if checked else DisplayMode.POSITION)
-        if self.mode.currentIndex() == index:
-            self.schedule_refresh()
-        else:
-            self.mode.setCurrentIndex(index)
 
     def _outcome_hovered(self, text: str) -> None:
         self.outcomes.setText(text)
@@ -213,9 +219,9 @@ class MapWorkspace(QWidget):
             self._loaded_game_location = session.game.location
             self.scene = None
             self._first_scene = True
-            self.labels.blockSignals(True)
-            self.labels.setCurrentIndex(self.labels.findData(LabelMode.FULL_NAME))
-            self.labels.blockSignals(False)
+            self.three_letter_codes.blockSignals(True)
+            self.three_letter_codes.setChecked(False)
+            self.three_letter_codes.blockSignals(False)
         fog = session.game.settings.visibility_policy.enabled
         self.perspective_label.setVisible(fog)
         self.perspective.setVisible(fog)
@@ -293,12 +299,13 @@ class MapWorkspace(QWidget):
             size = PixelSize(
                 max(1, self.canvas.viewport().width()), max(1, self.canvas.viewport().height())
             )
+        # The success-only is only applicable in summer/winter
         return RenderRequest(
-            DisplayMode(self.mode.currentData()),
-            LabelMode(self.labels.currentData()),
+            DisplayMode.ORDERS if self.preview_orders.isChecked() else DisplayMode.POSITION,
+            LabelMode.ABBREVIATION if self.three_letter_codes.isChecked() else LabelMode.FULL_NAME,
             bounds,
             size,
-            self.successful_movements.isChecked(),
+            self.successful_movements.isChecked() and self.session.phase and self.session.phase.phase_id.season in {Season.SUMMER, Season.WINTER},
         )
 
     def refresh(self) -> None:

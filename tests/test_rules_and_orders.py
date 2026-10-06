@@ -15,9 +15,11 @@ from diplomacy_app.domain.models import (
     UnitPosition,
     UnitType,
 )
+from diplomacy_app.domain.models import DislodgedUnit
 from diplomacy_app.order_processing import OrderProcessor
 from diplomacy_app.rules_engine import StandardRulesEngine
 from diplomacy_app.rules_engine.map_adapter import engine_map_path
+from diplomacy_app.rules_engine.state_adapter import make_game, state_from_game
 
 
 def empty_phase(england):
@@ -35,6 +37,29 @@ def empty_phase(england):
 def test_generated_engine_map_is_valid(england):
     engine_map = Map(str(engine_map_path(england)))
     assert engine_map.error == []
+
+
+def test_dislodged_unit_does_not_clear_occupier_control(england):
+    london = next(power.id for power in england.powers if power.id == "london")
+    bristol = next(power.id for power in england.powers if power.id == "bristol")
+    controllers = dict(england.default_starting_setup.state.territory_controllers)
+    owners = dict(england.default_starting_setup.state.supply_centre_owners)
+    controllers["dorset"] = london
+    state = GameState(
+        units=(UnitPosition(london, UnitType.ARMY, Location("dorset")),),
+        dislodged_units=(
+            DislodgedUnit(
+                UnitPosition(bristol, UnitType.ARMY, Location("dorset")),
+                (Location("somerset"),),
+            ),
+        ),
+        territory_controllers=MappingProxyType(controllers),
+        supply_centre_owners=MappingProxyType(owners),
+    )
+
+    restored = state_from_game(england, make_game(england, PhaseId(2002, Season.SUMMER), state))
+
+    assert restored.territory_controllers["dorset"] == london
 
 
 def test_parser_accepts_names_abbreviations_and_reports_duplicates(england):

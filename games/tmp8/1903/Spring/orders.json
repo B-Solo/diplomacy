@@ -1,0 +1,466 @@
+{
+  "results": [
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "budapest"
+          },
+          "power": "austria",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "austria",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "vienna"
+          },
+          "power": "austria",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "austria",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "trieste"
+          },
+          "power": "austria",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "austria",
+      "source_line": null
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "north-sea"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "london"
+          },
+          "power": "england",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "england",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "yorkshire"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "liverpool"
+          },
+          "power": "england",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "england",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "edinburgh"
+          },
+          "power": "england",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "england",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "marseilles"
+          },
+          "power": "france",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "france",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "paris"
+          },
+          "power": "france",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "france",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "portugal"
+          },
+          "power": "france",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "france",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "berlin"
+          },
+          "power": "germany",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "munich"
+          },
+          "power": "germany",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "denmark"
+          },
+          "power": "germany",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "naples"
+          },
+          "power": "italy",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "italy",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "rome"
+          },
+          "power": "italy",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "italy",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "venice"
+          },
+          "power": "italy",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "italy",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "moscow"
+          },
+          "power": "russia",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "sevastopol"
+          },
+          "power": "russia",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": "sc",
+            "territory": "st-petersburg"
+          },
+          "power": "russia",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "warsaw"
+          },
+          "power": "russia",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "ankara"
+          },
+          "power": "turkey",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "turkey",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "constantinople"
+          },
+          "power": "turkey",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "turkey",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "smyrna"
+          },
+          "power": "turkey",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "turkey",
+      "source_line": null
+    }
+  ],
+  "schema_version": 1,
+  "submissions": {
+    "england": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "F LON - NTH",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "north-sea"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "london"
+              },
+              "power": "england",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "F Lon - NTH"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "north-sea"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "london"
+                },
+                "power": "england",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "A Lvp - YOR",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "yorkshire"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "liverpool"
+              },
+              "power": "england",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "A LVP - Yor"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "yorkshire"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "liverpool"
+                },
+                "power": "england",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        }
+      ],
+      "power": "england",
+      "raw_text": "F Lon - NTH\nA LVP - Yor"
+    }
+  }
+}

@@ -80,7 +80,7 @@ def compile_engine_map(map_definition: MapDefinition) -> str:
         for origin in locations:
             destination_locations = sorted(
                 {edge.destination for edge in map_definition.adjacencies if edge.origin == origin},
-                key=lambda item: (item.territory_id, item.coast_id or ""),
+                key=lambda item: (item.territory_id, item.coast_id is None, item.coast_id or ""),
             )
             if origin.coast_id is None and territory.split_coast_ids:
                 coast_destinations = {
@@ -92,30 +92,19 @@ def compile_engine_map(map_definition: MapDefinition) -> str:
                 }
                 destination_locations = sorted(
                     set(destination_locations) | coast_destinations,
-                    key=lambda item: (item.territory_id, item.coast_id or ""),
+                    key=lambda item: (item.territory_id, item.coast_id is None, item.coast_id or ""),
                 )
-            army_here = any(
-                edge.origin == origin and edge.unit_type is UnitType.ARMY
-                for edge in map_definition.adjacencies
-            ) or (origin.coast_id is None and territory.kind is TerritoryKind.LAND)
             fleet_here = any(
                 edge.origin == origin and edge.unit_type is UnitType.FLEET
                 for edge in map_definition.adjacencies
             )
             if territory.kind is TerritoryKind.SEA:
                 terrain = "WATER"
-            elif (
-                fleet_here
-                and origin.coast_id is not None
-                or fleet_here
-                and not territory.split_coast_ids
-            ):
+            elif fleet_here or territory.split_coast_ids:
                 terrain = "COAST"
             else:
                 terrain = "LAND"
             origin_abbreviation = _abbr(map_definition, origin)
-            if origin.coast_id is None and territory.split_coast_ids:
-                origin_abbreviation = origin_abbreviation.lower()
             abuts: list[str] = []
             for destination in destination_locations:
                 army = (origin, destination, UnitType.ARMY) in edge_lookup
@@ -129,16 +118,8 @@ def compile_engine_map(map_definition: MapDefinition) -> str:
                         for edge in map_definition.adjacencies
                     )
                 token = _abbr(map_definition, destination)
-                destination_territory = by_id[destination.territory_id]
                 if army and not fleet and (fleet_here or destination.territory_id in fleet_capable):
                     token = token.lower()
-                elif (
-                    fleet
-                    and not army
-                    and army_here
-                    and destination_territory.kind is TerritoryKind.LAND
-                ):
-                    token = token[:1].upper() + token[1:].lower()
                 abuts.append(token)
             lines.append(f"{terrain:8} {origin_abbreviation:8} ABUTS {' '.join(abuts)}")
     lines.append("")

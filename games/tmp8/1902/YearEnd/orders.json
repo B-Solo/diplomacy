@@ -1,0 +1,24 @@
+{
+  "results": [
+    {
+      "order": {
+        "kind": "waive",
+        "power": "france"
+      },
+      "outcomes": [],
+      "power": "france",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "waive",
+        "power": "germany"
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": null
+    }
+  ],
+  "schema_version": 1,
+  "submissions": {}
+}

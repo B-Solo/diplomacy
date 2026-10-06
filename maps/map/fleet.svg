@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 24" width="52" height="18" role="img" color="#697474">
+  <title>Fleet</title>
+  <g fill="currentColor" stroke="#293333" stroke-width="1.7" stroke-linejoin="round">
+    <path d="M2.5 14h55l11-5 1.5 2-6.5 7.5q-1.8 2-5.5 2H11q-5 0-7-3z"/>
+    <path d="M13 14v-4h10l3-4.5h11l3 4.5h12v4z"/>
+    <path d="M28 5.5V2h4.5v3.5zM35 5.5V3h4v4z"/>
+    <path d="M8 14v-3h9v3zM51 14v-3h7l5-2v3l-5 2z"/>
+  </g>
+  <path d="M8 17h55M30.2 2V.8" fill="none" stroke="#293333" stroke-width="1.4" stroke-linecap="round"/>
+</svg>

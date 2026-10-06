@@ -44,6 +44,7 @@ from diplomacy_app.domain.models import (
     UnitPosition,
     UnitRef,
     UnitType,
+    UnparseableOrder,
     WaiveOrder,
 )
 from diplomacy_app.presentation import (
@@ -124,6 +125,8 @@ def order_data(value: CanonicalOrder) -> dict[str, Any]:
         return {"kind": "disband", "unit": unit_ref_data(value.unit)}
     if isinstance(value, WaiveOrder):
         return {"kind": "waive", "power": value.power_id}
+    if isinstance(value, UnparseableOrder):
+        return {"kind": "unparseable", "unit": unit_ref_data(value.unit)}
     raise TypeError(f"Unsupported order value: {type(value).__name__}")
 
 
@@ -162,6 +165,8 @@ def order_from_data(value: Any) -> CanonicalOrder:
         return DisbandOrder(unit_ref_from_data(value["unit"]))
     if kind == "waive":
         return WaiveOrder(PowerId(str(value["power"])))
+    if kind == "unparseable":
+        return UnparseableOrder(unit_ref_from_data(value["unit"]))
     raise InvalidStoredData(f"Unknown order kind: {kind}")
 
 

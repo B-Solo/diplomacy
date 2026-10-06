@@ -1161,12 +1161,13 @@ territories:
     split_coasts:
       north:
         fleet_anchor:
-        - 334.63
-        - 750.75
+        - 327.93
+        - 752.42
         add_connections:
         - s-bristol-channel
         - avon-estuary
         - cornwall
+        - somerset
         label_anchor:
         - 304.05
         - 780.83

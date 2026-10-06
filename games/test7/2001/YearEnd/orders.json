@@ -1,0 +1,187 @@
+{
+  "results": [
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "durham"
+          },
+          "power": "up-north",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "up-north",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "london"
+          },
+          "power": "london",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "london",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "s-lincolnshire"
+          },
+          "power": "east-anglia",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "east-anglia",
+      "source_line": 1
+    }
+  ],
+  "schema_version": 1,
+  "submissions": {
+    "east-anglia": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Sli B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "s-lincolnshire"
+              },
+              "power": "east-anglia",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Sli B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "s-lincolnshire"
+                },
+                "power": "east-anglia",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "east-anglia",
+      "raw_text": "A Sli B"
+    },
+    "london": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Lon B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "london"
+              },
+              "power": "london",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Lon B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "london"
+                },
+                "power": "london",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "london",
+      "raw_text": "A Lon B"
+    },
+    "up-north": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Dur B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "durham"
+              },
+              "power": "up-north",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Dur B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "durham"
+                },
+                "power": "up-north",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "up-north",
+      "raw_text": "A Dur B"
+    }
+  }
+}

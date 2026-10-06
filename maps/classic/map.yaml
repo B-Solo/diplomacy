@@ -10,7 +10,7 @@ start:
 teams:
   austria:
     name: Austria
-    colour: '#9f4c56'
+    colour: '#b16a6f'
     home_supply_centres:
     - budapest
     - trieste
@@ -35,20 +35,20 @@ teams:
       location: trieste
   england:
     name: England
-    colour: '#3d6698'
+    colour: '#4d76a8'
     home_supply_centres:
     - edinburgh
     - liverpool
     - london
     starting_supply_centres:
     - edinburgh
-    - london
     - liverpool
+    - london
     starting_territories:
     - clyde
     - edinburgh
-    - london
     - liverpool
+    - london
     - wales
     - yorkshire
     initial_units:
@@ -60,7 +60,7 @@ teams:
       location: liverpool
   france:
     name: France
-    colour: '#6dbfb8'
+    colour: '#86a0a8'
     home_supply_centres:
     - brest
     - marseilles
@@ -85,7 +85,7 @@ teams:
       location: paris
   germany:
     name: Germany
-    colour: '#777777'
+    colour: '#555555'
     home_supply_centres:
     - berlin
     - kiel
@@ -110,11 +110,11 @@ teams:
       location: munich
   italy:
     name: Italy
-    colour: '#55915d'
+    colour: '#6e765f'
     home_supply_centres:
-    - apulia
     - naples
     - rome
+    - venice
     starting_supply_centres:
     - naples
     - rome
@@ -135,7 +135,7 @@ teams:
       location: venice
   russia:
     name: Russia
-    colour: '#dddddd'
+    colour: '#f8eeee'
     home_supply_centres:
     - moscow
     - sevastopol
@@ -147,6 +147,7 @@ teams:
     - st-petersburg
     - warsaw
     starting_territories:
+    - finland
     - livonia
     - moscow
     - sevastopol
@@ -164,7 +165,7 @@ teams:
       location: warsaw
   turkey:
     name: Turkey
-    colour: '#ba9a6d'
+    colour: '#c28b3c'
     home_supply_centres:
     - ankara
     - constantinople
@@ -198,11 +199,28 @@ territories:
       - 763.4
       - 1062.8
       abbreviation:
-      - 763.4
-      - 1062.8
+      - 758.16
+      - 1069.09
       fleet:
-      - 763.4
-      - 1071.8
+      - 762.89
+      - 1084.61
+    connection_overrides:
+      add:
+      - to: albania
+        units:
+        - fleet
+      - to: apulia
+        units:
+        - fleet
+      - to: ionian-sea
+        units:
+        - fleet
+      - to: trieste
+        units:
+        - fleet
+      - to: venice
+        units:
+        - fleet
   aegean-sea:
     name: Aegean Sea
     abbreviation: AEG
@@ -214,14 +232,31 @@ territories:
       - 1045.5
       - 1222.1
       abbreviation:
-      - 1045.5
-      - 1222.1
+      - 1035.44
+      - 1237.19
       fleet:
       - 1045.5
       - 1231.1
+    connection_overrides:
+      add:
+      - to: constantinople
+        units:
+        - fleet
+      - to: eastern-mediterranean
+        units:
+        - fleet
+      - to: greece
+        units:
+        - fleet
+      - to: ionian-sea
+        units:
+        - fleet
+      - to: smyrna
+        units:
+        - fleet
   albania:
     name: Albania
-    abbreviation: ALB
+    abbreviation: Alb
     kind: land
     svg_element: territory-albania
     supply_centre: false
@@ -238,9 +273,29 @@ territories:
       fleet:
       - 878.5
       - 1134.8
+    connection_overrides:
+      add:
+      - to: adriatic-sea
+        units:
+        - fleet
+      - to: greece
+        units:
+        - army
+        - fleet
+      - to: ionian-sea
+        units:
+        - fleet
+      - to: serbia
+        units:
+        - army
+      - to: trieste
+        units:
+        - army
+        - fleet
+    display_name: Albania
   ankara:
     name: Ankara
-    abbreviation: ANK
+    abbreviation: Ank
     kind: land
     svg_element: territory-ankara
     supply_centre: true
@@ -258,11 +313,28 @@ territories:
       - 1266.8
       - 1108.6
       supply_centre:
-      - 1266.8
-      - 1099.6
+      - 1264.28
+      - 1117.71
+    connection_overrides:
+      add:
+      - to: armenia
+        units:
+        - army
+        - fleet
+      - to: black-sea
+        units:
+        - fleet
+      - to: constantinople
+        units:
+        - army
+        - fleet
+      - to: smyrna
+        units:
+        - army
+    display_name: Ankara
   apulia:
     name: Apulia
-    abbreviation: APU
+    abbreviation: Apu
     kind: land
     svg_element: territory-apulia
     supply_centre: false
@@ -271,14 +343,34 @@ territories:
       - 758.3
       - 1123.9
       abbreviation:
-      - 758.3
-      - 1123.9
+      - 752.36
+      - 1120.06
       army:
-      - 758.3
-      - 1134.9
+      - 797.43
+      - 1138.53
       fleet:
       - 758.3
       - 1132.9
+    connection_overrides:
+      add:
+      - to: adriatic-sea
+        units:
+        - fleet
+      - to: ionian-sea
+        units:
+        - fleet
+      - to: naples
+        units:
+        - army
+        - fleet
+      - to: rome
+        units:
+        - army
+      - to: venice
+        units:
+        - army
+        - fleet
+    display_name: Apulia
   armenia:
     name: Armenia
     abbreviation: ARM
@@ -298,6 +390,25 @@ territories:
       fleet:
       - 1436.6
       - 1103.3
+    connection_overrides:
+      add:
+      - to: ankara
+        units:
+        - army
+        - fleet
+      - to: black-sea
+        units:
+        - fleet
+      - to: sevastopol
+        units:
+        - army
+        - fleet
+      - to: smyrna
+        units:
+        - army
+      - to: syria
+        units:
+        - army
   baltic-sea:
     name: Baltic Sea
     abbreviation: BAL
@@ -314,6 +425,29 @@ territories:
       fleet:
       - 818.2
       - 598.8
+    connection_overrides:
+      add:
+      - to: berlin
+        units:
+        - fleet
+      - to: gulf-of-bothnia
+        units:
+        - fleet
+      - to: denmark
+        units:
+        - fleet
+      - to: livonia
+        units:
+        - fleet
+      - to: kiel
+        units:
+        - fleet
+      - to: prussia
+        units:
+        - fleet
+      - to: sweden
+        units:
+        - fleet
   barents-sea:
     name: Barents Sea
     abbreviation: BAR
@@ -330,9 +464,17 @@ territories:
       fleet:
       - 1132.0
       - 148.6
+    connection_overrides:
+      add:
+      - to: norway
+        units:
+        - fleet
+      - to: norwegian-sea
+        units:
+        - fleet
   belgium:
     name: Belgium
-    abbreviation: BEL
+    abbreviation: Bel
     kind: land
     svg_element: territory-belgium
     supply_centre: true
@@ -341,20 +483,43 @@ territories:
       - 520.1
       - 779.6
       abbreviation:
-      - 520.1
-      - 779.6
+      - 531.84
+      - 773.31
       army:
-      - 520.1
-      - 790.6
+      - 503.33
+      - 761.25
       fleet:
       - 520.1
       - 788.6
       supply_centre:
-      - 520.1
-      - 779.6
+      - 532.68
+      - 787.57
+    connection_overrides:
+      add:
+      - to: burgundy
+        units:
+        - army
+      - to: english-channel
+        units:
+        - fleet
+      - to: holland
+        units:
+        - army
+        - fleet
+      - to: north-sea
+        units:
+        - fleet
+      - to: picardy
+        units:
+        - army
+        - fleet
+      - to: ruhr
+        units:
+        - army
+    display_name: Belgium
   berlin:
     name: Berlin
-    abbreviation: BER
+    abbreviation: Ber
     kind: land
     svg_element: territory-berlin
     supply_centre: true
@@ -372,8 +537,28 @@ territories:
       - 701.1
       - 729.6
       supply_centre:
-      - 701.1
-      - 720.6
+      - 699.0
+      - 736.53
+    connection_overrides:
+      add:
+      - to: baltic-sea
+        units:
+        - fleet
+      - to: kiel
+        units:
+        - army
+        - fleet
+      - to: munich
+        units:
+        - army
+      - to: prussia
+        units:
+        - army
+        - fleet
+      - to: silesia
+        units:
+        - army
+    display_name: Berlin
   black-sea:
     name: Black Sea
     abbreviation: BLA
@@ -385,14 +570,31 @@ territories:
       - 1316.3
       - 961.8
       abbreviation:
-      - 1316.3
-      - 961.8
+      - 1292.15
+      - 988.97
       fleet:
       - 1316.3
       - 970.8
+    connection_overrides:
+      add:
+      - to: ankara
+        units:
+        - fleet
+      - to: armenia
+        units:
+        - fleet
+      - to: constantinople
+        units:
+        - fleet
+      - to: rumania
+        units:
+        - fleet
+      - to: sevastopol
+        units:
+        - fleet
   bohemia:
     name: Bohemia
-    abbreviation: BOH
+    abbreviation: Boh
     kind: land
     svg_element: territory-bohemia
     supply_centre: false
@@ -406,6 +608,24 @@ territories:
       army:
       - 749.0
       - 846.9
+    connection_overrides:
+      add:
+      - to: galicia
+        units:
+        - army
+      - to: munich
+        units:
+        - army
+      - to: silesia
+        units:
+        - army
+      - to: tyrolia
+        units:
+        - army
+      - to: vienna
+        units:
+        - army
+    display_name: Bohemia
   gulf-of-bothnia:
     name: Gulf of Bothnia
     abbreviation: BOT
@@ -422,9 +642,23 @@ territories:
       fleet:
       - 828.1
       - 415.0
+    connection_overrides:
+      add:
+      - to: baltic-sea
+        units:
+        - fleet
+      - to: finland
+        units:
+        - fleet
+      - to: livonia
+        units:
+        - fleet
+      - to: sweden
+        units:
+        - fleet
   brest:
     name: Brest
-    abbreviation: BRE
+    abbreviation: Bre
     kind: land
     svg_element: territory-brest
     supply_centre: true
@@ -434,83 +668,147 @@ territories:
       - 836.2
       abbreviation:
       - 344.6
-      - 836.2
+      - 832.68
       army:
-      - 344.6
-      - 847.2
+      - 355.16
+      - 865.31
       fleet:
       - 344.6
       - 845.2
       supply_centre:
-      - 344.6
-      - 836.2
+      - 345.1
+      - 846.26
+    connection_overrides:
+      add:
+      - to: english-channel
+        units:
+        - fleet
+      - to: gascony
+        units:
+        - army
+        - fleet
+      - to: mid-atlantic-ocean
+        units:
+        - fleet
+      - to: paris
+        units:
+        - army
+      - to: picardy
+        units:
+        - army
+        - fleet
+    display_name: Brest
   budapest:
     name: Budapest
-    abbreviation: BUD
+    abbreviation: Bud
     kind: land
     svg_element: territory-budapest
     supply_centre: true
     anchors:
       label:
-      - 925.8
-      - 903.97
+      - 926.1
+      - 918.3
       abbreviation:
-      - 926.1
-      - 918.3
+      - 918.13
+      - 931.72
       army:
-      - 908.48
-      - 939.45
+      - 960.9
+      - 930.14
       supply_centre:
-      - 926.1
-      - 918.3
+      - 917.72
+      - 945.55
+    connection_overrides:
+      add:
+      - to: galicia
+        units:
+        - army
+      - to: rumania
+        units:
+        - army
+      - to: serbia
+        units:
+        - army
+      - to: trieste
+        units:
+        - army
+      - to: vienna
+        units:
+        - army
+    display_name: Budapest
   bulgaria:
     name: Bulgaria
-    abbreviation: BUL
+    abbreviation: Bul
     kind: land
     svg_element: territory-bulgaria
     supply_centre: true
     anchors:
       label:
-      - 1009.66
-      - 1055.8
+      - 1009.3
+      - 1068.7
       abbreviation:
       - 1009.3
       - 1068.7
       army:
-      - 1011.81
-      - 1085.79
+      - 979.11
+      - 1061.59
       fleet:
       - 1009.3
       - 1077.7
       supply_centre:
-      - 1009.3
-      - 1068.7
+      - 1008.88
+      - 1087.15
     split_coasts:
       ec:
         fleet_anchor:
         - 1030.0
         - 1050.0
         label_anchor:
-        - 1066.17
-        - 1042.37
-        label_rotation: -90
+        - 1058.9
+        - 1046.22
+        label_rotation: 0
         add_connections:
         - black-sea
         - constantinople
+        - rumania
       sc:
         fleet_anchor:
         - 1004.0
         - 1110.0
         label_anchor:
-        - 1005.79
-        - 1116.48
+        - 1004.84
+        - 1116.45
         label_rotation: 0
         add_connections:
         - aegean-sea
         - constantinople
+        - greece
+    connection_overrides:
+      add:
+      - to: aegean-sea
+        units:
+        - fleet
+      - to: black-sea
+        units:
+        - fleet
+      - to: constantinople
+        units:
+        - army
+        - fleet
+      - to: greece
+        units:
+        - army
+        - fleet
+      - to: rumania
+        units:
+        - army
+        - fleet
+      - to: serbia
+        units:
+        - army
+    display_name: Bulgaria
   burgundy:
     name: Burgundy
-    abbreviation: BUR
+    abbreviation: Bur
     kind: land
     svg_element: territory-burgundy
     supply_centre: false
@@ -524,9 +822,33 @@ territories:
       army:
       - 511.4
       - 899.4
+    connection_overrides:
+      add:
+      - to: belgium
+        units:
+        - army
+      - to: gascony
+        units:
+        - army
+      - to: ruhr
+        units:
+        - army
+      - to: marseilles
+        units:
+        - army
+      - to: munich
+        units:
+        - army
+      - to: paris
+        units:
+        - army
+      - to: picardy
+        units:
+        - army
+    display_name: Burgundy
   clyde:
     name: Clyde
-    abbreviation: CLY
+    abbreviation: Cly
     kind: land
     svg_element: territory-clyde
     supply_centre: false
@@ -538,14 +860,31 @@ territories:
       - 363.7
       - 522.4
       army:
-      - 365.08
-      - 567.27
+      - 363.7
+      - 533.4
       fleet:
       - 363.7
       - 531.4
+    connection_overrides:
+      add:
+      - to: edinburgh
+        units:
+        - army
+        - fleet
+      - to: liverpool
+        units:
+        - army
+        - fleet
+      - to: north-atlantic-ocean
+        units:
+        - fleet
+      - to: norwegian-sea
+        units:
+        - fleet
+    display_name: Clyde
   constantinople:
     name: Constantinople
-    abbreviation: CON
+    abbreviation: Con
     kind: land
     svg_element: territory-constantinople
     supply_centre: true
@@ -564,7 +903,24 @@ territories:
       - 1147.1
       supply_centre:
       - 1121.6
-      - 1138.1
+      - 1152.69
+    connection_overrides:
+      add:
+      - to: aegean-sea
+        units:
+        - fleet
+      - to: black-sea
+        units:
+        - fleet
+      - to: ankara
+        units:
+        - army
+        - fleet
+      - to: smyrna
+        units:
+        - army
+        - fleet
+    display_name: Constantinople
   denmark:
     name: Denmark
     abbreviation: DEN
@@ -587,6 +943,28 @@ territories:
       supply_centre:
       - 637.2
       - 579.6
+    connection_overrides:
+      add:
+      - to: baltic-sea
+        units:
+        - fleet
+      - to: helgoland-bight
+        units:
+        - fleet
+      - to: kiel
+        units:
+        - army
+        - fleet
+      - to: north-sea
+        units:
+        - fleet
+      - to: skagerrak
+        units:
+        - fleet
+      - to: sweden
+        units:
+        - army
+        - fleet
   eastern-mediterranean:
     name: Eastern Mediterranean
     abbreviation: EAS
@@ -603,28 +981,62 @@ territories:
       fleet:
       - 1192.9
       - 1289.8
+    connection_overrides:
+      add:
+      - to: aegean-sea
+        units:
+        - fleet
+      - to: ionian-sea
+        units:
+        - fleet
+      - to: smyrna
+        units:
+        - fleet
+      - to: syria
+        units:
+        - fleet
   edinburgh:
     name: Edinburgh
-    abbreviation: EDI
+    abbreviation: Edi
     kind: land
     svg_element: territory-edinburgh
     supply_centre: true
     anchors:
       label:
-      - 406.32
-      - 511.14
-      abbreviation:
       - 389.9
       - 545.7
+      abbreviation:
+      - 405.83
+      - 515.51
       army:
-      - 398.19
-      - 520.93
+      - 389.9
+      - 556.7
       fleet:
       - 389.9
       - 554.7
       supply_centre:
-      - 404.93
-      - 583.37
+      - 401.22
+      - 529.35
+    connection_overrides:
+      add:
+      - to: clyde
+        units:
+        - army
+        - fleet
+      - to: liverpool
+        units:
+        - army
+      - to: north-sea
+        units:
+        - fleet
+      - to: norwegian-sea
+        units:
+        - fleet
+      - to: yorkshire
+        units:
+        - army
+        - fleet
+    display_name: Edinburgh
   english-channel:
     name: English Channel
     abbreviation: ENG
@@ -641,6 +1053,32 @@ territories:
       fleet:
       - 291.2
       - 785.6
+    connection_overrides:
+      add:
+      - to: belgium
+        units:
+        - fleet
+      - to: brest
+        units:
+        - fleet
+      - to: irish-sea
+        units:
+        - fleet
+      - to: london
+        units:
+        - fleet
+      - to: mid-atlantic-ocean
+        units:
+        - fleet
+      - to: north-sea
+        units:
+        - fleet
+      - to: picardy
+        units:
+        - fleet
+      - to: wales
+        units:
+        - fleet
   finland:
     name: Finland
     abbreviation: FIN
@@ -660,9 +1098,21 @@ territories:
       fleet:
       - 946.2
       - 286.8
+    connection_overrides:
+      add:
+      - to: gulf-of-bothnia
+        units:
+        - fleet
+      - to: norway
+        units:
+        - army
+      - to: sweden
+        units:
+        - army
+        - fleet
   galicia:
     name: Galicia
-    abbreviation: GAL
+    abbreviation: Gal
     kind: land
     svg_element: territory-galicia
     supply_centre: false
@@ -674,11 +1124,35 @@ territories:
       - 957.9
       - 838.8
       army:
-      - 931.69
-      - 814.66
+      - 978.86
+      - 841.0
+    connection_overrides:
+      add:
+      - to: bohemia
+        units:
+        - army
+      - to: budapest
+        units:
+        - army
+      - to: rumania
+        units:
+        - army
+      - to: silesia
+        units:
+        - army
+      - to: ukraine
+        units:
+        - army
+      - to: vienna
+        units:
+        - army
+      - to: warsaw
+        units:
+        - army
+    display_name: Galicia
   gascony:
     name: Gascony
-    abbreviation: GAS
+    abbreviation: Gas
     kind: land
     svg_element: territory-gascony
     supply_centre: false
@@ -695,6 +1169,25 @@ territories:
       fleet:
       - 383.6
       - 968.6
+    connection_overrides:
+      add:
+      - to: burgundy
+        units:
+        - army
+      - to: brest
+        units:
+        - army
+        - fleet
+      - to: mid-atlantic-ocean
+        units:
+        - fleet
+      - to: marseilles
+        units:
+        - army
+      - to: paris
+        units:
+        - army
+    display_name: Gascony
   gulf-of-lyon:
     name: Gulf of Lyon
     abbreviation: GOL
@@ -711,9 +1204,26 @@ territories:
       fleet:
       - 488.1
       - 1096.5
+    connection_overrides:
+      add:
+      - to: marseilles
+        units:
+        - fleet
+      - to: piedmont
+        units:
+        - fleet
+      - to: tuscany
+        units:
+        - fleet
+      - to: tyrrhenian-sea
+        units:
+        - fleet
+      - to: western-mediterranean
+        units:
+        - fleet
   greece:
     name: Greece
-    abbreviation: GRE
+    abbreviation: Gre
     kind: land
     svg_element: territory-greece
     supply_centre: true
@@ -722,17 +1232,33 @@ territories:
       - 933.3
       - 1200.8
       abbreviation:
-      - 933.3
-      - 1200.8
+      - 928.27
+      - 1150.99
       army:
       - 933.3
-      - 1211.8
+      - 1189.16
       fleet:
       - 933.3
       - 1209.8
       supply_centre:
-      - 933.3
-      - 1200.8
+      - 928.27
+      - 1165.08
+    connection_overrides:
+      add:
+      - to: aegean-sea
+        units:
+        - fleet
+      - to: albania
+        units:
+        - army
+        - fleet
+      - to: ionian-sea
+        units:
+        - fleet
+      - to: serbia
+        units:
+        - army
+    display_name: Greece
   helgoland-bight:
     name: Helgoland Bight
     abbreviation: HEL
@@ -749,9 +1275,23 @@ territories:
       fleet:
       - 577.3
       - 653.2
+    connection_overrides:
+      add:
+      - to: denmark
+        units:
+        - fleet
+      - to: holland
+        units:
+        - fleet
+      - to: kiel
+        units:
+        - fleet
+      - to: north-sea
+        units:
+        - fleet
   holland:
     name: Holland
-    abbreviation: HOL
+    abbreviation: Hol
     kind: land
     svg_element: territory-holland
     supply_centre: true
@@ -760,17 +1300,37 @@ territories:
       - 542.5
       - 719.8
       abbreviation:
-      - 542.5
-      - 719.8
+      - 544.25
+      - 724.34
       army:
-      - 542.5
-      - 730.8
+      - 562.76
+      - 696.56
       fleet:
       - 542.5
       - 728.8
       supply_centre:
-      - 542.5
-      - 719.8
+      - 542.85
+      - 736.22
+    connection_overrides:
+      add:
+      - to: belgium
+        units:
+        - army
+        - fleet
+      - to: helgoland-bight
+        units:
+        - fleet
+      - to: kiel
+        units:
+        - army
+        - fleet
+      - to: north-sea
+        units:
+        - fleet
+      - to: ruhr
+        units:
+        - army
+    display_name: Holland
   ionian-sea:
     name: Ionian Sea
     abbreviation: ION
@@ -787,6 +1347,35 @@ territories:
       fleet:
       - 840.0
       - 1264.2
+    connection_overrides:
+      add:
+      - to: adriatic-sea
+        units:
+        - fleet
+      - to: aegean-sea
+        units:
+        - fleet
+      - to: albania
+        units:
+        - fleet
+      - to: apulia
+        units:
+        - fleet
+      - to: eastern-mediterranean
+        units:
+        - fleet
+      - to: greece
+        units:
+        - fleet
+      - to: naples
+        units:
+        - fleet
+      - to: tunis
+        units:
+        - fleet
+      - to: tyrrhenian-sea
+        units:
+        - fleet
   irish-sea:
     name: Irish Sea
     abbreviation: IRI
@@ -803,9 +1392,26 @@ territories:
       fleet:
       - 254.9
       - 690.4
+    connection_overrides:
+      add:
+      - to: english-channel
+        units:
+        - fleet
+      - to: liverpool
+        units:
+        - fleet
+      - to: mid-atlantic-ocean
+        units:
+        - fleet
+      - to: north-atlantic-ocean
+        units:
+        - fleet
+      - to: wales
+        units:
+        - fleet
   kiel:
     name: Kiel
-    abbreviation: KIE
+    abbreviation: Kie
     kind: land
     svg_element: territory-kiel
     supply_centre: true
@@ -814,17 +1420,44 @@ territories:
       - 624.1
       - 726.0
       abbreviation:
-      - 624.1
-      - 726.0
+      - 613.78
+      - 712.83
       army:
-      - 624.1
-      - 737.0
+      - 617.69
+      - 751.59
       fleet:
       - 624.1
       - 735.0
       supply_centre:
-      - 624.1
-      - 726.0
+      - 612.94
+      - 726.54
+    connection_overrides:
+      add:
+      - to: baltic-sea
+        units:
+        - fleet
+      - to: berlin
+        units:
+        - army
+        - fleet
+      - to: denmark
+        units:
+        - army
+        - fleet
+      - to: helgoland-bight
+        units:
+        - fleet
+      - to: holland
+        units:
+        - army
+        - fleet
+      - to: munich
+        units:
+        - army
+      - to: ruhr
+        units:
+        - army
+    display_name: Kiel
   london:
     name: London
     abbreviation: LON
@@ -836,17 +1469,33 @@ territories:
       - 409.1
       - 713.2
       abbreviation:
-      - 409.1
-      - 713.2
+      - 435.55
+      - 710.48
       army:
-      - 384.91
-      - 724.89
+      - 390.56
+      - 724.45
       fleet:
       - 409.1
       - 722.2
       supply_centre:
-      - 412.56
-      - 729.44
+      - 421.46
+      - 719.13
+    connection_overrides:
+      add:
+      - to: english-channel
+        units:
+        - fleet
+      - to: north-sea
+        units:
+        - fleet
+      - to: yorkshire
+        units:
+        - army
+        - fleet
+      - to: wales
+        units:
+        - army
+        - fleet
   livonia:
     name: Livonia
     abbreviation: LVN
@@ -866,31 +1515,72 @@ territories:
       fleet:
       - 976.5
       - 562.1
+    connection_overrides:
+      add:
+      - to: baltic-sea
+        units:
+        - fleet
+      - to: gulf-of-bothnia
+        units:
+        - fleet
+      - to: moscow
+        units:
+        - army
+      - to: prussia
+        units:
+        - army
+        - fleet
+      - to: warsaw
+        units:
+        - army
   liverpool:
     name: Liverpool
-    abbreviation: LVP
+    abbreviation: Lvp
     kind: land
     svg_element: territory-liverpool
     supply_centre: true
     anchors:
       label:
-      - 376.65
-      - 621.31
+      - 392.2
+      - 625.8
       abbreviation:
       - 392.2
       - 625.8
       army:
-      - 385.98
-      - 644.58
+      - 392.2
+      - 636.8
       fleet:
       - 392.2
       - 634.8
       supply_centre:
-      - 388.92
-      - 602.13
+      - 392.2
+      - 638.8
+    connection_overrides:
+      add:
+      - to: clyde
+        units:
+        - army
+        - fleet
+      - to: edinburgh
+        units:
+        - army
+      - to: irish-sea
+        units:
+        - fleet
+      - to: north-atlantic-ocean
+        units:
+        - fleet
+      - to: wales
+        units:
+        - army
+        - fleet
+      - to: yorkshire
+        units:
+        - army
+    display_name: Liverpool
   marseilles:
     name: Marseilles
-    abbreviation: MAR
+    abbreviation: Mar
     kind: land
     svg_element: territory-marseilles
     supply_centre: true
@@ -899,17 +1589,33 @@ territories:
       - 474.5
       - 989.0
       abbreviation:
-      - 474.5
-      - 989.0
+      - 503.85
+      - 993.19
       army:
-      - 474.5
-      - 1000.0
+      - 451.53
+      - 1000.93
       fleet:
       - 474.5
       - 998.0
       supply_centre:
-      - 474.5
-      - 989.0
+      - 503.85
+      - 1007.03
+    connection_overrides:
+      add:
+      - to: burgundy
+        units:
+        - army
+      - to: gascony
+        units:
+        - army
+      - to: gulf-of-lyon
+        units:
+        - fleet
+      - to: piedmont
+        units:
+        - army
+        - fleet
+    display_name: Marseilles
   mid-atlantic-ocean:
     name: Mid-Atlantic Ocean
     abbreviation: MID
@@ -926,6 +1632,32 @@ territories:
       fleet:
       - 56.9
       - 1031.1
+    connection_overrides:
+      add:
+      - to: brest
+        units:
+        - fleet
+      - to: english-channel
+        units:
+        - fleet
+      - to: gascony
+        units:
+        - fleet
+      - to: irish-sea
+        units:
+        - fleet
+      - to: north-africa
+        units:
+        - fleet
+      - to: north-atlantic-ocean
+        units:
+        - fleet
+      - to: portugal
+        units:
+        - fleet
+      - to: western-mediterranean
+        units:
+        - fleet
   moscow:
     name: Moscow
     abbreviation: MOS
@@ -945,9 +1677,26 @@ territories:
       supply_centre:
       - 1386.3
       - 365.3
+    connection_overrides:
+      add:
+      - to: livonia
+        units:
+        - army
+      - to: sevastopol
+        units:
+        - army
+      - to: st-petersburg
+        units:
+        - army
+      - to: ukraine
+        units:
+        - army
+      - to: warsaw
+        units:
+        - army
   munich:
     name: Munich
-    abbreviation: MUN
+    abbreviation: Mun
     kind: land
     svg_element: territory-munich
     supply_centre: true
@@ -959,11 +1708,35 @@ territories:
       - 642.8
       - 834.7
       army:
-      - 642.8
-      - 845.7
+      - 614.63
+      - 867.33
       supply_centre:
-      - 642.8
-      - 834.7
+      - 641.12
+      - 850.63
+    connection_overrides:
+      add:
+      - to: berlin
+        units:
+        - army
+      - to: bohemia
+        units:
+        - army
+      - to: burgundy
+        units:
+        - army
+      - to: kiel
+        units:
+        - army
+      - to: ruhr
+        units:
+        - army
+      - to: silesia
+        units:
+        - army
+      - to: tyrolia
+        units:
+        - army
+    display_name: Munich
   north-africa:
     name: North Africa
     abbreviation: NAF
@@ -983,9 +1756,20 @@ territories:
       fleet:
       - 290.1
       - 1302.5
+    connection_overrides:
+      add:
+      - to: mid-atlantic-ocean
+        units:
+        - fleet
+      - to: tunis
+        units:
+        - army
+      - to: western-mediterranean
+        units:
+        - fleet
   naples:
     name: Naples
-    abbreviation: NAP
+    abbreviation: Nap
     kind: land
     svg_element: territory-naples
     supply_centre: true
@@ -994,17 +1778,34 @@ territories:
       - 720.8
       - 1261.8
       abbreviation:
-      - 720.8
-      - 1261.8
+      - 775.13
+      - 1166.64
       army:
-      - 720.8
-      - 1272.8
+      - 755.68
+      - 1145.1
       fleet:
-      - 720.8
-      - 1270.8
+      - 787.0
+      - 1194.35
       supply_centre:
-      - 720.8
-      - 1261.8
+      - 779.16
+      - 1179.21
+    connection_overrides:
+      add:
+      - to: apulia
+        units:
+        - army
+        - fleet
+      - to: ionian-sea
+        units:
+        - fleet
+      - to: rome
+        units:
+        - army
+        - fleet
+      - to: tyrrhenian-sea
+        units:
+        - fleet
+    display_name: Naples
   north-atlantic-ocean:
     name: North Atlantic Ocean
     abbreviation: NAT
@@ -1021,6 +1822,23 @@ territories:
       fleet:
       - 185.6
       - 368.1
+    connection_overrides:
+      add:
+      - to: clyde
+        units:
+        - fleet
+      - to: irish-sea
+        units:
+        - fleet
+      - to: liverpool
+        units:
+        - fleet
+      - to: mid-atlantic-ocean
+        units:
+        - fleet
+      - to: norwegian-sea
+        units:
+        - fleet
   norwegian-sea:
     name: Norwegian Sea
     abbreviation: NRG
@@ -1029,14 +1847,34 @@ territories:
     supply_centre: false
     anchors:
       label:
-      - 531.85
-      - 254.75
+      - 536.7
+      - 249.9
       abbreviation:
       - 536.7
       - 249.9
       fleet:
       - 536.7
       - 258.9
+    connection_overrides:
+      add:
+      - to: barents-sea
+        units:
+        - fleet
+      - to: clyde
+        units:
+        - fleet
+      - to: edinburgh
+        units:
+        - fleet
+      - to: north-atlantic-ocean
+        units:
+        - fleet
+      - to: norway
+        units:
+        - fleet
+      - to: north-sea
+        units:
+        - fleet
   north-sea:
     name: North Sea
     abbreviation: NTH
@@ -1048,11 +1886,46 @@ territories:
       - 514.5
       - 589.1
       abbreviation:
-      - 514.5
-      - 589.1
+      - 497.84
+      - 665.55
       fleet:
-      - 514.5
-      - 598.1
+      - 499.98
+      - 677.54
+    connection_overrides:
+      add:
+      - to: belgium
+        units:
+        - fleet
+      - to: denmark
+        units:
+        - fleet
+      - to: edinburgh
+        units:
+        - fleet
+      - to: english-channel
+        units:
+        - fleet
+      - to: london
+        units:
+        - fleet
+      - to: helgoland-bight
+        units:
+        - fleet
+      - to: holland
+        units:
+        - fleet
+      - to: norway
+        units:
+        - fleet
+      - to: norwegian-sea
+        units:
+        - fleet
+      - to: skagerrak
+        units:
+        - fleet
+      - to: yorkshire
+        units:
+        - fleet
   norway:
     name: Norway
     abbreviation: NWY
@@ -1075,9 +1948,30 @@ territories:
       supply_centre:
       - 724.3
       - 291.8
+    connection_overrides:
+      add:
+      - to: barents-sea
+        units:
+        - fleet
+      - to: finland
+        units:
+        - army
+      - to: north-sea
+        units:
+        - fleet
+      - to: norwegian-sea
+        units:
+        - fleet
+      - to: skagerrak
+        units:
+        - fleet
+      - to: sweden
+        units:
+        - army
+        - fleet
   paris:
     name: Paris
-    abbreviation: PAR
+    abbreviation: Par
     kind: land
     svg_element: territory-paris
     supply_centre: true
@@ -1086,17 +1980,32 @@ territories:
       - 427.7
       - 878.3
       abbreviation:
-      - 427.7
-      - 878.3
+      - 435.75
+      - 850.63
       army:
       - 427.7
       - 889.3
       supply_centre:
-      - 427.7
-      - 878.3
+      - 436.25
+      - 865.72
+    connection_overrides:
+      add:
+      - to: burgundy
+        units:
+        - army
+      - to: brest
+        units:
+        - army
+      - to: gascony
+        units:
+        - army
+      - to: picardy
+        units:
+        - army
+    display_name: Paris
   picardy:
     name: Picardy
-    abbreviation: PIC
+    abbreviation: Pic
     kind: land
     svg_element: territory-picardy
     supply_centre: false
@@ -1113,9 +2022,29 @@ territories:
       fleet:
       - 461.7
       - 802.6
+    connection_overrides:
+      add:
+      - to: belgium
+        units:
+        - army
+        - fleet
+      - to: brest
+        units:
+        - army
+        - fleet
+      - to: burgundy
+        units:
+        - army
+      - to: english-channel
+        units:
+        - fleet
+      - to: paris
+        units:
+        - army
+    display_name: Picardy
   piedmont:
     name: Piedmont
-    abbreviation: PIE
+    abbreviation: Pie
     kind: land
     svg_element: territory-piedmont
     supply_centre: false
@@ -1124,17 +2053,37 @@ territories:
       - 583.1
       - 978.6
       abbreviation:
-      - 583.1
-      - 978.6
+      - 585.2
+      - 966.02
       army:
-      - 583.1
-      - 989.6
+      - 567.16
+      - 988.76
       fleet:
       - 583.1
       - 987.6
+    connection_overrides:
+      add:
+      - to: gulf-of-lyon
+        units:
+        - fleet
+      - to: marseilles
+        units:
+        - army
+        - fleet
+      - to: tuscany
+        units:
+        - army
+        - fleet
+      - to: tyrolia
+        units:
+        - army
+      - to: venice
+        units:
+        - army
+    display_name: Piedmont
   portugal:
     name: Portugal
-    abbreviation: POR
+    abbreviation: Por
     kind: land
     svg_element: territory-portugal
     supply_centre: true
@@ -1143,20 +2092,26 @@ territories:
       - 111.9
       - 1076.0
       abbreviation:
-      - 111.9
-      - 1076.0
+      - 131.02
+      - 1044.81
       army:
-      - 111.9
-      - 1087.0
+      - 110.39
+      - 1104.61
       fleet:
       - 111.9
       - 1085.0
       supply_centre:
-      - 111.9
-      - 1076.0
+      - 130.51
+      - 1058.89
+    connection_overrides:
+      add:
+      - to: mid-atlantic-ocean
+        units:
+        - fleet
+    display_name: Portugal
   prussia:
     name: Prussia
-    abbreviation: PRU
+    abbreviation: Pru
     kind: land
     svg_element: territory-prussia
     supply_centre: false
@@ -1165,17 +2120,37 @@ territories:
       - 827.1
       - 677.2
       abbreviation:
-      - 827.1
-      - 677.2
+      - 814.42
+      - 693.5
       army:
       - 827.1
       - 688.2
       fleet:
       - 827.1
       - 686.2
+    connection_overrides:
+      add:
+      - to: baltic-sea
+        units:
+        - fleet
+      - to: berlin
+        units:
+        - army
+        - fleet
+      - to: livonia
+        units:
+        - army
+        - fleet
+      - to: silesia
+        units:
+        - army
+      - to: warsaw
+        units:
+        - army
+    display_name: Prussia
   rome:
     name: Rome
-    abbreviation: ROM
+    abbreviation: Rom
     kind: land
     svg_element: territory-rome
     supply_centre: true
@@ -1184,20 +2159,40 @@ territories:
       - 686.9
       - 1092.5
       abbreviation:
-      - 686.9
-      - 1092.5
+      - 685.22
+      - 1074.89
       army:
-      - 686.9
-      - 1103.5
+      - 703.25
+      - 1106.85
       fleet:
       - 686.9
       - 1101.5
       supply_centre:
-      - 686.9
-      - 1092.5
+      - 686.06
+      - 1086.63
+    connection_overrides:
+      add:
+      - to: apulia
+        units:
+        - army
+      - to: naples
+        units:
+        - army
+        - fleet
+      - to: tuscany
+        units:
+        - army
+        - fleet
+      - to: tyrrhenian-sea
+        units:
+        - fleet
+      - to: venice
+        units:
+        - army
+    display_name: Rome
   ruhr:
     name: Ruhr
-    abbreviation: RUH
+    abbreviation: Ruh
     kind: land
     svg_element: territory-ruhr
     supply_centre: false
@@ -1211,31 +2206,71 @@ territories:
       army:
       - 579.0
       - 803.7
+    connection_overrides:
+      add:
+      - to: belgium
+        units:
+        - army
+      - to: burgundy
+        units:
+        - army
+      - to: holland
+        units:
+        - army
+      - to: kiel
+        units:
+        - army
+      - to: munich
+        units:
+        - army
+    display_name: Ruhr
   rumania:
     name: Rumania
-    abbreviation: RUM
+    abbreviation: Rum
     kind: land
     svg_element: territory-rumania
     supply_centre: true
     anchors:
       label:
-      - 1012.06
-      - 1003.48
-      abbreviation:
       - 1048.8
       - 947.0
+      abbreviation:
+      - 1051.73
+      - 951.19
       army:
-      - 1014.82
-      - 973.7
+      - 1016.52
+      - 979.38
       fleet:
       - 1048.8
       - 956.0
       supply_centre:
-      - 1046.24
-      - 981.99
+      - 1050.9
+      - 964.19
+    connection_overrides:
+      add:
+      - to: black-sea
+        units:
+        - fleet
+      - to: budapest
+        units:
+        - army
+      - to: galicia
+        units:
+        - army
+      - to: serbia
+        units:
+        - army
+      - to: sevastopol
+        units:
+        - army
+        - fleet
+      - to: ukraine
+        units:
+        - army
+    display_name: Rumania
   serbia:
     name: Serbia
-    abbreviation: SER
+    abbreviation: Ser
     kind: land
     svg_element: territory-serbia
     supply_centre: true
@@ -1244,17 +2279,38 @@ territories:
       - 907.8
       - 1063.2
       abbreviation:
-      - 907.8
-      - 1063.2
+      - 906.79
+      - 1036.37
       army:
-      - 919.8
-      - 1092.41
+      - 913.33
+      - 1085.77
       supply_centre:
-      - 907.2
-      - 1075.74
+      - 905.79
+      - 1050.12
+    connection_overrides:
+      add:
+      - to: albania
+        units:
+        - army
+      - to: budapest
+        units:
+        - army
+      - to: bulgaria
+        units:
+        - army
+      - to: greece
+        units:
+        - army
+      - to: rumania
+        units:
+        - army
+      - to: trieste
+        units:
+        - army
+    display_name: Serbia
   sevastopol:
     name: Sevastopol
-    abbreviation: SEV
+    abbreviation: Sev
     kind: land
     svg_element: territory-sevastopol
     supply_centre: true
@@ -1272,24 +2328,65 @@ territories:
       - 1403.0
       - 798.1
       supply_centre:
-      - 1403.0
-      - 789.1
+      - 1400.59
+      - 809.02
+    connection_overrides:
+      add:
+      - to: armenia
+        units:
+        - army
+        - fleet
+      - to: black-sea
+        units:
+        - fleet
+      - to: moscow
+        units:
+        - army
+      - to: rumania
+        units:
+        - army
+        - fleet
+      - to: ukraine
+        units:
+        - army
+    display_name: Sevastopol
   silesia:
     name: Silesia
-    abbreviation: SIL
+    abbreviation: Sil
     kind: land
     svg_element: territory-silesia
     supply_centre: false
     anchors:
       label:
-      - 765.21
-      - 746.63
-      abbreviation:
       - 746.7
       - 774.4
+      abbreviation:
+      - 746.7
+      - 768.97
       army:
-      - 759.48
-      - 763.24
+      - 774.37
+      - 767.79
+    connection_overrides:
+      add:
+      - to: berlin
+        units:
+        - army
+      - to: bohemia
+        units:
+        - army
+      - to: galicia
+        units:
+        - army
+      - to: munich
+        units:
+        - army
+      - to: prussia
+        units:
+        - army
+      - to: warsaw
+        units:
+        - army
+    display_name: Silesia
   skagerrak:
     name: Skagerrak
     abbreviation: SKA
@@ -1306,6 +2403,20 @@ territories:
       fleet:
       - 636.0
       - 537.2
+    connection_overrides:
+      add:
+      - to: denmark
+        units:
+        - fleet
+      - to: norway
+        units:
+        - fleet
+      - to: north-sea
+        units:
+        - fleet
+      - to: sweden
+        units:
+        - fleet
   smyrna:
     name: Smyrna
     abbreviation: SMY
@@ -1328,28 +2439,50 @@ territories:
       supply_centre:
       - 1212.8
       - 1200.5
+    connection_overrides:
+      add:
+      - to: aegean-sea
+        units:
+        - fleet
+      - to: ankara
+        units:
+        - army
+      - to: armenia
+        units:
+        - army
+      - to: constantinople
+        units:
+        - army
+        - fleet
+      - to: eastern-mediterranean
+        units:
+        - fleet
+      - to: syria
+        units:
+        - army
+        - fleet
   spain:
     name: Spain
-    abbreviation: SPA
+    abbreviation: Spa
     kind: land
     svg_element: territory-spain
     supply_centre: true
     anchors:
       label:
-      - 284.7
-      - 1079.3
+      - 330.83
+      - 1051.54
       abbreviation:
-      - 284.7
-      - 1079.3
+      - 372.71
+      - 1055.6
       army:
-      - 284.7
-      - 1090.3
+      - 339.67
+      - 1064.62
       fleet:
       - 284.7
       - 1088.3
       supply_centre:
-      - 284.7
-      - 1079.3
+      - 372.71
+      - 1070.42
     split_coasts:
       nc:
         fleet_anchor:
@@ -1373,10 +2506,34 @@ territories:
         label_rotation: 0
         add_connections:
         - gulf-of-lyon
-        - mid-atlantic-ocean
         - marseilles
+        - mid-atlantic-ocean
         - portugal
         - western-mediterranean
+    connection_overrides:
+      add:
+      - to: gascony
+        units:
+        - army
+        - fleet
+      - to: gulf-of-lyon
+        units:
+        - fleet
+      - to: mid-atlantic-ocean
+        units:
+        - fleet
+      - to: marseilles
+        units:
+        - army
+        - fleet
+      - to: portugal
+        units:
+        - army
+        - fleet
+      - to: western-mediterranean
+        units:
+        - fleet
+    display_name: Spain
   st-petersburg:
     name: St Petersburg
     abbreviation: STP
@@ -1420,9 +2577,32 @@ territories:
         - 405.0
         label_rotation: 0
         add_connections:
-        - gulf-of-bothnia
         - finland
+        - gulf-of-bothnia
         - livonia
+    connection_overrides:
+      add:
+      - to: barents-sea
+        units:
+        - fleet
+      - to: gulf-of-bothnia
+        units:
+        - fleet
+      - to: finland
+        units:
+        - army
+        - fleet
+      - to: livonia
+        units:
+        - army
+        - fleet
+      - to: moscow
+        units:
+        - army
+      - to: norway
+        units:
+        - army
+        - fleet
   sweden:
     name: Sweden
     abbreviation: SWE
@@ -1445,6 +2625,29 @@ territories:
       supply_centre:
       - 750.7
       - 383.5
+    connection_overrides:
+      add:
+      - to: baltic-sea
+        units:
+        - fleet
+      - to: gulf-of-bothnia
+        units:
+        - fleet
+      - to: denmark
+        units:
+        - army
+        - fleet
+      - to: finland
+        units:
+        - army
+        - fleet
+      - to: norway
+        units:
+        - army
+        - fleet
+      - to: skagerrak
+        units:
+        - fleet
   syria:
     name: Syria
     abbreviation: SYR
@@ -1464,9 +2667,21 @@ territories:
       fleet:
       - 1436.3
       - 1272.6
+    connection_overrides:
+      add:
+      - to: armenia
+        units:
+        - army
+      - to: eastern-mediterranean
+        units:
+        - fleet
+      - to: smyrna
+        units:
+        - army
+        - fleet
   trieste:
     name: Trieste
-    abbreviation: TRI
+    abbreviation: Tri
     kind: land
     svg_element: territory-trieste
     supply_centre: true
@@ -1478,17 +2693,43 @@ territories:
       - 810.0
       - 1019.2
       army:
-      - 810.0
-      - 1030.2
+      - 780.82
+      - 1006.55
       fleet:
-      - 810.0
-      - 1028.2
+      - 781.33
+      - 1028.69
       supply_centre:
-      - 810.0
-      - 1019.2
+      - 809.65
+      - 1034.92
+    connection_overrides:
+      add:
+      - to: adriatic-sea
+        units:
+        - fleet
+      - to: albania
+        units:
+        - army
+        - fleet
+      - to: budapest
+        units:
+        - army
+      - to: serbia
+        units:
+        - army
+      - to: tyrolia
+        units:
+        - army
+      - to: venice
+        units:
+        - army
+        - fleet
+      - to: vienna
+        units:
+        - army
+    display_name: Trieste
   tunis:
     name: Tunis
-    abbreviation: TUN
+    abbreviation: Tun
     kind: land
     svg_element: territory-tunis
     supply_centre: true
@@ -1497,17 +2738,33 @@ territories:
       - 582.3
       - 1307.2
       abbreviation:
-      - 582.3
-      - 1307.2
+      - 587.85
+      - 1281.57
       army:
-      - 582.3
-      - 1318.2
+      - 581.87
+      - 1324.18
       supply_centre:
-      - 582.3
-      - 1307.2
+      - 586.57
+      - 1294.81
+    connection_overrides:
+      add:
+      - to: ionian-sea
+        units:
+        - fleet
+      - to: north-africa
+        units:
+        - army
+        - fleet
+      - to: tyrrhenian-sea
+        units:
+        - fleet
+      - to: western-mediterranean
+        units:
+        - fleet
+    display_name: Tunis
   tuscany:
     name: Tuscany
-    abbreviation: TUS
+    abbreviation: Tus
     kind: land
     svg_element: territory-tuscany
     supply_centre: false
@@ -1516,14 +2773,34 @@ territories:
       - 650.6
       - 1044.9
       abbreviation:
-      - 650.6
-      - 1044.9
+      - 648.08
+      - 1043.39
       army:
-      - 650.6
-      - 1055.9
+      - 654.62
+      - 1056.4
       fleet:
       - 650.6
       - 1053.9
+    connection_overrides:
+      add:
+      - to: gulf-of-lyon
+        units:
+        - fleet
+      - to: piedmont
+        units:
+        - army
+        - fleet
+      - to: rome
+        units:
+        - army
+        - fleet
+      - to: tyrrhenian-sea
+        units:
+        - fleet
+      - to: venice
+        units:
+        - army
+    display_name: Tuscany
   tyrrhenian-sea:
     name: Tyrrhenian Sea
     abbreviation: TYN
@@ -1535,30 +2812,74 @@ territories:
       - 669.4
       - 1159.4
       abbreviation:
-      - 669.4
-      - 1159.4
+      - 630.45
+      - 1106.1
       fleet:
-      - 669.4
-      - 1168.4
+      - 630.45
+      - 1119.71
+    connection_overrides:
+      add:
+      - to: ionian-sea
+        units:
+        - fleet
+      - to: gulf-of-lyon
+        units:
+        - fleet
+      - to: rome
+        units:
+        - fleet
+      - to: naples
+        units:
+        - fleet
+      - to: tunis
+        units:
+        - fleet
+      - to: tuscany
+        units:
+        - fleet
+      - to: western-mediterranean
+        units:
+        - fleet
   tyrolia:
     name: Tyrolia
-    abbreviation: TYR
+    abbreviation: Tyr
     kind: land
     svg_element: territory-tyrolia
     supply_centre: false
     anchors:
       label:
-      - 693.03
-      - 914.3
+      - 695.9
+      - 918.6
       abbreviation:
       - 695.9
       - 918.6
       army:
-      - 729.58
-      - 915.63
+      - 734.05
+      - 914.93
+    connection_overrides:
+      add:
+      - to: bohemia
+        units:
+        - army
+      - to: munich
+        units:
+        - army
+      - to: piedmont
+        units:
+        - army
+      - to: trieste
+        units:
+        - army
+      - to: venice
+        units:
+        - army
+      - to: vienna
+        units:
+        - army
+    display_name: Tyrolia
   ukraine:
     name: Ukraine
-    abbreviation: UKR
+    abbreviation: Ukr
     kind: land
     svg_element: territory-ukraine
     supply_centre: false
@@ -1572,9 +2893,27 @@ territories:
       army:
       - 1134.8
       - 795.6
+    connection_overrides:
+      add:
+      - to: galicia
+        units:
+        - army
+      - to: moscow
+        units:
+        - army
+      - to: rumania
+        units:
+        - army
+      - to: sevastopol
+        units:
+        - army
+      - to: warsaw
+        units:
+        - army
+    display_name: Ukraine
   venice:
     name: Venice
-    abbreviation: VEN
+    abbreviation: Ven
     kind: land
     svg_element: territory-venice
     supply_centre: true
@@ -1583,58 +2922,122 @@ territories:
       - 651.0
       - 1004.9
       abbreviation:
-      - 651.0
-      - 1004.9
+      - 661.06
+      - 1008.67
       army:
-      - 651.0
-      - 1015.9
+      - 656.87
+      - 981.94
       fleet:
       - 651.0
       - 1013.9
       supply_centre:
-      - 651.0
-      - 1004.9
+      - 666.93
+      - 1021.25
+    connection_overrides:
+      add:
+      - to: adriatic-sea
+        units:
+        - fleet
+      - to: apulia
+        units:
+        - army
+        - fleet
+      - to: piedmont
+        units:
+        - army
+      - to: rome
+        units:
+        - army
+      - to: trieste
+        units:
+        - army
+        - fleet
+      - to: tuscany
+        units:
+        - army
+      - to: tyrolia
+        units:
+        - army
+    display_name: Venice
   vienna:
     name: Vienna
-    abbreviation: VIE
+    abbreviation: Vie
     kind: land
     svg_element: territory-vienna
     supply_centre: true
     anchors:
       label:
-      - 807.14
-      - 881.15
-      abbreviation:
       - 794.6
       - 912.8
+      abbreviation:
+      - 799.21
+      - 892.26
       army:
-      - 801.77
-      - 923.8
+      - 800.47
+      - 932.18
       supply_centre:
-      - 806.25
-      - 893.69
+      - 797.6
+      - 905.88
+    connection_overrides:
+      add:
+      - to: bohemia
+        units:
+        - army
+      - to: budapest
+        units:
+        - army
+      - to: galicia
+        units:
+        - army
+      - to: trieste
+        units:
+        - army
+      - to: tyrolia
+        units:
+        - army
+    display_name: Vienna
   wales:
     name: Wales
-    abbreviation: WAL
+    abbreviation: Wal
     kind: land
     svg_element: territory-wales
     supply_centre: false
     anchors:
       label:
-      - 342.76
-      - 731.07
-      abbreviation:
       - 349.5
       - 693.4
+      abbreviation:
+      - 354.94
+      - 668.43
       army:
-      - 348.81
-      - 680.73
+      - 349.5
+      - 680.92
       fleet:
       - 349.5
       - 702.4
+    connection_overrides:
+      add:
+      - to: english-channel
+        units:
+        - fleet
+      - to: irish-sea
+        units:
+        - fleet
+      - to: london
+        units:
+        - army
+        - fleet
+      - to: liverpool
+        units:
+        - army
+        - fleet
+      - to: yorkshire
+        units:
+        - army
+    display_name: Wales
   warsaw:
     name: Warsaw
-    abbreviation: WAR
+    abbreviation: War
     kind: land
     svg_element: territory-warsaw
     supply_centre: true
@@ -1646,11 +3049,32 @@ territories:
       - 924.5
       - 715.0
       army:
-      - 932.74
-      - 753.23
+      - 887.27
+      - 757.69
       supply_centre:
-      - 930.95
-      - 727.54
+      - 924.92
+      - 734.7
+    connection_overrides:
+      add:
+      - to: galicia
+        units:
+        - army
+      - to: livonia
+        units:
+        - army
+      - to: moscow
+        units:
+        - army
+      - to: prussia
+        units:
+        - army
+      - to: silesia
+        units:
+        - army
+      - to: ukraine
+        units:
+        - army
+    display_name: Warsaw
   western-mediterranean:
     name: Western Mediterranean
     abbreviation: WES
@@ -1667,6 +3091,23 @@ territories:
       fleet:
       - 417.9
       - 1221.9
+    connection_overrides:
+      add:
+      - to: mid-atlantic-ocean
+        units:
+        - fleet
+      - to: gulf-of-lyon
+        units:
+        - fleet
+      - to: north-africa
+        units:
+        - fleet
+      - to: tunis
+        units:
+        - fleet
+      - to: tyrrhenian-sea
+        units:
+        - fleet
   yorkshire:
     name: Yorkshire
     abbreviation: YOR
@@ -1675,17 +3116,36 @@ territories:
     supply_centre: false
     anchors:
       label:
-      - 400.77
-      - 693.86
+      - 417.7
+      - 651.7
       abbreviation:
       - 417.7
       - 651.7
       army:
-      - 407.33
-      - 667.37
+      - 417.7
+      - 662.7
       fleet:
       - 417.7
       - 660.7
+    connection_overrides:
+      add:
+      - to: edinburgh
+        units:
+        - army
+        - fleet
+      - to: london
+        units:
+        - army
+        - fleet
+      - to: liverpool
+        units:
+        - army
+      - to: north-sea
+        units:
+        - fleet
+      - to: wales
+        units:
+        - army
 non_playable_elements:
   detail-switzerland: impassable
   detail-impassable-islands: impassable

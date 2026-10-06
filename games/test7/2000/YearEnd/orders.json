@@ -1,0 +1,632 @@
+{
+  "results": [
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "merseyside"
+          },
+          "power": "merseyside",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "merseyside",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "northumberland"
+          },
+          "power": "up-north",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "up-north",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "durham"
+          },
+          "power": "up-north",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "up-north",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "kent"
+          },
+          "power": "london",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "london",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "surrey"
+          },
+          "power": "london",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "london",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "avon"
+          },
+          "power": "bristol",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "bristol",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "gloucestershire"
+          },
+          "power": "bristol",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "bristol",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "pembrokeshire"
+          },
+          "power": "wales",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "wales",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "glamorgan"
+          },
+          "power": "wales",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "wales",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "s-lincolnshire"
+          },
+          "power": "east-anglia",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "east-anglia",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "n-lincolnshire"
+          },
+          "power": "east-anglia",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "east-anglia",
+      "source_line": 2
+    }
+  ],
+  "schema_version": 1,
+  "submissions": {
+    "bristol": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Avo B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "avon"
+              },
+              "power": "bristol",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Avo B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "avon"
+                },
+                "power": "bristol",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "A Glo B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "gloucestershire"
+              },
+              "power": "bristol",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "A Glo B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "gloucestershire"
+                },
+                "power": "bristol",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        }
+      ],
+      "power": "bristol",
+      "raw_text": "A Avo B\nA Glo B"
+    },
+    "east-anglia": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Sli B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "s-lincolnshire"
+              },
+              "power": "east-anglia",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Sli B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "s-lincolnshire"
+                },
+                "power": "east-anglia",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "F Nli B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "n-lincolnshire"
+              },
+              "power": "east-anglia",
+              "type": "fleet"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "F Nli B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "n-lincolnshire"
+                },
+                "power": "east-anglia",
+                "type": "fleet"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        }
+      ],
+      "power": "east-anglia",
+      "raw_text": "A Sli B\nF Nli B"
+    },
+    "london": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "F Ken B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "kent"
+              },
+              "power": "london",
+              "type": "fleet"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "F Ken B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "kent"
+                },
+                "power": "london",
+                "type": "fleet"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "A Sur B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "surrey"
+              },
+              "power": "london",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "A Sur B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "surrey"
+                },
+                "power": "london",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        }
+      ],
+      "power": "london",
+      "raw_text": "F Ken B\nA Sur B"
+    },
+    "merseyside": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Mer B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "merseyside"
+              },
+              "power": "merseyside",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Merseyside B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "merseyside"
+                },
+                "power": "merseyside",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "merseyside",
+      "raw_text": "A Merseyside B"
+    },
+    "up-north": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Nbl B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "northumberland"
+              },
+              "power": "up-north",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Nbl B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "northumberland"
+                },
+                "power": "up-north",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "A Dur B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "durham"
+              },
+              "power": "up-north",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "A Dur B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "durham"
+                },
+                "power": "up-north",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        }
+      ],
+      "power": "up-north",
+      "raw_text": "A Nbl B\nA Dur B"
+    },
+    "wales": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "F Pem B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "pembrokeshire"
+              },
+              "power": "wales",
+              "type": "fleet"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "F Pem B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "pembrokeshire"
+                },
+                "power": "wales",
+                "type": "fleet"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "A Gla B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "glamorgan"
+              },
+              "power": "wales",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "A Gla B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "glamorgan"
+                },
+                "power": "wales",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        }
+      ],
+      "power": "wales",
+      "raw_text": "F Pem B\nA Gla B"
+    }
+  }
+}

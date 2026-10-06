@@ -1,0 +1,1027 @@
+schema_version: 1
+map_id: map
+name: Map
+rules_engine: standard
+assets:
+  map: map.svg
+presentation:
+  territory_label_font_size: 11.0
+  coast_label_font_size: 9.0
+  label_colour: '#4c3b1e'
+  inaccessible_region_colour: '#777870'
+  sea_colour: '#9ebbd2'
+  unclaimed_region_colour: '#d0c9aa'
+  hold_underlines:
+    army:
+    - 0
+    - 13
+    fleet:
+    - 0
+    - 13
+start:
+  year: 1901
+  season: spring
+teams: {}
+territories:
+  adriatic-sea:
+    name: Adriatic Sea
+    abbreviation: ASX
+    kind: sea
+    svg_element: territory-adriatic-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 1524.7
+      - 1895.07
+      army:
+      - 1524.7
+      - 1895.07
+  aegean-sea:
+    name: Aegean Sea
+    abbreviation: ASA
+    kind: sea
+    svg_element: territory-aegean-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 2044.14
+      - 2189.85
+      army:
+      - 2044.14
+      - 2189.85
+  albania:
+    name: Albania
+    abbreviation: AXX
+    kind: land
+    svg_element: territory-albania
+    supply_centre: false
+    anchors:
+      label:
+      - 1760.01
+      - 2017.67
+      army:
+      - 1760.01
+      - 2017.67
+  ankara:
+    name: Ankara
+    abbreviation: AXA
+    kind: land
+    svg_element: territory-ankara
+    supply_centre: false
+    anchors:
+      label:
+      - 2451.54
+      - 1963.11
+      army:
+      - 2451.54
+      - 1963.11
+  apulia:
+    name: Apulia
+    abbreviation: AXB
+    kind: land
+    svg_element: territory-apulia
+    supply_centre: false
+    anchors:
+      label:
+      - 1511.48
+      - 2003.83
+      army:
+      - 1511.48
+      - 2003.83
+  armenia:
+    name: Armenia
+    abbreviation: AXC
+    kind: land
+    svg_element: territory-armenia
+    supply_centre: false
+    anchors:
+      label:
+      - 2834.7
+      - 1975.38
+      army:
+      - 2834.7
+      - 1975.38
+  baltic-sea:
+    name: Baltic Sea
+    abbreviation: BSX
+    kind: sea
+    svg_element: territory-baltic-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 1619.48
+      - 1046.39
+      army:
+      - 1619.48
+      - 1046.39
+  barents-sea:
+    name: Barents Sea
+    abbreviation: BSA
+    kind: sea
+    svg_element: territory-barents-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 2285.09
+      - 226.6
+      army:
+      - 2285.09
+      - 226.6
+  belgium:
+    name: Belgium
+    abbreviation: BXX
+    kind: land
+    svg_element: territory-belgium
+    supply_centre: false
+    anchors:
+      label:
+      - 1077.25
+      - 1344.04
+      army:
+      - 1077.25
+      - 1344.04
+  berlin:
+    name: Berlin
+    abbreviation: BXA
+    kind: land
+    svg_element: territory-berlin
+    supply_centre: false
+    anchors:
+      label:
+      - 1417.68
+      - 1199.18
+      army:
+      - 1417.68
+      - 1199.18
+  black-sea:
+    name: Black Sea
+    abbreviation: BSB
+    kind: sea
+    svg_element: territory-black-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 2470.57
+      - 1774.52
+      army:
+      - 2470.57
+      - 1774.52
+  bohemia:
+    name: Bohemia
+    abbreviation: BXB
+    kind: land
+    svg_element: territory-bohemia
+    supply_centre: false
+    anchors:
+      label:
+      - 1551.65
+      - 1458.9
+      army:
+      - 1551.65
+      - 1458.9
+  brest:
+    name: Brest
+    abbreviation: BXC
+    kind: land
+    svg_element: territory-brest
+    supply_centre: false
+    anchors:
+      label:
+      - 764.74
+      - 1488.35
+      army:
+      - 764.74
+      - 1488.35
+  budapest:
+    name: Budapest
+    abbreviation: BXD
+    kind: land
+    svg_element: territory-budapest
+    supply_centre: false
+    anchors:
+      label:
+      - 1836.64
+      - 1623.31
+      army:
+      - 1836.64
+      - 1623.31
+  bulgaria:
+    name: Bulgaria
+    abbreviation: BXE
+    kind: land
+    svg_element: territory-bulgaria
+    supply_centre: false
+    anchors:
+      label:
+      - 1999.94
+      - 1899.25
+      army:
+      - 1999.94
+      - 1899.25
+  burgundy:
+    name: Burgundy
+    abbreviation: BXF
+    kind: land
+    svg_element: territory-burgundy
+    supply_centre: false
+    anchors:
+      label:
+      - 1022.94
+      - 1530.17
+      army:
+      - 1022.94
+      - 1530.17
+  clyde:
+    name: Clyde
+    abbreviation: CXX
+    kind: sea
+    svg_element: territory-clyde
+    supply_centre: false
+    anchors:
+      label:
+      - 798.45
+      - 825.29
+      army:
+      - 798.45
+      - 825.29
+  constantinople:
+    name: Constantinople
+    abbreviation: CXA
+    kind: land
+    svg_element: territory-constantinople
+    supply_centre: false
+    anchors:
+      label:
+      - 2209.63
+      - 2057.61
+      army:
+      - 2209.63
+      - 2057.61
+  denmark:
+    name: Denmark
+    abbreviation: DXX
+    kind: land
+    svg_element: territory-denmark
+    supply_centre: false
+    anchors:
+      label:
+      - 1297.95
+      - 1038.39
+      army:
+      - 1297.95
+      - 1038.39
+  eastern-mediterranean:
+    name: Eastern Mediterranean
+    abbreviation: EMX
+    kind: sea
+    svg_element: territory-eastern-mediterranean
+    supply_centre: false
+    anchors:
+      label:
+      - 2381.47
+      - 2288.89
+      army:
+      - 2381.47
+      - 2288.89
+  edinburgh:
+    name: Edinburgh
+    abbreviation: Edi
+    kind: land
+    svg_element: territory-edinburgh
+    supply_centre: false
+    anchors:
+      label:
+      - 855.66
+      - 886.45
+      army:
+      - 855.66
+      - 886.45
+  english-channel:
+    name: English Channel
+    abbreviation: ECX
+    kind: sea
+    svg_element: territory-english-channel
+    supply_centre: false
+    anchors:
+      label:
+      - 754.02
+      - 1330.9
+      army:
+      - 754.02
+      - 1330.9
+  finland:
+    name: Finland
+    abbreviation: FXX
+    kind: land
+    svg_element: territory-finland
+    supply_centre: false
+    anchors:
+      label:
+      - 1902.9
+      - 452.47
+      army:
+      - 1902.9
+      - 452.47
+  galicia:
+    name: Galicia
+    abbreviation: GXX
+    kind: land
+    svg_element: territory-galicia
+    supply_centre: false
+    anchors:
+      label:
+      - 1926.34
+      - 1492.16
+      army:
+      - 1926.34
+      - 1492.16
+  gascony:
+    name: Gascony
+    abbreviation: GXA
+    kind: land
+    svg_element: territory-gascony
+    supply_centre: false
+    anchors:
+      label:
+      - 840.34
+      - 1708.31
+      army:
+      - 840.34
+      - 1708.31
+  greece:
+    name: Greece
+    abbreviation: GXB
+    kind: land
+    svg_element: territory-greece
+    supply_centre: false
+    anchors:
+      label:
+      - 1846.6
+      - 2089.91
+      army:
+      - 1846.6
+      - 2089.91
+  gulf-of-bothnia:
+    name: Gulf Of Bothnia
+    abbreviation: GOB
+    kind: sea
+    svg_element: territory-gulf-of-bothnia
+    supply_centre: false
+    anchors:
+      label:
+      - 1669.24
+      - 680.68
+      army:
+      - 1669.24
+      - 680.68
+  gulf-of-lyon:
+    name: Gulf Of Lyon
+    abbreviation: GOL
+    kind: sea
+    svg_element: territory-gulf-of-lyon
+    supply_centre: false
+    anchors:
+      label:
+      - 1003.45
+      - 1929.92
+      army:
+      - 1003.45
+      - 1929.92
+  helgoland-bight:
+    name: Helgoland Bight
+    abbreviation: HBX
+    kind: land
+    svg_element: territory-helgoland-bight
+    supply_centre: false
+    anchors:
+      label:
+      - 1229.31
+      - 1112.35
+      army:
+      - 1229.31
+      - 1112.35
+  holland:
+    name: Holland
+    abbreviation: HXX
+    kind: land
+    svg_element: territory-holland
+    supply_centre: false
+    anchors:
+      label:
+      - 1156.43
+      - 1241.52
+      army:
+      - 1156.43
+      - 1241.52
+  ionian-sea:
+    name: Ionian Sea
+    abbreviation: ISX
+    kind: sea
+    svg_element: territory-ionian-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 1654.91
+      - 2232.7
+      army:
+      - 1654.91
+      - 2232.7
+  ireland:
+    name: Ireland
+    abbreviation: IXX
+    kind: land
+    svg_element: territory-ireland
+    supply_centre: false
+    anchors:
+      label:
+      - 624.4
+      - 1037.14
+      army:
+      - 624.4
+      - 1037.14
+  irish-sea:
+    name: Irish Sea
+    abbreviation: ISA
+    kind: sea
+    svg_element: territory-irish-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 662.07
+      - 1138.58
+      army:
+      - 662.07
+      - 1138.58
+  kiel:
+    name: Kiel
+    abbreviation: KXX
+    kind: land
+    svg_element: territory-kiel
+    supply_centre: false
+    anchors:
+      label:
+      - 1270.9
+      - 1208.22
+      army:
+      - 1270.9
+      - 1208.22
+  liverpool:
+    name: Liverpool
+    abbreviation: Lvp
+    kind: land
+    svg_element: territory-liverpool
+    supply_centre: false
+    anchors:
+      label:
+      - 833.2
+      - 1000.46
+      army:
+      - 833.2
+      - 1000.46
+  livonia:
+    name: Livonia
+    abbreviation: LXA
+    kind: land
+    svg_element: territory-livonia
+    supply_centre: false
+    anchors:
+      label:
+      - 1888.19
+      - 989.12
+      army:
+      - 1888.19
+      - 989.12
+  london:
+    name: London
+    abbreviation: Lon
+    kind: land
+    svg_element: territory-london
+    supply_centre: false
+    anchors:
+      label:
+      - 895.26
+      - 1206.82
+      army:
+      - 895.26
+      - 1206.82
+  marseilles:
+    name: Marseilles
+    abbreviation: MXX
+    kind: land
+    svg_element: territory-marseilles
+    supply_centre: false
+    anchors:
+      label:
+      - 1011.14
+      - 1755.08
+      army:
+      - 1011.14
+      - 1755.08
+  mid-atlantic:
+    name: Mid Atlantic
+    abbreviation: MAX
+    kind: sea
+    svg_element: territory-mid-atlantic
+    supply_centre: false
+    anchors:
+      label:
+      - 153.94
+      - 1779.65
+      army:
+      - 153.94
+      - 1779.65
+  moscow:
+    name: Moscow
+    abbreviation: MXA
+    kind: land
+    svg_element: territory-moscow
+    supply_centre: false
+    anchors:
+      label:
+      - 2609.7
+      - 963.98
+      army:
+      - 2609.7
+      - 963.98
+  munich:
+    name: Munich
+    abbreviation: MXB
+    kind: land
+    svg_element: territory-munich
+    supply_centre: false
+    anchors:
+      label:
+      - 1309.18
+      - 1432.12
+      army:
+      - 1309.18
+      - 1432.12
+  naples:
+    name: Naples
+    abbreviation: NXX
+    kind: land
+    svg_element: territory-naples
+    supply_centre: false
+    anchors:
+      label:
+      - 1434.96
+      - 2257.52
+      army:
+      - 1434.96
+      - 2257.52
+  north-africa:
+    name: North Africa
+    abbreviation: NAX
+    kind: land
+    svg_element: territory-north-africa
+    supply_centre: false
+    anchors:
+      label:
+      - 655.11
+      - 2290.23
+      army:
+      - 655.11
+      - 2290.23
+  north-atlantic:
+    name: North Atlantic
+    abbreviation: NAA
+    kind: sea
+    svg_element: territory-north-atlantic
+    supply_centre: false
+    anchors:
+      label:
+      - 421.68
+      - 617.21
+      army:
+      - 421.68
+      - 617.21
+  north-sea:
+    name: North Sea
+    abbreviation: NSX
+    kind: sea
+    svg_element: territory-north-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 1079.41
+      - 969.23
+      army:
+      - 1079.41
+      - 969.23
+  norway:
+    name: Norway
+    abbreviation: NXA
+    kind: land
+    svg_element: territory-norway
+    supply_centre: false
+    anchors:
+      label:
+      - 1472.41
+      - 469.02
+      army:
+      - 1472.41
+      - 469.02
+  norwegian-sea:
+    name: Norwegian Sea
+    abbreviation: NSA
+    kind: sea
+    svg_element: territory-norwegian-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 1164.03
+      - 383.06
+      army:
+      - 1164.03
+      - 383.06
+  paris:
+    name: Paris
+    abbreviation: PXX
+    kind: land
+    svg_element: territory-paris
+    supply_centre: false
+    anchors:
+      label:
+      - 860.62
+      - 1519.65
+      army:
+      - 860.62
+      - 1519.65
+  picardy:
+    name: Picardy
+    abbreviation: PXA
+    kind: land
+    svg_element: territory-picardy
+    supply_centre: false
+    anchors:
+      label:
+      - 955.36
+      - 1364.77
+      army:
+      - 955.36
+      - 1364.77
+  piedmont:
+    name: Piedmont
+    abbreviation: PXB
+    kind: land
+    svg_element: territory-piedmont
+    supply_centre: false
+    anchors:
+      label:
+      - 1195.05
+      - 1727.26
+      army:
+      - 1195.05
+      - 1727.26
+  portugal:
+    name: Portugal
+    abbreviation: PXC
+    kind: land
+    svg_element: territory-portugal
+    supply_centre: false
+    anchors:
+      label:
+      - 305.32
+      - 1902.59
+      army:
+      - 305.32
+      - 1902.59
+  prussia:
+    name: Prussia
+    abbreviation: PXD
+    kind: land
+    svg_element: territory-prussia
+    supply_centre: false
+    anchors:
+      label:
+      - 1651.01
+      - 1186.16
+      army:
+      - 1651.01
+      - 1186.16
+  rome:
+    name: Rome
+    abbreviation: RXX
+    kind: land
+    svg_element: territory-rome
+    supply_centre: false
+    anchors:
+      label:
+      - 1382.14
+      - 1948.73
+      army:
+      - 1382.14
+      - 1948.73
+  ruhr:
+    name: Ruhr
+    abbreviation: RXA
+    kind: land
+    svg_element: territory-ruhr
+    supply_centre: false
+    anchors:
+      label:
+      - 1217.82
+      - 1368.73
+      army:
+      - 1217.82
+      - 1368.73
+  rumania:
+    name: Rumania
+    abbreviation: RXB
+    kind: land
+    svg_element: territory-rumania
+    supply_centre: false
+    anchors:
+      label:
+      - 2068.41
+      - 1680.78
+      army:
+      - 2068.41
+      - 1680.78
+  saint-petersburg:
+    name: Saint Petersburg
+    abbreviation: SPX
+    kind: land
+    svg_element: territory-saint-petersburg
+    supply_centre: false
+    anchors:
+      label:
+      - 2533.98
+      - 528.63
+      army:
+      - 2533.98
+      - 528.63
+  serbia:
+    name: Serbia
+    abbreviation: SXX
+    kind: land
+    svg_element: territory-serbia
+    supply_centre: false
+    anchors:
+      label:
+      - 1833.5
+      - 1908.9
+      army:
+      - 1833.5
+      - 1908.9
+  sevastopol:
+    name: Sevastopol
+    abbreviation: SXA
+    kind: land
+    svg_element: territory-sevastopol
+    supply_centre: false
+    anchors:
+      label:
+      - 2787.7
+      - 1552.53
+      army:
+      - 2787.7
+      - 1552.53
+  silesia:
+    name: Silesia
+    abbreviation: SXB
+    kind: land
+    svg_element: territory-silesia
+    supply_centre: false
+    anchors:
+      label:
+      - 1539.53
+      - 1348.06
+      army:
+      - 1539.53
+      - 1348.06
+  skagerrak:
+    name: Skagerrak
+    abbreviation: SXC
+    kind: sea
+    svg_element: territory-skagerrak
+    supply_centre: false
+    anchors:
+      label:
+      - 1337.66
+      - 899.88
+      army:
+      - 1337.66
+      - 899.88
+  smyrna:
+    name: Smyrna
+    abbreviation: SXD
+    kind: land
+    svg_element: territory-smyrna
+    supply_centre: false
+    anchors:
+      label:
+      - 2329.91
+      - 2158.43
+      army:
+      - 2329.91
+      - 2158.43
+  spain:
+    name: Spain
+    abbreviation: SXE
+    kind: land
+    svg_element: territory-spain
+    supply_centre: false
+    anchors:
+      label:
+      - 631.15
+      - 1906.06
+      army:
+      - 631.15
+      - 1906.06
+  sweden:
+    name: Sweden
+    abbreviation: SXF
+    kind: land
+    svg_element: territory-sweden
+    supply_centre: false
+    anchors:
+      label:
+      - 1527.65
+      - 632.92
+      army:
+      - 1527.65
+      - 632.92
+  syria:
+    name: Syria
+    abbreviation: SXG
+    kind: land
+    svg_element: territory-syria
+    supply_centre: false
+    anchors:
+      label:
+      - 2820.39
+      - 2260.35
+      army:
+      - 2820.39
+      - 2260.35
+  trieste:
+    name: Trieste
+    abbreviation: TXX
+    kind: land
+    svg_element: territory-trieste
+    supply_centre: false
+    anchors:
+      label:
+      - 1594.22
+      - 1784.43
+      army:
+      - 1594.22
+      - 1784.43
+  tunis:
+    name: Tunis
+    abbreviation: TXA
+    kind: land
+    svg_element: territory-tunis
+    supply_centre: false
+    anchors:
+      label:
+      - 1172.0
+      - 2327.3
+      army:
+      - 1172.0
+      - 2327.3
+  tuscany:
+    name: Tuscany
+    abbreviation: TXB
+    kind: land
+    svg_element: territory-tuscany
+    supply_centre: false
+    anchors:
+      label:
+      - 1321.69
+      - 1876.33
+      army:
+      - 1321.69
+      - 1876.33
+  tyrolia:
+    name: Tyrolia
+    abbreviation: TXC
+    kind: land
+    svg_element: territory-tyrolia
+    supply_centre: false
+    anchors:
+      label:
+      - 1418.48
+      - 1619.79
+      army:
+      - 1418.48
+      - 1619.79
+  tyrrhenian-sea:
+    name: Tyrrhenian Sea
+    abbreviation: TSX
+    kind: sea
+    svg_element: territory-tyrrhenian-sea
+    supply_centre: false
+    anchors:
+      label:
+      - 1344.24
+      - 2070.66
+      army:
+      - 1344.24
+      - 2070.66
+  ukraine:
+    name: Ukraine
+    abbreviation: UXX
+    kind: land
+    svg_element: territory-ukraine
+    supply_centre: false
+    anchors:
+      label:
+      - 2025.79
+      - 1403.27
+      army:
+      - 2025.79
+      - 1403.27
+  venice:
+    name: Venice
+    abbreviation: VXX
+    kind: land
+    svg_element: territory-venice
+    supply_centre: false
+    anchors:
+      label:
+      - 1318.75
+      - 1783.51
+      army:
+      - 1318.75
+      - 1783.51
+  vienna:
+    name: Vienna
+    abbreviation: VXA
+    kind: land
+    svg_element: territory-vienna
+    supply_centre: false
+    anchors:
+      label:
+      - 1611.37
+      - 1592.71
+      army:
+      - 1611.37
+      - 1592.71
+  wales:
+    name: Wales
+    abbreviation: Wal
+    kind: land
+    svg_element: territory-wales
+    supply_centre: false
+    anchors:
+      label:
+      - 770.42
+      - 1189.5
+      army:
+      - 770.42
+      - 1189.5
+  warsaw:
+    name: Warsaw
+    abbreviation: WXA
+    kind: land
+    svg_element: territory-warsaw
+    supply_centre: false
+    anchors:
+      label:
+      - 1746.06
+      - 1301.24
+      army:
+      - 1746.06
+      - 1301.24
+  western-mediterranean:
+    name: Western Mediterranean
+    abbreviation: WMX
+    kind: sea
+    svg_element: territory-western-mediterranean
+    supply_centre: false
+    anchors:
+      label:
+      - 867.91
+      - 2157.12
+      army:
+      - 867.91
+      - 2157.12
+  yorkshire:
+    name: Yorkshire
+    abbreviation: YXX
+    kind: land
+    svg_element: territory-yorkshire
+    supply_centre: false
+    anchors:
+      label:
+      - 888.76
+      - 1068.34
+      army:
+      - 888.76
+      - 1068.34
+non_playable_elements:
+  map-background: decoration
+  map-geometry: decoration
+  territories: decoration
+  impassable-regions: decoration
+  impassable-shetland-islands: decoration
+  impassable-faero-islands: decoration
+  impassable-cypres: decoration
+  impassable-rhodos: decoration
+  impassable-sardina: decoration
+  impassable-corsica: decoration
+  impassable-mallorca: decoration
+  impassable-switzerland: decoration
+  map-borders: decoration

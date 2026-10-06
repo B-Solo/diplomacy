@@ -1,0 +1,85 @@
+{
+  "results": [
+    {
+      "order": {
+        "kind": "waive",
+        "power": "england"
+      },
+      "outcomes": [],
+      "power": "england",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "brest"
+          },
+          "power": "france",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "france",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "waive",
+        "power": "germany"
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": null
+    }
+  ],
+  "schema_version": 1,
+  "submissions": {
+    "france": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Bre B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "brest"
+              },
+              "power": "france",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A BRE B"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "brest"
+                },
+                "power": "france",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "france",
+      "raw_text": "A BRE B"
+    }
+  }
+}

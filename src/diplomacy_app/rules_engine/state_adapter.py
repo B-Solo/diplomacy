@@ -87,6 +87,7 @@ def make_game(map_definition: MapDefinition, phase_id: PhaseId, state: GameState
                 if owner == power.id
             ]
             game.set_centers(engine_power(power.id), centers, reset=True)
+        for power in map_definition.powers:
             engine_instance = game.get_power(engine_power(power.id))
             engine_instance.influence = [
                 codes[territory_id]

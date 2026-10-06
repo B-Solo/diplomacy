@@ -1,0 +1,1802 @@
+{
+  "adjacencies": [],
+  "inaccessible_svg_elements": [],
+  "map_id": "map",
+  "name": "Map",
+  "powers": [],
+  "presentation": {
+    "abbreviations": {
+      "adriatic-sea": [
+        1524.7,
+        1895.07
+      ],
+      "aegean-sea": [
+        2044.14,
+        2189.85
+      ],
+      "albania": [
+        1760.01,
+        2017.67
+      ],
+      "ankara": [
+        2451.54,
+        1963.11
+      ],
+      "apulia": [
+        1511.48,
+        2003.83
+      ],
+      "armenia": [
+        2834.7,
+        1975.38
+      ],
+      "baltic-sea": [
+        1619.48,
+        1046.39
+      ],
+      "barents-sea": [
+        2285.09,
+        226.6
+      ],
+      "belgium": [
+        1077.25,
+        1344.04
+      ],
+      "berlin": [
+        1417.68,
+        1199.18
+      ],
+      "black-sea": [
+        2470.57,
+        1774.52
+      ],
+      "bohemia": [
+        1551.65,
+        1458.9
+      ],
+      "brest": [
+        764.74,
+        1488.35
+      ],
+      "budapest": [
+        1836.64,
+        1623.31
+      ],
+      "bulgaria": [
+        1999.94,
+        1899.25
+      ],
+      "burgundy": [
+        1022.94,
+        1530.17
+      ],
+      "clyde": [
+        798.45,
+        825.29
+      ],
+      "constantinople": [
+        2209.63,
+        2057.61
+      ],
+      "denmark": [
+        1297.95,
+        1038.39
+      ],
+      "eastern-mediterranean": [
+        2381.47,
+        2288.89
+      ],
+      "edinburgh": [
+        855.66,
+        886.45
+      ],
+      "english-channel": [
+        754.02,
+        1330.9
+      ],
+      "finland": [
+        1902.9,
+        452.47
+      ],
+      "galicia": [
+        1926.34,
+        1492.16
+      ],
+      "gascony": [
+        840.34,
+        1708.31
+      ],
+      "greece": [
+        1846.6,
+        2089.91
+      ],
+      "gulf-of-bothnia": [
+        1669.24,
+        680.68
+      ],
+      "gulf-of-lyon": [
+        1003.45,
+        1929.92
+      ],
+      "helgoland-bight": [
+        1229.31,
+        1112.35
+      ],
+      "holland": [
+        1156.43,
+        1241.52
+      ],
+      "ionian-sea": [
+        1654.91,
+        2232.7
+      ],
+      "ireland": [
+        624.4,
+        1037.14
+      ],
+      "irish-sea": [
+        662.07,
+        1138.58
+      ],
+      "kiel": [
+        1270.9,
+        1208.22
+      ],
+      "liverpool": [
+        833.2,
+        1000.46
+      ],
+      "livonia": [
+        1888.19,
+        989.12
+      ],
+      "london": [
+        895.26,
+        1206.82
+      ],
+      "marseilles": [
+        1011.14,
+        1755.08
+      ],
+      "mid-atlantic": [
+        153.94,
+        1779.65
+      ],
+      "moscow": [
+        2609.7,
+        963.98
+      ],
+      "munich": [
+        1309.18,
+        1432.12
+      ],
+      "naples": [
+        1434.96,
+        2257.52
+      ],
+      "north-africa": [
+        655.11,
+        2290.23
+      ],
+      "north-atlantic": [
+        421.68,
+        617.21
+      ],
+      "north-sea": [
+        1079.41,
+        969.23
+      ],
+      "norway": [
+        1472.41,
+        469.02
+      ],
+      "norwegian-sea": [
+        1164.03,
+        383.06
+      ],
+      "paris": [
+        860.62,
+        1519.65
+      ],
+      "picardy": [
+        955.36,
+        1364.77
+      ],
+      "piedmont": [
+        1195.05,
+        1727.26
+      ],
+      "portugal": [
+        305.32,
+        1902.59
+      ],
+      "prussia": [
+        1651.01,
+        1186.16
+      ],
+      "rome": [
+        1382.14,
+        1948.73
+      ],
+      "ruhr": [
+        1217.82,
+        1368.73
+      ],
+      "rumania": [
+        2068.41,
+        1680.78
+      ],
+      "saint-petersburg": [
+        2533.98,
+        528.63
+      ],
+      "serbia": [
+        1833.5,
+        1908.9
+      ],
+      "sevastopol": [
+        2787.7,
+        1552.53
+      ],
+      "silesia": [
+        1539.53,
+        1348.06
+      ],
+      "skagerrak": [
+        1337.66,
+        899.88
+      ],
+      "smyrna": [
+        2329.91,
+        2158.43
+      ],
+      "spain": [
+        631.15,
+        1906.06
+      ],
+      "sweden": [
+        1527.65,
+        632.92
+      ],
+      "syria": [
+        2820.39,
+        2260.35
+      ],
+      "trieste": [
+        1594.22,
+        1784.43
+      ],
+      "tunis": [
+        1172.0,
+        2327.3
+      ],
+      "tuscany": [
+        1321.69,
+        1876.33
+      ],
+      "tyrolia": [
+        1418.48,
+        1619.79
+      ],
+      "tyrrhenian-sea": [
+        1344.24,
+        2070.66
+      ],
+      "ukraine": [
+        2025.79,
+        1403.27
+      ],
+      "venice": [
+        1318.75,
+        1783.51
+      ],
+      "vienna": [
+        1611.37,
+        1592.71
+      ],
+      "wales": [
+        770.42,
+        1189.5
+      ],
+      "warsaw": [
+        1746.06,
+        1301.24
+      ],
+      "western-mediterranean": [
+        867.91,
+        2157.12
+      ],
+      "yorkshire": [
+        888.76,
+        1068.34
+      ]
+    },
+    "armies": {
+      "adriatic-sea": [
+        1524.7,
+        1895.07
+      ],
+      "aegean-sea": [
+        2044.14,
+        2189.85
+      ],
+      "albania": [
+        1760.01,
+        2017.67
+      ],
+      "ankara": [
+        2451.54,
+        1963.11
+      ],
+      "apulia": [
+        1511.48,
+        2003.83
+      ],
+      "armenia": [
+        2834.7,
+        1975.38
+      ],
+      "baltic-sea": [
+        1619.48,
+        1046.39
+      ],
+      "barents-sea": [
+        2285.09,
+        226.6
+      ],
+      "belgium": [
+        1077.25,
+        1344.04
+      ],
+      "berlin": [
+        1417.68,
+        1199.18
+      ],
+      "black-sea": [
+        2470.57,
+        1774.52
+      ],
+      "bohemia": [
+        1551.65,
+        1458.9
+      ],
+      "brest": [
+        764.74,
+        1488.35
+      ],
+      "budapest": [
+        1836.64,
+        1623.31
+      ],
+      "bulgaria": [
+        1999.94,
+        1899.25
+      ],
+      "burgundy": [
+        1022.94,
+        1530.17
+      ],
+      "clyde": [
+        798.45,
+        825.29
+      ],
+      "constantinople": [
+        2209.63,
+        2057.61
+      ],
+      "denmark": [
+        1297.95,
+        1038.39
+      ],
+      "eastern-mediterranean": [
+        2381.47,
+        2288.89
+      ],
+      "edinburgh": [
+        855.66,
+        886.45
+      ],
+      "english-channel": [
+        754.02,
+        1330.9
+      ],
+      "finland": [
+        1902.9,
+        452.47
+      ],
+      "galicia": [
+        1926.34,
+        1492.16
+      ],
+      "gascony": [
+        840.34,
+        1708.31
+      ],
+      "greece": [
+        1846.6,
+        2089.91
+      ],
+      "gulf-of-bothnia": [
+        1669.24,
+        680.68
+      ],
+      "gulf-of-lyon": [
+        1003.45,
+        1929.92
+      ],
+      "helgoland-bight": [
+        1229.31,
+        1112.35
+      ],
+      "holland": [
+        1156.43,
+        1241.52
+      ],
+      "ionian-sea": [
+        1654.91,
+        2232.7
+      ],
+      "ireland": [
+        624.4,
+        1037.14
+      ],
+      "irish-sea": [
+        662.07,
+        1138.58
+      ],
+      "kiel": [
+        1270.9,
+        1208.22
+      ],
+      "liverpool": [
+        833.2,
+        1000.46
+      ],
+      "livonia": [
+        1888.19,
+        989.12
+      ],
+      "london": [
+        895.26,
+        1206.82
+      ],
+      "marseilles": [
+        1011.14,
+        1755.08
+      ],
+      "mid-atlantic": [
+        153.94,
+        1779.65
+      ],
+      "moscow": [
+        2609.7,
+        963.98
+      ],
+      "munich": [
+        1309.18,
+        1432.12
+      ],
+      "naples": [
+        1434.96,
+        2257.52
+      ],
+      "north-africa": [
+        655.11,
+        2290.23
+      ],
+      "north-atlantic": [
+        421.68,
+        617.21
+      ],
+      "north-sea": [
+        1079.41,
+        969.23
+      ],
+      "norway": [
+        1472.41,
+        469.02
+      ],
+      "norwegian-sea": [
+        1164.03,
+        383.06
+      ],
+      "paris": [
+        860.62,
+        1519.65
+      ],
+      "picardy": [
+        955.36,
+        1364.77
+      ],
+      "piedmont": [
+        1195.05,
+        1727.26
+      ],
+      "portugal": [
+        305.32,
+        1902.59
+      ],
+      "prussia": [
+        1651.01,
+        1186.16
+      ],
+      "rome": [
+        1382.14,
+        1948.73
+      ],
+      "ruhr": [
+        1217.82,
+        1368.73
+      ],
+      "rumania": [
+        2068.41,
+        1680.78
+      ],
+      "saint-petersburg": [
+        2533.98,
+        528.63
+      ],
+      "serbia": [
+        1833.5,
+        1908.9
+      ],
+      "sevastopol": [
+        2787.7,
+        1552.53
+      ],
+      "silesia": [
+        1539.53,
+        1348.06
+      ],
+      "skagerrak": [
+        1337.66,
+        899.88
+      ],
+      "smyrna": [
+        2329.91,
+        2158.43
+      ],
+      "spain": [
+        631.15,
+        1906.06
+      ],
+      "sweden": [
+        1527.65,
+        632.92
+      ],
+      "syria": [
+        2820.39,
+        2260.35
+      ],
+      "trieste": [
+        1594.22,
+        1784.43
+      ],
+      "tunis": [
+        1172.0,
+        2327.3
+      ],
+      "tuscany": [
+        1321.69,
+        1876.33
+      ],
+      "tyrolia": [
+        1418.48,
+        1619.79
+      ],
+      "tyrrhenian-sea": [
+        1344.24,
+        2070.66
+      ],
+      "ukraine": [
+        2025.79,
+        1403.27
+      ],
+      "venice": [
+        1318.75,
+        1783.51
+      ],
+      "vienna": [
+        1611.37,
+        1592.71
+      ],
+      "wales": [
+        770.42,
+        1189.5
+      ],
+      "warsaw": [
+        1746.06,
+        1301.24
+      ],
+      "western-mediterranean": [
+        867.91,
+        2157.12
+      ],
+      "yorkshire": [
+        888.76,
+        1068.34
+      ]
+    },
+    "coast_label_font_size": 9.0,
+    "coast_labels": [],
+    "fleets": [],
+    "hold_underlines": {
+      "army": [
+        0.0,
+        13.0
+      ],
+      "fleet": [
+        0.0,
+        13.0
+      ]
+    },
+    "inaccessible_region_colour": "#777870",
+    "label_colour": "#4c3b1e",
+    "labels": {
+      "adriatic-sea": [
+        1524.7,
+        1895.07
+      ],
+      "aegean-sea": [
+        2044.14,
+        2189.85
+      ],
+      "albania": [
+        1760.01,
+        2017.67
+      ],
+      "ankara": [
+        2451.54,
+        1963.11
+      ],
+      "apulia": [
+        1511.48,
+        2003.83
+      ],
+      "armenia": [
+        2834.7,
+        1975.38
+      ],
+      "baltic-sea": [
+        1619.48,
+        1046.39
+      ],
+      "barents-sea": [
+        2285.09,
+        226.6
+      ],
+      "belgium": [
+        1077.25,
+        1344.04
+      ],
+      "berlin": [
+        1417.68,
+        1199.18
+      ],
+      "black-sea": [
+        2470.57,
+        1774.52
+      ],
+      "bohemia": [
+        1551.65,
+        1458.9
+      ],
+      "brest": [
+        764.74,
+        1488.35
+      ],
+      "budapest": [
+        1836.64,
+        1623.31
+      ],
+      "bulgaria": [
+        1999.94,
+        1899.25
+      ],
+      "burgundy": [
+        1022.94,
+        1530.17
+      ],
+      "clyde": [
+        798.45,
+        825.29
+      ],
+      "constantinople": [
+        2209.63,
+        2057.61
+      ],
+      "denmark": [
+        1297.95,
+        1038.39
+      ],
+      "eastern-mediterranean": [
+        2381.47,
+        2288.89
+      ],
+      "edinburgh": [
+        855.66,
+        886.45
+      ],
+      "english-channel": [
+        754.02,
+        1330.9
+      ],
+      "finland": [
+        1902.9,
+        452.47
+      ],
+      "galicia": [
+        1926.34,
+        1492.16
+      ],
+      "gascony": [
+        840.34,
+        1708.31
+      ],
+      "greece": [
+        1846.6,
+        2089.91
+      ],
+      "gulf-of-bothnia": [
+        1669.24,
+        680.68
+      ],
+      "gulf-of-lyon": [
+        1003.45,
+        1929.92
+      ],
+      "helgoland-bight": [
+        1229.31,
+        1112.35
+      ],
+      "holland": [
+        1156.43,
+        1241.52
+      ],
+      "ionian-sea": [
+        1654.91,
+        2232.7
+      ],
+      "ireland": [
+        624.4,
+        1037.14
+      ],
+      "irish-sea": [
+        662.07,
+        1138.58
+      ],
+      "kiel": [
+        1270.9,
+        1208.22
+      ],
+      "liverpool": [
+        833.2,
+        1000.46
+      ],
+      "livonia": [
+        1888.19,
+        989.12
+      ],
+      "london": [
+        895.26,
+        1206.82
+      ],
+      "marseilles": [
+        1011.14,
+        1755.08
+      ],
+      "mid-atlantic": [
+        153.94,
+        1779.65
+      ],
+      "moscow": [
+        2609.7,
+        963.98
+      ],
+      "munich": [
+        1309.18,
+        1432.12
+      ],
+      "naples": [
+        1434.96,
+        2257.52
+      ],
+      "north-africa": [
+        655.11,
+        2290.23
+      ],
+      "north-atlantic": [
+        421.68,
+        617.21
+      ],
+      "north-sea": [
+        1079.41,
+        969.23
+      ],
+      "norway": [
+        1472.41,
+        469.02
+      ],
+      "norwegian-sea": [
+        1164.03,
+        383.06
+      ],
+      "paris": [
+        860.62,
+        1519.65
+      ],
+      "picardy": [
+        955.36,
+        1364.77
+      ],
+      "piedmont": [
+        1195.05,
+        1727.26
+      ],
+      "portugal": [
+        305.32,
+        1902.59
+      ],
+      "prussia": [
+        1651.01,
+        1186.16
+      ],
+      "rome": [
+        1382.14,
+        1948.73
+      ],
+      "ruhr": [
+        1217.82,
+        1368.73
+      ],
+      "rumania": [
+        2068.41,
+        1680.78
+      ],
+      "saint-petersburg": [
+        2533.98,
+        528.63
+      ],
+      "serbia": [
+        1833.5,
+        1908.9
+      ],
+      "sevastopol": [
+        2787.7,
+        1552.53
+      ],
+      "silesia": [
+        1539.53,
+        1348.06
+      ],
+      "skagerrak": [
+        1337.66,
+        899.88
+      ],
+      "smyrna": [
+        2329.91,
+        2158.43
+      ],
+      "spain": [
+        631.15,
+        1906.06
+      ],
+      "sweden": [
+        1527.65,
+        632.92
+      ],
+      "syria": [
+        2820.39,
+        2260.35
+      ],
+      "trieste": [
+        1594.22,
+        1784.43
+      ],
+      "tunis": [
+        1172.0,
+        2327.3
+      ],
+      "tuscany": [
+        1321.69,
+        1876.33
+      ],
+      "tyrolia": [
+        1418.48,
+        1619.79
+      ],
+      "tyrrhenian-sea": [
+        1344.24,
+        2070.66
+      ],
+      "ukraine": [
+        2025.79,
+        1403.27
+      ],
+      "venice": [
+        1318.75,
+        1783.51
+      ],
+      "vienna": [
+        1611.37,
+        1592.71
+      ],
+      "wales": [
+        770.42,
+        1189.5
+      ],
+      "warsaw": [
+        1746.06,
+        1301.24
+      ],
+      "western-mediterranean": [
+        867.91,
+        2157.12
+      ],
+      "yorkshire": [
+        888.76,
+        1068.34
+      ]
+    },
+    "sea_colour": "#9ebbd2",
+    "supply_centres": {},
+    "territory_label_font_size": 11.0,
+    "unclaimed_region_colour": "#d0c9aa"
+  },
+  "rules_engine": "standard",
+  "schema_version": 1,
+  "source": {
+    "cache_version": 1,
+    "digest": "5be5e97cd0db654e53b5aff01ddbf292aba5809e0193c10f29f7a8951ac0b2f9"
+  },
+  "start": {
+    "dislodged_units": [],
+    "phase": {
+      "season": "spring",
+      "year": 1901
+    },
+    "schema_version": 1,
+    "supply_centre_owners": {},
+    "territory_controllers": {
+      "adriatic-sea": null,
+      "aegean-sea": null,
+      "albania": null,
+      "ankara": null,
+      "apulia": null,
+      "armenia": null,
+      "baltic-sea": null,
+      "barents-sea": null,
+      "belgium": null,
+      "berlin": null,
+      "black-sea": null,
+      "bohemia": null,
+      "brest": null,
+      "budapest": null,
+      "bulgaria": null,
+      "burgundy": null,
+      "clyde": null,
+      "constantinople": null,
+      "denmark": null,
+      "eastern-mediterranean": null,
+      "edinburgh": null,
+      "english-channel": null,
+      "finland": null,
+      "galicia": null,
+      "gascony": null,
+      "greece": null,
+      "gulf-of-bothnia": null,
+      "gulf-of-lyon": null,
+      "helgoland-bight": null,
+      "holland": null,
+      "ionian-sea": null,
+      "ireland": null,
+      "irish-sea": null,
+      "kiel": null,
+      "liverpool": null,
+      "livonia": null,
+      "london": null,
+      "marseilles": null,
+      "mid-atlantic": null,
+      "moscow": null,
+      "munich": null,
+      "naples": null,
+      "north-africa": null,
+      "north-atlantic": null,
+      "north-sea": null,
+      "norway": null,
+      "norwegian-sea": null,
+      "paris": null,
+      "picardy": null,
+      "piedmont": null,
+      "portugal": null,
+      "prussia": null,
+      "rome": null,
+      "ruhr": null,
+      "rumania": null,
+      "saint-petersburg": null,
+      "serbia": null,
+      "sevastopol": null,
+      "silesia": null,
+      "skagerrak": null,
+      "smyrna": null,
+      "spain": null,
+      "sweden": null,
+      "syria": null,
+      "trieste": null,
+      "tunis": null,
+      "tuscany": null,
+      "tyrolia": null,
+      "tyrrhenian-sea": null,
+      "ukraine": null,
+      "venice": null,
+      "vienna": null,
+      "wales": null,
+      "warsaw": null,
+      "western-mediterranean": null,
+      "yorkshire": null
+    },
+    "units": []
+  },
+  "territories": [
+    {
+      "abbreviation": "ASX",
+      "display_name": "Adriatic Sea",
+      "id": "adriatic-sea",
+      "kind": "sea",
+      "name": "Adriatic Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-adriatic-sea"
+    },
+    {
+      "abbreviation": "ASA",
+      "display_name": "Aegean Sea",
+      "id": "aegean-sea",
+      "kind": "sea",
+      "name": "Aegean Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-aegean-sea"
+    },
+    {
+      "abbreviation": "AXX",
+      "display_name": "Albania",
+      "id": "albania",
+      "kind": "land",
+      "name": "Albania",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-albania"
+    },
+    {
+      "abbreviation": "AXA",
+      "display_name": "Ankara",
+      "id": "ankara",
+      "kind": "land",
+      "name": "Ankara",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-ankara"
+    },
+    {
+      "abbreviation": "AXB",
+      "display_name": "Apulia",
+      "id": "apulia",
+      "kind": "land",
+      "name": "Apulia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-apulia"
+    },
+    {
+      "abbreviation": "AXC",
+      "display_name": "Armenia",
+      "id": "armenia",
+      "kind": "land",
+      "name": "Armenia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-armenia"
+    },
+    {
+      "abbreviation": "BSX",
+      "display_name": "Baltic Sea",
+      "id": "baltic-sea",
+      "kind": "sea",
+      "name": "Baltic Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-baltic-sea"
+    },
+    {
+      "abbreviation": "BSA",
+      "display_name": "Barents Sea",
+      "id": "barents-sea",
+      "kind": "sea",
+      "name": "Barents Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-barents-sea"
+    },
+    {
+      "abbreviation": "BXX",
+      "display_name": "Belgium",
+      "id": "belgium",
+      "kind": "land",
+      "name": "Belgium",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-belgium"
+    },
+    {
+      "abbreviation": "BXA",
+      "display_name": "Berlin",
+      "id": "berlin",
+      "kind": "land",
+      "name": "Berlin",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-berlin"
+    },
+    {
+      "abbreviation": "BSB",
+      "display_name": "Black Sea",
+      "id": "black-sea",
+      "kind": "sea",
+      "name": "Black Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-black-sea"
+    },
+    {
+      "abbreviation": "BXB",
+      "display_name": "Bohemia",
+      "id": "bohemia",
+      "kind": "land",
+      "name": "Bohemia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-bohemia"
+    },
+    {
+      "abbreviation": "BXC",
+      "display_name": "Brest",
+      "id": "brest",
+      "kind": "land",
+      "name": "Brest",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-brest"
+    },
+    {
+      "abbreviation": "BXD",
+      "display_name": "Budapest",
+      "id": "budapest",
+      "kind": "land",
+      "name": "Budapest",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-budapest"
+    },
+    {
+      "abbreviation": "BXE",
+      "display_name": "Bulgaria",
+      "id": "bulgaria",
+      "kind": "land",
+      "name": "Bulgaria",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-bulgaria"
+    },
+    {
+      "abbreviation": "BXF",
+      "display_name": "Burgundy",
+      "id": "burgundy",
+      "kind": "land",
+      "name": "Burgundy",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-burgundy"
+    },
+    {
+      "abbreviation": "CXX",
+      "display_name": "Clyde",
+      "id": "clyde",
+      "kind": "sea",
+      "name": "Clyde",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-clyde"
+    },
+    {
+      "abbreviation": "CXA",
+      "display_name": "Constantinople",
+      "id": "constantinople",
+      "kind": "land",
+      "name": "Constantinople",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-constantinople"
+    },
+    {
+      "abbreviation": "DXX",
+      "display_name": "Denmark",
+      "id": "denmark",
+      "kind": "land",
+      "name": "Denmark",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-denmark"
+    },
+    {
+      "abbreviation": "EMX",
+      "display_name": "Eastern Mediterranean",
+      "id": "eastern-mediterranean",
+      "kind": "sea",
+      "name": "Eastern Mediterranean",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-eastern-mediterranean"
+    },
+    {
+      "abbreviation": "Edi",
+      "display_name": "Edinburgh",
+      "id": "edinburgh",
+      "kind": "land",
+      "name": "Edinburgh",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-edinburgh"
+    },
+    {
+      "abbreviation": "ECX",
+      "display_name": "English Channel",
+      "id": "english-channel",
+      "kind": "sea",
+      "name": "English Channel",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-english-channel"
+    },
+    {
+      "abbreviation": "FXX",
+      "display_name": "Finland",
+      "id": "finland",
+      "kind": "land",
+      "name": "Finland",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-finland"
+    },
+    {
+      "abbreviation": "GXX",
+      "display_name": "Galicia",
+      "id": "galicia",
+      "kind": "land",
+      "name": "Galicia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-galicia"
+    },
+    {
+      "abbreviation": "GXA",
+      "display_name": "Gascony",
+      "id": "gascony",
+      "kind": "land",
+      "name": "Gascony",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-gascony"
+    },
+    {
+      "abbreviation": "GXB",
+      "display_name": "Greece",
+      "id": "greece",
+      "kind": "land",
+      "name": "Greece",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-greece"
+    },
+    {
+      "abbreviation": "GOB",
+      "display_name": "Gulf Of Bothnia",
+      "id": "gulf-of-bothnia",
+      "kind": "sea",
+      "name": "Gulf Of Bothnia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-gulf-of-bothnia"
+    },
+    {
+      "abbreviation": "GOL",
+      "display_name": "Gulf Of Lyon",
+      "id": "gulf-of-lyon",
+      "kind": "sea",
+      "name": "Gulf Of Lyon",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-gulf-of-lyon"
+    },
+    {
+      "abbreviation": "HBX",
+      "display_name": "Helgoland Bight",
+      "id": "helgoland-bight",
+      "kind": "land",
+      "name": "Helgoland Bight",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-helgoland-bight"
+    },
+    {
+      "abbreviation": "HXX",
+      "display_name": "Holland",
+      "id": "holland",
+      "kind": "land",
+      "name": "Holland",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-holland"
+    },
+    {
+      "abbreviation": "ISX",
+      "display_name": "Ionian Sea",
+      "id": "ionian-sea",
+      "kind": "sea",
+      "name": "Ionian Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-ionian-sea"
+    },
+    {
+      "abbreviation": "IXX",
+      "display_name": "Ireland",
+      "id": "ireland",
+      "kind": "land",
+      "name": "Ireland",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-ireland"
+    },
+    {
+      "abbreviation": "ISA",
+      "display_name": "Irish Sea",
+      "id": "irish-sea",
+      "kind": "sea",
+      "name": "Irish Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-irish-sea"
+    },
+    {
+      "abbreviation": "KXX",
+      "display_name": "Kiel",
+      "id": "kiel",
+      "kind": "land",
+      "name": "Kiel",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-kiel"
+    },
+    {
+      "abbreviation": "Lvp",
+      "display_name": "Liverpool",
+      "id": "liverpool",
+      "kind": "land",
+      "name": "Liverpool",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-liverpool"
+    },
+    {
+      "abbreviation": "LXA",
+      "display_name": "Livonia",
+      "id": "livonia",
+      "kind": "land",
+      "name": "Livonia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-livonia"
+    },
+    {
+      "abbreviation": "Lon",
+      "display_name": "London",
+      "id": "london",
+      "kind": "land",
+      "name": "London",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-london"
+    },
+    {
+      "abbreviation": "MXX",
+      "display_name": "Marseilles",
+      "id": "marseilles",
+      "kind": "land",
+      "name": "Marseilles",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-marseilles"
+    },
+    {
+      "abbreviation": "MAX",
+      "display_name": "Mid Atlantic",
+      "id": "mid-atlantic",
+      "kind": "sea",
+      "name": "Mid Atlantic",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-mid-atlantic"
+    },
+    {
+      "abbreviation": "MXA",
+      "display_name": "Moscow",
+      "id": "moscow",
+      "kind": "land",
+      "name": "Moscow",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-moscow"
+    },
+    {
+      "abbreviation": "MXB",
+      "display_name": "Munich",
+      "id": "munich",
+      "kind": "land",
+      "name": "Munich",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-munich"
+    },
+    {
+      "abbreviation": "NXX",
+      "display_name": "Naples",
+      "id": "naples",
+      "kind": "land",
+      "name": "Naples",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-naples"
+    },
+    {
+      "abbreviation": "NAX",
+      "display_name": "North Africa",
+      "id": "north-africa",
+      "kind": "land",
+      "name": "North Africa",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-north-africa"
+    },
+    {
+      "abbreviation": "NAA",
+      "display_name": "North Atlantic",
+      "id": "north-atlantic",
+      "kind": "sea",
+      "name": "North Atlantic",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-north-atlantic"
+    },
+    {
+      "abbreviation": "NSX",
+      "display_name": "North Sea",
+      "id": "north-sea",
+      "kind": "sea",
+      "name": "North Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-north-sea"
+    },
+    {
+      "abbreviation": "NXA",
+      "display_name": "Norway",
+      "id": "norway",
+      "kind": "land",
+      "name": "Norway",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-norway"
+    },
+    {
+      "abbreviation": "NSA",
+      "display_name": "Norwegian Sea",
+      "id": "norwegian-sea",
+      "kind": "sea",
+      "name": "Norwegian Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-norwegian-sea"
+    },
+    {
+      "abbreviation": "PXX",
+      "display_name": "Paris",
+      "id": "paris",
+      "kind": "land",
+      "name": "Paris",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-paris"
+    },
+    {
+      "abbreviation": "PXA",
+      "display_name": "Picardy",
+      "id": "picardy",
+      "kind": "land",
+      "name": "Picardy",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-picardy"
+    },
+    {
+      "abbreviation": "PXB",
+      "display_name": "Piedmont",
+      "id": "piedmont",
+      "kind": "land",
+      "name": "Piedmont",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-piedmont"
+    },
+    {
+      "abbreviation": "PXC",
+      "display_name": "Portugal",
+      "id": "portugal",
+      "kind": "land",
+      "name": "Portugal",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-portugal"
+    },
+    {
+      "abbreviation": "PXD",
+      "display_name": "Prussia",
+      "id": "prussia",
+      "kind": "land",
+      "name": "Prussia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-prussia"
+    },
+    {
+      "abbreviation": "RXX",
+      "display_name": "Rome",
+      "id": "rome",
+      "kind": "land",
+      "name": "Rome",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-rome"
+    },
+    {
+      "abbreviation": "RXA",
+      "display_name": "Ruhr",
+      "id": "ruhr",
+      "kind": "land",
+      "name": "Ruhr",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-ruhr"
+    },
+    {
+      "abbreviation": "RXB",
+      "display_name": "Rumania",
+      "id": "rumania",
+      "kind": "land",
+      "name": "Rumania",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-rumania"
+    },
+    {
+      "abbreviation": "SPX",
+      "display_name": "Saint Petersburg",
+      "id": "saint-petersburg",
+      "kind": "land",
+      "name": "Saint Petersburg",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-saint-petersburg"
+    },
+    {
+      "abbreviation": "SXX",
+      "display_name": "Serbia",
+      "id": "serbia",
+      "kind": "land",
+      "name": "Serbia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-serbia"
+    },
+    {
+      "abbreviation": "SXA",
+      "display_name": "Sevastopol",
+      "id": "sevastopol",
+      "kind": "land",
+      "name": "Sevastopol",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-sevastopol"
+    },
+    {
+      "abbreviation": "SXB",
+      "display_name": "Silesia",
+      "id": "silesia",
+      "kind": "land",
+      "name": "Silesia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-silesia"
+    },
+    {
+      "abbreviation": "SXC",
+      "display_name": "Skagerrak",
+      "id": "skagerrak",
+      "kind": "sea",
+      "name": "Skagerrak",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-skagerrak"
+    },
+    {
+      "abbreviation": "SXD",
+      "display_name": "Smyrna",
+      "id": "smyrna",
+      "kind": "land",
+      "name": "Smyrna",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-smyrna"
+    },
+    {
+      "abbreviation": "SXE",
+      "display_name": "Spain",
+      "id": "spain",
+      "kind": "land",
+      "name": "Spain",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-spain"
+    },
+    {
+      "abbreviation": "SXF",
+      "display_name": "Sweden",
+      "id": "sweden",
+      "kind": "land",
+      "name": "Sweden",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-sweden"
+    },
+    {
+      "abbreviation": "SXG",
+      "display_name": "Syria",
+      "id": "syria",
+      "kind": "land",
+      "name": "Syria",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-syria"
+    },
+    {
+      "abbreviation": "TXX",
+      "display_name": "Trieste",
+      "id": "trieste",
+      "kind": "land",
+      "name": "Trieste",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-trieste"
+    },
+    {
+      "abbreviation": "TXA",
+      "display_name": "Tunis",
+      "id": "tunis",
+      "kind": "land",
+      "name": "Tunis",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-tunis"
+    },
+    {
+      "abbreviation": "TXB",
+      "display_name": "Tuscany",
+      "id": "tuscany",
+      "kind": "land",
+      "name": "Tuscany",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-tuscany"
+    },
+    {
+      "abbreviation": "TXC",
+      "display_name": "Tyrolia",
+      "id": "tyrolia",
+      "kind": "land",
+      "name": "Tyrolia",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-tyrolia"
+    },
+    {
+      "abbreviation": "TSX",
+      "display_name": "Tyrrhenian Sea",
+      "id": "tyrrhenian-sea",
+      "kind": "sea",
+      "name": "Tyrrhenian Sea",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-tyrrhenian-sea"
+    },
+    {
+      "abbreviation": "UXX",
+      "display_name": "Ukraine",
+      "id": "ukraine",
+      "kind": "land",
+      "name": "Ukraine",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-ukraine"
+    },
+    {
+      "abbreviation": "VXX",
+      "display_name": "Venice",
+      "id": "venice",
+      "kind": "land",
+      "name": "Venice",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-venice"
+    },
+    {
+      "abbreviation": "VXA",
+      "display_name": "Vienna",
+      "id": "vienna",
+      "kind": "land",
+      "name": "Vienna",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-vienna"
+    },
+    {
+      "abbreviation": "Wal",
+      "display_name": "Wales",
+      "id": "wales",
+      "kind": "land",
+      "name": "Wales",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-wales"
+    },
+    {
+      "abbreviation": "WXA",
+      "display_name": "Warsaw",
+      "id": "warsaw",
+      "kind": "land",
+      "name": "Warsaw",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-warsaw"
+    },
+    {
+      "abbreviation": "WMX",
+      "display_name": "Western Mediterranean",
+      "id": "western-mediterranean",
+      "kind": "sea",
+      "name": "Western Mediterranean",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-western-mediterranean"
+    },
+    {
+      "abbreviation": "YXX",
+      "display_name": "Yorkshire",
+      "id": "yorkshire",
+      "kind": "land",
+      "name": "Yorkshire",
+      "split_coasts": [],
+      "supply_centre": false,
+      "svg_element": "territory-yorkshire"
+    }
+  ]
+}

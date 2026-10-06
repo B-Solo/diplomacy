@@ -33,6 +33,7 @@ from diplomacy_app.domain.models import (
     UnitPosition,
     UnitRef,
     UnitType,
+    UnparseableOrder,
     WaiveOrder,
 )
 from diplomacy_app.rules_engine.map_adapter import (
@@ -108,7 +109,7 @@ class StandardRulesEngine:
         return None
 
     def _order_allowed(self, phase_id: PhaseId, order: CanonicalOrder) -> bool:
-        """Return whether an order kind belongs to the requested phase."""
+        """Return whether an order is permitted in the current season."""
         if phase_id.season in {Season.SPRING, Season.FALL}:
             return isinstance(order, (HoldOrder, MoveOrder, SupportOrder, ConvoyOrder))
         if phase_id.season in {Season.SUMMER, Season.WINTER}:
@@ -146,6 +147,17 @@ class StandardRulesEngine:
                         candidate.source.number,
                         False,
                         (issue,),
+                        self._invalid_default(phase_id, power_id, candidate),
+                    )
+                )
+                continue
+            if isinstance(candidate.order, UnparseableOrder):
+                # Don't log an issue, this was done at parse time
+                results.append(
+                    RuleValidation(
+                        candidate.source.number,
+                        False,
+                        candidate.parser_issues,
                         self._invalid_default(phase_id, power_id, candidate),
                     )
                 )

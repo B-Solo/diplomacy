@@ -1,0 +1,415 @@
+{
+  "results": [
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "budapest"
+          },
+          "power": "austria",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "austria",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "vienna"
+          },
+          "power": "austria",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "austria",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "trieste"
+          },
+          "power": "austria",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "austria",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "edinburgh"
+          },
+          "power": "england",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "england",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "london"
+          },
+          "power": "england",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "england",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "liverpool"
+          },
+          "power": "england",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "england",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "brest"
+          },
+          "power": "france",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [
+        "VOID"
+      ],
+      "power": "france",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "marseilles"
+          },
+          "power": "france",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "france",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "paris"
+          },
+          "power": "france",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "france",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "berlin"
+          },
+          "power": "germany",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "kiel"
+          },
+          "power": "germany",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "munich"
+          },
+          "power": "germany",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "germany",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "naples"
+          },
+          "power": "italy",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "italy",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "rome"
+          },
+          "power": "italy",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "italy",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "venice"
+          },
+          "power": "italy",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "italy",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "moscow"
+          },
+          "power": "russia",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "sevastopol"
+          },
+          "power": "russia",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": "sc",
+            "territory": "st-petersburg"
+          },
+          "power": "russia",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "warsaw"
+          },
+          "power": "russia",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "russia",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "ankara"
+          },
+          "power": "turkey",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "turkey",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "constantinople"
+          },
+          "power": "turkey",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "turkey",
+      "source_line": null
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "smyrna"
+          },
+          "power": "turkey",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "turkey",
+      "source_line": null
+    }
+  ],
+  "schema_version": 1,
+  "submissions": {
+    "france": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "Unknown or ambiguous territory: MAO",
+          "order": {
+            "kind": "unparseable",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "brest"
+              },
+              "power": "france",
+              "type": "fleet"
+            }
+          },
+          "parser_issues": [
+            {
+              "code": "order.unrecognised_description",
+              "message": "Unknown or ambiguous territory: MAO",
+              "severity": "error"
+            }
+          ],
+          "source": {
+            "number": 1,
+            "text": "F Bre - MAO"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "hold",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "brest"
+                },
+                "power": "france",
+                "type": "fleet"
+              }
+            },
+            "is_valid": false,
+            "issues": [
+              {
+                "code": "order.unrecognised_description",
+                "message": "Unknown or ambiguous territory: MAO",
+                "severity": "error"
+              }
+            ],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "france",
+      "raw_text": "F Bre - MAO"
+    }
+  }
+}

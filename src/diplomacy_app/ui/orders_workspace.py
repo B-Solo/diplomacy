@@ -377,7 +377,8 @@ class OrdersWorkspace(QWidget):
         if not session.game or not session.phase or not session.phase_requirements:
             return
         self.phase_label.setText(session.phase.phase_id.label)
-        editable = session.phase.phase_id == session.game.current_phase
+        # editable = session.phase.phase_id == session.game.current_phase
+        editable = True
         self.finalisation_enabled = session.game.settings.require_order_finalisation
         self.unfinalised.setVisible(self.finalisation_enabled)
         self.final_count.setVisible(self.finalisation_enabled)

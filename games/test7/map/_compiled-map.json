@@ -1059,6 +1059,17 @@
     {
       "destination": {
         "coast": null,
+        "territory": "somerset"
+      },
+      "origin": {
+        "coast": "north",
+        "territory": "devon"
+      },
+      "unit": "fleet"
+    },
+    {
+      "destination": {
+        "coast": null,
         "territory": "cornwall"
       },
       "origin": {
@@ -4465,6 +4476,17 @@
         "territory": "somerset"
       },
       "unit": "army"
+    },
+    {
+      "destination": {
+        "coast": "north",
+        "territory": "devon"
+      },
+      "origin": {
+        "coast": null,
+        "territory": "somerset"
+      },
+      "unit": "fleet"
     },
     {
       "destination": {
@@ -6338,8 +6360,8 @@
           "territory": "devon"
         },
         "point": [
-          334.63,
-          750.75
+          327.93,
+          752.42
         ]
       },
       {
@@ -6919,7 +6941,7 @@
   "schema_version": 1,
   "source": {
     "cache_version": 1,
-    "digest": "1642a98e3d82da32649d66753e4068d044825a3c513e08716ab767aee8d5ec3f"
+    "digest": "1368cfb8a061be2be1282896b01561c76707981f625c8a0df9dbc4f0935b34fc"
   },
   "start": {
     "dislodged_units": [],

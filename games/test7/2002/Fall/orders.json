@@ -1,0 +1,2222 @@
+{
+  "results": [
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "douglas-bay"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "lancashire"
+          },
+          "power": "merseyside",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "merseyside",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "clwyd"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "cheshire"
+          },
+          "power": "merseyside",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "merseyside",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "cheshire"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "staffordshire"
+          },
+          "power": "merseyside",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "merseyside",
+      "source_line": 3
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "pembrokeshire"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "cardigan-bay"
+          },
+          "power": "merseyside",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "merseyside",
+      "source_line": 5
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "greater-manchester"
+          },
+          "power": "merseyside",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "merseyside",
+      "source_line": null
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "north-atlantic"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "north-sea"
+          },
+          "power": "up-north",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "up-north",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "lancashire"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "n-yorkshire"
+          },
+          "power": "up-north",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "up-north",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "lancashire"
+        },
+        "kind": "support",
+        "supported_unit": {
+          "location": {
+            "coast": null,
+            "territory": "n-yorkshire"
+          },
+          "power": "",
+          "type": "army"
+        },
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "cumbria"
+          },
+          "power": "up-north",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "up-north",
+      "source_line": 3
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "greater-manchester"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "w-yorkshire"
+          },
+          "power": "up-north",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [
+        "BOUNCE"
+      ],
+      "power": "up-north",
+      "source_line": 4
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "staffordshire"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "derbyshire-and-nottinghamshire"
+          },
+          "power": "up-north",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "up-north",
+      "source_line": 5
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "n-yorkshire"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "durham"
+          },
+          "power": "up-north",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "up-north",
+      "source_line": 6
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "dutch-crossing"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "straights-of-dover"
+          },
+          "power": "london",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "london",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "destination": null,
+        "kind": "support",
+        "supported_unit": {
+          "location": {
+            "coast": null,
+            "territory": "dorset"
+          },
+          "power": "",
+          "type": "army"
+        },
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "south-coast"
+          },
+          "power": "london",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [
+        "CUT"
+      ],
+      "power": "london",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "dorset"
+          },
+          "power": "london",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "DISLODGED"
+      ],
+      "power": "london",
+      "source_line": 3
+    },
+    {
+      "order": {
+        "destination": null,
+        "kind": "support",
+        "supported_unit": {
+          "location": {
+            "coast": null,
+            "territory": "surrey"
+          },
+          "power": "",
+          "type": "army"
+        },
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "london"
+          },
+          "power": "london",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "CUT"
+      ],
+      "power": "london",
+      "source_line": 4
+    },
+    {
+      "order": {
+        "destination": null,
+        "kind": "support",
+        "supported_unit": {
+          "location": {
+            "coast": null,
+            "territory": "london"
+          },
+          "power": "",
+          "type": "army"
+        },
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "surrey"
+          },
+          "power": "london",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "london",
+      "source_line": 5
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "dorset"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "hampshire"
+          },
+          "power": "bristol",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "bristol",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "dorset"
+        },
+        "kind": "support",
+        "supported_unit": {
+          "location": {
+            "coast": null,
+            "territory": "hampshire"
+          },
+          "power": "",
+          "type": "army"
+        },
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "somerset"
+          },
+          "power": "bristol",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "bristol",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "wiltshire"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "gloucestershire"
+          },
+          "power": "bristol",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "bristol",
+      "source_line": 3
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "london"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "bucks"
+          },
+          "power": "bristol",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [
+        "BOUNCE"
+      ],
+      "power": "bristol",
+      "source_line": 4
+    },
+    {
+      "order": {
+        "kind": "hold",
+        "unit": {
+          "location": {
+            "coast": "north",
+            "territory": "devon"
+          },
+          "power": "bristol",
+          "type": "fleet"
+        }
+      },
+      "outcomes": [],
+      "power": "bristol",
+      "source_line": 5
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "south-coast"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "cornwall"
+          },
+          "power": "wales",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [
+        "BOUNCE"
+      ],
+      "power": "wales",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "cornwall"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "s-bristol-channel"
+          },
+          "power": "wales",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [
+        "BOUNCE"
+      ],
+      "power": "wales",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "dyfed"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "glamorgan"
+          },
+          "power": "wales",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "wales",
+      "source_line": 3
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "gwynedd"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "n-powys"
+          },
+          "power": "wales",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "wales",
+      "source_line": 4
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "w-midlands"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "hereford-and-worcester"
+          },
+          "power": "wales",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "wales",
+      "source_line": 5
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "menai-straits"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "north-atlantic"
+          },
+          "power": "east-anglia",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "east-anglia",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "n-lincolnshire"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "humberside"
+          },
+          "power": "east-anglia",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "east-anglia",
+      "source_line": 2
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "humberside"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "humber-estuary"
+          },
+          "power": "east-anglia",
+          "type": "fleet"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "east-anglia",
+      "source_line": 3
+    },
+    {
+      "order": {
+        "destination": null,
+        "kind": "support",
+        "supported_unit": {
+          "location": {
+            "coast": null,
+            "territory": "warwickshire"
+          },
+          "power": "",
+          "type": "army"
+        },
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "northants"
+          },
+          "power": "east-anglia",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "east-anglia",
+      "source_line": 4
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "staffordshire"
+        },
+        "kind": "support",
+        "supported_unit": {
+          "location": {
+            "coast": null,
+            "territory": "derbyshire-and-nottinghamshire"
+          },
+          "power": "",
+          "type": "army"
+        },
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "warwickshire"
+          },
+          "power": "east-anglia",
+          "type": "army"
+        }
+      },
+      "outcomes": [],
+      "power": "east-anglia",
+      "source_line": 5
+    },
+    {
+      "order": {
+        "destination": {
+          "coast": null,
+          "territory": "derbyshire-and-nottinghamshire"
+        },
+        "kind": "move",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "s-lincolnshire"
+          },
+          "power": "east-anglia",
+          "type": "army"
+        },
+        "via_convoy": false
+      },
+      "outcomes": [],
+      "power": "east-anglia",
+      "source_line": 6
+    }
+  ],
+  "schema_version": 1,
+  "submissions": {
+    "bristol": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Ham - Dor",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "dorset"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "hampshire"
+              },
+              "power": "bristol",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Ham - Dor"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "dorset"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "hampshire"
+                },
+                "power": "bristol",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "A Som S A Ham - Dor",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "dorset"
+            },
+            "kind": "support",
+            "supported_unit": {
+              "location": {
+                "coast": null,
+                "territory": "hampshire"
+              },
+              "power": "",
+              "type": "army"
+            },
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "somerset"
+              },
+              "power": "bristol",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "A som S A Ham - Dor"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "dorset"
+              },
+              "kind": "support",
+              "supported_unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "hampshire"
+                },
+                "power": "",
+                "type": "army"
+              },
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "somerset"
+                },
+                "power": "bristol",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        },
+        {
+          "canonical_text": "A Glo - Wil",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "wiltshire"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "gloucestershire"
+              },
+              "power": "bristol",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 3,
+            "text": "A Glo - Wil"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "wiltshire"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "gloucestershire"
+                },
+                "power": "bristol",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 3
+          }
+        },
+        {
+          "canonical_text": "A Buc - Lon",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "london"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "bucks"
+              },
+              "power": "bristol",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 4,
+            "text": "A buc - Lon"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "london"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "bucks"
+                },
+                "power": "bristol",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 4
+          }
+        },
+        {
+          "canonical_text": "F Dev/NORTH H",
+          "order": {
+            "kind": "hold",
+            "unit": {
+              "location": {
+                "coast": "north",
+                "territory": "devon"
+              },
+              "power": "bristol",
+              "type": "fleet"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 5,
+            "text": "F Dev/NORTH H"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "hold",
+              "unit": {
+                "location": {
+                  "coast": "north",
+                  "territory": "devon"
+                },
+                "power": "bristol",
+                "type": "fleet"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 5
+          }
+        }
+      ],
+      "power": "bristol",
+      "raw_text": "A Ham - Dor\nA som S A Ham - Dor\nA Glo - Wil\nA buc - Lon\nF Dev/NORTH H"
+    },
+    "east-anglia": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "F NAT - MEN",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "menai-straits"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "north-atlantic"
+              },
+              "power": "east-anglia",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "F Nat - Men"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "menai-straits"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "north-atlantic"
+                },
+                "power": "east-anglia",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "A Hum - Nli",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "n-lincolnshire"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "humberside"
+              },
+              "power": "east-anglia",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "A Hum - Nli"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "n-lincolnshire"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "humberside"
+                },
+                "power": "east-anglia",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        },
+        {
+          "canonical_text": "F HUE - Hum",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "humberside"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "humber-estuary"
+              },
+              "power": "east-anglia",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 3,
+            "text": "F Hue - Hum"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "humberside"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "humber-estuary"
+                },
+                "power": "east-anglia",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 3
+          }
+        },
+        {
+          "canonical_text": "A Nha S A War",
+          "order": {
+            "destination": null,
+            "kind": "support",
+            "supported_unit": {
+              "location": {
+                "coast": null,
+                "territory": "warwickshire"
+              },
+              "power": "",
+              "type": "army"
+            },
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "northants"
+              },
+              "power": "east-anglia",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 4,
+            "text": "A Nha S A War"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": null,
+              "kind": "support",
+              "supported_unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "warwickshire"
+                },
+                "power": "",
+                "type": "army"
+              },
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "northants"
+                },
+                "power": "east-anglia",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 4
+          }
+        },
+        {
+          "canonical_text": "A War S A Dno - Sta",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "staffordshire"
+            },
+            "kind": "support",
+            "supported_unit": {
+              "location": {
+                "coast": null,
+                "territory": "derbyshire-and-nottinghamshire"
+              },
+              "power": "",
+              "type": "army"
+            },
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "warwickshire"
+              },
+              "power": "east-anglia",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 5,
+            "text": "A war S A Dno - Sta"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "staffordshire"
+              },
+              "kind": "support",
+              "supported_unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "derbyshire-and-nottinghamshire"
+                },
+                "power": "",
+                "type": "army"
+              },
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "warwickshire"
+                },
+                "power": "east-anglia",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 5
+          }
+        },
+        {
+          "canonical_text": "A Sli - Dno",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "derbyshire-and-nottinghamshire"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "s-lincolnshire"
+              },
+              "power": "east-anglia",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 6,
+            "text": "A Sli - Dno"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "derbyshire-and-nottinghamshire"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "s-lincolnshire"
+                },
+                "power": "east-anglia",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 6
+          }
+        }
+      ],
+      "power": "east-anglia",
+      "raw_text": "F Nat - Men\nA Hum - Nli\nF Hue - Hum\nA Nha S A War\nA war S A Dno - Sta\nA Sli - Dno"
+    },
+    "london": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "F SOD - DCR",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "dutch-crossing"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "straights-of-dover"
+              },
+              "power": "london",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "F SOD - DCR"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "dutch-crossing"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "straights-of-dover"
+                },
+                "power": "london",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "F SOC S A Dor",
+          "order": {
+            "destination": null,
+            "kind": "support",
+            "supported_unit": {
+              "location": {
+                "coast": null,
+                "territory": "dorset"
+              },
+              "power": "",
+              "type": "army"
+            },
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "south-coast"
+              },
+              "power": "london",
+              "type": "fleet"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "F SOC S A Dor"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": null,
+              "kind": "support",
+              "supported_unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "dorset"
+                },
+                "power": "",
+                "type": "army"
+              },
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "south-coast"
+                },
+                "power": "london",
+                "type": "fleet"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        },
+        {
+          "canonical_text": "A Dor H",
+          "order": {
+            "kind": "hold",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "dorset"
+              },
+              "power": "london",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 3,
+            "text": "A Dor H"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "hold",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "dorset"
+                },
+                "power": "london",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 3
+          }
+        },
+        {
+          "canonical_text": "A Lon S A Sur",
+          "order": {
+            "destination": null,
+            "kind": "support",
+            "supported_unit": {
+              "location": {
+                "coast": null,
+                "territory": "surrey"
+              },
+              "power": "",
+              "type": "army"
+            },
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "london"
+              },
+              "power": "london",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 4,
+            "text": "A Lon S A Sur"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": null,
+              "kind": "support",
+              "supported_unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "surrey"
+                },
+                "power": "",
+                "type": "army"
+              },
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "london"
+                },
+                "power": "london",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 4
+          }
+        },
+        {
+          "canonical_text": "A Sur S A Lon",
+          "order": {
+            "destination": null,
+            "kind": "support",
+            "supported_unit": {
+              "location": {
+                "coast": null,
+                "territory": "london"
+              },
+              "power": "",
+              "type": "army"
+            },
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "surrey"
+              },
+              "power": "london",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 5,
+            "text": "A sur S A Lon"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": null,
+              "kind": "support",
+              "supported_unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "london"
+                },
+                "power": "",
+                "type": "army"
+              },
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "surrey"
+                },
+                "power": "london",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 5
+          }
+        }
+      ],
+      "power": "london",
+      "raw_text": "F SOD - DCR\nF SOC S A Dor\nA Dor H\nA Lon S A Sur\nA sur S A Lon"
+    },
+    "merseyside": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "F Lan - DBY",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "douglas-bay"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "lancashire"
+              },
+              "power": "merseyside",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "F Lan - DBY"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "douglas-bay"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "lancashire"
+                },
+                "power": "merseyside",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "A Che - Clw",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "clwyd"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "cheshire"
+              },
+              "power": "merseyside",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "A CHe - CLW"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "clwyd"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "cheshire"
+                },
+                "power": "merseyside",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        },
+        {
+          "canonical_text": "A Sta - Che",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "cheshire"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "staffordshire"
+              },
+              "power": "merseyside",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 3,
+            "text": "A Sta - Che"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "cheshire"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "staffordshire"
+                },
+                "power": "merseyside",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 3
+          }
+        },
+        {
+          "canonical_text": null,
+          "order": null,
+          "parser_issues": [
+            {
+              "code": "order.unrecognised_unit",
+              "message": "Expected A/Army or F/Fleet, found: Gma",
+              "severity": "error"
+            }
+          ],
+          "source": {
+            "number": 4,
+            "text": "Gma H"
+          },
+          "validation": null
+        },
+        {
+          "canonical_text": "F CDB - Pem",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "pembrokeshire"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "cardigan-bay"
+              },
+              "power": "merseyside",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 5,
+            "text": "F CDB - Pem"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "pembrokeshire"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "cardigan-bay"
+                },
+                "power": "merseyside",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 5
+          }
+        }
+      ],
+      "power": "merseyside",
+      "raw_text": "F Lan - DBY\nA CHe - CLW\nA Sta - Che\nGma H\nF CDB - Pem"
+    },
+    "up-north": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "F NTH - NAT",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "north-atlantic"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "north-sea"
+              },
+              "power": "up-north",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "F Nth - NAT"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "north-atlantic"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "north-sea"
+                },
+                "power": "up-north",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "A Nyo - Lan",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "lancashire"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "n-yorkshire"
+              },
+              "power": "up-north",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "A Nyo - Lan"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "lancashire"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "n-yorkshire"
+                },
+                "power": "up-north",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        },
+        {
+          "canonical_text": "A Cum S A Nyo - Lan",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "lancashire"
+            },
+            "kind": "support",
+            "supported_unit": {
+              "location": {
+                "coast": null,
+                "territory": "n-yorkshire"
+              },
+              "power": "",
+              "type": "army"
+            },
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "cumbria"
+              },
+              "power": "up-north",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 3,
+            "text": "A Cum S A Nyo - Lan"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "lancashire"
+              },
+              "kind": "support",
+              "supported_unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "n-yorkshire"
+                },
+                "power": "",
+                "type": "army"
+              },
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "cumbria"
+                },
+                "power": "up-north",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 3
+          }
+        },
+        {
+          "canonical_text": "A Wyo - Gma",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "greater-manchester"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "w-yorkshire"
+              },
+              "power": "up-north",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 4,
+            "text": "A Wyo - Gma"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "greater-manchester"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "w-yorkshire"
+                },
+                "power": "up-north",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 4
+          }
+        },
+        {
+          "canonical_text": "A Dno - Sta",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "staffordshire"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "derbyshire-and-nottinghamshire"
+              },
+              "power": "up-north",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 5,
+            "text": "A dno - Sta"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "staffordshire"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "derbyshire-and-nottinghamshire"
+                },
+                "power": "up-north",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 5
+          }
+        },
+        {
+          "canonical_text": "A Dur - Nyo",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "n-yorkshire"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "durham"
+              },
+              "power": "up-north",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 6,
+            "text": "A dur - nyo"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "n-yorkshire"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "durham"
+                },
+                "power": "up-north",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 6
+          }
+        }
+      ],
+      "power": "up-north",
+      "raw_text": "F Nth - NAT\nA Nyo - Lan\nA Cum S A Nyo - Lan\nA Wyo - Gma\nA dno - Sta\nA dur - nyo"
+    },
+    "wales": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "F Cor - SOC",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "south-coast"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "cornwall"
+              },
+              "power": "wales",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "F Cor - soc"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "south-coast"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "cornwall"
+                },
+                "power": "wales",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        },
+        {
+          "canonical_text": "F SBC - Cor",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "cornwall"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "s-bristol-channel"
+              },
+              "power": "wales",
+              "type": "fleet"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 2,
+            "text": "F SBC - Cor"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "cornwall"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "s-bristol-channel"
+                },
+                "power": "wales",
+                "type": "fleet"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 2
+          }
+        },
+        {
+          "canonical_text": "A Gla - Dyf",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "dyfed"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "glamorgan"
+              },
+              "power": "wales",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 3,
+            "text": "A Gla - Dyf"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "dyfed"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "glamorgan"
+                },
+                "power": "wales",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 3
+          }
+        },
+        {
+          "canonical_text": "A Npo - Gwy",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "gwynedd"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "n-powys"
+              },
+              "power": "wales",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 4,
+            "text": "A Npo - Gwy"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "gwynedd"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "n-powys"
+                },
+                "power": "wales",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 4
+          }
+        },
+        {
+          "canonical_text": "A Hwo - Wmi",
+          "order": {
+            "destination": {
+              "coast": null,
+              "territory": "w-midlands"
+            },
+            "kind": "move",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "hereford-and-worcester"
+              },
+              "power": "wales",
+              "type": "army"
+            },
+            "via_convoy": false
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 5,
+            "text": "A Hwo - Wmi"
+          },
+          "validation": {
+            "effective_order": {
+              "destination": {
+                "coast": null,
+                "territory": "w-midlands"
+              },
+              "kind": "move",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "hereford-and-worcester"
+                },
+                "power": "wales",
+                "type": "army"
+              },
+              "via_convoy": false
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 5
+          }
+        }
+      ],
+      "power": "wales",
+      "raw_text": "F Cor - soc\nF SBC - Cor\nA Gla - Dyf\nA Npo - Gwy\nA Hwo - Wmi"
+    }
+  }
+}

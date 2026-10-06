@@ -1,0 +1,307 @@
+{
+  "dislodged_units": [],
+  "phase": {
+    "season": "spring",
+    "year": 1904
+  },
+  "schema_version": 1,
+  "supply_centre_owners": {
+    "ankara": "turkey",
+    "belgium": "england",
+    "berlin": "germany",
+    "brest": "france",
+    "budapest": "austria",
+    "bulgaria": null,
+    "constantinople": "turkey",
+    "denmark": "germany",
+    "edinburgh": "england",
+    "greece": null,
+    "holland": null,
+    "kiel": "germany",
+    "liverpool": "england",
+    "london": "england",
+    "marseilles": "france",
+    "moscow": "russia",
+    "munich": "germany",
+    "naples": "italy",
+    "norway": null,
+    "paris": "france",
+    "portugal": "france",
+    "rome": "italy",
+    "rumania": null,
+    "serbia": null,
+    "sevastopol": "russia",
+    "smyrna": "turkey",
+    "spain": null,
+    "st-petersburg": "russia",
+    "sweden": null,
+    "trieste": "austria",
+    "tunis": null,
+    "venice": "italy",
+    "vienna": "austria",
+    "warsaw": "russia"
+  },
+  "territory_controllers": {
+    "adriatic-sea": null,
+    "aegean-sea": null,
+    "albania": null,
+    "ankara": "turkey",
+    "apulia": "italy",
+    "armenia": "turkey",
+    "baltic-sea": null,
+    "barents-sea": null,
+    "belgium": "england",
+    "berlin": "germany",
+    "black-sea": null,
+    "bohemia": "austria",
+    "brest": "france",
+    "budapest": "austria",
+    "bulgaria": null,
+    "burgundy": "france",
+    "clyde": "england",
+    "constantinople": "turkey",
+    "denmark": "germany",
+    "eastern-mediterranean": null,
+    "edinburgh": "england",
+    "english-channel": null,
+    "finland": "russia",
+    "galicia": "austria",
+    "gascony": "france",
+    "greece": null,
+    "gulf-of-bothnia": null,
+    "gulf-of-lyon": null,
+    "helgoland-bight": null,
+    "holland": null,
+    "ionian-sea": null,
+    "irish-sea": null,
+    "kiel": "germany",
+    "liverpool": "england",
+    "livonia": "russia",
+    "london": "england",
+    "marseilles": "france",
+    "mid-atlantic-ocean": "france",
+    "moscow": "russia",
+    "munich": "germany",
+    "naples": "italy",
+    "north-africa": null,
+    "north-atlantic-ocean": null,
+    "north-sea": "england",
+    "norway": null,
+    "norwegian-sea": null,
+    "paris": "france",
+    "picardy": "france",
+    "piedmont": "italy",
+    "portugal": "france",
+    "prussia": "germany",
+    "rome": "italy",
+    "ruhr": "germany",
+    "rumania": null,
+    "serbia": null,
+    "sevastopol": "russia",
+    "silesia": "germany",
+    "skagerrak": null,
+    "smyrna": "turkey",
+    "spain": null,
+    "st-petersburg": "russia",
+    "sweden": null,
+    "syria": "turkey",
+    "trieste": "austria",
+    "tunis": null,
+    "tuscany": "italy",
+    "tyrolia": "austria",
+    "tyrrhenian-sea": null,
+    "ukraine": "russia",
+    "venice": "italy",
+    "vienna": "austria",
+    "wales": "england",
+    "warsaw": "russia",
+    "western-mediterranean": null,
+    "yorkshire": "england"
+  },
+  "units": [
+    {
+      "location": {
+        "coast": null,
+        "territory": "budapest"
+      },
+      "power": "austria",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "vienna"
+      },
+      "power": "austria",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "trieste"
+      },
+      "power": "austria",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "edinburgh"
+      },
+      "power": "england",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "north-sea"
+      },
+      "power": "england",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "belgium"
+      },
+      "power": "england",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "marseilles"
+      },
+      "power": "france",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "paris"
+      },
+      "power": "france",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "portugal"
+      },
+      "power": "france",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "brest"
+      },
+      "power": "france",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "munich"
+      },
+      "power": "germany",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "denmark"
+      },
+      "power": "germany",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "kiel"
+      },
+      "power": "germany",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "naples"
+      },
+      "power": "italy",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "rome"
+      },
+      "power": "italy",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "venice"
+      },
+      "power": "italy",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "moscow"
+      },
+      "power": "russia",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "sevastopol"
+      },
+      "power": "russia",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": "sc",
+        "territory": "st-petersburg"
+      },
+      "power": "russia",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "warsaw"
+      },
+      "power": "russia",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "ankara"
+      },
+      "power": "turkey",
+      "type": "fleet"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "constantinople"
+      },
+      "power": "turkey",
+      "type": "army"
+    },
+    {
+      "location": {
+        "coast": null,
+        "territory": "smyrna"
+      },
+      "power": "turkey",
+      "type": "army"
+    }
+  ]
+}

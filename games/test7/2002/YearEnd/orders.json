@@ -1,0 +1,136 @@
+{
+  "results": [
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "anglesey"
+          },
+          "power": "merseyside",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "merseyside",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "build",
+        "unit": {
+          "location": {
+            "coast": null,
+            "territory": "kent"
+          },
+          "power": "london",
+          "type": "army"
+        }
+      },
+      "outcomes": [
+        "OK"
+      ],
+      "power": "london",
+      "source_line": 1
+    },
+    {
+      "order": {
+        "kind": "waive",
+        "power": "wales"
+      },
+      "outcomes": [],
+      "power": "wales",
+      "source_line": null
+    }
+  ],
+  "schema_version": 1,
+  "submissions": {
+    "london": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Ken B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "kent"
+              },
+              "power": "london",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Kent Build"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "kent"
+                },
+                "power": "london",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "london",
+      "raw_text": "A Kent Build"
+    },
+    "merseyside": {
+      "is_final": false,
+      "lines": [
+        {
+          "canonical_text": "A Ang B",
+          "order": {
+            "kind": "build",
+            "unit": {
+              "location": {
+                "coast": null,
+                "territory": "anglesey"
+              },
+              "power": "merseyside",
+              "type": "army"
+            }
+          },
+          "parser_issues": [],
+          "source": {
+            "number": 1,
+            "text": "A Anglesey Build"
+          },
+          "validation": {
+            "effective_order": {
+              "kind": "build",
+              "unit": {
+                "location": {
+                  "coast": null,
+                  "territory": "anglesey"
+                },
+                "power": "merseyside",
+                "type": "army"
+              }
+            },
+            "is_valid": true,
+            "issues": [],
+            "source_line": 1
+          }
+        }
+      ],
+      "power": "merseyside",
+      "raw_text": "A Anglesey Build"
+    }
+  }
+}

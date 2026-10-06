@@ -22,11 +22,18 @@ from diplomacy_app.domain.models import (
     SupportOrder,
     UnitRef,
     UnitType,
+    UnparseableOrder,
     WaiveOrder,
 )
 
 
 class _ParseFailure(ValueError):
+    pass
+
+class _ParseOrderUnitFailure(_ParseFailure):
+    pass
+
+class _ParseOrderActionFailure(_ParseFailure):
     pass
 
 
@@ -66,7 +73,7 @@ def _normalise_locations(
 def _location(token: str, names: dict[str, Location]) -> Location:
     normal = token.strip(".,;:()[]").casefold()
     if normal not in names:
-        raise _ParseFailure(f"Unknown or ambiguous territory: {token}")
+        raise _ParseOrderActionFailure(f"Unknown or ambiguous territory: {token}")
     return names[normal]
 
 
@@ -138,56 +145,74 @@ def parse_line(
             if first in {"build", "disband", "remove"}:
                 prefix_action = first
                 tokens = tokens[1:]
-            unit, position = _unit(tokens, 0, power_id, names)
+            try:
+                unit, position = _unit(tokens, 0, power_id, names)
+            # If we can't parse the unit at this point, who knows what's going on
+            except _ParseFailure as exc:
+                raise _ParseOrderUnitFailure(str(exc)) from exc
             if prefix_action:
                 order = BuildOrder(unit) if prefix_action == "build" else DisbandOrder(unit)
             else:
                 if position >= len(tokens):
-                    raise _ParseFailure("The order action is missing")
+                    raise _ParseOrderActionFailure("The order action is missing")
                 action = tokens[position].strip(".,;:").casefold()
                 position += 1
                 if action in {"h", "hold", "holds"}:
                     order = HoldOrder(unit)
                 elif action == "-":
                     if position >= len(tokens):
-                        raise _ParseFailure("Move destination is missing")
+                        raise _ParseOrderActionFailure("Move destination is missing")
                     destination = _location(tokens[position], names)
                     via_convoy = any(
                         value.casefold() in {"via", "convoy"} for value in tokens[position + 1 :]
                     )
                     order = MoveOrder(unit, destination, via_convoy)
                 elif action in {"s", "support", "supports"}:
-                    supported, position = _unit(tokens, position, PowerId(""), names)
+                    try:
+                        supported, position = _unit(tokens, position, PowerId(""), names)
+                    except _ParseFailure as exc:
+                        raise _ParseOrderActionFailure(str(exc)) from exc
                     destination = None
                     if position < len(tokens):
                         if tokens[position] != "-":
-                            raise _ParseFailure("Expected '-' before supported move destination")
+                            raise _ParseOrderActionFailure("Expected '-' before supported move destination")
                         if position + 1 >= len(tokens):
-                            raise _ParseFailure("Supported move destination is missing")
+                            raise _ParseOrderActionFailure("Supported move destination is missing")
                         destination = _location(tokens[position + 1], names)
                     order = SupportOrder(unit, supported, destination)
                 elif action in {"c", "convoy", "convoys"}:
-                    convoyed, position = _unit(tokens, position, PowerId(""), names)
+                    try:
+                        convoyed, position = _unit(tokens, position, PowerId(""), names)
+                    except _ParseFailure as exc:
+                        raise _ParseOrderActionFailure(str(exc)) from exc
                     if (
                         position >= len(tokens)
                         or tokens[position] != "-"
                         or position + 1 >= len(tokens)
                     ):
-                        raise _ParseFailure("Convoy destination must follow '-'")
+                        raise _ParseOrderActionFailure("Convoy destination must follow '-'")
                     order = ConvoyOrder(unit, convoyed, _location(tokens[position + 1], names))
                 elif action in {"r", "retreat", "retreats"}:
                     if position >= len(tokens):
-                        raise _ParseFailure("Retreat destination is missing")
+                        raise _ParseOrderActionFailure("Retreat destination is missing")
                     order = RetreatOrder(unit, _location(tokens[position], names))
                 elif action in {"b", "build", "builds"}:
                     order = BuildOrder(unit)
                 elif action in {"d", "disband", "remove", "removes"}:
                     order = DisbandOrder(unit)
                 else:
-                    raise _ParseFailure(f"Unknown order action: {tokens[position - 1]}")
+                    raise _ParseOrderActionFailure(f"Unknown order action: {tokens[position - 1]}")
         return OrderCandidate(source, order, canonical_text(order, map_definition), ())
-    except _ParseFailure as exc:
-        issue = Issue("order.unrecognised", str(exc), IssueSeverity.ERROR)
+
+    # If we can't parse the action but could still parse the unit, we can still
+    # return an order so we know to underline it on the map.
+    except _ParseOrderActionFailure as exc:
+        if not unit:
+            raise _ParseOrderUnitFailure(str(exc)) from exc
+        issue = Issue("order.unrecognised_description", str(exc), IssueSeverity.ERROR)
+        return OrderCandidate(source, UnparseableOrder(unit) , str(exc), (issue,))
+    except _ParseOrderUnitFailure as exc:
+        issue = Issue("order.unrecognised_unit", str(exc), IssueSeverity.ERROR)
         return OrderCandidate(source, None, None, (issue,))
 
 

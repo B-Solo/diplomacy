@@ -75,6 +75,15 @@ class Point:
     x: float
     y: float
 
+    def __add__(self, other: Point) -> Point:
+        return Point(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other: Point) -> Point:
+        return Point(self.x - other.x, self.y - other.y)
+
+    def __mul__(self, scalar: float) -> Point:
+        return Point(self.x * scalar, self.y * scalar)
+
 
 @dataclass(frozen=True, slots=True, order=True)
 class Location:
@@ -267,6 +276,10 @@ class DisbandOrder:
 class WaiveOrder:
     power_id: PowerId
 
+@dataclass(frozen=True, slots=True)
+class UnparseableOrder:
+    unit: UnitRef
+
 
 type CanonicalOrder = (
     HoldOrder
@@ -277,6 +290,7 @@ type CanonicalOrder = (
     | BuildOrder
     | DisbandOrder
     | WaiveOrder
+    | UnparseableOrder
 )
 
 

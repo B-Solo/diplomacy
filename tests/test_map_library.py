@@ -146,6 +146,29 @@ def test_classic_svg_imports_with_declared_terrain_kinds(tmp_path, project_root)
     assert draft.element_roles["detail-impassable-islands"] is SvgElementRole.DECORATION
 
 
+def test_classic_compiles_canonical_topology(project_root):
+    definition = FileMapLibrary(project_root / "maps").load(MapId("classic"))
+    pairs = {
+        tuple(sorted((str(edge.origin.territory_id), str(edge.destination.territory_id))))
+        for edge in definition.adjacencies
+    }
+    assert len(definition.adjacencies) == 504
+    assert not any(
+        edge.origin.territory_id == "livonia"
+        and edge.destination.territory_id == "moscow"
+        and edge.unit_type.value == "fleet"
+        for edge in definition.adjacencies
+    )
+    assert {
+        "baltic-sea",
+        "helgoland-bight",
+        "kiel",
+        "north-sea",
+        "skagerrak",
+        "sweden",
+    } == {right if left == "denmark" else left for left, right in pairs if "denmark" in (left, right)}
+
+
 def test_save_preserves_ancillary_files_and_loads_current_cache(configured_maps, monkeypatch):
     library = configured_maps
     map_id = library.list()[0].map_id
